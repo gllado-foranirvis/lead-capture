@@ -37,3 +37,9 @@ test('page.css: la pantalla del formulari ocupa l\'alçada i el botó s\'ancora 
   assert.match(page, /\.form__actions\s*\{[^}]*margin-top:\s*auto/);
   assert.doesNotMatch(page, /position:\s*fixed/);
 });
+test('page.css: el moviment de l\'indicador i de les pantalles té guarda de reduced-motion', () => {
+  const motion = [...page.matchAll(/@media \(prefers-reduced-motion: no-preference\) \{([\s\S]*?)\n\}/g)].map((m) => m[1]).join('\n');
+  assert.match(motion, /\.steps__seg[^{]*\{[^}]*transition/);
+  assert.match(motion, /animation:\s*screen-in/);
+  assert.doesNotMatch(page.replace(/@media \(prefers-reduced-motion: no-preference\) \{[\s\S]*?\n\}/g, ''), /(^|\s)(transition|animation):/);
+});
