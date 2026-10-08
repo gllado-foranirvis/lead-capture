@@ -5,7 +5,7 @@ Substitueix el formulari d'una sola pantalla per un flux progressiu de 2 passos,
 ## Pantalles
 
 ### 1. Entrada
-- H1 «Hablemos de propulsión eléctrica»; subtítol «Explora los modelos disponibles y consulta todas sus especificaciones técnicas.»
+- H1 «Hablemos de propulsión eléctrica»; subtítol «Explora los modelos disponibles y consulta todas las especificaciones técnicas.» (ajustat: «sus» no passa el test de tracte)
 - CTA principal (únic sòlid): «Descubrir la gama eléctrica».
 - Secundaris amb icona: «Escribir por WhatsApp», «Escribir por correo».
 - Sense selector ni pregunta prèvia (només amb l'Extra 1 activat; l'MVP manté els xips de perfil).
