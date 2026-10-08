@@ -1,0 +1,523 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-08T10:40:12.028Z",
+  "title": "Design System: The Silent Fleet",
+  "extensions": {
+    "colorMeta": {
+      "abyss-navy": {
+        "role": "primary",
+        "displayName": "Abyss Navy",
+        "canonical": "#0d1b2a",
+        "oklch": "oklch(21.8% 0.036 -109)",
+        "tonalRamp": [
+          "#020c19",
+          "#182636",
+          "#344355",
+          "#536375",
+          "#738497",
+          "#95a7bb",
+          "#b9cbe0",
+          "#e3f0fe"
+        ]
+      },
+      "fleet-navy": {
+        "role": "primary",
+        "displayName": "Fleet Navy",
+        "canonical": "#17304a",
+        "oklch": "oklch(30.3% 0.057 -109)",
+        "tonalRamp": [
+          "#000b1d",
+          "#0d263f",
+          "#2a445f",
+          "#496481",
+          "#6985a4",
+          "#8ba8c8",
+          "#aeccee",
+          "#e4f0fe"
+        ]
+      },
+      "steel-blue": {
+        "role": "primary",
+        "displayName": "Steel Blue",
+        "canonical": "#265a7a",
+        "oklch": "oklch(44.7% 0.076 -121)",
+        "tonalRamp": [
+          "#000d18",
+          "#01283e",
+          "#0f4766",
+          "#346788",
+          "#5589ab",
+          "#78acd0",
+          "#9bd1f6",
+          "#dff1ff"
+        ]
+      },
+      "action-black": {
+        "role": "primary",
+        "displayName": "Action Black",
+        "canonical": "#000000",
+        "oklch": "oklch(0.0% 0.000 0)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "lagoon-aqua": {
+        "role": "secondary",
+        "displayName": "Lagoon Aqua",
+        "canonical": "#45c4dc",
+        "oklch": "oklch(76.1% 0.114 -147)",
+        "tonalRamp": [
+          "#000e12",
+          "#012b32",
+          "#014b57",
+          "#026d7e",
+          "#0392a8",
+          "#34b7cf",
+          "#62ddf5",
+          "#d1f6fe"
+        ]
+      },
+      "electric-sky": {
+        "role": "secondary",
+        "displayName": "Electric Sky",
+        "canonical": "#3fb2e8",
+        "oklch": "oklch(72.2% 0.128 -127)",
+        "tonalRamp": [
+          "#000d16",
+          "#01293b",
+          "#024864",
+          "#016a91",
+          "#008ec1",
+          "#3fb2e8",
+          "#86d4ff",
+          "#ddf2fe"
+        ]
+      },
+      "deep-lagoon": {
+        "role": "secondary",
+        "displayName": "Deep Lagoon",
+        "canonical": "#0e7c92",
+        "oklch": "oklch(54.1% 0.094 -144)",
+        "tonalRamp": [
+          "#000e13",
+          "#022a33",
+          "#004a59",
+          "#016d81",
+          "#2f90a6",
+          "#57b4cb",
+          "#7dd9f0",
+          "#d3f5ff"
+        ]
+      },
+      "paper-white": {
+        "role": "neutral",
+        "displayName": "Paper White",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 90)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "mist": {
+        "role": "neutral",
+        "displayName": "Mist",
+        "canonical": "#f0f0f0",
+        "oklch": "oklch(95.5% 0.000 90)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "night-ink": {
+        "role": "neutral",
+        "displayName": "Night Ink",
+        "canonical": "#0f1419",
+        "oklch": "oklch(18.8% 0.013 -111)",
+        "tonalRamp": [
+          "#070c10",
+          "#20262b",
+          "#3d4349",
+          "#5c6268",
+          "#7d838a",
+          "#9fa6ad",
+          "#c3cad1",
+          "#e8eff7"
+        ]
+      },
+      "harbour-slate": {
+        "role": "neutral",
+        "displayName": "Harbour Slate",
+        "canonical": "#5a6570",
+        "oklch": "oklch(50.1% 0.022 -112)",
+        "tonalRamp": [
+          "#050c14",
+          "#1d262f",
+          "#39434d",
+          "#58636e",
+          "#78848f",
+          "#9ba7b3",
+          "#becbd7",
+          "#e3f0fd"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#d5dbe1",
+        "oklch": "oklch(88.9% 0.011 -112)",
+        "tonalRamp": [
+          "#080c0f",
+          "#21262a",
+          "#3e4347",
+          "#5d6267",
+          "#7e8388",
+          "#a0a6ab",
+          "#c4cad0",
+          "#e9eff5"
+        ]
+      },
+      "control-edge": {
+        "role": "neutral",
+        "displayName": "Control Edge",
+        "canonical": "#7b8794",
+        "oklch": "oklch(61.8% 0.024 -110)",
+        "tonalRamp": [
+          "#040c15",
+          "#1c2631",
+          "#38434f",
+          "#57636f",
+          "#788491",
+          "#9aa7b4",
+          "#becbd9",
+          "#e3f0ff"
+        ]
+      },
+      "on-navy-muted": {
+        "role": "neutral",
+        "displayName": "On-navy Muted",
+        "canonical": "#c3d0dc",
+        "oklch": "oklch(85.1% 0.022 -114)",
+        "tonalRamp": [
+          "#040c14",
+          "#1c262f",
+          "#39434d",
+          "#57636d",
+          "#78848f",
+          "#9aa7b2",
+          "#becbd7",
+          "#e3f0fd"
+        ]
+      },
+      "error-red": {
+        "role": "semantic",
+        "displayName": "Error Red",
+        "canonical": "#b3261e",
+        "oklch": "oklch(50.1% 0.178 29)",
+        "tonalRamp": [
+          "#1f0000",
+          "#4d0001",
+          "#810103",
+          "#b0221b",
+          "#d84c3f",
+          "#ff7464",
+          "#ffb3a8",
+          "#ffe9e5"
+        ]
+      },
+      "success-green": {
+        "role": "semantic",
+        "displayName": "Success Green",
+        "canonical": "#0b6b4d",
+        "oklch": "oklch(46.9% 0.095 165)",
+        "tonalRamp": [
+          "#000f08",
+          "#002d1e",
+          "#014f37",
+          "#187253",
+          "#429474",
+          "#67b896",
+          "#8bddba",
+          "#c1ffe2"
+        ]
+      },
+      "warning-amber": {
+        "role": "semantic",
+        "displayName": "Warning Amber",
+        "canonical": "#7a4b00",
+        "oklch": "oklch(45.6% 0.099 69)",
+        "tonalRamp": [
+          "#140800",
+          "#371f00",
+          "#5d3902",
+          "#855513",
+          "#a9773a",
+          "#ce9a5d",
+          "#f4be81",
+          "#ffebd6"
+        ]
+      },
+      "error-wash": {
+        "role": "semantic",
+        "displayName": "Error Wash",
+        "canonical": "#fbe9e7",
+        "oklch": "oklch(94.8% 0.020 25)",
+        "tonalRamp": [
+          "#130807",
+          "#2e2120",
+          "#4c3e3d",
+          "#6c5d5b",
+          "#8e7e7c",
+          "#b1a19f",
+          "#d6c5c3",
+          "#fceae8"
+        ]
+      },
+      "success-wash": {
+        "role": "semantic",
+        "displayName": "Success Wash",
+        "canonical": "#e3f4ec",
+        "oklch": "oklch(95.2% 0.021 166)",
+        "tonalRamp": [
+          "#040e09",
+          "#1b2823",
+          "#38463f",
+          "#57655e",
+          "#77877f",
+          "#99a9a2",
+          "#bdcec6",
+          "#e2f3eb"
+        ]
+      },
+      "warning-wash": {
+        "role": "semantic",
+        "displayName": "Warning Wash",
+        "canonical": "#fdf2d8",
+        "oklch": "oklch(96.3% 0.036 88)",
+        "tonalRamp": [
+          "#100a00",
+          "#2c240f",
+          "#4a412c",
+          "#6a604a",
+          "#8b816a",
+          "#aea48c",
+          "#d3c8af",
+          "#f9eed4"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Títol de portada, blanc sobre foto amb velo."
+      },
+      "h1": {
+        "displayName": "Headline 1",
+        "purpose": "Títol de pàgina."
+      },
+      "h2": {
+        "displayName": "Headline 2",
+        "purpose": "Títol de secció."
+      },
+      "h3": {
+        "displayName": "Title",
+        "purpose": "Títol de targeta i de bloc de marca."
+      },
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "El nom de marca en text pla; no hi ha logotip."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Text de cos per defecte; mai pes 300."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Etiquetes de camp."
+      },
+      "eyebrow": {
+        "displayName": "Eyebrow",
+        "purpose": "Llegendes; únic lloc amb majúscules sostingudes."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "color-transition",
+        "value": "150ms ease",
+        "purpose": "Només es mou el color: botons, enllaços i xips."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "Tot el que es mogui ha de tenir una alternativa que mantingui l'estat visible (p. ex. text «Enviando…»)."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "bp-md",
+        "value": "768px"
+      },
+      {
+        "name": "bp-lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Solid Button",
+      "kind": "button",
+      "refersTo": "button-solid",
+      "description": "Acció principal; un per pantalla.",
+      "html": "<button class=\"ds-btn-solid\">Enviar</button>",
+      "css": ".ds-btn-solid { font-family: var(--font-sans, Montserrat, system-ui, sans-serif); font-size: 14px; font-weight: 500; line-height: 20px; min-height: 48px; padding: 0 32px; border: 1px solid transparent; border-radius: 999px; background: var(--action, #000); color: var(--on-action, #fff); cursor: pointer; transition: background-color .15s, color .15s, opacity .15s; } .ds-btn-solid:hover { opacity: .85; } .ds-btn-solid:focus-visible { outline: 2px solid var(--focus, #0e7c92); outline-offset: 2px; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Acció secundària sobre fons clar.",
+      "html": "<button class=\"ds-btn-outline\">Correo electrónico</button>",
+      "css": ".ds-btn-outline { font-family: var(--font-sans, Montserrat, system-ui, sans-serif); font-size: 14px; font-weight: 500; line-height: 20px; min-height: 48px; padding: 0 32px; border: 1px solid var(--ink, #0f1419); border-radius: 999px; background: transparent; color: var(--ink, #0f1419); cursor: pointer; transition: background-color .15s, color .15s; } .ds-btn-outline:hover { background: var(--ink, #0f1419); color: var(--surface-100, #fff); } .ds-btn-outline:focus-visible { outline: 2px solid var(--focus, #0e7c92); outline-offset: 2px; }"
+    },
+    {
+      "name": "Brand Button",
+      "kind": "button",
+      "refersTo": "button-brand",
+      "description": "CTA sobre el peu de pàgina navy.",
+      "html": "<button class=\"ds-btn-brand\">Junte-se agora</button>",
+      "css": ".ds-btn-brand { font-family: var(--font-sans, Montserrat, system-ui, sans-serif); font-size: 14px; font-weight: 500; line-height: 20px; min-height: 48px; padding: 0 32px; border: 1px solid transparent; border-radius: 999px; background: var(--navy-600, #265a7a); color: var(--on-navy, #fff); cursor: pointer; } .ds-btn-brand:hover { filter: brightness(1.15); } .ds-btn-brand:focus-visible { outline: 2px solid var(--focus-on-dark, #45c4dc); outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Camp quadrat amb etiqueta damunt i vora inferior.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Nombre*</span><input class=\"ds-field-control\" placeholder=\"Tu nombre\"></label>",
+      "css": ".ds-field { font-family: var(--font-sans, Montserrat, system-ui, sans-serif); display: flex; flex-direction: column; gap: 8px; color: var(--ink, #0f1419); } .ds-field-label { font-size: 14px; font-weight: 500; line-height: 20px; } .ds-field-control { font-family: var(--font-sans, Montserrat, system-ui, sans-serif); font-size: 16px; line-height: 26px; min-height: 48px; padding: 12px 16px; border: 0; border-bottom: 2px solid var(--border-strong, #7b8794); border-radius: 0; background: var(--surface-200, #f0f0f0); color: var(--ink, #0f1419); } .ds-field-control::placeholder { color: var(--text-muted, #5a6570); opacity: 1; } .ds-field-control:focus-visible { outline: 2px solid var(--focus, #0e7c92); outline-offset: 2px; }"
+    },
+    {
+      "name": "Choice Chips",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Opcions excloents en píndola; la seleccionada s'omple d'action.",
+      "html": "<div class=\"ds-chips\"><span class=\"ds-chip\">Distribuidor</span><span class=\"ds-chip ds-chip-on\">Particular</span></div>",
+      "css": ".ds-chips { font-family: var(--font-sans, Montserrat, system-ui, sans-serif); display: flex; gap: 12px; } .ds-chip { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 16px; border: 1px solid var(--border-strong, #7b8794); border-radius: 999px; color: var(--ink, #0f1419); font-size: 16px; transition: background-color .15s, color .15s; } .ds-chip-on { background: var(--action, #000); border-color: var(--action, #000); color: var(--on-action, #fff); }"
+    },
+    {
+      "name": "Language Switch",
+      "kind": "nav",
+      "refersTo": "lang-switch",
+      "description": "Selector d'idioma compacte per a pàgines sense capçalera.",
+      "html": "<span class=\"ds-lang\">ES <i class=\"ds-lang-caret\"></i></span>",
+      "css": ".ds-lang { font-family: var(--font-sans, Montserrat, system-ui, sans-serif); position: relative; display: inline-flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border: 1px solid var(--border-strong, #7b8794); border-radius: 6px; background: var(--surface-100, #fff); color: var(--ink, #0f1419); font-size: 14px; } .ds-lang-caret { border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--ink, #0f1419); }"
+    },
+    {
+      "name": "Success Notice",
+      "kind": "custom",
+      "refersTo": "notice-success",
+      "description": "Avís en bloc amb fons suau; el text sempre és ink.",
+      "html": "<div class=\"ds-notice\"><span class=\"ds-notice-icon\">✓</span><div><strong>Tu PDF está listo</strong><div>Ya puedes descargarlo.</div></div></div>",
+      "css": ".ds-notice { font-family: var(--font-sans, Montserrat, system-ui, sans-serif); display: flex; gap: 12px; align-items: flex-start; padding: 16px; border-radius: 16px; background: var(--success-bg, #e3f4ec); color: var(--ink, #0f1419); font-size: 14px; line-height: 22px; } .ds-notice-icon { flex: none; width: 24px; color: var(--success, #0b6b4d); font-weight: 700; }"
+    },
+    {
+      "name": "Product Panel",
+      "kind": "card",
+      "refersTo": "product-panel",
+      "description": "Panell navy quadrat amb botó outline-light.",
+      "html": "<div class=\"ds-product\"><h3 class=\"ds-product-title\">Smart 1.3</h3><p class=\"ds-product-desc\">Propulsión eléctrica silenciosa.</p><button class=\"ds-product-btn\">Especificaciones</button></div>",
+      "css": ".ds-product { font-family: var(--font-sans, Montserrat, system-ui, sans-serif); display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 24px; text-align: center; background: var(--surface-card, #0d1b2a); color: var(--on-navy, #fff); } .ds-product-title { margin: 0; font-size: 18px; line-height: 26px; font-weight: 600; } .ds-product-desc { margin: 0; font-size: 14px; line-height: 22px; color: var(--on-navy-muted, #c3d0dc); } .ds-product-btn { font-family: var(--font-sans, Montserrat, system-ui, sans-serif); margin-top: 8px; min-height: 48px; padding: 0 32px; border: 1px solid var(--on-navy, #fff); border-radius: 999px; background: transparent; color: var(--on-navy, #fff); font-size: 14px; font-weight: 500; cursor: pointer; } .ds-product-btn:hover { background: var(--on-navy, #fff); color: var(--navy-900, #0d1b2a); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Quiet Current",
+    "overview": "El sistema visual de The Silent Fleet és el silenci d'una propulsió elèctrica fet interfície: un fons blanc net, tipografia Montserrat sempre i accions en píndola negra. L'aigua turquesa és un ressalt i no una identitat: apareix només sobre navy, mai sobre blanc. La profunditat no ve de cap ombra, sinó del contrast tonal entre el blanc, el gris suau i el panell navy.\n\nEl to és sobri, precís i silenciós. Els components són refinats i continguts: no competeixen amb la fotografia d'aigua i embarcacions en moviment, que es mostra a tall viu, sense marc, amb un velo per llegir-hi el text. Tot es dissenya primer per a un mòbil d'uns 390px i s'amplia des de 768px.\n\nL'anti-referent és tot el decoratiu: ombres, degradats, emojis, majúscules sostingudes i qualsevol logotip dibuixat que la marca no hagi subministrat.",
+    "keyCharacteristics": [
+      "Mobile first: base 360–767px, escriptori com a ampliació.",
+      "Dos temes complets, clar i fosc, fixats a l'arrel amb `data-theme`.",
+      "Color només per token; mai un valor literal en una pàgina.",
+      "Formes amb dos llenguatges: píndola per a accions, quadrat per a dades i panells.",
+      "Sense ombres ni degradats; el nivell es fa amb to.",
+      "Densitat compacta (`tsf-compact`) només als fluxos de formulari."
+    ],
+    "rules": [
+      {
+        "name": "The Aqua-on-Navy Rule",
+        "body": "El turquesa i el blau elèctric només viuen sobre navy o com a bloc decoratiu. Sobre blanc, l'accent és Deep Lagoon.",
+        "section": "colors"
+      },
+      {
+        "name": "The Token-Only Rule",
+        "body": "Cap color per valor en una pàgina; es fixa `data-theme` a l'arrel i es crida el token.",
+        "section": "colors"
+      },
+      {
+        "name": "The Words-Plus-Color Rule",
+        "body": "Cap estat es comunica només amb color: sempre text, signe o icona.",
+        "section": "colors"
+      },
+      {
+        "name": "The Sentence-Case Rule",
+        "body": "Els titulars van en frase normal; les majúscules sostingudes són només l'estil `eyebrow`.",
+        "section": "typography"
+      },
+      {
+        "name": "The Weight Floor Rule",
+        "body": "El text de cos no baixa de 400 i els titulars no passen de 600, llevat del `wordmark`.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tonal-Layer Rule",
+        "body": "Cap `box-shadow`, cap degradat: si cal separar, es canvia de capa tonal o es dibuixa una vora d'1px.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Pill-or-Square Rule",
+        "body": "Tot el que s'acciona és píndola; tot el que s'omple o es llegeix és quadrat. No hi ha formes intermèdies.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Colour-Only Motion Rule",
+        "body": "Un canvi de color no necessita alternativa. Qualsevol cosa que es mogui (un spinner, per exemple) ha de tenir una alternativa amb `prefers-reduced-motion` que mantingui l'estat visible: text com «Enviando…» en lloc del gir.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "**Do** fixar `data-theme` a l'arrel i usar només tokens de color.",
+      "**Do** posar un sol botó `solid` per pantalla i la resta en `outline`.",
+      "**Do** usar Deep Lagoon per a text i icones sobre blanc, i Lagoon Aqua només sobre navy.",
+      "**Do** donar 48px de zona tàctil (44px en compacte) amb 8px entre elements.",
+      "**Do** escriure titulars en frase normal, amb verbs curts als botons i sense emojis ni signes d'exclamació.",
+      "**Do** mostrar la fotografia a tall viu amb `overlay-hero` quan porti text a sobre."
+    ],
+    "donts": [
+      "**Don't** usar ombres ni degradats; la profunditat és tonal.",
+      "**Don't** usar Lagoon Aqua ni Electric Sky com a text o icona sobre blanc.",
+      "**Don't** dibuixar un logotip: el nom és text en `wordmark` i els logotips de partners es mostren tal com els subministra cada marca (màx. 96px d'alt, sobre blanc, sense filtre).",
+      "**Don't** acolorir el glif de WhatsApp ni posar-lo amb els colors de la marca: és una marca de tercers i només va en la tinta del botó.",
+      "**Don't** baixar el text de cos a pes 300 ni escriure en majúscules sostingudes fora d'`eyebrow`.",
+      "**Don't** comunicar un estat només amb color.",
+      "**Don't** usar `brand` sobre fons clar ni posar dos `solid` junts."
+    ]
+  }
+}

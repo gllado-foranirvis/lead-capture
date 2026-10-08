@@ -1,0 +1,23 @@
+<!-- @dsCard group="Seccions" height=340 subtitle="Titular amb subtítol" -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html,body{margin:0}
+body{background:var(--surface-100);color:var(--ink);font-family:var(--font-sans);padding:16px}
+.lbl{margin:0 0 8px;font-size:12px;line-height:16px;color:var(--text-muted)}
+.frame{max-width:100%;margin:0 0 24px;border:1px dashed var(--border-strong);position:relative}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:0 0 20px}
+.navy{background:var(--surface-card);padding:20px}
+</style></head>
+<body><div id="root"></div>
+<script>
+var T = window.TSF, h = React.createElement;
+function Frame(p){ return h('div',null,h('p',{className:'lbl'},p.label),h('div',{className:'frame',style:{width:p.w}},p.children)); }
+var noop = function(e){ if(e&&e.preventDefault) e.preventDefault(); };
+function App(){
+  return h('div',null,
+    h(Frame,{label:'Centrat · mòbil',w:390},h('div',{style:{padding:'24px 16px'}},h(T.SectionHeading,{layout:'mobile',title:'Nuestra Gama',subtitle:'Motores eléctricos para navegación y accesorios'}))),
+    h(Frame,{label:'A l’inici · escriptori',w:640},h('div',{style:{padding:'32px'}},h(T.SectionHeading,{layout:'desktop',align:'start',title:'Missão'}))));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script></body></html>

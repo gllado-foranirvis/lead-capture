@@ -1,0 +1,24 @@
+<!-- @dsCard group="Targetes" height=480 width=800 subtitle="Foto 3:2 amb títol i text" -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html,body{margin:0}
+body{background:var(--surface-100);color:var(--ink);font-family:var(--font-sans);padding:16px}
+.lbl{margin:0 0 8px;font-size:12px;line-height:16px;color:var(--text-muted)}
+.frame{max-width:100%;margin:0 0 24px;border:1px dashed var(--border-strong);position:relative}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:0 0 20px}
+.navy{background:var(--surface-card);padding:20px}
+</style></head>
+<body><div id="root"></div>
+<script>
+var T = window.TSF, h = React.createElement;
+function Frame(p){ return h('div',null,h('p',{className:'lbl'},p.label),h('div',{className:'frame',style:{width:p.w}},p.children)); }
+var noop = function(e){ if(e&&e.preventDefault) e.preventDefault(); };
+function App(){
+  return h('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:24,maxWidth:760}},
+    h(T.ImageCard,{placeholder:'Foto 3:2',alt:'Embarcació amb motor elèctric',title:'Propulsão elétrica e Infraestrutura',description:'Apoio especializado para embarcações e infraestrutura'}),
+    h(T.ImageCard,{placeholder:'Foto 3:2',alt:'Persona amb scooter submarí',title:'Water Toys',description:'Inovadores, elétricos e silenciosos para momentos inesquecíveis na água'}),
+    h(T.ImageCard,{placeholder:'Foto 3:2',alt:'Motor elèctric obert',title:'Suporte Técnico',description:'Contacte-nos para manutenção, atualização ou reparação do seu Sea-NXT em Portugal e Espanha'}));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script></body></html>

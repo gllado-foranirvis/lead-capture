@@ -1,0 +1,39 @@
+<!-- @dsCard group="Pàgines" height=2700 width=430 page subtitle="Enquesta de 14 preguntes en mòbil" -->
+<!doctype html>
+<html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html,body{margin:0}
+body{background:var(--surface-200);color:var(--ink);font-family:var(--font-sans);padding:20px}
+.page{width:390px;background:var(--surface-100);border:2px solid var(--border-strong);border-radius:28px;overflow:hidden;box-sizing:border-box}
+.body{display:flex;flex-direction:column;gap:12px;padding:16px 16px 24px}
+.intro{text-align:center}
+.note{text-align:center;margin:4px 0 0}
+</style></head>
+<body><div id="root"></div>
+<script>
+var T=window.TSF,h=React.createElement;
+var links=[{label:'O Movimento',active:true},{label:'Water Toys'},{label:'e-Motors',menu:true},{label:'Parceiros'},{label:'Contactos'}];
+var yn=[{value:'s',label:'Sim'},{value:'n',label:'Não'}];
+function App(){
+  return h('div',{className:'page tsf-compact'},
+    h(T.SiteHeader,{layout:'mobile',links:links,lang:'PT'}),
+    h('div',{className:'body'},
+      h(T.SectionHeading,{layout:'mobile',level:1,title:'Sabia que a propulsão elétrica está a mudar a forma de navegar?',subtitle:'O que o entusiasma ou preocupa nesta tecnologia?'}),
+      h(T.Figure,{placeholder:'Foto 16:9',alt:'Embarcação com motor elétrico'}),
+      h('p',{className:'label note'},'Queremos saber a sua opinião'),
+      h(T.RadioGroup,{legend:'Visitante',required:true,options:[{value:'p',label:'Particular'},{value:'pr',label:'Profissional'}]}),
+      h(T.CheckboxGroup,{legend:'Atividade principal',required:true,options:['Lazer','Charter/Aluguer Turístico','Atividades Desportivas (Vela)','Atividades Desportivas (Mergulho)','Serviços de Segurança / Salvamento','Transporte de Passageiros','Pesca','Marina / Operador Portuário'].map(function(l,i){return {value:'a'+i,label:l};})}),
+      h(T.Field,{label:'Outro (especifique)',multiline:true,placeholder:'Descreva aqui'}),
+      h(T.RadioGroup,{legend:'Já tem embarcações de propulsão eléctrica?',required:true,options:yn}),
+      h(T.CheckboxGroup,{legend:'O que o entusiasma?',required:true,options:['Sustentabilidade ambiental','Redução de ruído','Menos manutenção','Custos operacionais mais baixos','Regulamentações futuras'].map(function(l,i){return {value:'e'+i,label:l};})}),
+      h(T.Field,{label:'Outro (especifique)',placeholder:'Descreva aqui'}),
+      h(T.CheckboxGroup,{legend:'O que te preocupa?',required:true,options:['Autonomia limitada','Tempo de carregamento','Custo de aquisição','Infraestrutura de carregamento','Desvalorização do equipamento'].map(function(l,i){return {value:'p'+i,label:l};})}),
+      h(T.RadioGroup,{legend:'Está a pensar investir em propulsão electrica?',required:true,options:yn}),
+      h(T.Field,{label:'Interessado numa demonstração futura?',placeholder:'Localidade'}),
+      h(T.Field,{label:'email de contacto',type:'email',required:true,placeholder:'@'}),
+      h(T.Field,{label:'Comentários',multiline:true,placeholder:'outros comentários'}),
+      h(T.Button,{type:'submit',full:true},'Enviar formulário')),
+    h(T.SiteFooter,{layout:'mobile',contactHeading:'CONTACTE',contacts:[{label:'+351 93 406 53 56',href:'#'},{label:'info@thesilentfleet.com',href:'#'}],newsletter:{heading:'SUBSCREVER',button:'Junte-se agora',onSubmit:function(e){e.preventDefault();}}}));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script></body></html>

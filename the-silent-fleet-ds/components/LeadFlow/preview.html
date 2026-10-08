@@ -1,0 +1,42 @@
+<!-- @dsCard group="Pàgines" height=640 width=1260 page subtitle="Flux de lead compacte en 3 pantalles" -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html,body{margin:0}
+body{background:var(--surface-200);color:var(--ink);font-family:var(--font-sans);padding:24px}
+.flow{display:flex;gap:24px;align-items:flex-start}
+.phone{width:390px;display:flex;flex-direction:column;gap:12px;padding:16px;background:var(--surface-100);border:2px solid var(--border-strong);border-radius:28px;box-sizing:border-box}
+.top{display:flex;justify-content:space-between;align-items:center}
+.logo{border:1px dashed var(--border-strong);padding:6px 12px;font-size:12px;color:var(--text-muted)}
+.stack{display:flex;flex-direction:column;gap:8px}
+.center{text-align:center}
+</style></head>
+<body><div id="root"></div>
+<script>
+var T=window.TSF,h=React.createElement;
+function Top(){ return h('div',{className:'top'},h('div',{className:'logo'},'[LOGO]'),h(T.LangSwitch,{languages:[{code:'ES'},{code:'PT'},{code:'EN'}],defaultValue:'ES'})); }
+function Phone(p){ return h('div',{className:'phone tsf-compact'},h(Top),p.children); }
+function S1(){ return h(Phone,null,
+  h(T.SectionHeading,{layout:'mobile',align:'start',title:'Juntos en la Transición',subtitle:'Soluciones a medida para su transición eléctrica'}),
+  h(T.ChoiceChips,{legend:'Perfil (opcional)',options:[{value:'o',label:'Propietario'},{value:'i',label:'Interesado'}]}),
+  h(T.Button,{full:true},'Pedir información de un producto'),
+  h(T.SectionLabel,{},'O contacta directamente'),
+  h('div',{className:'stack'},h(T.Button,{variant:'outline',full:true},'WhatsApp'),h(T.Button,{variant:'outline',full:true},'Correo electrónico')),
+  h(T.LegalLinks,{links:[{label:'Privacidad'},{label:'Cookies'}]})); }
+function S2(){ return h(Phone,null,
+  h(T.SectionHeading,{layout:'mobile',align:'start',title:'Pedir información'}),
+  h(T.Select,{label:'Producto',placeholder:'Elige un producto',required:true,options:[{value:'s',label:'Smart 1.3'},{value:'b',label:'Baterías'}]}),
+  h(T.Field,{label:'Nombre',required:true}),
+  h(T.Field,{label:'Correo',type:'email',required:true}),
+  h(T.Field,{label:'Teléfono',type:'tel',required:true}),
+  h('div',null,h(T.Checkbox,{required:true,defaultChecked:true},'Acepto la ',h('a',{href:'#'},'política de privacidad')),h(T.Checkbox,{},'Quiero recibir novedades (opcional)')),
+  h(T.Button,{type:'submit',full:true},'Enviar y descargar el PDF'),
+  h('div',{className:'center'},h(T.Button,{variant:'link'},'← Volver'))); }
+function S3(){ return h(Phone,null,
+  h(T.Notice,{variant:'success',size:'lg',title:'Tu PDF está listo'},'Ya puedes descargarlo.'),
+  h(T.PdfCard,{title:'Smart 1.3 · Ficha técnica',meta:'PDF · 2,4 MB'}),
+  h(T.Button,{full:true},'Descargar el PDF'),
+  h('div',{className:'stack'},h(T.Button,{variant:'outline',full:true},'WhatsApp'),h(T.Button,{variant:'outline',full:true},'Correo electrónico'))); }
+function App(){ return h('div',{className:'flow'},h(S1),h(S2),h(S3)); }
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script></body></html>

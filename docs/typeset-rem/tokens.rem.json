@@ -1,0 +1,534 @@
+{
+  "name": "The Silent Fleet",
+  "version": 1,
+  "color": {
+    "themes": [
+      {
+        "id": "light",
+        "name": "Clar"
+      },
+      {
+        "id": "dark",
+        "name": "Fosc"
+      }
+    ],
+    "tokens": [
+      {
+        "name": "navy-900",
+        "value": "#0d1b2a",
+        "usage": "Blau marí més fosc. Fons dels panells de producte i text sobre aqua-500. Parella: on-navy (17:1)."
+      },
+      {
+        "name": "navy-800",
+        "value": "#17304a",
+        "usage": "Blau marí del peu de pàgina i dels blocs foscos. Text: on-navy o on-navy-muted."
+      },
+      {
+        "name": "navy-600",
+        "value": "#265a7a",
+        "usage": "Blau acer del botó de marca (CTA del peu). Text on-navy a 7,4:1."
+      },
+      {
+        "name": "aqua-500",
+        "value": "#45c4dc",
+        "usage": "Turquesa de l'aigua: icones, ones i ressalts només sobre fons navy-*. Mai text ni icona sobre blanc (2,1:1). Text sobre ell: on-aqua."
+      },
+      {
+        "name": "sky-500",
+        "value": "#3fb2e8",
+        "usage": "Blau elèctric dels motors. Només blocs i il·lustració decorativa; mai text."
+      },
+      {
+        "name": "aqua-700",
+        "value": "#0e7c92",
+        "usage": "Turquesa fosc per a text i icones sobre fons clars: 4,9:1 sobre #ffffff."
+      },
+      {
+        "name": "slate-600",
+        "value": "#5a6570",
+        "usage": "Gris de text secundari fix (5,9:1 sobre blanc). Placeholders dels camps blancs del peu en qualsevol tema."
+      },
+      {
+        "name": "surface-100",
+        "value": {
+          "light": "#ffffff",
+          "dark": "#0b1622"
+        },
+        "usage": "Fons de pàgina i de capçalera."
+      },
+      {
+        "name": "surface-200",
+        "value": {
+          "light": "#f0f0f0",
+          "dark": "#14283b"
+        },
+        "usage": "Farciment dels camps de formulari i blocs suaus. ink i text-muted hi llegeixen a 4,5:1 o més."
+      },
+      {
+        "name": "surface-card",
+        "value": {
+          "light": "{navy-900}",
+          "dark": "{navy-800}"
+        },
+        "usage": "Panell fosc de les targetes de producte. Text: on-navy, on-navy-muted."
+      },
+      {
+        "name": "surface-footer",
+        "value": {
+          "light": "{navy-800}",
+          "dark": "#0f2336"
+        },
+        "usage": "Fons del peu de pàgina. Text: on-navy, on-navy-muted."
+      },
+      {
+        "name": "ink",
+        "value": {
+          "light": "#0f1419",
+          "dark": "#f2f6f9"
+        },
+        "usage": "Titulars i text de cos sobre surface-100 i surface-200."
+      },
+      {
+        "name": "text-muted",
+        "value": {
+          "light": "{slate-600}",
+          "dark": "#a9b8c6"
+        },
+        "usage": "Text secundari i subtítols sobre surface-100 i surface-200 (≥5,2:1 en tots dos temes)."
+      },
+      {
+        "name": "on-navy",
+        "value": "#ffffff",
+        "usage": "Text i línies sobre navy-*, surface-card, surface-footer i sobre fotos amb overlay-hero."
+      },
+      {
+        "name": "on-navy-muted",
+        "value": "#c3d0dc",
+        "usage": "Text secundari sobre navy-800, navy-900, surface-card i surface-footer (≥8:1)."
+      },
+      {
+        "name": "on-aqua",
+        "value": "#0d1b2a",
+        "usage": "Text sobre aqua-500 (8,4:1)."
+      },
+      {
+        "name": "accent",
+        "value": {
+          "light": "{aqua-700}",
+          "dark": "{aqua-500}"
+        },
+        "usage": "Enllaços i icones sobre surface-100. Com a text, només sobre surface-100 (sobre surface-200 clar fa 4,3:1: reserva-ho a icones)."
+      },
+      {
+        "name": "action",
+        "value": {
+          "light": "#000000",
+          "dark": "#ffffff"
+        },
+        "usage": "Farciment del botó principal (píndola negra a la web)."
+      },
+      {
+        "name": "on-action",
+        "value": {
+          "light": "#ffffff",
+          "dark": "#0b1622"
+        },
+        "usage": "Text sobre action."
+      },
+      {
+        "name": "border",
+        "value": {
+          "light": "#d5dbe1",
+          "dark": "#284257"
+        },
+        "usage": "Separadors decoratius. No identifica controls: usa border-strong."
+      },
+      {
+        "name": "border-strong",
+        "value": "#7b8794",
+        "usage": "Vora inferior dels camps i contorn de controls: 3,7:1 sobre surface-100 clar i 5:1 sobre el fosc."
+      },
+      {
+        "name": "focus",
+        "value": {
+          "light": "{aqua-700}",
+          "dark": "{aqua-500}"
+        },
+        "usage": "Anell de focus sòlid de 2px sobre surface-100 i surface-200 (≥3:1)."
+      },
+      {
+        "name": "focus-on-dark",
+        "value": "{aqua-500}",
+        "usage": "Anell de focus sobre navy-*, surface-card i surface-footer (6,5:1)."
+      },
+      {
+        "name": "overlay-hero",
+        "value": "#0b1b2a59",
+        "usage": "Velo sobre fotos de portada perquè el text on-navy llegeixi. No el treguis ni l'aclareixis."
+      },
+      {
+        "name": "error",
+        "value": {
+          "light": "#b3261e",
+          "dark": "#ff9a8f"
+        },
+        "usage": "Missatges d'error sobre surface-100 i surface-200. Sempre amb text; mai només color."
+      },
+      {
+        "name": "success",
+        "value": {
+          "light": "#0b6b4d",
+          "dark": "#6fd6b0"
+        },
+        "usage": "Icona de confirmació sobre surface-100 i success-bg. Sempre amb text; mai només color."
+      },
+      {
+        "name": "success-bg",
+        "value": {
+          "light": "#e3f4ec",
+          "dark": "#0f2a22"
+        },
+        "usage": "Fons de l'avís d'èxit. Text: ink (≥14:1); icona: success (≥5,7:1)."
+      },
+      {
+        "name": "warning",
+        "value": {
+          "light": "#7a4b00",
+          "dark": "#f3c969"
+        },
+        "usage": "Icona d'advertència sobre warning-bg i surface-100. Sempre amb text."
+      },
+      {
+        "name": "warning-bg",
+        "value": {
+          "light": "#fdf2d8",
+          "dark": "#2e2410"
+        },
+        "usage": "Fons de l'avís d'advertència. Text: ink; icona: warning (≥6,6:1)."
+      },
+      {
+        "name": "error-bg",
+        "value": {
+          "light": "#fbe9e7",
+          "dark": "#2d1514"
+        },
+        "usage": "Fons de l'avís d'error. Text: ink; icona: error (≥5,6:1)."
+      }
+    ]
+  },
+  "type": {
+    "fonts": [],
+    "families": {
+      "sans": "\"Montserrat\", system-ui, -apple-system, \"Segoe UI\", Arial, sans-serif"
+    },
+    "groups": [
+      {
+        "name": "Titulars",
+        "family": "sans",
+        "styles": [
+          {
+            "name": "display",
+            "fontSize": "2.5rem",
+            "lineHeight": 1.1,
+            "fontWeight": 600,
+            "letterSpacing": "-0.01em",
+            "sample": "Tecnología de Punta",
+            "usage": "Títol de portada en mòbil (<768px), blanc sobre foto amb overlay-hero."
+          },
+          {
+            "name": "display-lg",
+            "fontSize": "4rem",
+            "lineHeight": 1.0625,
+            "fontWeight": 600,
+            "letterSpacing": "-0.02em",
+            "sample": "Tecnología de Punta",
+            "usage": "Títol de portada des de 768px."
+          },
+          {
+            "name": "h1",
+            "fontSize": "2rem",
+            "lineHeight": 1.1875,
+            "fontWeight": 600,
+            "sample": "Contáctanos",
+            "usage": "Títol de pàgina en mòbil."
+          },
+          {
+            "name": "h1-lg",
+            "fontSize": "3.5rem",
+            "lineHeight": 1.10714286,
+            "fontWeight": 600,
+            "letterSpacing": "-0.01em",
+            "sample": "Contáctanos",
+            "usage": "Títol de pàgina des de 768px."
+          },
+          {
+            "name": "h2",
+            "fontSize": "1.75rem",
+            "lineHeight": 1.21428571,
+            "fontWeight": 600,
+            "sample": "Juntos na Transição",
+            "usage": "Títol de secció en mòbil."
+          },
+          {
+            "name": "h2-lg",
+            "fontSize": "2.5rem",
+            "lineHeight": 1.2,
+            "fontWeight": 600,
+            "sample": "Juntos na Transição",
+            "usage": "Títol de secció des de 768px."
+          },
+          {
+            "name": "h3",
+            "fontSize": "1.125rem",
+            "lineHeight": 1.44444444,
+            "fontWeight": 600,
+            "sample": "Propulsão elétrica e Infraestrutura",
+            "usage": "Títol de targeta i de bloc de marca, tots els amples."
+          },
+          {
+            "name": "wordmark",
+            "fontSize": "1.125rem",
+            "lineHeight": 1.33333333,
+            "fontWeight": 700,
+            "sample": "The Silent Fleet",
+            "usage": "El nom «The Silent Fleet» a la capçalera, en text pla. No hi ha logotip dibuixat."
+          }
+        ]
+      },
+      {
+        "name": "Text",
+        "family": "sans",
+        "styles": [
+          {
+            "name": "body-lg",
+            "fontSize": "1.125rem",
+            "lineHeight": 1.55555556,
+            "fontWeight": 400,
+            "sample": "Entusiastas náuticos que creen en el futuro de la náutica.",
+            "usage": "Paràgraf d'entrada d'una secció."
+          },
+          {
+            "name": "body",
+            "fontSize": "1rem",
+            "lineHeight": 1.625,
+            "fontWeight": 400,
+            "sample": "Unir propietarios, operadores y entusiastas.",
+            "usage": "Text de cos per defecte."
+          },
+          {
+            "name": "body-sm",
+            "fontSize": "0.875rem",
+            "lineHeight": 1.57142857,
+            "fontWeight": 400,
+            "sample": "Soluciones a medida para su transición eléctrica",
+            "usage": "Subtítols, descripcions de targeta i text de peu. Pes 400: el pes 300 és massa fi per a 14px."
+          },
+          {
+            "name": "caption",
+            "fontSize": "0.75rem",
+            "lineHeight": 1.5,
+            "fontWeight": 400,
+            "sample": "© 2026. All rights reserved.",
+            "usage": "Copyright, notes i missatges d'error de camp."
+          },
+          {
+            "name": "eyebrow",
+            "fontSize": "0.75rem",
+            "lineHeight": 1.33333333,
+            "fontWeight": 700,
+            "letterSpacing": "0.08em",
+            "sample": "SUBSCREVER",
+            "usage": "Encapçalaments de columna del peu. Escriu el text ja en majúscules."
+          },
+          {
+            "name": "nav",
+            "fontSize": "0.875rem",
+            "lineHeight": 1.42857143,
+            "fontWeight": 400,
+            "sample": "El Movimiento",
+            "usage": "Enllaços de navegació."
+          },
+          {
+            "name": "label",
+            "fontSize": "0.875rem",
+            "lineHeight": 1.42857143,
+            "fontWeight": 500,
+            "sample": "Nombre*",
+            "usage": "Etiquetes dels camps de formulari."
+          },
+          {
+            "name": "button",
+            "fontSize": "0.875rem",
+            "lineHeight": 1.42857143,
+            "fontWeight": 500,
+            "sample": "Especificaciones",
+            "usage": "Text dels botons."
+          }
+        ]
+      }
+    ]
+  },
+  "spacing": {
+    "note": "Escala mòbil primer. Les distàncies entre seccions són a «layout».",
+    "tokens": [
+      {
+        "name": "space-1",
+        "value": "4px",
+        "usage": "Separació mínima: entre icona i text, entre línies d'un grup."
+      },
+      {
+        "name": "space-2",
+        "value": "8px",
+        "usage": "Entre etiqueta i camp; entre elements d'un mateix grup."
+      },
+      {
+        "name": "space-3",
+        "value": "12px",
+        "usage": "Entre títol i descripció d'una targeta."
+      },
+      {
+        "name": "space-4",
+        "value": "16px",
+        "usage": "Padding intern d'un camp i separació entre blocs relacionats."
+      },
+      {
+        "name": "space-5",
+        "value": "24px",
+        "usage": "Padding de panells i gutter mòbil."
+      },
+      {
+        "name": "space-6",
+        "value": "32px",
+        "usage": "Entre targetes apilades; padding horitzontal de botó."
+      },
+      {
+        "name": "space-7",
+        "value": "48px",
+        "usage": "Entre blocs de contingut dins d'una secció."
+      },
+      {
+        "name": "space-8",
+        "value": "64px",
+        "usage": "Marge vertical de secció en mòbil."
+      },
+      {
+        "name": "space-9",
+        "value": "96px",
+        "usage": "Marge vertical de secció des de 768px."
+      },
+      {
+        "name": "space-10",
+        "value": "128px",
+        "usage": "Respiració abans d'un peu de pàgina o d'un hero secundari."
+      }
+    ]
+  },
+  "radius": {
+    "tokens": [
+      {
+        "name": "radius-none",
+        "value": "0",
+        "usage": "Camps de formulari, portada a pantalla completa i panells de producte."
+      },
+      {
+        "name": "radius-sm",
+        "value": "6px",
+        "usage": "Camp de correu blanc del peu."
+      },
+      {
+        "name": "radius-md",
+        "value": "16px",
+        "usage": "Imatges de targeta."
+      },
+      {
+        "name": "radius-lg",
+        "value": "24px",
+        "usage": "Imatge destacada gran."
+      },
+      {
+        "name": "radius-pill",
+        "value": "999px",
+        "usage": "Tots els botons."
+      }
+    ]
+  },
+  "layout": {
+    "note": "Valors CSS plans. El punt de ruptura principal és 768px; la composició base és mòbil.",
+    "tokens": [
+      {
+        "name": "container-max",
+        "value": "1140px",
+        "usage": "Amplada màxima del contingut centrat."
+      },
+      {
+        "name": "gutter",
+        "value": "24px",
+        "usage": "Marge lateral en mòbil."
+      },
+      {
+        "name": "gutter-lg",
+        "value": "40px",
+        "usage": "Marge lateral des de 768px."
+      },
+      {
+        "name": "tap-min-compact",
+        "value": "44px",
+        "usage": "Alçada mínima tàctil en fluxos compactes (classe tsf-compact): botons, camps i chips."
+      },
+      {
+        "name": "option-h-compact",
+        "value": "40px",
+        "usage": "Alçada d'una fila de ràdio o casella en un grup compacte; tota la fila és clicable."
+      },
+      {
+        "name": "header-h",
+        "value": "56px",
+        "usage": "Alçada de la capçalera en mòbil."
+      },
+      {
+        "name": "header-h-lg",
+        "value": "64px",
+        "usage": "Alçada de la capçalera des de 768px."
+      },
+      {
+        "name": "tap-min",
+        "value": "48px",
+        "usage": "Alçada mínima de qualsevol zona tàctil (botó, camp, enllaç de menú)."
+      },
+      {
+        "name": "bp-md",
+        "value": "768px",
+        "usage": "Inici del disseny d'escriptori (@media min-width)."
+      },
+      {
+        "name": "bp-lg",
+        "value": "1024px",
+        "usage": "Inici de la composició ampla (3-4 columnes)."
+      },
+      {
+        "name": "section-y",
+        "value": "64px",
+        "usage": "Padding vertical d'una secció en mòbil."
+      },
+      {
+        "name": "section-y-lg",
+        "value": "96px",
+        "usage": "Padding vertical d'una secció des de 768px."
+      }
+    ]
+  },
+  "zIndex": {
+    "tokens": [
+      {
+        "name": "z-header",
+        "value": "100",
+        "usage": "Capçalera enganxada a dalt."
+      },
+      {
+        "name": "z-menu",
+        "value": "110",
+        "usage": "Panell del menú mòbil."
+      }
+    ]
+  }
+}

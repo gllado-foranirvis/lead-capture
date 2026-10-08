@@ -1,0 +1,40 @@
+<!-- @dsCard height=300 -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+html,body{margin:0;width:960px;height:300px;overflow:hidden}
+body{position:relative;background:var(--surface-100);font-family:var(--font-sans)}
+svg{position:absolute;left:0;top:0;width:960px;height:300px;display:block}
+.slab{fill:var(--navy-800);rx:var(--radius-lg)}
+.aqua{fill:var(--aqua-500);rx:var(--radius-lg)}
+.sky{fill:var(--sky-500);rx:var(--radius-lg)}
+.steel{fill:var(--navy-600);rx:var(--radius-lg)}
+.teal{fill:var(--aqua-700);rx:var(--radius-lg)}
+.ripple{fill:none;stroke:var(--aqua-500);stroke-width:4}
+.txt{position:absolute;left:48px;bottom:48px;width:432px}
+.name{margin:0;font-size:72px;line-height:.95;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+.tag{margin:12px 0 0;font-size:13px;line-height:18px;color:var(--text-muted)}
+</style></head>
+<body>
+<svg viewBox="0 0 960 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
+<!--
+Blocks: navy-800 slab 216x268 (bleeds top), aqua-500 96, sky-500 120x228 (bleeds right+bottom), navy-600 216x64 and aqua-700 96x164 (bleed bottom); gaps space-4 (16), corners radius-lg (24).
+Arrangement: staggered stack, one tall dark slab with satellites, right of x=480 so the name keeps the left zone.
+Pattern: wave ripples (literal motif): four concentric half-circles at a 24px pitch (space-5), stroke aqua-500 4px, clipped to the slab, because the brand is silent water and electric propulsion.
+Steps and radii: space-4, space-5, radius-lg; name 72px / 2 lines, tagline 13px muted.
+-->
+<defs><clipPath id="c"><rect x="520" y="-24" width="216" height="268" rx="24"/></clipPath></defs>
+<rect class="slab" x="520" y="-24" width="216" height="268"/>
+<g clip-path="url(#c)">
+<path class="ripple" d="M604 244A24 24 0 0 1 652 244"/>
+<path class="ripple" d="M580 244A48 48 0 0 1 676 244"/>
+<path class="ripple" d="M556 244A72 72 0 0 1 700 244"/>
+<path class="ripple" d="M532 244A96 96 0 0 1 724 244"/>
+</g>
+<rect class="aqua" x="752" y="48" width="96" height="96"/>
+<rect class="teal" x="752" y="160" width="96" height="164"/>
+<rect class="sky" x="864" y="96" width="120" height="228"/>
+<rect class="steel" x="520" y="260" width="216" height="64"/>
+</svg>
+<div class="txt"><h1 class="name">The Silent<br>Fleet</h1><p class="tag">Juntos, fazemos a diferença</p></div>
+</body></html>

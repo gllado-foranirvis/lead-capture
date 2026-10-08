@@ -1,0 +1,25 @@
+<!-- @dsCard group="Navegació" height=760 width=920 subtitle="Peu navy: contacte i subscripció" -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html,body{margin:0}
+body{background:var(--surface-100);color:var(--ink);font-family:var(--font-sans);padding:16px}
+.lbl{margin:0 0 8px;font-size:12px;line-height:16px;color:var(--text-muted)}
+.frame{max-width:100%;margin:0 0 24px;border:1px dashed var(--border-strong);position:relative}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:0 0 20px}
+.navy{background:var(--surface-card);padding:20px}
+</style></head>
+<body><div id="root"></div>
+<script>
+var T = window.TSF, h = React.createElement;
+function Frame(p){ return h('div',null,h('p',{className:'lbl'},p.label),h('div',{className:'frame',style:{width:p.w}},p.children)); }
+var noop = function(e){ if(e&&e.preventDefault) e.preventDefault(); };
+function Soc(){ return ['Facebook','Instagram','TikTok','X'].map(function(n){ return h('a',{key:n,href:'#','aria-label':n,style:{display:'inline-block',width:24,height:24,borderRadius:'50%',border:'2px solid var(--on-navy)'}}); }); }
+var f={contactHeading:'CONTACTE',contacts:[{label:'+351 93 406 53 56',href:'#'},{label:'+34 682 37 57 28',href:'#'},{label:'info@thesilentfleet.com',href:'#'}],newsletter:{heading:'SUBSCREVER',button:'Junte-se agora',onSubmit:noop},social:h(Soc)};
+function App(){
+  return h('div',null,
+    h(Frame,{label:'Mòbil (390px)',w:390},h(T.SiteFooter,Object.assign({layout:'mobile'},f))),
+    h(Frame,{label:'Escriptori (880px)',w:880},h(T.SiteFooter,Object.assign({layout:'desktop'},f))));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script></body></html>

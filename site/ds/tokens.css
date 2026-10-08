@@ -1,0 +1,100 @@
+/* The Silent Fleet — generated from tokens.json */
+:root, [data-theme="light"] {
+  --navy-900: #0d1b2a;
+  --navy-800: #17304a;
+  --navy-600: #265a7a;
+  --aqua-500: #45c4dc;
+  --sky-500: #3fb2e8;
+  --aqua-700: #0e7c92;
+  --slate-600: #5a6570;
+  --surface-100: #ffffff;
+  --surface-200: #f0f0f0;
+  --surface-card: var(--navy-900);
+  --surface-footer: var(--navy-800);
+  --ink: #0f1419;
+  --text-muted: var(--slate-600);
+  --on-navy: #ffffff;
+  --on-navy-muted: #c3d0dc;
+  --on-aqua: #0d1b2a;
+  --accent: var(--aqua-700);
+  --action: #000000;
+  --on-action: #ffffff;
+  --border: #d5dbe1;
+  --border-strong: #7b8794;
+  --focus: var(--aqua-700);
+  --focus-on-dark: var(--aqua-500);
+  --overlay-hero: #0b1b2a59;
+  --error: #b3261e;
+  --success: #0b6b4d;
+  --success-bg: #e3f4ec;
+  --warning: #7a4b00;
+  --warning-bg: #fdf2d8;
+  --error-bg: #fbe9e7;
+}
+[data-theme="dark"] {
+  --surface-100: #0b1622;
+  --surface-200: #14283b;
+  --surface-card: var(--navy-800);
+  --surface-footer: #0f2336;
+  --ink: #f2f6f9;
+  --text-muted: #a9b8c6;
+  --accent: var(--aqua-500);
+  --action: #ffffff;
+  --on-action: #0b1622;
+  --border: #284257;
+  --focus: var(--aqua-500);
+  --error: #ff9a8f;
+  --success: #6fd6b0;
+  --success-bg: #0f2a22;
+  --warning: #f3c969;
+  --warning-bg: #2e2410;
+  --error-bg: #2d1514;
+}
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+  --radius-none: 0;
+  --radius-sm: 6px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+  --container-max: 1140px;
+  --gutter: 24px;
+  --gutter-lg: 40px;
+  --tap-min-compact: 44px;
+  --option-h-compact: 40px;
+  --header-h: 56px;
+  --header-h-lg: 64px;
+  --tap-min: 48px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --section-y: 64px;
+  --section-y-lg: 96px;
+  --z-header: 100;
+  --z-menu: 110;
+  --font-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+}
+.display { font-family: var(--font-sans); font-size: 40px; line-height: 44px; font-weight: 600; letter-spacing: -0.01em; }
+.display-lg { font-family: var(--font-sans); font-size: 64px; line-height: 68px; font-weight: 600; letter-spacing: -0.02em; }
+.h1 { font-family: var(--font-sans); font-size: 32px; line-height: 38px; font-weight: 600; }
+.h1-lg { font-family: var(--font-sans); font-size: 56px; line-height: 62px; font-weight: 600; letter-spacing: -0.01em; }
+.h2 { font-family: var(--font-sans); font-size: 28px; line-height: 34px; font-weight: 600; }
+.h2-lg { font-family: var(--font-sans); font-size: 40px; line-height: 48px; font-weight: 600; }
+.h3 { font-family: var(--font-sans); font-size: 18px; line-height: 26px; font-weight: 600; }
+.wordmark { font-family: var(--font-sans); font-size: 18px; line-height: 24px; font-weight: 700; }
+.body-lg { font-family: var(--font-sans); font-size: 18px; line-height: 28px; font-weight: 400; }
+.body { font-family: var(--font-sans); font-size: 16px; line-height: 26px; font-weight: 400; }
+.body-sm { font-family: var(--font-sans); font-size: 14px; line-height: 22px; font-weight: 400; }
+.caption { font-family: var(--font-sans); font-size: 12px; line-height: 18px; font-weight: 400; }
+.eyebrow { font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 700; letter-spacing: 0.08em; }
+.nav { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 400; }
+.label { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 500; }
+.button { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 500; }

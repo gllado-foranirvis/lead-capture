@@ -1,0 +1,34 @@
+{
+  "v": 3,
+  "assetGroups": {},
+  "blobs": {},
+  "createdOnFiles": {
+    "at": "2026-10-08T08:45:36Z",
+    "v": 1
+  },
+  "docs": {
+    "readme": "project/README.md",
+    "sections": []
+  },
+  "groups": [],
+  "lastChange": {
+    "by": "Olga",
+    "at": "2026-10-08T09:17:50Z",
+    "via": "Claude",
+    "note": "Afegits RadioGroup, CheckboxGroup, Figure, densitat compacta, LeadFlow compacte i enquesta"
+  },
+  "layout": "files",
+  "libraries": [
+    {
+      "name": "react",
+      "version": "18"
+    },
+    {
+      "name": "react-dom",
+      "version": "18"
+    }
+  ],
+  "namespace": "TSF",
+  "sections": {},
+  "title": "The Silent Fleet"
+}

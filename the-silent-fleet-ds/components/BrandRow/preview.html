@@ -1,0 +1,27 @@
+<!-- @dsCard group="Seccions" height=640 width=920 subtitle="Logotip i text, alternat" -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html,body{margin:0}
+body{background:var(--surface-100);color:var(--ink);font-family:var(--font-sans);padding:16px}
+.lbl{margin:0 0 8px;font-size:12px;line-height:16px;color:var(--text-muted)}
+.frame{max-width:100%;margin:0 0 24px;border:1px dashed var(--border-strong);position:relative}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:0 0 20px}
+.navy{background:var(--surface-card);padding:20px}
+</style></head>
+<body><div id="root"></div>
+<script>
+var T = window.TSF, h = React.createElement;
+function Frame(p){ return h('div',null,h('p',{className:'lbl'},p.label),h('div',{className:'frame',style:{width:p.w}},p.children)); }
+var noop = function(e){ if(e&&e.preventDefault) e.preventDefault(); };
+function Logo(t){ return h('div',{style:{border:'1px dashed var(--border-strong)',padding:'28px 24px',width:'100%',textAlign:'center',color:'var(--text-muted)',fontSize:12}},t); }
+function App(){
+  return h('div',null,
+    h(Frame,{label:'Escriptori (880px) · filera normal i filera reverse',w:880},
+      h('div',{style:{padding:'0 24px'}},
+        h(T.BrandRow,{layout:'desktop',logo:Logo('Logotip del partner'),title:'Impulsando el futuro. En silencio'},['Desde hace más de 4 años, desarrollan sistemas de propulsión eléctrica para pequeñas embarcaciones y lanchas auxiliares.','Una combinación de rendimiento, sostenibilidad y operación sin esfuerzo.']),
+        h(T.BrandRow,{layout:'desktop',reverse:true,logo:Logo('Logotip del partner'),title:'Innovación en el surf eléctrico'},['Redefiniendo los deportes acuáticos con jetboards eléctricos de alto rendimiento.']))),
+    h(Frame,{label:'Mòbil (390px)',w:390},h('div',{style:{padding:'0 24px'}},h(T.BrandRow,{layout:'mobile',logo:Logo('Logotip del partner'),title:'Expandiendo las fronteras de lo posible'},['Fundada en 2022 por un equipo de arquitectos navales, ingenieros y diseñadores con experiencia y pasión por el entorno marino.']))));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script></body></html>

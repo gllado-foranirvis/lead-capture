@@ -1,0 +1,83 @@
+export const DICT = {
+  es: {
+    title: 'Hablemos de propulsión eléctrica',
+    subtitle: 'Cuéntanos qué buscas y te respondemos',
+    profileLegend: '¿Quién eres? (opcional)', profileDistribuidor: 'Distribuidor o profesional', profileParticular: 'Particular',
+    contactLabel: 'Escríbenos', whatsapp: 'Escribir por WhatsApp', emailLabel: 'Escribir por correo',
+    contactHint: 'Se abre con un mensaje ya escrito. Puedes cambiarlo antes de enviarlo.',
+    contactFallback: '¿No se abre? Escríbenos a',
+    privacy: 'Privacidad', cookies: 'Cookies', legalNav: 'Enlaces legales', langLabel: 'Idioma', back: 'Volver',
+    greeting: 'Hola,', closing: 'Gracias.',
+    messages: {
+      none: { subject: 'Información desde el Salón Náutico', text: 'He visto vuestro stand en el Salón Náutico de Barcelona y quiero más información.' },
+      distribuidor: { subject: 'Distribución · Salón Náutico', text: 'Soy distribuidor y me interesa trabajar con The Silent Fleet. ¿Podemos hablar de volumen y condiciones?' },
+      particular: { subject: 'Propulsión eléctrica · Salón Náutico', text: 'Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme?' },
+    },
+    privacyTitle: 'Privacidad',
+    privacyText: 'Esta página no guarda datos personales. Si nos escribes por WhatsApp o por correo, usaremos tus datos solo para responderte.',
+    cookiesTitle: 'Cookies',
+    cookiesText: 'Esta página no usa cookies ni herramientas de medición.',
+  },
+  ca: {
+    title: 'Parlem de propulsió elèctrica',
+    subtitle: 'Explica\'ns què busques i et responem',
+    profileLegend: 'Qui ets? (opcional)', profileDistribuidor: 'Distribuïdor o professional', profileParticular: 'Particular',
+    contactLabel: 'Escriu-nos', whatsapp: 'Escriure per WhatsApp', emailLabel: 'Escriure per correu',
+    contactHint: 'S\'obre amb un missatge ja escrit. Pots canviar-lo abans d\'enviar-lo.',
+    contactFallback: 'No s\'obre? Escriu-nos a',
+    privacy: 'Privacitat', cookies: 'Cookies', legalNav: 'Enllaços legals', langLabel: 'Idioma', back: 'Tornar',
+    greeting: 'Hola,', closing: 'Gràcies.',
+    messages: {
+      none: { subject: 'Informació des del Saló Nàutic', text: 'He vist el vostre estand al Saló Nàutic de Barcelona i vull més informació.' },
+      distribuidor: { subject: 'Distribució · Saló Nàutic', text: 'Sóc distribuïdor i m\'interessa treballar amb The Silent Fleet. Podem parlar de volum i condicions?' },
+      particular: { subject: 'Propulsió elèctrica · Saló Nàutic', text: 'Sóc un particular i m\'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar?' },
+    },
+    privacyTitle: 'Privacitat',
+    privacyText: 'Aquesta pàgina no desa dades personals. Si ens escrius per WhatsApp o per correu, farem servir les teves dades només per respondre\'t.',
+    cookiesTitle: 'Cookies',
+    cookiesText: 'Aquesta pàgina no fa servir cookies ni eines de mesura.',
+  },
+  pt: {
+    title: 'Falemos de propulsão elétrica',
+    subtitle: 'Diga-nos o que procura e respondemos',
+    profileLegend: 'Quem é? (opcional)', profileDistribuidor: 'Distribuidor ou profissional', profileParticular: 'Particular',
+    contactLabel: 'Escreva-nos', whatsapp: 'Escrever por WhatsApp', emailLabel: 'Escrever por e-mail',
+    contactHint: 'Abre com uma mensagem já escrita. Pode alterá-la antes de a enviar.',
+    contactFallback: 'Não abre? Escreva-nos para',
+    privacy: 'Privacidade', cookies: 'Cookies', legalNav: 'Ligações legais', langLabel: 'Idioma', back: 'Voltar',
+    greeting: 'Olá,', closing: 'Obrigado.',
+    messages: {
+      none: { subject: 'Informação do Salão Náutico', text: 'Vi o vosso stand no Salão Náutico de Barcelona e gostaria de mais informação.' },
+      distribuidor: { subject: 'Distribuição · Salão Náutico', text: 'Sou distribuidor e tenho interesse em trabalhar com a The Silent Fleet. Podemos falar de volume e condições?' },
+      particular: { subject: 'Propulsão elétrica · Salão Náutico', text: 'Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me?' },
+    },
+    privacyTitle: 'Privacidade',
+    privacyText: 'Esta página não guarda dados pessoais. Se nos escrever por WhatsApp ou por correio, usaremos os seus dados apenas para lhe responder.',
+    cookiesTitle: 'Cookies',
+    cookiesText: 'Esta página não utiliza cookies nem ferramentas de medição.',
+  },
+  en: {
+    title: "Let's talk electric propulsion",
+    subtitle: "Tell us what you're looking for and we'll reply",
+    profileLegend: 'Who are you? (optional)', profileDistribuidor: 'Distributor or professional', profileParticular: 'Private customer',
+    contactLabel: 'Get in touch', whatsapp: 'Message on WhatsApp', emailLabel: 'Send an email',
+    contactHint: 'It opens with a message already written. You can edit it before sending.',
+    contactFallback: "Doesn't open? Write to us at",
+    privacy: 'Privacy', cookies: 'Cookies', legalNav: 'Legal links', langLabel: 'Language', back: 'Back',
+    greeting: 'Hello,', closing: 'Thank you.',
+    messages: {
+      none: { subject: 'Information from the Boat Show', text: 'I saw your stand at the Barcelona Boat Show and would like more information.' },
+      distribuidor: { subject: 'Distribution · Boat Show', text: 'I am a distributor and I am interested in working with The Silent Fleet. Can we talk about volume and terms?' },
+      particular: { subject: 'Electric propulsion · Boat Show', text: 'I am an individual interested in electric propulsion for my boat. Could you send me some information?' },
+    },
+    privacyTitle: 'Privacy',
+    privacyText: 'This page does not store personal data. If you write to us by WhatsApp or email, we will use your details only to reply.',
+    cookiesTitle: 'Cookies',
+    cookiesText: 'This page does not use cookies or measurement tools.',
+  },
+};
+
+export function resolveLang(search, config) {
+  const wanted = (new URLSearchParams(search).get('lang') || '').toLowerCase();
+  return config.languages.includes(wanted) ? wanted : config.defaultLang;
+}

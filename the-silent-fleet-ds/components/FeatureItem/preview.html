@@ -1,0 +1,28 @@
+<!-- @dsCard group="Targetes" height=300 width=820 subtitle="Icona, títol i descripció" -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html,body{margin:0}
+body{background:var(--surface-100);color:var(--ink);font-family:var(--font-sans);padding:16px}
+.lbl{margin:0 0 8px;font-size:12px;line-height:16px;color:var(--text-muted)}
+.frame{max-width:100%;margin:0 0 24px;border:1px dashed var(--border-strong);position:relative}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:0 0 20px}
+.navy{background:var(--surface-card);padding:20px}
+</style></head>
+<body><div id="root"></div>
+<script>
+var T = window.TSF, h = React.createElement;
+function Frame(p){ return h('div',null,h('p',{className:'lbl'},p.label),h('div',{className:'frame',style:{width:p.w}},p.children)); }
+var noop = function(e){ if(e&&e.preventDefault) e.preventDefault(); };
+function Ico(d){ return h('svg',{width:32,height:32,viewBox:'0 0 32 32',fill:'none',stroke:'currentColor',strokeWidth:1.5,strokeLinecap:'round',strokeLinejoin:'round'},d); }
+function App(){
+  var items=[
+   ['Battery Monitoring','Stay informed about your battery status and the realtime power consumption.',Ico(h('rect',{x:4,y:10,width:22,height:12,rx:2}))],
+   ['Speed control','Fine-tune your speed for optimal performance and efficiency.',Ico(h('path',{d:'M5 22a11 11 0 0 1 22 0M16 22l5-7'}))],
+   ['Remote Lockout and MOB','Prevent unauthorized use and quickly stop the motor in emergencies.',Ico(h('path',{d:'M10 16h12M16 10v12'}))],
+   ['Precise GPS Tracking','Know your exact speed and location with pinpoint accuracy.',Ico(h('circle',{cx:16,cy:16,r:9}))]];
+  return h('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(170px,1fr))',gap:32,maxWidth:780}},
+    items.map(function(i,k){ return h(T.FeatureItem,{key:k,title:i[0],description:i[1],icon:i[2]}); }));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script></body></html>
