@@ -21,6 +21,7 @@ export function createFormScreen({ h, T }) {
 
     return h('div', { className: 'page__screen page__screen--form' },
       h(T.SectionHeading, { layout: 'mobile', align: 'start', level: 1, title: f.title, subtitle: f.subtitle, className: 'page__title' }),
+      h('p', { className: 'body-sm page__note' }, f.requiredNote),
       h('form', { className: 'form', noValidate: true, onKeyDown, onSubmit: (e) => { e.preventDefault(); onSubmit(); } },
         h('div', { className: 'form__group' },
           h(T.Select, {

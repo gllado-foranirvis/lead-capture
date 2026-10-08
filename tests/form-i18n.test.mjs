@@ -44,3 +44,13 @@ test('el botó d\'entrada és «Saber más» i les seves traduccions', () => {
 test('el text de privacitat de l\'Extra 1 també explica què passa si t\'escriuen per WhatsApp o correu', () => {
   for (const l of CONFIG.languages) assert.match(DICT[l].form.privacyText, /WhatsApp/, l);
 });
+test('el formulari no promet un PDF: el document és sempre «ficha» (cap «PDF» als literals visibles)', () => {
+  for (const l of CONFIG.languages) for (const s of leaves(DICT[l].form)) assert.doesNotMatch(s, /PDF/, s);
+});
+test('el text de privacitat no diu «correio» (en portuguès és correu postal)', () => {
+  assert.doesNotMatch(DICT.pt.form.privacyText, /correio/);
+  assert.doesNotMatch(DICT.pt.privacyText, /correio/);
+});
+test('el literal de l\'asterisc existeix en els 4 idiomes i comença per «*»', () => {
+  for (const l of CONFIG.languages) assert.match(DICT[l].form.requiredNote, /^\* \S/, l);
+});

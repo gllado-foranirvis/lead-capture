@@ -54,7 +54,7 @@ const PAGE = {
       particular: { subject: 'Propulsão elétrica · Salão Náutico', text: 'Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me?' },
     },
     privacyTitle: 'Privacidade',
-    privacyText: 'Esta página não guarda dados pessoais. Se nos escreveres por WhatsApp ou por correio, usaremos os teus dados apenas para te responder.',
+    privacyText: 'Esta página não guarda dados pessoais. Se nos escreveres por WhatsApp ou por e-mail, usaremos os teus dados apenas para te responder.',
     cookiesTitle: 'Cookies',
     cookiesText: 'Esta página não utiliza cookies nem ferramentas de medição.',
   },

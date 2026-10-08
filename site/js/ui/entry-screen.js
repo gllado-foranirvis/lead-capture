@@ -12,6 +12,7 @@ export function createEntryScreen({ h, T, icon }) {
           onChange: (e) => onProfile(e.target.value),
         })),
       withForm ? h(T.Button, { full: true, onClick: onOpenForm }, t.form.entryCta) : null,
+      withForm ? h('p', { className: 'body-sm page__note' }, t.form.entryHint) : null,
       h(T.SectionLabel, null, withForm ? t.form.entryContactLabel : t.contactLabel),
       h('div', { className: 'page__stack' },
         h(T.Button, { full: true, variant: withForm ? 'outline' : undefined, href: links.whatsapp }, icon(h, 'whatsapp'), t.whatsapp),

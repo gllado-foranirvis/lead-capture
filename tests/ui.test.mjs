@@ -47,6 +47,10 @@ test('entrada amb Extra 1: el botó nou és l\'únic principal i WhatsApp passa 
   assert.equal(mail.props.variant, 'outline');
   assert.equal(textOf(byType(entry({ onOpenForm }), 'T.SectionLabel')[0]), DICT.es.form.entryContactLabel);
 });
+test('entrada amb Extra 1: una línia diu què es rep en tocar el botó; sense Extra 1 no hi és', () => {
+  assert.ok(textOf(entry({ onOpenForm: noop })).includes(DICT.es.form.entryHint));
+  assert.ok(!textOf(entry()).includes(DICT.es.form.entryHint));
+});
 test('entrada: línia explicativa, adreça visible i enllaços legals amb la query', () => {
   const tree = entry({ legalQuery: '?lang=es&extra1=1' });
   assert.ok(textOf(tree).includes(DICT.es.contactHint));
@@ -114,9 +118,12 @@ test('formulari: privacitat sense marcar, enllaç a pestanya nova, novetats opci
   assert.equal(byName(tree, 'newsletter')[0].props.required, undefined);
   assert.ok(textOf(byName(tree, 'newsletter')[0]).includes('(opcional)'));
 });
+test('formulari: una línia explica l\'asterisc', () => {
+  assert.ok(textOf(form()).includes(DICT.es.form.requiredNote));
+});
 test('formulari: botó d\'enviar principal i «← Volver» com a enllaç', () => {
   const [submit, back] = buttons(form());
-  assert.deepEqual([submit.props.type, submit.props.full, textOf(submit)], ['submit', true, 'Enviar y descargar el PDF']);
+  assert.deepEqual([submit.props.type, submit.props.full, textOf(submit)], ['submit', true, 'Recibir la ficha']);
   assert.deepEqual([back.props.variant, textOf(back)], ['link', '← Volver']);
 });
 test('formulari: enviar no recarrega la pàgina i crida onSubmit', () => {
