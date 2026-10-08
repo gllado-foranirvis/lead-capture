@@ -54,7 +54,7 @@ export function renderTexts(dict, config) {
       out.push(`| ${label} | WhatsApp | — | ${cell(whatsappText(d, { profile: key }))} |`);
       out.push(`| ${label} | Correu | ${cell(d.messages[key].subject)} | ${cell(emailBody(d, { profile: key }))} |`);
     }
-    const example = { profile: 'particular', name: 'Ana', product: 'Modelo A', hasBoat: d.form.yes };
+    const example = { profile: 'particular', name: 'Ana', product: 'Modelo A', hasBoat: d.form.yes, intent: d.form.no };
     out.push(`| Particular amb dades de sessió (exemple) | WhatsApp | — | ${cell(whatsappText(d, example))} |`);
     out.push(`| Particular amb dades de sessió (exemple) | Correu | ${cell(d.messages.particular.subject)} | ${cell(emailBody(d, example))} |`);
     out.push('');

@@ -33,16 +33,6 @@ test('sense cap argument de sessió, o amb perfil desconegut, cau al missatge ge
   assert.equal(whatsappText(DICT.es), `${DICT.es.greeting}\n\n${DICT.es.messages.none.text}`);
   assert.equal(whatsappText(DICT.es, { profile: 'inventat' }), whatsappText(DICT.es));
 });
-test('amb dades de sessió: nom, producte i embarcació van entre el text i el comiat', () => {
-  const session = { profile: 'particular', name: 'Ana', product: 'Modelo A', hasBoat: 'Sí' };
-  const d = DICT.es;
-  const lines = 'Me llamo Ana.\nProducto de interés: Modelo A\nTengo embarcación: Sí';
-  assert.equal(whatsappText(d, session), `${d.greeting}\n\n${d.messages.particular.text}\n\n${lines}`);
-  assert.equal(emailBody(d, session), `${d.greeting}\n\n${d.messages.particular.text}\n\n${lines}\n\n${d.closing}`);
-});
-test('les línies que no tenen valor no apareixen', () => {
-  assert.equal(whatsappText(DICT.ca, { product: 'Modelo A' }), `${DICT.ca.greeting}\n\n${DICT.ca.messages.none.text}\n\nProducte d'interès: Modelo A`);
-});
 test('un nom amb símbols arriba intacte als dos canals', () => {
   const name = 'Ana & "Joe" ñ 😀 $& {value}';
   const { whatsapp, email } = contactLinks(CONFIG, DICT.es, { name });
@@ -53,7 +43,18 @@ test('el número de config es normalitza a l\'enllaç', () => {
   const { whatsapp } = contactLinks({ ...CONFIG, whatsappNumber: '+34 600-00 00 00' }, DICT.es, {});
   assert.match(whatsapp, /^https:\/\/wa\.me\/34600000000\?/);
 });
-test('cada idioma té les tres línies de dades amb {value}', () => {
-  for (const lang of CONFIG.languages) for (const key of ['name', 'product', 'boat'])
+
+test('amb dades de sessió: les línies van entre el text i el comiat, en ordre', () => {
+  const session = { profile: 'particular', name: 'Ana', product: 'Modelo A', activity: 'Deporte: vela', hasBoat: 'Sí', intent: 'No' };
+  const d = DICT.es;
+  const lines = 'Me llamo Ana.\nProducto de interés: Modelo A\nActividad: Deporte: vela\nTengo embarcación: Sí\nIntención de compra: No';
+  assert.equal(whatsappText(d, session), `${d.greeting}\n\n${d.messages.particular.text}\n\n${lines}`);
+  assert.equal(emailBody(d, session), `${d.greeting}\n\n${d.messages.particular.text}\n\n${lines}\n\n${d.closing}`);
+});
+test('les línies que no tenen valor no apareixen', () => {
+  assert.equal(whatsappText(DICT.ca, { intent: 'Sí' }), `${DICT.ca.greeting}\n\n${DICT.ca.messages.none.text}\n\nIntenció de compra: Sí`);
+});
+test('cada idioma té les cinc línies de dades amb {value}', () => {
+  for (const lang of CONFIG.languages) for (const key of ['name', 'product', 'activity', 'boat', 'intent'])
     assert.match(DICT[lang].messageContext[key], /\{value\}/, `${lang}.${key}`);
 });

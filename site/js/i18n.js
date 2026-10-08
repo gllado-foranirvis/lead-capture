@@ -10,7 +10,7 @@ const PAGE = {
     contactFallback: '¿No se abre? Escríbenos a',
     privacy: 'Privacidad', cookies: 'Cookies', legalNav: 'Enlaces legales', langLabel: 'Idioma', back: 'Volver',
     greeting: 'Hola,', closing: 'Gracias.',
-    messageContext: { name: 'Me llamo {value}.', product: 'Producto de interés: {value}', boat: 'Tengo embarcación: {value}' },
+    messageContext: { name: 'Me llamo {value}.', product: 'Producto de interés: {value}', boat: 'Tengo embarcación: {value}', activity: 'Actividad: {value}', intent: 'Intención de compra: {value}' },
     messages: {
       none: { subject: 'Información desde el Salón Náutico', text: 'He visto vuestro stand en el Salón Náutico de Barcelona y quiero más información.' },
       distribuidor: { subject: 'Distribución · Salón Náutico', text: 'Soy distribuidor y me interesa trabajar con The Silent Fleet. ¿Podemos hablar de volumen y condiciones?' },
@@ -30,7 +30,7 @@ const PAGE = {
     contactFallback: 'No s\'obre? Escriu-nos a',
     privacy: 'Privacitat', cookies: 'Cookies', legalNav: 'Enllaços legals', langLabel: 'Idioma', back: 'Tornar',
     greeting: 'Hola,', closing: 'Gràcies.',
-    messageContext: { name: 'Em dic {value}.', product: 'Producte d\'interès: {value}', boat: 'Tinc embarcació: {value}' },
+    messageContext: { name: 'Em dic {value}.', product: 'Producte d\'interès: {value}', boat: 'Tinc embarcació: {value}', activity: 'Activitat: {value}', intent: 'Intenció de compra: {value}' },
     messages: {
       none: { subject: 'Informació des del Saló Nàutic', text: 'He vist el vostre estand al Saló Nàutic de Barcelona i vull més informació.' },
       distribuidor: { subject: 'Distribució · Saló Nàutic', text: 'Sóc distribuïdor i m\'interessa treballar amb The Silent Fleet. Podem parlar de volum i condicions?' },
@@ -50,7 +50,7 @@ const PAGE = {
     contactFallback: 'Não abre? Escreve-nos para',
     privacy: 'Privacidade', cookies: 'Cookies', legalNav: 'Ligações legais', langLabel: 'Idioma', back: 'Voltar',
     greeting: 'Olá,', closing: 'Obrigado.',
-    messageContext: { name: 'Chamo-me {value}.', product: 'Produto de interesse: {value}', boat: 'Tenho embarcação: {value}' },
+    messageContext: { name: 'Chamo-me {value}.', product: 'Produto de interesse: {value}', boat: 'Tenho embarcação: {value}', activity: 'Atividade: {value}', intent: 'Intenção de compra: {value}' },
     messages: {
       none: { subject: 'Informação do Salão Náutico', text: 'Vi o vosso stand no Salão Náutico de Barcelona e gostaria de mais informação.' },
       distribuidor: { subject: 'Distribuição · Salão Náutico', text: 'Sou distribuidor e tenho interesse em trabalhar com a The Silent Fleet. Podemos falar de volume e condições?' },
@@ -70,7 +70,7 @@ const PAGE = {
     contactFallback: "Doesn't open? Write to us at",
     privacy: 'Privacy', cookies: 'Cookies', legalNav: 'Legal links', langLabel: 'Language', back: 'Back',
     greeting: 'Hello,', closing: 'Thank you.',
-    messageContext: { name: 'My name is {value}.', product: 'Product of interest: {value}', boat: 'I own a boat: {value}' },
+    messageContext: { name: 'My name is {value}.', product: 'Product of interest: {value}', boat: 'I own a boat: {value}', activity: 'Activity: {value}', intent: 'Purchase intent: {value}' },
     messages: {
       none: { subject: 'Information from the Boat Show', text: 'I saw your stand at the Barcelona Boat Show and would like more information.' },
       distribuidor: { subject: 'Distribution · Boat Show', text: 'I am a distributor and I am interested in working with The Silent Fleet. Can we talk about volume and terms?' },
