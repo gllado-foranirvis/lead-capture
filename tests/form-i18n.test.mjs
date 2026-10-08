@@ -86,3 +86,12 @@ test('el subtítol del pas 2 no repeteix el títol', () => {
     assert.equal(step2Subtitle.toLowerCase().includes(lead), false, `${l}: «${lead}»`);
   }
 });
+
+test('cada idioma té un exemple per a nom, correu, telèfon i activitat «altra»; el correu i el telèfon tenen forma d\'exemple', () => {
+  for (const l of CONFIG.languages) {
+    const form = DICT[l].form;
+    for (const key of ['namePlaceholder', 'emailPlaceholder', 'phonePlaceholder', 'activityOtherPlaceholder']) assert.ok(form[key]?.trim(), `${l}.${key}`);
+    assert.match(form.emailPlaceholder, /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i, l);
+    assert.match(form.phonePlaceholder, /^\+\d[\d ]+$/, l);
+  }
+});

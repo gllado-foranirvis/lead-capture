@@ -182,3 +182,14 @@ test('pas 2: el xip llarg d\'assessorament de producte té fila pròpia (form__c
   assert.equal(wrappers.length, 1);
   assert.equal(findAll(wrappers[0], (n) => n.props?.name === 'product').length, 1);
 });
+
+test('els camps d\'escriptura porten un exemple com a placeholder (no substitueix l\'etiqueta)', () => {
+  const c = contact();
+  for (const [name, key] of [['name', 'namePlaceholder'], ['email', 'emailPlaceholder'], ['phone', 'phonePlaceholder']]) {
+    const field = byName(c, name)[0];
+    assert.equal(field.props.placeholder, f[key], name);
+    assert.notEqual(field.props.placeholder, field.props.label, name);
+  }
+  const other = profile({ values: { ...emptyForm(), profile: 'profesional', activity: 'otra' } });
+  assert.equal(byName(other, 'activityOther')[0].props.placeholder, f.activityOtherPlaceholder);
+});

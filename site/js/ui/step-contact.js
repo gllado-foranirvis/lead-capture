@@ -17,9 +17,9 @@ export function createStepContact({ h, T }) {
       h('p', { className: 'body-sm page__note' }, f.requiredNote),
       h('form', { className: 'form', noValidate: true, onKeyDown, onSubmit: (e) => { e.preventDefault(); onNext(); } },
         h('div', { className: 'form__group' },
-          text('name', f.name, { required: true }),
-          text('email', f.email, { required: true, type: 'email' }),
-          text('phone', f.phone, { required: true, type: 'tel' })),
+          text('name', f.name, { required: true, placeholder: f.namePlaceholder }),
+          text('email', f.email, { required: true, type: 'email', placeholder: f.emailPlaceholder }),
+          text('phone', f.phone, { required: true, type: 'tel', placeholder: f.phonePlaceholder })),
         h('div', { className: 'form__group' },
           h(T.Checkbox, { name: 'privacy', id: 'privacy', required: true, checked: values.privacy, error: error('privacy'), onChange: (e) => onChange('privacy', e.target.checked) },
             // Un sol element: l'etiqueta del Checkbox és flex i, amb tres fills, es perdria l'espai abans de l'enllaç.

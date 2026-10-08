@@ -21,7 +21,7 @@ export function createStepProfile({ h, T }) {
         h('div', { className: 'form__group' },
           chips('profile', f.profileLegend, PROFILES.map((p) => ({ value: p, label: f.profiles[p] })), { required: true }),
           showsActivity(values) ? select('activity', f.activity, ACTIVITIES.map((a) => ({ value: a, label: f.activities[a] })), { placeholder: f.activityPlaceholder }) : null,
-          showsActivityOther(values) ? text('activityOther', f.activityOther) : null,
+          showsActivityOther(values) ? text('activityOther', f.activityOther, { placeholder: f.activityOtherPlaceholder }) : null,
           chips('hasBoat', f.hasBoat, yesNo),
           chips('intent', f.intent, yesNo),
           chips('product', f.productLegend, productOptions, { className: 'form__chips--wide' })),

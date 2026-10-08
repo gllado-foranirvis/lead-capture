@@ -44,6 +44,9 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `name` | Nombre | Nom | Nome | Name |
 | `email` | Correo electrónico | Correu electrònic | E-mail | Email |
 | `phone` | Teléfono | Telèfon | Telefone | Phone |
+| `namePlaceholder` | Ana García | Anna Garcia | Ana Silva | Jane Smith |
+| `emailPlaceholder` | nombre@empresa.com | nom@empresa.com | nome@empresa.pt | name@company.com |
+| `phonePlaceholder` | +34 600 00 00 00 | +34 600 00 00 00 | +351 912 345 678 | +44 7700 900123 |
 | `consentBefore` | Acepto la  | Accepto la  | Aceito a  | I accept the  |
 | `consentLink` | política de privacidad | política de privacitat | política de privacidade | privacy policy |
 | `newsletter` | Quiero recibir novedades (opcional) | Vull rebre novetats (opcional) | Quero receber novidades (opcional) | I'd like to receive updates (optional) |
@@ -65,6 +68,7 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `activities.marina` | Marina / operador portuario | Marina / operador portuari | Marina / operador portuário | Marina / port operator |
 | `activities.otra` | Otra | Altra | Outra | Other |
 | `activityOther` | Otra actividad (especifica) | Una altra activitat (especifica) | Outra atividade (especifica) | Other activity (please specify) |
+| `activityOtherPlaceholder` | Por ejemplo, remolcadores | Per exemple, remolcadors | Por exemplo, rebocadores | For example, tugboats |
 | `hasBoat` | ¿Tienes embarcación actualmente? | Tens una embarcació actualment? | Tens atualmente uma embarcação? | Do you currently own a boat? |
 | `intent` | ¿Tienes intención de comprar propulsión eléctrica? | Tens intenció de comprar propulsió elèctrica? | Tens intenção de comprar propulsão elétrica? | Do you intend to buy electric propulsion? |
 | `productLegend` | Modelo o potencia de interés | Model o potència d'interès | Modelo ou potência de interesse | Model or power of interest |
