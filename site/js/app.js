@@ -2,11 +2,12 @@ import { CONFIG } from './config.js';
 import { DICT, resolveLang } from './i18n.js';
 import { contactLinks } from './messages.js';
 import { icon } from './icons.js';
-import { isExtra1Enabled, legalQuery, resolveProduct } from './form/context.js';
+import { isExtra1Enabled, legalQuery, resolveOrigin, resolveProduct } from './form/context.js';
 import { PROFILES, emptyForm, formReducer } from './form/model.js';
 import { clearError } from './form/validate.js';
 import { newLeadId } from './form/lead.js';
-import { advanceStep1, handleSubmit, leaveToEntry } from './form/flow.js';
+import { advanceStep1, discardSession, handleSubmit, leaveToEntry } from './form/flow.js';
+import { ACTIVITY_EVENTS, IDLE_MS, watchIdle } from './form/idle.js';
 import { toSession } from './form/session.js';
 import { focusFirstError, focusStepHeading } from './form/focus.js';
 import { advanceOnEnter, applyFieldHints } from './form/hints.js';
@@ -57,8 +58,16 @@ function App() {
     } else {
       mounted.current = true;
     }
-    if (view === 'step1') applyFieldHints(document);
+    if (view === 'step1' || view === 'step2') applyFieldHints(document);
   }, [view]);
+  // Tauleta de l'estand: si el visitant s'allunya sense tocar res, la sessió es descarta.
+  R.useEffect(() => {
+    if (resolveOrigin(search) !== 'tauleta') return undefined;
+    return watchIdle({
+      target: document, events: ACTIVITY_EVENTS, ms: IDLE_MS,
+      onIdle: () => discardSession({ products: CONFIG.products, search, dispatch, setErrors, setLeadId, setReceipt, goTo: setView }),
+    });
+  }, []);
   R.useEffect(() => {
     if (attempt > 0) focusFirstError(errors, document);
   }, [attempt]);
@@ -90,7 +99,7 @@ function App() {
       onBack: () => leaveToEntry({ ...common, dispatch }), privacyHref: `privacy.html${query}#privacy`,
     }),
     step2: () => h(StepProfile, {
-      t, products: CONFIG.products, values, errors, onChange: change, onSubmit: submit, onBack: goBack('step1'),
+      t, products: CONFIG.products, values, errors, onChange: change, onSubmit: submit, onKeyDown: (e) => advanceOnEnter(e, document), onBack: goBack('step1'),
     }),
     done: () => h(DoneScreen, {
       t, emailDelivery: CONFIG.emailDelivery, onOpen: openDocument, onHome: goHome,

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { advanceStep1, handleSubmit, leaveToEntry } from '../site/js/form/flow.js';
+import { advanceStep1, discardSession, handleSubmit, leaveToEntry } from '../site/js/form/flow.js';
 import { emptyForm } from '../site/js/form/model.js';
 
 const PRODUCTS = [{ id: 'model-a', name: 'Modelo A' }];
@@ -104,4 +104,12 @@ test('mòbil: en tornar a l\'inici es conserva la sessió (només es netegen els
   const { calls, deps } = leaveHarness('');
   leaveToEntry(deps);
   assert.deepEqual(names(calls), ['setErrors', 'goTo']);
+});
+
+test('discardSession (inactivitat a la tauleta): esborra dades, perfil, errors, id i confirmació i torna a l\'inici', () => {
+  const calls = [];
+  const rec = (name) => (...args) => calls.push([name, ...args]);
+  discardSession({ products: PRODUCTS, search: '?o=tauleta&producto=model-a', dispatch: rec('dispatch'), setErrors: rec('setErrors'), setLeadId: rec('setLeadId'), setReceipt: rec('setReceipt'), goTo: rec('goTo') });
+  assert.deepEqual(call(calls, 'dispatch')[1], { type: 'reset', initial: { product: 'model-a' } });
+  assert.deepEqual([call(calls, 'setErrors')[1], call(calls, 'setLeadId')[1], call(calls, 'setReceipt')[1], call(calls, 'goTo')[1]], [{}, '', null, 'entry']);
 });

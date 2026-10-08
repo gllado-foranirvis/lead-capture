@@ -3,6 +3,7 @@ export const FIELD_HINTS = {
   name: { autocomplete: 'name', autocapitalize: 'words', enterkeyhint: 'next' },
   email: { autocomplete: 'email', inputmode: 'email', autocapitalize: 'none', spellcheck: 'false', enterkeyhint: 'next' },
   phone: { autocomplete: 'tel', inputmode: 'tel', enterkeyhint: 'next' },
+  activityOther: { enterkeyhint: 'next' },
 };
 
 export function applyFieldHints(doc, hints = FIELD_HINTS) {
@@ -18,7 +19,7 @@ export function applyFieldHints(doc, hints = FIELD_HINTS) {
 
 // Intro avança al camp següent en lloc d'enviar el pas (a iOS no s'ha verificat en un mòbil real).
 // A l'últim camp de text passa a la casella de privacitat.
-export const NEXT_FIELD = { name: 'email', email: 'phone', phone: 'privacy' };
+export const NEXT_FIELD = { name: 'email', email: 'phone', phone: 'privacy', activityOther: 'hasBoat' };
 
 export function advanceOnEnter(event, doc) {
   const next = NEXT_FIELD[event.target.name];

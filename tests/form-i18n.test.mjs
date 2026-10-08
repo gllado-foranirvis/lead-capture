@@ -61,3 +61,16 @@ test('CTA d\'entrada i botó final', () => {
 test('la confirmació té una versió amb correu i una sense', () => {
   for (const l of CONFIG.languages) assert.notEqual(DICT[l].form.doneText, DICT[l].form.doneTextMail, l);
 });
+
+test('el text de privacitat diu què desa el lead parcial: origen, perfil si ja s\'ha indicat i la casella de novetats', () => {
+  const parts = {
+    es: [/origen/, /si ya lo has indicado/, /casilla de novedades, tu perfil/],
+    ca: [/origen/, /si ja l'has indicat/, /casella de novetats, el teu perfil/],
+    pt: [/origem/, /se já o indicaste/, /caixa de novidades, o teu perfil/],
+    en: [/origin/, /if you have already told us/, /updates box, your profile/],
+  };
+  for (const l of CONFIG.languages) for (const re of parts[l]) assert.match(DICT[l].form.privacyText, re, `${l} ${re}`);
+});
+test('el subtítol del pas 2 no promet un dossier personalitzat (el document és un de sol)', () => {
+  for (const l of CONFIG.languages) assert.doesNotMatch(DICT[l].form.step2Subtitle, /personali[sz]|tailor/i, l);
+});

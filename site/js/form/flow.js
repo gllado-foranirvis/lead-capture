@@ -55,3 +55,12 @@ export function leaveToEntry({ products, search, dispatch, setErrors, setLeadId,
   setErrors({});
   goTo('entry');
 }
+
+// Inactivitat a la tauleta: el visitant que s'allunya no ha de deixar res (dades, perfil, id de lead ni confirmació) al següent.
+export function discardSession({ products, search, dispatch, setErrors, setLeadId, setReceipt, goTo }) {
+  dispatch({ type: 'reset', initial: { product: resolveProduct(search, products) } });
+  setErrors({});
+  setLeadId('');
+  setReceipt(null);
+  goTo('entry');
+}

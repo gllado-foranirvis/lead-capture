@@ -12,7 +12,8 @@ test('els camps de text porten autocompletat, teclat i tecla d\'Intro adequats',
   assert.deepEqual(FIELD_HINTS.email, { autocomplete: 'email', inputmode: 'email', autocapitalize: 'none', spellcheck: 'false', enterkeyhint: 'next' });
   assert.deepEqual(FIELD_HINTS.name, { autocomplete: 'name', autocapitalize: 'words', enterkeyhint: 'next' });
   assert.deepEqual(FIELD_HINTS.phone, { autocomplete: 'tel', inputmode: 'tel', enterkeyhint: 'next' });
-  assert.deepEqual(Object.keys(FIELD_HINTS).sort(), ['email', 'name', 'phone']);
+  assert.deepEqual(Object.keys(FIELD_HINTS).sort(), ['activityOther', 'email', 'name', 'phone']);
+  assert.equal(FIELD_HINTS.activityOther.enterkeyhint, 'next');
 });
 test('applyFieldHints aplica els atributs als camps presents i compta els aplicats', () => {
   const doc = fakeDoc(['email']);
@@ -20,7 +21,7 @@ test('applyFieldHints aplica els atributs als camps presents i compta els aplica
   assert.equal(doc.els.email.attrs.inputmode, 'email');
 });
 test('Intro avança: nom → correu → telèfon → privacitat', () => {
-  assert.deepEqual(NEXT_FIELD, { name: 'email', email: 'phone', phone: 'privacy' });
+  assert.deepEqual(NEXT_FIELD, { name: 'email', email: 'phone', phone: 'privacy', activityOther: 'hasBoat' });
   const doc = fakeDoc(['email', 'phone', 'privacy']);
   const a = enter('name');
   assert.equal(advanceOnEnter(a, doc), true);
@@ -36,4 +37,10 @@ test('altres tecles, altres elements o un destí que no existeix no fan res', ()
   assert.equal(advanceOnEnter({ ...enter('name'), target: { name: 'name', tagName: 'SELECT' } }, doc), false);
   assert.equal(advanceOnEnter(enter('phone'), doc), false);
   assert.equal(advanceOnEnter(enter('altre'), doc), false);
+});
+test('Intro a «Otra actividad» passa a la pregunta de l\'embarcació en lloc d\'enviar el pas 2', () => {
+  const doc = fakeDoc(['hasBoat']);
+  const e = enter('activityOther');
+  assert.equal(advanceOnEnter(e, doc), true);
+  assert.deepEqual([e.prevented, doc.els.hasBoat.focused], [true, true]);
 });
