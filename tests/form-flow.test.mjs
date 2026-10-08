@@ -82,3 +82,25 @@ test('el reinici torna a preseleccionar el producte de la URL, o cap', () => {
   handleSubmit(full, without.deps);
   assert.deepEqual(call(without.calls, 'dispatch')[1].initial, { product: '' });
 });
+
+import { leaveToEntry } from '../site/js/form/flow.js';
+
+const leaveHarness = (search) => {
+  const calls = [];
+  const rec = (name) => (...args) => calls.push([name, ...args]);
+  return { calls, deps: { products: PRODUCTS, search, dispatch: rec('dispatch'), setErrors: rec('setErrors'), setLeadId: rec('setLeadId'), goTo: rec('goTo') } };
+};
+
+test('tauleta: en tornar a l\'entrada es descarta el que ha escrit el visitant (dades, errors i id de lead)', () => {
+  const { calls, deps } = leaveHarness('?o=tauleta&producto=model-a');
+  leaveToEntry(deps);
+  assert.deepEqual(call(calls, 'dispatch')[1], { type: 'reset', initial: { product: 'model-a' } });
+  assert.deepEqual(call(calls, 'setLeadId'), ['setLeadId', '']);
+  assert.deepEqual(call(calls, 'setErrors'), ['setErrors', {}]);
+  assert.deepEqual(call(calls, 'goTo'), ['goTo', 'entry']);
+});
+test('mòbil: en tornar a l\'entrada es conserva la sessió (només es netegen els errors)', () => {
+  const { calls, deps } = leaveHarness('');
+  leaveToEntry(deps);
+  assert.deepEqual(names(calls), ['setErrors', 'goTo']);
+});

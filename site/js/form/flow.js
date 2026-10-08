@@ -41,3 +41,14 @@ export function handleSubmit(values, {
   goTo('done');
   return true;
 }
+
+// A la tauleta de l'estand, un visitant que abandona el flux no ha de deixar les seves dades (ni el seu id de lead)
+// al següent. Al mòbil propi es conserva la sessió: l'entrada la fa servir per als missatges.
+export function leaveToEntry({ products, search, dispatch, setErrors, setLeadId, goTo }) {
+  if (resolveOrigin(search) === 'tauleta') {
+    dispatch({ type: 'reset', initial: { product: resolveProduct(search, products) } });
+    setLeadId('');
+  }
+  setErrors({});
+  goTo('entry');
+}

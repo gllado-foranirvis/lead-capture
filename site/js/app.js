@@ -6,7 +6,7 @@ import { isExtra1Enabled, legalQuery, resolveProduct } from './form/context.js';
 import { emptyForm, formReducer } from './form/model.js';
 import { clearError } from './form/validate.js';
 import { newLeadId } from './form/lead.js';
-import { advanceStep1, handleSubmit } from './form/flow.js';
+import { advanceStep1, handleSubmit, leaveToEntry } from './form/flow.js';
 import { toSession } from './form/session.js';
 import { focusFirstError, focusStepHeading } from './form/focus.js';
 import { advanceOnEnter, applyFieldHints } from './form/hints.js';
@@ -80,7 +80,7 @@ function App() {
       onProfile: setProfile, onClearProfile: () => setProfile(''), onOpenForm: extra1 ? () => setView('step1') : undefined,
     }),
     step1: () => h(StepProduct, {
-      t, products: CONFIG.products, values, errors, onChange: change, onNext: next, onKeyDown: (e) => advanceOnEnter(e, document), onBack: goBack('entry'),
+      t, products: CONFIG.products, values, errors, onChange: change, onNext: next, onKeyDown: (e) => advanceOnEnter(e, document), onBack: () => leaveToEntry({ ...common, dispatch }),
     }),
     step2: () => h(StepContact, {
       t, values, errors, onChange: change, onSubmit: submit, onKeyDown: (e) => advanceOnEnter(e, document), onBack: goBack('step1'),
