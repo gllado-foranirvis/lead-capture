@@ -74,3 +74,7 @@ test('el text de privacitat diu què desa el lead parcial: origen, perfil si ja 
 test('el subtítol del pas 2 no promet un dossier personalitzat (el document és un de sol)', () => {
   for (const l of CONFIG.languages) assert.doesNotMatch(DICT[l].form.step2Subtitle, /personali[sz]|tailor/i, l);
 });
+
+test('el botó del pas 1 diu que s\'aconsegueix informació', () => {
+  assert.deepEqual(CONFIG.languages.map((l) => DICT[l].form.next), ['Conseguir información', 'Aconseguir informació', 'Obter informação', 'Get information']);
+});

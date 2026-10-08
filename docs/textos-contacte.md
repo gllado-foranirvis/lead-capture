@@ -40,7 +40,7 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `requiredNote` | * Campo obligatorio | * Camp obligatori | * Campo obrigatório | * Required field |
 | `step1Title` | Déjanos tus datos | Deixa'ns les teves dades | Deixa-nos os teus dados | Leave us your details |
 | `step1Subtitle` | Así podremos enviarte el dossier y ponernos en contacto contigo. | Així podrem enviar-te el dossier i posar-nos en contacte amb tu. | Assim poderemos enviar-te o dossier e entrar em contacto contigo. | So we can send you the dossier and get in touch. |
-| `next` | Continuar | Continuar | Continuar | Continue |
+| `next` | Conseguir información | Aconseguir informació | Obter informação | Get information |
 | `name` | Nombre | Nom | Nome | Name |
 | `email` | Correo electrónico | Correu electrònic | E-mail | Email |
 | `phone` | Teléfono | Telèfon | Telefone | Phone |

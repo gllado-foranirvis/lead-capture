@@ -47,11 +47,18 @@ test('inici amb Extra 1: xip de perfil sempre visible, CTA nou únic principal, 
   const tree = entry({ onOpenForm: noop });
   const [chips] = byType(tree, 'T.ChoiceChips');
   assert.deepEqual([chips.props.legend, chips.props.name, chips.props.options.map((o) => o.value)], [f.entryProfileLegend, 'perfil', ['particular', 'profesional']]);
-  const [cta, wa, mail] = buttons(tree);
+  const [wa, mail, cta] = buttons(tree);
   assert.deepEqual([textOf(cta), cta.props.variant, cta.props.onClick], [f.entryCta, undefined, noop]);
   assert.deepEqual([textOf(wa), wa.props.variant, textOf(mail), mail.props.variant], [f.entryWhatsapp, 'outline', f.entryEmail, 'outline']);
   assert.equal(byType(tree, 'T.SectionHeading')[0].props.title, f.entryTitle);
   assert.equal(deselectable(tree).length, 1, 'el perfil és desmarcable a l\'inici');
+});
+test('inici amb Extra 1: el CTA principal va després dels contactes i just abans dels enllaços legals', () => {
+  const kinds = entry({ onOpenForm: noop }).children.map((n) => (typeof n === 'object' && n ? n.type : null));
+  const at = (type) => kinds.indexOf(type);
+  assert.ok(at('T.SectionLabel') < kinds.lastIndexOf('T.Button'), 'els contactes abans del CTA');
+  assert.equal(kinds.at(-2), 'T.Button');
+  assert.equal(kinds.at(-1), 'T.LegalLinks');
 });
 test('inici sense Extra 1: l\'MVP amb xips de perfil i WhatsApp principal', () => {
   const t = DICT.es;
@@ -82,11 +89,11 @@ test('pas 1: privacitat sense marcar amb enllaç a pestanya nova, text d\'un sol
   assert.match(f.consentBefore, / $/);
   assert.equal(byName(tree, 'newsletter')[0].props.required, undefined);
 });
-test('pas 1: botó «Continuar →» (submit) i «← Volver»; Intro envia el pas; els errors es veuen abans de seguir', () => {
+test('pas 1: botó «Conseguir información →» (submit) i «← Volver»; Intro envia el pas; els errors es veuen abans de seguir', () => {
   let called = 0;
   const tree = contact({ onNext: () => called++, onKeyDown: noop, errors: { name: 'required', email: 'email', privacy: 'privacy' } });
   const [next, back] = buttons(tree);
-  assert.deepEqual([next.props.type, next.props.full, textOf(next), back.props.variant, textOf(back)], ['submit', true, 'Continuar →', 'link', '← Volver']);
+  assert.deepEqual([next.props.type, next.props.full, textOf(next), back.props.variant, textOf(back)], ['submit', true, 'Conseguir información →', 'link', '← Volver']);
   const [formEl] = byType(tree, 'form');
   const e = { preventDefault() { this.prevented = true; } };
   formEl.props.onSubmit(e);
