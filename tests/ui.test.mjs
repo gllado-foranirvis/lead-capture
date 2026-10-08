@@ -12,7 +12,9 @@ const Header = createChrome({ h, T, brand: CONFIG.brand, languages: CONFIG.langu
 const EntryScreen = createEntryScreen({ h, T, icon });
 
 const entry = (extra = {}) => EntryScreen({
-  t: DICT.es, links: { whatsapp: 'wa', email: 'mail' }, email: CONFIG.email, profile: '', onProfile: noop, onClearProfile: noop, legalQuery: '?lang=es', ...extra,
+  t: DICT.es, links: { whatsapp: 'wa', email: 'mail' }, email: CONFIG.email, profile: '', profileLegend: DICT.es.profileLegend,
+  profileOptions: [{ value: 'profesional', label: DICT.es.profileDistribuidor }, { value: 'particular', label: DICT.es.profileParticular }],
+  onProfile: noop, onClearProfile: noop, legalQuery: '?lang=es', ...extra,
 });
 const buttons = (tree) => byType(tree, 'T.Button');
 

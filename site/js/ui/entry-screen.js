@@ -1,22 +1,18 @@
 import { deselectProps } from '../chips.js';
 
 export function createEntryScreen({ h, T, icon }) {
-  return function EntryScreen({ t, links, email, profile, onProfile, onClearProfile, legalQuery, onOpenForm }) {
+  return function EntryScreen({ t, links, email, profile, profileLegend, profileOptions, onProfile, onClearProfile, legalQuery, onOpenForm }) {
     const withForm = typeof onOpenForm === 'function';
     const f = t.form;
-    const heading = h(T.SectionHeading, {
-      layout: 'mobile', align: 'start', level: 1, className: 'page__title',
-      title: withForm ? f.entryTitle : t.title, subtitle: withForm ? f.entrySubtitle : t.subtitle,
-    });
     return h('div', { className: 'page__screen' },
-      h('div', { className: 'page__heading', tabIndex: -1, 'data-step-heading': '' }, heading),
-      // El perfil només es pregunta a l'MVP; amb l'Extra 1 es demana al pas 2, perquè la primera decisió sigui un sol clic.
-      withForm ? null : h('div', deselectProps(profile, onClearProfile),
-        h(T.ChoiceChips, {
-          legend: t.profileLegend, name: 'perfil', value: profile,
-          options: [{ value: 'distribuidor', label: t.profileDistribuidor }, { value: 'particular', label: t.profileParticular }],
-          onChange: (e) => onProfile(e.target.value),
+      h('div', { className: 'page__heading', tabIndex: -1, 'data-step-heading': '' },
+        h(T.SectionHeading, {
+          layout: 'mobile', align: 'start', level: 1, className: 'page__title',
+          title: withForm ? f.entryTitle : t.title, subtitle: withForm ? f.entrySubtitle : t.subtitle,
         })),
+      // La pregunta de perfil és sempre visible: el missatge de WhatsApp i correu i el pas 2 la fan servir.
+      h('div', deselectProps(profile, onClearProfile),
+        h(T.ChoiceChips, { legend: profileLegend, name: 'perfil', value: profile, options: profileOptions, onChange: (e) => onProfile(e.target.value) })),
       withForm ? h(T.Button, { full: true, onClick: onOpenForm }, f.entryCta) : null,
       h(T.SectionLabel, null, withForm ? f.entryContactLabel : t.contactLabel),
       h('div', { className: 'page__stack' },

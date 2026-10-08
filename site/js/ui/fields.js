@@ -15,5 +15,8 @@ export function makeFields({ h, T, f, values, errors, onChange }) {
     return h('div', required ? {} : deselectProps(values[field], () => onChange(field, '')), ...body);
   };
 
-  return { text, chips };
+  const select = (field, label, options, extra = {}) =>
+    h(T.Select, { label, name: field, id: field, value: values[field], error: error(field), onChange: set(field), options, ...extra });
+
+  return { text, chips, select };
 }
