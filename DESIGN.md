@@ -275,6 +275,8 @@ El ritme és una escala d'espaiat de 4 a 128px (4, 8, 12, 16, 24, 32, 48, 64, 96
 
 El CSS és pla i mobile first: s'escriu primer l'estil base i s'afegeix `@media (min-width: 768px)`; mai `max-width`.
 
+**Excepció: la pantalla del formulari.** El botó principal s'ancora a la base de la pantalla quan el contingut hi cap (`min-height: 100dvh` i `margin-top: auto`, mai `position: fixed`, que salta amb el teclat del mòbil), seguint el wireframe; si el contingut és més alt que la pantalla, el botó segueix l'últim camp. Això s'aparta de la regla de `mobile-first.md` («el botó segueix l'últim camp; no es fixa a la base») perquè l'acció principal quedi a l'abast del polze. Per a un Profesional el formulari fa uns 1,8 pantalles d'alçada a 360×740 (mesurat).
+
 ### Usability floor
 
 Nivell mínim per a tots els públics i per al mòbil, comprovable a cada pàgina:

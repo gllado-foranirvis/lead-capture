@@ -12,6 +12,7 @@ npm run serve      # http://localhost:8080
 npm test           # tots els tests
 npm run sync       # copia el sistema de disseny, React i Montserrat a site/ (després d'actualitzar the-silent-fleet-ds/)
 npm run qr         # genera out/qr.png i out/qr.svg a partir de siteUrl
+npm run texts      # regenera docs/textos-contacte.md (textos per validar) a partir de i18n.js
 ```
 
 ## Estructura
@@ -38,6 +39,15 @@ Els botons de WhatsApp i correu porten una icona en línia (`site/js/icons.js`, 
 
 - **WhatsApp:** glif de [Simple Icons](https://simpleicons.org) 16.31.0 (CC0). La marca és de WhatsApp LLC i només s'usa en una tinta, la del botó.
 - **Correu:** icona `mail` de [Lucide](https://lucide.dev) 1.47.0 (ISC); el text de la llicència és a `docs/licenses/lucide-ISC-LICENSE.txt`.
+
+## Extra 1: formulari de contacte i perfilació
+
+La pantalla del formulari («Recibe la ficha del producto») és **apagada per defecte**: l'MVP continua igual per als visitants. Es veu amb `?extra1=1` (per exemple `?lang=es&extra1=1`) o posant `extra1: true` a `site/js/config.js`. Altres paràmetres: `?producto=<id>` preselecciona el producte i `?o=tauleta` marca l'origen.
+
+- En enviar un formulari vàlid dispara l'esdeveniment `tsf:lead` a `window` amb `{ contact, profiling, hasProfiling }`. **Encara no s'envia enlloc**: l'enviament als Google Forms, el PDF i la pantalla de gràcies són el pla següent; ara es mostra un avís provisional.
+- `products` i `legalName` de `config.js` són de prova fins que Bruno els doni. El text de privacitat de l'Extra 1 és un esborrany sense validar (no és assessorament legal).
+- Els literals són a `site/js/i18n-form.js`. El tractament és proper, i «Ski / Wake» no es tradueix.
+- `docs-privats/` (proposta i specs amb preus) és local i no és al repositori.
 
 ## Pendent
 

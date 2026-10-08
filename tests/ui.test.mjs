@@ -135,3 +135,10 @@ test('formulari: cada control notifica el seu camp amb el valor correcte', () =>
   byName(tree, 'privacy')[0].props.onChange({ target: { checked: true } });
   assert.deepEqual(calls, [['name', 'Ana'], ['privacy', true]]);
 });
+test('formulari: el text de la casella de privacitat és un sol element (l\'etiqueta és flex i perdria l\'espai abans de l\'enllaç)', () => {
+  const [privacy] = byName(form(), 'privacy');
+  assert.equal(privacy.children.length, 1);
+  assert.equal(privacy.children[0].type, 'span');
+  assert.equal(textOf(privacy.children[0]), `${DICT.es.form.consentBefore}${DICT.es.form.consentLink}`);
+  assert.match(DICT.es.form.consentBefore, / $/, 'el text anterior acaba en espai');
+});
