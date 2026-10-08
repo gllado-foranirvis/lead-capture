@@ -1,6 +1,6 @@
-import { ADVICE, PROFILES } from './model.js';
+import { PROFILES } from './model.js';
 
-export const STEP_FIELDS = { 1: ['product', 'email'], 2: ['name', 'profile', 'phone', 'privacy'] };
+export const STEP_FIELDS = { 1: ['name', 'email', 'phone', 'privacy'], 2: ['profile'] };
 export const FIELD_ORDER = [...STEP_FIELDS[1], ...STEP_FIELDS[2]];
 
 const EMAIL = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[^\s@.]{2,}$/;
@@ -16,26 +16,25 @@ function phoneError(phone) {
   return PHONE_CHARS.test(phone) && n >= PHONE_DIGITS.min && n <= PHONE_DIGITS.max ? undefined : 'phone';
 }
 
-export function validateStep1(values, products) {
+// Pas 1: contacte i consentiment.
+export function validateStep1(values) {
   const errors = {};
-  if (![...products.map((p) => p.id), ADVICE].includes(values.product)) errors.product = 'productRequired';
+  if (!text(values, 'name')) errors.name = 'required';
   const email = text(values, 'email');
   if (!email) errors.email = 'required';
   else if (!EMAIL.test(email)) errors.email = 'email';
-  return errors;
-}
-
-export function validateStep2(values) {
-  const errors = {};
-  if (!text(values, 'name')) errors.name = 'required';
-  if (!PROFILES.includes(values.profile)) errors.profile = 'profileRequired';
   const phone = phoneError(text(values, 'phone'));
   if (phone) errors.phone = phone;
   if (values.privacy !== true) errors.privacy = 'privacy';
   return errors;
 }
 
-export const validateContact = (values, products) => ({ ...validateStep1(values, products), ...validateStep2(values) });
+// Pas 2: només el perfil és obligatori; la resta de la perfilació és opcional.
+export function validateStep2(values) {
+  return PROFILES.includes(values.profile) ? {} : { profile: 'profileRequired' };
+}
+
+export const validateContact = (values) => ({ ...validateStep1(values), ...validateStep2(values) });
 
 export const firstErrorField = (errors) => FIELD_ORDER.find((field) => errors[field]);
 
