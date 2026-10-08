@@ -18,6 +18,9 @@ body { background: var(--surface-100); color: var(--ink); font-family: var(--fon
    i l'altre xip es quedava més baix. L'etiqueta omple l'alçada del xip perquè la fila sigui pareja. */
 .tsf-chip { display: flex; }
 .tsf-chip__label { flex: 1; padding-block: var(--space-2); }
+/* Amb tres o més xips (producte) la fila fa salt de línia en lloc de tallar l'últim. */
+.form .tsf-chips__row { flex-wrap: wrap; }
+.form .tsf-chip { flex: 1 1 40%; }
 .page__note { color: var(--text-muted); overflow-wrap: anywhere; }
 .page__address { color: var(--ink); user-select: all; }
 /* El sistema cobreix a, button, input i textarea; el select (idioma) quedava amb l'anell del navegador */

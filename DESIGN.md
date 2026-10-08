@@ -326,6 +326,15 @@ Només es mou el color: botons, enllaços i xips canvien de color en 150ms (`eas
 - **Style:** píndola amb vora Control Edge, text ink, repartits en una fila.
 - **State:** seleccionat s'omple d'Action Black amb text blanc; el focus es dibuixa amb l'anell sobre l'etiqueta.
 - **Opcional:** quan l'elecció és opcional, tocar de nou el xip seleccionat (o prémer l'espai) el desmarca; les fletxes continuen movent la selecció.
+- **Fila amb salt de línia:** dins del formulari, amb tres o més opcions els xips ocupen mig ample i la fila fa salt de línia, perquè una etiqueta llarga («No lo sé aún / Busco asesoramiento») no es talli.
+- **Obligatori:** la llegenda porta « *» i el xip no es pot desmarcar (producte i perfil).
+
+### Indicador de pas
+- **Contingut:** el text visible «Paso 1 de 2» (la informació essencial) i, a sota, un traç de dos segments iguals de 4px amb extrems de píndola. Cap percentatge, cap cercle de progrés, cap gradient ni ombra.
+- **Color:** segments plens en Action Black (blanc en fosc); buits en Control Edge fort. El pas actual i els anteriors són plens (pas 1 = 50 %, pas 2 = 100 %).
+- **Accessibilitat:** el traç és un `progressbar` amb `aria-valuemin/max/now`, `aria-valuetext` i `aria-label` iguals al text visible; en canviar de pantalla el focus va al títol.
+- **Moviment:** només el canvi de color del segment (200ms) i l'entrada suau de cada pantalla (180ms), tots dos dins `prefers-reduced-motion: no-preference`; sense moviment l'estat es veu igual.
+- **On:** a dalt de la pantalla, sota la capçalera i sobre el títol. L'entrada de l'Extra 1 no porta indicador ni xips de perfil: la primera decisió és un sol clic.
 
 ### Inputs / Fields
 - **Style:** farciment Mist, vora inferior de 2px Control Edge, quadrat, alçada mínima 48px, etiqueta damunt en `label`.

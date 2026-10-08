@@ -40,14 +40,33 @@ Els botons de WhatsApp i correu porten una icona en línia (`site/js/icons.js`, 
 - **WhatsApp:** glif de [Simple Icons](https://simpleicons.org) 16.31.0 (CC0). La marca és de WhatsApp LLC i només s'usa en una tinta, la del botó.
 - **Correu:** icona `mail` de [Lucide](https://lucide.dev) 1.47.0 (ISC); el text de la llicència és a `docs/licenses/lucide-ISC-LICENSE.txt`.
 
-## Extra 1: formulari de contacte i perfilació
+## Extra 1: flux de captació en 2 passos
 
-La pantalla del formulari («Recibe la ficha del producto») és **apagada per defecte**: l'MVP continua igual per als visitants. Es veu amb `?extra1=1` (per exemple `?lang=es&extra1=1`) o posant `extra1: true` a `site/js/config.js`. Altres paràmetres: `?producto=<id>` preselecciona el producte i `?o=tauleta` marca l'origen.
+El flux és **apagat per defecte**: l'MVP continua igual per als visitants. Es veu amb `?extra1=1` (per exemple `?lang=es&extra1=1`) o posant `extra1: true` a `site/js/config.js`. Altres paràmetres: `?producto=<id>|asesoramiento` preselecciona el producte i `?o=tauleta` marca l'origen.
 
-- En enviar un formulari vàlid dispara l'esdeveniment `tsf:lead` a `window` amb `{ contact, profiling, hasProfiling }`. **Encara no s'envia enlloc**: l'enviament als Google Forms, el PDF i la pantalla de gràcies són el pla següent; ara es mostra un avís provisional.
-- `products` i `legalName` de `config.js` són de prova fins que Bruno els doni. El text de privacitat de l'Extra 1 és un esborrany sense validar (no és assessorament legal).
-- Els literals són a `site/js/i18n-form.js`. El tractament és proper, i «Ski / Wake» no es tradueix.
+**Recorregut:** entrada (un sol botó principal, sense xips de perfil) → pas 1 (producte i correu) → pas 2 (nom, perfil, telèfon, si té embarcació, privacitat, novetats) → confirmació (s'obre `CONFIG.dossierUrl` i s'ofereix WhatsApp). «← Volver» conserva el que s'ha escrit; els errors del pas 1 es veuen abans de seguir.
+
+- **Esdeveniments `window`** (res no s'envia encara a cap servidor): `tsf:lead-partial` en passar del pas 1 al 2, amb `{ id, stage: 'step1', product, email, privacy: false, lang, origin }`, i `tsf:lead` en acabar, amb `{ contact, profiling, hasProfiling }`. Comparteixen `id`. El lead parcial queda registrat com a **privacitat no acceptada**.
+- **WhatsApp i correu** porten les dades de la sessió (nom, producte, si té embarcació) en una línia entre el text i el comiat; sense dades són els missatges de sempre.
+- **Document:** s'obre en prémer el botó final (dins del gest, perquè el navegador no el bloquegi). `site/dossier-prova.pdf` el genera `scripts/make-test-pdf.mjs` i és de prova.
+- **`emailDelivery`** (`config.js`) és `false` fins que existeixi l'enviament del correu amb la ficha; només canvia el text de la confirmació.
+- Els literals són a `site/js/i18n-form.js` (tracte proper; el document es diu «ficha» fins que Bruno decideixi).
 - `docs-privats/` (proposta i specs amb preus) és local i no és al repositori.
+
+### Dades a substituir abans d'activar `extra1`
+
+| On | Valor de prova | Qui el dona |
+|---|---|---|
+| `products` (`config.js`) | Modelo A / B / C, més l'opció fixa d'assessorament | Bruno: models o potències reals |
+| `dossierUrl` (`config.js`) | `dossier-prova.pdf` | Bruno: el document real |
+| `legalName` (`config.js`) | PENDIENTE… | Bruno |
+| `privacyText` (`i18n-form.js`) | Esborrany, ara amb el correu parcial | Bruno (no és assessorament legal) |
+| Nom del document | «ficha» | Bruno: «ficha» o «dossier» |
+
+### Pendent de Bruno
+- Si es pot desar el correu abans del consentiment (el pas 1 el desa amb `privacy: false`).
+- Si «Profesional» ha d'enviar el missatge «distribuidor».
+- Enviament real del correu amb la ficha (pla posterior) i prova en un mòbil real (finestres emergents, teclats, autocompletat).
 
 ## Pendent
 

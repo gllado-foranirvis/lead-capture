@@ -43,3 +43,7 @@ test('page.css: el moviment de l\'indicador i de les pantalles té guarda de red
   assert.match(motion, /animation:\s*screen-in/);
   assert.doesNotMatch(page.replace(/@media \(prefers-reduced-motion: no-preference\) \{[\s\S]*?\n\}/g, ''), /(^|\s)(transition|animation):/);
 });
+test('page.css: els xips del formulari fan salt de línia perquè cap opció quedi tallada', () => {
+  assert.match(page, /\.form \.tsf-chips__row\s*\{[^}]*flex-wrap:\s*wrap/);
+  assert.match(page, /\.form \.tsf-chip\s*\{[^}]*flex:\s*1 1 40%/);
+});
