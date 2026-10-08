@@ -15,3 +15,12 @@ test('siteUrl és https i acaba en barra', () => {
 test('idioma per defecte és un dels idiomes disponibles', () => {
   assert.ok(CONFIG.languages.includes(CONFIG.defaultLang));
 });
+test('productes de config: ids únics i amb nom', () => {
+  const ids = CONFIG.products.map((p) => p.id);
+  assert.ok(CONFIG.products.length >= 2);
+  assert.equal(new Set(ids).size, ids.length);
+  for (const p of CONFIG.products) assert.ok(p.id.trim() && p.name.trim(), JSON.stringify(p));
+});
+test('legalName és present (de prova fins que Bruno el doni)', () => {
+  assert.ok(CONFIG.legalName.trim().length > 0);
+});
