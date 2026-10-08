@@ -10,11 +10,6 @@ export function mailtoUrl(email, subject, body) {
   return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
-// El perfil és opcional: tocar el xip ja seleccionat el desmarca.
-export function toggleProfile(current, clicked) {
-  return current === clicked ? '' : clicked;
-}
-
 // Un perfil desconegut o absent cau al missatge genèric.
 const messageFor = (dict, profile) => (Object.hasOwn(dict.messages, profile) ? dict.messages[profile] : dict.messages.none);
 

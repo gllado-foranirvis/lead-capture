@@ -1,7 +1,8 @@
 import { CONFIG } from './config.js';
 import { DICT, resolveLang } from './i18n.js';
-import { contactLinks, toggleProfile } from './messages.js';
+import { contactLinks } from './messages.js';
 import { icon } from './icons.js';
+import { deselectProps } from './chips.js';
 
 const R = window.React;
 const T = window.TSF;
@@ -28,11 +29,7 @@ function App() {
         onChange: (e) => setLang(e.target.value.toLowerCase()),
       })),
     h(T.SectionHeading, { layout: 'mobile', align: 'start', level: 1, title: t.title, subtitle: t.subtitle, className: 'page__title' }),
-    // Un radio ja marcat no dispara onChange: tornar-lo a tocar (o prémer l'espai) desmarca el perfil.
-    h('div', {
-      onClick: (e) => { if (e.target.tagName === 'INPUT' && e.target.value === profile) setProfile(toggleProfile(profile, e.target.value)); },
-      onKeyDown: (e) => { if (e.key === ' ' && e.target.tagName === 'INPUT' && e.target.value === profile) { e.preventDefault(); setProfile(''); } },
-    },
+    h('div', deselectProps(profile, () => setProfile('')),
       h(T.ChoiceChips, {
         legend: t.profileLegend, name: 'perfil', value: profile,
         options: [{ value: 'distribuidor', label: t.profileDistribuidor }, { value: 'particular', label: t.profileParticular }],

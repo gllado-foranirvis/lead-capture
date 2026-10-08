@@ -2,13 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { CONFIG } from '../site/js/config.js';
 import { DICT } from '../site/js/i18n.js';
-import { normalizeNumber, whatsappUrl, mailtoUrl, contactLinks, toggleProfile } from '../site/js/messages.js';
+import { normalizeNumber, whatsappUrl, mailtoUrl, contactLinks } from '../site/js/messages.js';
 
-test('toggleProfile: triar, canviar i desmarcar el perfil (és opcional)', () => {
-  assert.equal(toggleProfile('', 'particular'), 'particular');
-  assert.equal(toggleProfile('particular', 'distribuidor'), 'distribuidor');
-  assert.equal(toggleProfile('particular', 'particular'), '');
-});
 
 test('normalizeNumber deixa només dígits', () => {
   assert.equal(normalizeNumber('+34 600-00 00.00'), '34600000000');

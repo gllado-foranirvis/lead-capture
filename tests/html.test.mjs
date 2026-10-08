@@ -68,11 +68,8 @@ test('metadades: descripció a la portada i icona buida a les dues pàgines (cap
   for (const f of ['site/index.html', 'site/privacy.html'])
     assert.match(readFileSync(f, 'utf8'), /<link rel="icon" href="data:,">/, f);
 });
-test('app.js: el perfil es pot desmarcar tocant de nou el xip o amb l\'espai', () => {
-  const app = readFileSync('site/js/app.js', 'utf8');
-  assert.match(app, /toggleProfile/);
-  assert.match(app, /onClick/);
-  assert.match(app, /onKeyDown/);
+test('app.js: el perfil es pot desmarcar amb deselectProps', () => {
+  assert.match(readFileSync('site/js/app.js', 'utf8'), /deselectProps\(profile/);
 });
 
 const priv = readFileSync('site/privacy.html', 'utf8');
