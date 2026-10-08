@@ -124,7 +124,8 @@ test('pas 2: Profesional veu l\'activitat; «otra» mostra el camp d\'especifica
   const pro = profile({ values: { ...emptyForm(), profile: 'profesional' } });
   const order = findAll(pro, (n) => ['T.ChoiceChips', 'T.Select'].includes(n.type)).map((n) => n.props.name);
   assert.deepEqual(order, ['profile', 'activity', 'hasBoat', 'intent', 'product']);
-  assert.deepEqual(byName(pro, 'activity')[0].props.options.map((o) => o.value), ACTIVITIES);
+  assert.deepEqual(byName(pro, 'activity')[0].props.options.map((o) => o.value), ['', ...ACTIVITIES]);
+  assert.equal(byName(pro, 'activity')[0].props.options[0].label, f.activityNone, 'es pot tornar a «sense especificar»');
   assert.equal(byName(pro, 'activityOther').length, 0);
   const other = profile({ values: { ...emptyForm(), profile: 'profesional', activity: 'otra' } });
   assert.equal(byName(other, 'activityOther')[0].type, 'T.Field');
@@ -195,4 +196,26 @@ test('els camps d\'escriptura porten un exemple com a placeholder (no substituei
   }
   const other = profile({ values: { ...emptyForm(), profile: 'profesional', activity: 'otra' } });
   assert.equal(byName(other, 'activityOther')[0].props.placeholder, f.activityOtherPlaceholder);
+});
+
+const chipsWrapper = (tree, name) => findAll(tree, (n) => n.type === 'div' && typeof n.props.ref === 'function' && findAll(n, (m) => m.props?.name === name).length > 0)[0];
+const fakeGroup = () => { const attrs = {}; return { attrs, el: { querySelector: () => ({ setAttribute: (k, v) => { attrs[k] = v; }, removeAttribute: (k) => { delete attrs[k]; } }) } }; };
+
+test('error dels xips: el «!» és decoratiu (aria-hidden) i l\'error té un id perquè el grup hi apunti', () => {
+  const tree = profile({ errors: { profile: 'profileRequired' } });
+  const [alert] = findAll(tree, (n) => n.props?.role === 'alert');
+  assert.equal(alert.props.id, 'profile-err');
+  assert.equal(textOf(alert), '! Elige una opción');
+  const [bang] = findAll(alert, (n) => n.type === 'span');
+  assert.deepEqual([bang.props['aria-hidden'], textOf(bang)], ['true', '! ']);
+});
+test('error dels xips: el grup (fieldset) queda enllaçat amb aria-describedby i aria-invalid; sense error es desenllaça', () => {
+  const withError = fakeGroup();
+  chipsWrapper(profile({ errors: { profile: 'profileRequired' } }), 'profile').props.ref(withError.el);
+  assert.deepEqual(withError.attrs, { 'aria-describedby': 'profile-err', 'aria-invalid': 'true' });
+  const clean = fakeGroup();
+  clean.attrs['aria-describedby'] = 'x';
+  chipsWrapper(profile(), 'profile').props.ref(clean.el);
+  assert.deepEqual(clean.attrs, {});
+  chipsWrapper(profile(), 'profile').props.ref(null);
 });

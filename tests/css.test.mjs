@@ -52,3 +52,8 @@ test('page.css: separació del CTA de l\'inici i xip llarg a fila pròpia', () =
   assert.match(page, /\.page__cta\s*\{[^}]*margin-top:\s*var\(--space-4\)/);
   assert.match(page, /\.form__chips--wide \.tsf-chip:last-child\s*\{[^}]*flex-basis:\s*100%/);
 });
+
+test('page.css: els enllaços legals compacts fan 44px d\'alt (el sistema compacte els deixa a 40px) i el contingut va dins de <main>', () => {
+  assert.match(page, /\.tsf-compact \.tsf-legal__link\s*\{[^}]*min-height:\s*44px/);
+  assert.match(page, /\.page__main\s*\{[^}]*flex:\s*1/);
+});

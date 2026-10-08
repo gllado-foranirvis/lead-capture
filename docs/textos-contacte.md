@@ -58,6 +58,7 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `profiles.profesional` | Profesional | Professional | Profissional | Professional |
 | `activity` | Actividad principal | Activitat principal | Atividade principal | Main activity |
 | `activityPlaceholder` | Elige una actividad | Tria una activitat | Escolhe uma atividade | Choose an activity |
+| `activityNone` | Sin especificar | Sense especificar | Sem especificar | Not specified |
 | `activities.ocio` | Ocio | Oci | Lazer | Leisure |
 | `activities.charter` | Chárter / alquiler | Xàrter / lloguer | Charter / aluguer | Charter / rental |
 | `activities.vela` | Deporte: vela | Esport: vela | Desporto: vela | Sport: sailing |

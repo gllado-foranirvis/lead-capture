@@ -21,6 +21,7 @@ const buttons = (tree) => byType(tree, 'T.Button');
 test('capçalera: marca i selector d\'idioma amb codis en majúscules', () => {
   const tree = Header({ t: DICT.ca, lang: 'ca', onLang: noop });
   assert.equal(textOf(tree).includes(CONFIG.brand), true);
+  assert.equal(tree.type, 'header', 'la capçalera és un <header> (landmark de banner)');
   const [lang] = byType(tree, 'T.LangSwitch');
   assert.equal(lang.props.value, 'CA');
   assert.deepEqual(lang.props.languages.map((l) => l.code), ['ES', 'CA', 'PT', 'EN']);

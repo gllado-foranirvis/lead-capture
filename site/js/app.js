@@ -108,9 +108,10 @@ function App() {
   };
 
   const isStep = view === 'step1' || view === 'step2';
-  return h('main', { className: isStep ? 'page page--form tsf-compact' : 'page tsf-compact' },
+  // El <header> queda fora de <main>: així és el landmark de banner i el contingut és el principal.
+  return h('div', { className: isStep ? 'page page--form tsf-compact' : 'page tsf-compact' },
     h(Header, { t, lang, onLang: setLang }),
-    screens[view]());
+    h('main', { className: 'page__main' }, screens[view]()));
 }
 
 window.ReactDOM.createRoot(document.getElementById('root')).render(h(App));

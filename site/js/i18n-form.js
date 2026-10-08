@@ -21,7 +21,7 @@ export const FORM = {
     step2Subtitle: 'Así te atenderemos mejor. Solo el perfil es obligatorio.',
     profileLegend: '¿Quién eres?',
     profiles: { particular: 'Particular', profesional: 'Profesional' },
-    activity: 'Actividad principal', activityPlaceholder: 'Elige una actividad',
+    activity: 'Actividad principal', activityPlaceholder: 'Elige una actividad', activityNone: 'Sin especificar',
     activities: {
       ocio: 'Ocio', charter: 'Chárter / alquiler', vela: 'Deporte: vela', buceo: 'Deporte: buceo',
       skiwake: 'Deporte: Ski / Wake', seguridad: 'Seguridad / salvamento', pasajeros: 'Transporte de pasajeros',
@@ -67,7 +67,7 @@ export const FORM = {
     step2Subtitle: 'Així t\'atendrem millor. Només el perfil és obligatori.',
     profileLegend: 'Qui ets?',
     profiles: { particular: 'Particular', profesional: 'Professional' },
-    activity: 'Activitat principal', activityPlaceholder: 'Tria una activitat',
+    activity: 'Activitat principal', activityPlaceholder: 'Tria una activitat', activityNone: 'Sense especificar',
     activities: {
       ocio: 'Oci', charter: 'Xàrter / lloguer', vela: 'Esport: vela', buceo: 'Esport: busseig',
       skiwake: 'Esport: Ski / Wake', seguridad: 'Seguretat / salvament', pasajeros: 'Transport de passatgers',
@@ -113,7 +113,7 @@ export const FORM = {
     step2Subtitle: 'Assim poderemos atender-te melhor. Só o perfil é obrigatório.',
     profileLegend: 'Quem és?',
     profiles: { particular: 'Particular', profesional: 'Profissional' },
-    activity: 'Atividade principal', activityPlaceholder: 'Escolhe uma atividade',
+    activity: 'Atividade principal', activityPlaceholder: 'Escolhe uma atividade', activityNone: 'Sem especificar',
     activities: {
       ocio: 'Lazer', charter: 'Charter / aluguer', vela: 'Desporto: vela', buceo: 'Desporto: mergulho',
       skiwake: 'Desporto: Ski / Wake', seguridad: 'Segurança / salvamento', pasajeros: 'Transporte de passageiros',
@@ -159,7 +159,7 @@ export const FORM = {
     step2Subtitle: 'That helps us serve you better. Only the profile is required.',
     profileLegend: 'Who are you?',
     profiles: { particular: 'Private customer', profesional: 'Professional' },
-    activity: 'Main activity', activityPlaceholder: 'Choose an activity',
+    activity: 'Main activity', activityPlaceholder: 'Choose an activity', activityNone: 'Not specified',
     activities: {
       ocio: 'Leisure', charter: 'Charter / rental', vela: 'Sport: sailing', buceo: 'Sport: diving',
       skiwake: 'Sport: Ski / Wake', seguridad: 'Safety / rescue', pasajeros: 'Passenger transport',

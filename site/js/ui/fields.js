@@ -1,6 +1,19 @@
 import { deselectProps } from '../chips.js';
 
 // Camps comuns als dos passos: text amb error i xips amb error accessible.
+// El ChoiceChips del sistema no reenvia aria-* al <fieldset>: l'enllacem amb l'error des de l'envoltori.
+const linkGroup = (message, errorId) => (wrapper) => {
+  const group = wrapper?.querySelector('fieldset');
+  if (!group) return;
+  if (message) {
+    group.setAttribute('aria-describedby', errorId);
+    group.setAttribute('aria-invalid', 'true');
+  } else {
+    group.removeAttribute('aria-describedby');
+    group.removeAttribute('aria-invalid');
+  }
+};
+
 export function makeFields({ h, T, f, values, errors, onChange }) {
   const set = (field) => (e) => onChange(field, e.target.value);
   const error = (field) => (errors[field] ? f.errors[errors[field]] : undefined);
@@ -11,9 +24,10 @@ export function makeFields({ h, T, f, values, errors, onChange }) {
   const chips = (field, legend, options, { required = false, className } = {}) => {
     const group = h(T.ChoiceChips, { legend: required ? `${legend} *` : legend, name: field, value: values[field], options, onChange: set(field) });
     const message = error(field);
-    const body = [group, message ? h('p', { className: 'caption form__error', role: 'alert' }, `! ${message}`) : null];
+    const errorId = `${field}-err`;
+    const body = [group, message ? h('p', { id: errorId, className: 'caption form__error', role: 'alert' }, h('span', { 'aria-hidden': 'true' }, '! '), message) : null];
     const wrapper = required ? {} : deselectProps(values[field], () => onChange(field, ''));
-    return h('div', className ? { ...wrapper, className } : wrapper, ...body);
+    return h('div', { ...wrapper, ...(className ? { className } : {}), ref: linkGroup(message, errorId) }, ...body);
   };
 
   const select = (field, label, options, extra = {}) =>
