@@ -47,3 +47,8 @@ test('page.css: els xips del formulari fan salt de línia perquè cap opció que
   assert.match(page, /\.form \.tsf-chips__row\s*\{[^}]*flex-wrap:\s*wrap/);
   assert.match(page, /\.form \.tsf-chip\s*\{[^}]*flex:\s*1 1 40%/);
 });
+
+test('page.css: separació del CTA de l\'inici i xip llarg a fila pròpia', () => {
+  assert.match(page, /\.page__cta\s*\{[^}]*margin-top:\s*var\(--space-4\)/);
+  assert.match(page, /\.form__chips--wide \.tsf-chip:last-child\s*\{[^}]*flex-basis:\s*100%/);
+});

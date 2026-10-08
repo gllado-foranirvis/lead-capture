@@ -170,3 +170,15 @@ test('confirmació: el subtítol parla del correu només si l\'enviament existei
   assert.equal(sub(false), f.doneText);
   assert.equal(sub(true), f.doneTextMail);
 });
+
+test('inici: el CTA principal té separació pròpia dels contactes (page__cta)', () => {
+  const cta = buttons(entry({ onOpenForm: noop })).at(-1);
+  assert.equal(textOf(cta), f.entryCta);
+  assert.equal(cta.props.className, 'page__cta');
+});
+test('pas 2: el xip llarg d\'assessorament de producte té fila pròpia (form__chips--wide); els altres grups no', () => {
+  const tree = profile({ values: { ...emptyForm(), profile: 'profesional' } });
+  const wrappers = findAll(tree, (n) => n.type === 'div' && String(n.props.className ?? '').includes('form__chips--wide'));
+  assert.equal(wrappers.length, 1);
+  assert.equal(findAll(wrappers[0], (n) => n.props?.name === 'product').length, 1);
+});

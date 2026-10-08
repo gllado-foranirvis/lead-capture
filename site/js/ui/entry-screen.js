@@ -20,7 +20,7 @@ export function createEntryScreen({ h, T, icon }) {
         h('p', { className: 'body-sm page__note' }, t.contactHint),
         h('p', { className: 'body-sm page__note' }, `${t.contactFallback} `, h('span', { className: 'page__address' }, email))),
       // El CTA principal tanca la pantalla, just abans dels enllaços legals.
-      withForm ? h(T.Button, { full: true, onClick: onOpenForm }, f.entryCta) : null,
+      withForm ? h(T.Button, { full: true, className: 'page__cta', onClick: onOpenForm }, f.entryCta) : null,
       h(T.LegalLinks, {
         label: t.legalNav,
         links: [{ label: t.privacy, href: `privacy.html${legalQuery}` }, { label: t.cookies, href: `privacy.html${legalQuery}#cookies` }],

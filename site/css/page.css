@@ -21,6 +21,9 @@ body { background: var(--surface-100); color: var(--ink); font-family: var(--fon
 /* Amb tres o més xips (producte) la fila fa salt de línia en lloc de tallar l'últim. */
 .form .tsf-chips__row { flex-wrap: wrap; }
 .form .tsf-chip { flex: 1 1 40%; }
+.form__chips--wide .tsf-chip:last-child { flex-basis: 100%; }
+/* El CTA principal tanca l'inici: separat del bloc de contacte. */
+.page__cta { margin-top: var(--space-4); }
 .page__note { color: var(--text-muted); overflow-wrap: anywhere; }
 .page__address { color: var(--ink); user-select: all; }
 /* El sistema cobreix a, button, input i textarea; el select (idioma) quedava amb l'anell del navegador */

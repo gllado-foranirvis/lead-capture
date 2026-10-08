@@ -24,7 +24,7 @@ export function createStepProfile({ h, T }) {
           showsActivityOther(values) ? text('activityOther', f.activityOther) : null,
           chips('hasBoat', f.hasBoat, yesNo),
           chips('intent', f.intent, yesNo),
-          chips('product', f.productLegend, productOptions)),
+          chips('product', f.productLegend, productOptions, { className: 'form__chips--wide' })),
         h('div', { className: 'form__actions' },
           h(T.Button, { type: 'submit', full: true }, f.submit),
           h(T.Button, { variant: 'link', onClick: onBack }, `← ${t.back}`))));

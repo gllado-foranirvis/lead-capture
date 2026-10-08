@@ -78,3 +78,11 @@ test('el subtítol del pas 2 no promet un dossier personalitzat (el document és
 test('el botó del pas 1 diu que s\'aconsegueix informació', () => {
   assert.deepEqual(CONFIG.languages.map((l) => DICT[l].form.next), ['Conseguir información', 'Aconseguir informació', 'Obter informação', 'Get information']);
 });
+
+test('el subtítol del pas 2 no repeteix el títol', () => {
+  for (const l of CONFIG.languages) {
+    const { step2Title, step2Subtitle } = DICT[l].form;
+    const lead = step2Title.split(' ').slice(0, 2).join(' ').toLowerCase();
+    assert.equal(step2Subtitle.toLowerCase().includes(lead), false, `${l}: «${lead}»`);
+  }
+});

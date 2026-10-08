@@ -48,7 +48,7 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `consentLink` | política de privacidad | política de privacitat | política de privacidade | privacy policy |
 | `newsletter` | Quiero recibir novedades (opcional) | Vull rebre novetats (opcional) | Quero receber novidades (opcional) | I'd like to receive updates (optional) |
 | `step2Title` | Cuéntanos más sobre ti | Explica'ns més sobre tu | Conta-nos mais sobre ti | Tell us more about you |
-| `step2Subtitle` | Cuéntanos más para atenderte mejor. Solo el perfil es obligatorio. | Explica'ns més per atendre't millor. Només el perfil és obligatori. | Conta-nos mais para te atendermos melhor. Só o perfil é obrigatório. | Tell us more so we can help you better. Only the profile is required. |
+| `step2Subtitle` | Así te atenderemos mejor. Solo el perfil es obligatorio. | Així t'atendrem millor. Només el perfil és obligatori. | Assim poderemos atender-te melhor. Só o perfil é obrigatório. | That helps us serve you better. Only the profile is required. |
 | `profileLegend` | ¿Quién eres? | Qui ets? | Quem és? | Who are you? |
 | `profiles.particular` | Particular | Particular | Particular | Private customer |
 | `profiles.profesional` | Profesional | Professional | Profissional | Professional |
