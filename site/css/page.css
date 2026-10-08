@@ -29,6 +29,13 @@ body { background: var(--surface-100); color: var(--ink); font-family: var(--fon
 /* El sistema cobreix a, button, input i textarea; el select (idioma) quedava amb l'anell del navegador */
 select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 /* Cada pantalla és una columna; el formulari ocupa l'alçada i empeny les accions cap avall (sense posició fixa: salta amb el teclat del mòbil) */
+.privacy section { display: flex; flex-direction: column; gap: var(--space-3); }
+/* Els marges per defecte dels títols i <p> se sumaven al gap i separaven massa els paràgrafs. */
+.privacy h1, .privacy h2, .privacy p { margin: 0; }
+.privacy__text { display: flex; flex-direction: column; gap: var(--space-4); }
+/* Més aire sobre cada secció que sota el seu títol; el botó de tornada se separa del text. */
+.privacy section + section { margin-top: var(--space-5); }
+.privacy #back { margin-top: var(--space-4); }
 .page__main { display: flex; flex: 1; flex-direction: column; gap: var(--space-3); }
 .page__screen { display: flex; flex-direction: column; gap: var(--space-3); }
 /* El sistema compacte deixa els enllaços legals a 40px; el terra tàctil del projecte és 44px. */

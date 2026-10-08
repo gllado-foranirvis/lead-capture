@@ -57,3 +57,9 @@ test('page.css: els enllaços legals compacts fan 44px d\'alt (el sistema compac
   assert.match(page, /\.tsf-compact \.tsf-legal__link\s*\{[^}]*min-height:\s*44px/);
   assert.match(page, /\.page__main\s*\{[^}]*flex:\s*1/);
 });
+
+test('page.css: la privacitat és una columna de paràgrafs amb ritme (més aire sobre cada secció que sota el títol)', () => {
+  assert.match(page, /\.privacy__text\s*\{[^}]*flex-direction:\s*column[^}]*gap:\s*var\(--space-4\)/);
+  assert.match(page, /\.privacy h1, \.privacy h2, \.privacy p\s*\{[^}]*margin:\s*0/);
+  assert.match(page, /\.privacy section \+ section\s*\{[^}]*margin-top:\s*var\(--space-5\)/);
+});

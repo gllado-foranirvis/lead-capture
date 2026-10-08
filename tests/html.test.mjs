@@ -79,3 +79,8 @@ test('privacy.html: tots els textos venen del diccionari', () => {
   for (const key of ['privacyTitle', 'privacyText', 'cookiesTitle', 'cookiesText', 'back'])
     assert.match(priv, new RegExp(`data-key="${key}"`), key);
 });
+
+test('privacy.html: el text de privacitat va en un contenidor de paràgrafs, no en un sol <p>', () => {
+  assert.match(priv, /<div[^>]*class="privacy__text"[^>]*data-key="privacyText"/);
+  assert.doesNotMatch(priv, /<p[^>]*data-key="privacyText"/);
+});
