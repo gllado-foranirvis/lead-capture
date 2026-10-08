@@ -31,7 +31,7 @@ export const FORM = {
     },
     pendingTitle: 'Formulario listo',
     pendingText: 'Los datos son correctos. El envío se activa en la siguiente fase.',
-    privacyText: 'Si usas el formulario, guardamos tu nombre, correo, teléfono, el producto que te interesa, el idioma y tu perfil (particular o profesional). Si respondes a las preguntas opcionales, también tu actividad, si ya tienes embarcaciones eléctricas, si piensas invertir y tu localidad. Los usamos para enviarte la ficha y contactarte sobre tu interés; si marcas la casilla de novedades, también para enviarte novedades. Responsable: {responsable}. Los datos se guardan en Google (Formularios y Hojas de cálculo), que actúa como encargado del tratamiento. Puedes pedirnos acceso, rectificación o supresión escribiendo a {email}.',
+    privacyText: 'Si usas el formulario, guardamos tu nombre, correo, teléfono, el producto que te interesa, el idioma y tu perfil (particular o profesional). Si respondes a las preguntas opcionales, también tu actividad, si ya tienes embarcaciones eléctricas, si piensas invertir y tu localidad. Los usamos para enviarte la ficha y contactarte sobre tu interés; si marcas la casilla de novedades, también para enviarte novedades. Responsable: {responsable}. Los datos se guardan en Google (Formularios y Hojas de cálculo), que actúa como encargado del tratamiento. Puedes pedirnos acceso, rectificación o supresión escribiendo a {email}. Si nos escribes por WhatsApp o por correo, usaremos tus datos solo para responderte.',
   },
   ca: {
     entryCta: 'Saber-ne més',
@@ -63,7 +63,7 @@ export const FORM = {
     },
     pendingTitle: 'Formulari llest',
     pendingText: 'Les dades són correctes. L\'enviament s\'activa a la fase següent.',
-    privacyText: 'Si fas servir el formulari, desem el teu nom, correu, telèfon, el producte que t\'interessa, l\'idioma i el teu perfil (particular o professional). Si respons les preguntes opcionals, també la teva activitat, si ja tens embarcacions elèctriques, si penses invertir i la teva localitat. Els fem servir per enviar-te la fitxa i contactar-te sobre el teu interès; si marques la casella de novetats, també per enviar-te novetats. Responsable: {responsable}. Les dades es desen a Google (Formularis i Fulls de càlcul), que actua com a encarregat del tractament. Pots demanar-nos accés, rectificació o supressió escrivint a {email}.',
+    privacyText: 'Si fas servir el formulari, desem el teu nom, correu, telèfon, el producte que t\'interessa, l\'idioma i el teu perfil (particular o professional). Si respons les preguntes opcionals, també la teva activitat, si ja tens embarcacions elèctriques, si penses invertir i la teva localitat. Els fem servir per enviar-te la fitxa i contactar-te sobre el teu interès; si marques la casella de novetats, també per enviar-te novetats. Responsable: {responsable}. Les dades es desen a Google (Formularis i Fulls de càlcul), que actua com a encarregat del tractament. Pots demanar-nos accés, rectificació o supressió escrivint a {email}. Si ens escrius per WhatsApp o per correu, farem servir les teves dades només per respondre\'t.',
   },
   pt: {
     entryCta: 'Saber mais',
@@ -95,7 +95,7 @@ export const FORM = {
     },
     pendingTitle: 'Formulário pronto',
     pendingText: 'Os dados estão corretos. O envio ativa-se na fase seguinte.',
-    privacyText: 'Se usares o formulário, guardamos o teu nome, e-mail, telefone, o produto que te interessa, o idioma e o teu perfil (particular ou profissional). Se responderes às perguntas opcionais, também a tua atividade, se já tens embarcações elétricas, se pensas investir e a tua localidade. Usamos estes dados para te enviar a ficha e contactar-te sobre o teu interesse; se marcares a caixa de novidades, também para te enviar novidades. Responsável: {responsable}. Os dados ficam guardados na Google (Formulários e Folhas de cálculo), que atua como subcontratante. Podes pedir-nos acesso, retificação ou apagamento escrevendo para {email}.',
+    privacyText: 'Se usares o formulário, guardamos o teu nome, e-mail, telefone, o produto que te interessa, o idioma e o teu perfil (particular ou profissional). Se responderes às perguntas opcionais, também a tua atividade, se já tens embarcações elétricas, se pensas investir e a tua localidade. Usamos estes dados para te enviar a ficha e contactar-te sobre o teu interesse; se marcares a caixa de novidades, também para te enviar novidades. Responsável: {responsable}. Os dados ficam guardados na Google (Formulários e Folhas de cálculo), que atua como subcontratante. Podes pedir-nos acesso, retificação ou apagamento escrevendo para {email}. Se nos escreveres por WhatsApp ou por correio, usaremos os teus dados apenas para te responder.',
   },
   en: {
     entryCta: 'Learn more',
@@ -127,6 +127,6 @@ export const FORM = {
     },
     pendingTitle: 'Form ready',
     pendingText: 'Your details are valid. Sending is switched on in the next phase.',
-    privacyText: 'If you use the form, we store your name, email, phone, the product you are interested in, your language and your profile (private customer or professional). If you answer the optional questions, we also store your activity, whether you already own electric boats, whether you plan to invest and your town or city. We use this to send you the product sheet and contact you about your interest; if you tick the news box, also to send you news. Controller: {responsable}. The data is stored with Google (Forms and Sheets), which acts as data processor. You can ask us for access, correction or deletion by writing to {email}.',
+    privacyText: 'If you use the form, we store your name, email, phone, the product you are interested in, your language and your profile (private customer or professional). If you answer the optional questions, we also store your activity, whether you already own electric boats, whether you plan to invest and your town or city. We use this to send you the product sheet and contact you about your interest; if you tick the news box, also to send you news. Controller: {responsable}. The data is stored with Google (Forms and Sheets), which acts as data processor. You can ask us for access, correction or deletion by writing to {email}. If you write to us by WhatsApp or email, we will use your details only to reply.',
   },
 };

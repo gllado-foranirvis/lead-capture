@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { FIELD_HINTS, applyFieldHints } from '../site/js/form/hints.js';
+import { FIELD_HINTS, applyFieldHints, advanceOnEnter } from '../site/js/form/hints.js';
 
 const AUTOCOMPLETE_TOKENS = ['name', 'email', 'tel', 'address-level2']; // tokens vàlids de l'estàndard HTML
 
@@ -48,4 +48,32 @@ test('applyFieldHints posa els atributs als camps presents, salta els absents i 
 });
 test('applyFieldHints sense cap camp al DOM no fa res', () => {
   assert.equal(applyFieldHints(fakeDoc([])), 0);
+});
+
+const enter = (name, key = 'Enter', tag = 'INPUT') => ({ key, target: { name, tagName: tag }, preventDefault() { this.prevented = true; } });
+const docWith = (...present) => ({ focused: null, querySelector(sel) { const n = sel.match(/\[name="(.+)"\]/)[1]; return present.includes(n) ? { focus: () => { this.focused = n; } } : null; } });
+
+test('Intro al nom, al correu o al telèfon passa al camp següent en lloc d\'enviar el formulari', () => {
+  for (const [from, to] of [['name', 'email'], ['email', 'phone'], ['phone', 'profile']]) {
+    let focused = null;
+    const doc = { querySelector: (sel) => ({ focus: () => { focused = sel; } }) };
+    const e = enter(from);
+    assert.equal(advanceOnEnter(e, doc), true, from);
+    assert.equal(e.prevented, true, from);
+    assert.equal(focused, `[name="${to}"]`, from);
+  }
+});
+test('Intro a l\'últim camp (localitat) no s\'intercepta: envia el formulari', () => {
+  const e = enter('demo');
+  assert.equal(advanceOnEnter(e, { querySelector: () => ({ focus() {} }) }), false);
+  assert.equal(e.prevented, undefined);
+});
+test('altres tecles, o un element que no és un input, no s\'intercepten', () => {
+  assert.equal(advanceOnEnter(enter('name', 'a'), docWith('email')), false);
+  assert.equal(advanceOnEnter(enter('name', 'Enter', 'BUTTON'), docWith('email')), false);
+});
+test('si el camp següent no és al DOM, no s\'intercepta (el comportament per defecte continua)', () => {
+  const e = enter('name');
+  assert.equal(advanceOnEnter(e, { querySelector: () => null }), false);
+  assert.equal(e.prevented, undefined);
 });

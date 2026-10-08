@@ -16,3 +16,18 @@ export function applyFieldHints(doc, hints = FIELD_HINTS) {
   }
   return applied;
 }
+
+// «enterkeyhint="next"» només canvia l'etiqueta de la tecla: Intro enviaria el formulari sencer
+// (és el comportament estàndard dels formularis amb botó d'enviar; a iOS no s'ha verificat en un mòbil real).
+// Aquí Intro avança al camp següent; a l'últim camp, envia.
+export const NEXT_FIELD = { name: 'email', email: 'phone', phone: 'profile' };
+
+export function advanceOnEnter(event, doc) {
+  const next = NEXT_FIELD[event.target.name];
+  if (event.key !== 'Enter' || event.target.tagName !== 'INPUT' || !next) return false;
+  const element = doc.querySelector(`[name="${next}"]`);
+  if (!element) return false;
+  event.preventDefault();
+  element.focus();
+  return true;
+}

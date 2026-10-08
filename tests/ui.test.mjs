@@ -142,3 +142,8 @@ test('formulari: el text de la casella de privacitat és un sol element (l\'etiq
   assert.equal(textOf(privacy.children[0]), `${DICT.es.form.consentBefore}${DICT.es.form.consentLink}`);
   assert.match(DICT.es.form.consentBefore, / $/, 'el text anterior acaba en espai');
 });
+test('formulari: el formulari reenvia onKeyDown (perquè Intro avanci de camp en lloc d\'enviar)', () => {
+  const onKeyDown = noop;
+  const [formEl] = byType(form({ onKeyDown }), 'form');
+  assert.equal(formEl.props.onKeyDown, onKeyDown);
+});

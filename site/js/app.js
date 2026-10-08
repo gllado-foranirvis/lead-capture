@@ -2,12 +2,13 @@ import { CONFIG } from './config.js';
 import { DICT, resolveLang } from './i18n.js';
 import { contactLinks } from './messages.js';
 import { icon } from './icons.js';
-import { isExtra1Enabled, legalQuery, profileFromEntry, resolveOrigin, resolveProduct } from './form/context.js';
+import { isExtra1Enabled, legalQuery, profileFromEntry, resolveProduct } from './form/context.js';
 import { emptyForm, formReducer } from './form/model.js';
 import { clearError } from './form/validate.js';
-import { newLeadId, submitForm } from './form/lead.js';
+import { newLeadId } from './form/lead.js';
+import { handleSubmit } from './form/flow.js';
 import { focusFirstError } from './form/focus.js';
-import { applyFieldHints } from './form/hints.js';
+import { advanceOnEnter, applyFieldHints } from './form/hints.js';
 import { createChrome } from './ui/chrome.js';
 import { createEntryScreen } from './ui/entry-screen.js';
 import { createFormScreen } from './ui/form-screen.js';
@@ -51,16 +52,12 @@ function App() {
     dispatch({ type: 'prefill', field: 'profile', value: profileFromEntry(profile) });
     setView('form');
   };
-  const submit = () => {
-    const result = submitForm(values, { products: CONFIG.products, lang, origin: resolveOrigin(search), newId: newLeadId });
-    if (result.errors) {
-      setErrors(result.errors);
-      setAttempt((n) => n + 1);
-      return;
-    }
-    window.dispatchEvent(new CustomEvent('tsf:lead', { detail: result.lead }));
-    setView('pending');
-  };
+  const submit = () => handleSubmit(values, {
+    products: CONFIG.products, search, lang, newId: newLeadId,
+    dispatch, setErrors, bumpAttempt: () => setAttempt((n) => n + 1), clearEntryProfile: () => setProfile(''),
+    emitLead: (lead) => window.dispatchEvent(new CustomEvent('tsf:lead', { detail: lead })),
+    goTo: setView,
+  });
 
   const screens = {
     entry: () => h(EntryScreen, {
@@ -68,7 +65,7 @@ function App() {
       onProfile: setProfile, onClearProfile: () => setProfile(''), onOpenForm: extra1 ? openForm : undefined,
     }),
     form: () => h(FormScreen, {
-      t, products: CONFIG.products, values, errors, onChange: change, onSubmit: submit,
+      t, products: CONFIG.products, values, errors, onChange: change, onSubmit: submit, onKeyDown: (e) => advanceOnEnter(e, document),
       onBack: () => setView('entry'), privacyHref: `privacy.html${query}#privacy`,
     }),
     // Provisional: es retira quan arribi el pla d'enviament i de la pantalla de gràcies.

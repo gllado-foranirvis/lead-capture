@@ -2,7 +2,7 @@ import { ACTIVITIES, PROFILES, showsActivity, showsActivityOther } from '../form
 import { deselectProps } from '../chips.js';
 
 export function createFormScreen({ h, T }) {
-  return function FormScreen({ t, products, values, errors, onChange, onSubmit, onBack, privacyHref }) {
+  return function FormScreen({ t, products, values, errors, onChange, onSubmit, onBack, onKeyDown, privacyHref }) {
     const f = t.form;
     const set = (field) => (e) => onChange(field, e.target.value);
     const error = (field) => (errors[field] ? f.errors[errors[field]] : undefined);
@@ -21,7 +21,7 @@ export function createFormScreen({ h, T }) {
 
     return h('div', { className: 'page__screen page__screen--form' },
       h(T.SectionHeading, { layout: 'mobile', align: 'start', level: 1, title: f.title, subtitle: f.subtitle, className: 'page__title' }),
-      h('form', { className: 'form', noValidate: true, onSubmit: (e) => { e.preventDefault(); onSubmit(); } },
+      h('form', { className: 'form', noValidate: true, onKeyDown, onSubmit: (e) => { e.preventDefault(); onSubmit(); } },
         h('div', { className: 'form__group' },
           h(T.Select, {
             label: f.product, name: 'product', id: 'product', required: true, placeholder: f.productPlaceholder,

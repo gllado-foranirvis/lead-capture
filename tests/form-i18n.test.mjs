@@ -41,3 +41,6 @@ test('el botó d\'entrada és «Saber más» i les seves traduccions', () => {
     ['Saber más', 'Saber-ne més', 'Saber mais', 'Learn more'],
   );
 });
+test('el text de privacitat de l\'Extra 1 també explica què passa si t\'escriuen per WhatsApp o correu', () => {
+  for (const l of CONFIG.languages) assert.match(DICT[l].form.privacyText, /WhatsApp/, l);
+});
