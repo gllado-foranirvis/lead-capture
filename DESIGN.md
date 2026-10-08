@@ -334,7 +334,7 @@ Només es mou el color: botons, enllaços i xips canvien de color en 150ms (`eas
 - **Color:** segments plens en Action Black (blanc en fosc); buits en Control Edge fort. El pas actual i els anteriors són plens (pas 1 = 50 %, pas 2 = 100 %).
 - **Accessibilitat:** el traç és un `progressbar` amb `aria-valuemin/max/now`, `aria-valuetext` i `aria-label` iguals al text visible; en canviar de pantalla el focus va al títol.
 - **Moviment:** només el canvi de color del segment (200ms) i l'entrada suau de cada pantalla (180ms), tots dos dins `prefers-reduced-motion: no-preference`; sense moviment l'estat es veu igual.
-- **On:** a dalt de la pantalla, sota la capçalera i sobre el títol. L'entrada de l'Extra 1 no porta indicador ni xips de perfil: la primera decisió és un sol clic.
+- **On:** a dalt de la pantalla, sota la capçalera i sobre el títol. L'entrada porta la pregunta de perfil (opcional, xips) i un únic botó principal; el pas 1 és de contacte i el pas 2 de perfilació, i només el perfil és obligatori a la perfilació.
 
 ### Inputs / Fields
 - **Style:** farciment Mist, vora inferior de 2px Control Edge, quadrat, alçada mínima 48px, etiqueta damunt en `label`.

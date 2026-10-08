@@ -44,13 +44,13 @@ Els botons de WhatsApp i correu porten una icona en línia (`site/js/icons.js`, 
 
 El flux és **apagat per defecte**: l'MVP continua igual per als visitants. Es veu amb `?extra1=1` (per exemple `?lang=es&extra1=1`) o posant `extra1: true` a `site/js/config.js`. Altres paràmetres: `?producto=<id>|asesoramiento` preselecciona el producte i `?o=tauleta` marca l'origen.
 
-**Recorregut:** entrada (un sol botó principal, sense xips de perfil) → pas 1 (producte i correu) → pas 2 (nom, perfil, telèfon, si té embarcació, privacitat, novetats) → confirmació (s'obre `CONFIG.dossierUrl` i s'ofereix WhatsApp). «← Volver» conserva el que s'ha escrit; els errors del pas 1 es veuen abans de seguir.
+**Recorregut:** inici (pregunta de perfil sempre visible i CTA «Quiero saber más de The Silent Fleet») → pas 1 (nom, correu, telèfon, privacitat, novetats) → pas 2 (perfil, activitat si és Profesional, embarcació, intenció de compra, model; només el perfil és obligatori) → confirmació (s'obre el dossier general i s'ofereix WhatsApp). «← Volver» conserva el que s'ha escrit; els errors es veuen abans de seguir. A la tauleta (`?o=tauleta`), tornar a l'inici descarta les dades.
 
-- **Esdeveniments `window`** (res no s'envia encara a cap servidor): `tsf:lead-partial` en passar del pas 1 al 2, amb `{ id, stage: 'step1', product, email, privacy: false, lang, origin }`, i `tsf:lead` en acabar, amb `{ contact, profiling, hasProfiling }`. Comparteixen `id`. El lead parcial queda registrat com a **privacitat no acceptada**.
-- **WhatsApp i correu** porten les dades de la sessió (nom, producte, si té embarcació) en una línia entre el text i el comiat; sense dades són els missatges de sempre.
-- **Document:** s'obre en prémer el botó final (dins del gest, perquè el navegador no el bloquegi). `site/dossier-prova.pdf` el genera `scripts/make-test-pdf.mjs` i és de prova.
-- **`emailDelivery`** (`config.js`) és `false` fins que existeixi l'enviament del correu amb la ficha; només canvia el text de la confirmació.
-- Els literals són a `site/js/i18n-form.js` (tracte proper; el document es diu «ficha» fins que Bruno decideixi).
+- **Esdeveniments `window`** (res no s'envia encara a cap servidor): `tsf:lead-partial` en continuar el pas 1, amb `{ id, stage: 'step1', name, email, phone, privacy: true, newsletter, lang, origin, profile? }` (ja amb consentiment), i `tsf:lead` en acabar, amb `{ contact, profiling, hasProfiling }`. Comparteixen `id`.
+- **WhatsApp i correu** porten el que el visitant ja ha donat (nom, producte, activitat, embarcació, intenció de compra) en una línia entre el text i el comiat; sense dades són els missatges de sempre.
+- **Document:** s'obre en prémer el botó final (dins del gest, perquè el navegador no el bloquegi). `site/dossier-prova.pdf` el genera `scripts/make-test-pdf.mjs` i és de prova: ha de ser el document **general de l'empresa**.
+- **`emailDelivery`** (`config.js`) és `false` fins que existeixi l'enviament del correu amb el dossier; només canvia el text de la confirmació.
+- Els literals són a `site/js/i18n-form.js` (tracte proper; el document es diu «dossier» fins que Bruno decideixi).
 - `docs-privats/` (proposta i specs amb preus) és local i no és al repositori.
 
 ### Dades a substituir abans d'activar `extra1`
@@ -58,13 +58,12 @@ El flux és **apagat per defecte**: l'MVP continua igual per als visitants. Es v
 | On | Valor de prova | Qui el dona |
 |---|---|---|
 | `products` (`config.js`) | Modelo A / B / C, més l'opció fixa d'assessorament | Bruno: models o potències reals |
-| `dossierUrl` (`config.js`) | `dossier-prova.pdf` | Bruno: el document real |
+| `dossierUrl` (`config.js`) | `dossier-prova.pdf` | Bruno: el document general de l'empresa |
 | `legalName` (`config.js`) | PENDIENTE… | Bruno |
 | `privacyText` (`i18n-form.js`) | Esborrany, ara amb el correu parcial | Bruno (no és assessorament legal) |
-| Nom del document | «ficha» | Bruno: «ficha» o «dossier» |
+| Nom del document | «dossier» | Bruno |
 
 ### Pendent de Bruno
-- Si es pot desar el correu abans del consentiment (el pas 1 el desa amb `privacy: false`).
 - Si «Profesional» ha d'enviar el missatge «distribuidor».
 - Enviament real del correu amb la ficha (pla posterior) i prova en un mòbil real (finestres emergents, teclats, autocompletat).
 
