@@ -1,4 +1,6 @@
-export const DICT = {
+import { FORM } from './i18n-form.js';
+
+const PAGE = {
   es: {
     title: 'Hablemos de propulsión eléctrica',
     subtitle: 'Cuéntanos qué buscas y te respondemos',
@@ -39,11 +41,11 @@ export const DICT = {
   },
   pt: {
     title: 'Falemos de propulsão elétrica',
-    subtitle: 'Diga-nos o que procura e respondemos',
-    profileLegend: 'Quem é? (opcional)', profileDistribuidor: 'Distribuidor ou profissional', profileParticular: 'Particular',
-    contactLabel: 'Escreva-nos', whatsapp: 'Escrever por WhatsApp', emailLabel: 'Escrever por e-mail',
-    contactHint: 'Abre com uma mensagem já escrita. Pode alterá-la antes de a enviar.',
-    contactFallback: 'Não abre? Escreva-nos para',
+    subtitle: 'Diz-nos o que procuras e respondemos',
+    profileLegend: 'Quem és? (opcional)', profileDistribuidor: 'Distribuidor ou profissional', profileParticular: 'Particular',
+    contactLabel: 'Escreve-nos', whatsapp: 'Escrever por WhatsApp', emailLabel: 'Escrever por e-mail',
+    contactHint: 'Abre com uma mensagem já escrita. Podes alterá-la antes de a enviar.',
+    contactFallback: 'Não abre? Escreve-nos para',
     privacy: 'Privacidade', cookies: 'Cookies', legalNav: 'Ligações legais', langLabel: 'Idioma', back: 'Voltar',
     greeting: 'Olá,', closing: 'Obrigado.',
     messages: {
@@ -52,7 +54,7 @@ export const DICT = {
       particular: { subject: 'Propulsão elétrica · Salão Náutico', text: 'Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me?' },
     },
     privacyTitle: 'Privacidade',
-    privacyText: 'Esta página não guarda dados pessoais. Se nos escrever por WhatsApp ou por correio, usaremos os seus dados apenas para lhe responder.',
+    privacyText: 'Esta página não guarda dados pessoais. Se nos escreveres por WhatsApp ou por correio, usaremos os teus dados apenas para te responder.',
     cookiesTitle: 'Cookies',
     cookiesText: 'Esta página não utiliza cookies nem ferramentas de medição.',
   },
@@ -76,6 +78,8 @@ export const DICT = {
     cookiesText: 'This page does not use cookies or measurement tools.',
   },
 };
+
+export const DICT = Object.fromEntries(Object.entries(PAGE).map(([lang, page]) => [lang, { ...page, form: FORM[lang] }]));
 
 export function resolveLang(search, config) {
   const wanted = (new URLSearchParams(search).get('lang') || '').toLowerCase();

@@ -13,6 +13,8 @@ const UI = [
   ['Enllaç legal 1', 'privacy'], ['Enllaç legal 2', 'cookies'],
   ['Pàgina de privacitat', 'privacyText'], ['Pàgina de cookies', 'cookiesText'],
 ];
+const flat = (o, prefix = '') => Object.entries(o).flatMap(([k, v]) => (typeof v === 'object' ? flat(v, `${prefix}${k}.`) : [[`${prefix}${k}`, v]]));
+const at = (o, path) => path.split('.').reduce((acc, k) => acc[k], o);
 const cell = (s) => s.replace(/\n\n/g, ' ⏎ ').replace(/\n/g, ' / ').replace(/\|/g, '\\|');
 
 export function renderTexts(dict, config) {
@@ -30,6 +32,12 @@ export function renderTexts(dict, config) {
     ...UI.map(([label, key]) => `| ${label} | ${config.languages.map((l) => cell(dict[l][key])).join(' | ')} |`),
     '',
     `L'adreça de la línia de recuperació és \`${config.email}\`, en text seleccionable.`,
+    '',
+    "## Formulari de l'Extra 1 (esborrany)",
+    '',
+    '| Clau | ' + config.languages.map((l) => l.toUpperCase()).join(' | ') + ' |',
+    '|---|' + config.languages.map(() => '---|').join(''),
+    ...flat(dict.es.form).map(([key]) => `| \`${key}\` | ${config.languages.map((l) => cell(at(dict[l].form, key))).join(' | ')} |`),
     '',
     '## Missatges',
     '',

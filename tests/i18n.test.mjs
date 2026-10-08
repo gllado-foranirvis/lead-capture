@@ -23,7 +23,7 @@ test('cada missatge té només assumpte i text (cap camp a omplir ni altres pece
     assert.deepEqual(Object.keys(m).sort(), ['subject', 'text'], `${l}/${k}`);
 });
 test('registre consistent a la interfície: ES i CA de tu, sense «usted» ni «vós»', () => {
-  const ui = (d) => Object.entries(d).filter(([k]) => k !== 'messages').map(([, v]) => v).join(' ');
+  const ui = (d) => leaves((({ messages, ...rest }) => rest)(d)).join(' ');
   assert.doesNotMatch(ui(DICT.es), /\b(su|sus|usted|ustedes)\b/i);
   assert.doesNotMatch(ui(DICT.ca), /\b(vostre|vostra|vostres|escriviu|contacteu)\b/i);
 });
