@@ -15,3 +15,13 @@ test('sense errors, o amb un camp que no existeix al DOM, no fa res', () => {
   assert.equal(focusFirstError({}, fakeDoc([])), false);
   assert.equal(focusFirstError({ email: 'email' }, fakeDoc([])), false);
 });
+
+import { focusStepHeading } from '../site/js/form/focus.js';
+
+test('focusStepHeading dona el focus al contenidor del títol i diu si l\'ha trobat', () => {
+  let focused = 0;
+  const doc = { querySelector: (s) => (s === '[data-step-heading]' ? { focus: () => focused++ } : null) };
+  assert.equal(focusStepHeading(doc), true);
+  assert.equal(focused, 1);
+  assert.equal(focusStepHeading({ querySelector: () => null }), false);
+});

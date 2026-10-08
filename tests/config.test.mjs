@@ -24,3 +24,11 @@ test('productes de config: ids únics i amb nom', () => {
 test('legalName és present (de prova fins que Bruno el doni)', () => {
   assert.ok(CONFIG.legalName.trim().length > 0);
 });
+
+test('el document de prova existeix a site/ i és un PDF', async () => {
+  const { existsSync, readFileSync } = await import('node:fs');
+  assert.equal(CONFIG.emailDelivery, false);
+  assert.ok(existsSync(`site/${CONFIG.dossierUrl}`));
+  const pdf = readFileSync(`site/${CONFIG.dossierUrl}`, 'latin1');
+  assert.ok(pdf.startsWith('%PDF-') && pdf.trimEnd().endsWith('%%EOF'));
+});

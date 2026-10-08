@@ -7,3 +7,11 @@ export function focusFirstError(errors, doc) {
   element.focus();
   return true;
 }
+
+// En canviar de pantalla el focus va al títol, perquè el lector de pantalla anunciï el pas nou.
+export function focusStepHeading(doc) {
+  const element = doc.querySelector('[data-step-heading]');
+  if (!element) return false;
+  element.focus();
+  return true;
+}

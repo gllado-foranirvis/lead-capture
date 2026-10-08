@@ -1,19 +1,43 @@
-import { submitForm } from './lead.js';
+import { buildPartialLead, submitForm } from './lead.js';
 import { resolveOrigin, resolveProduct } from './context.js';
+import { STEP_FIELDS, firstErrorField, validateStep1 } from './validate.js';
 
-// Un enviament vàlid emet el lead i deixa el formulari (i el perfil de l'entrada) nets: a la tauleta
-// de l'estand el següent visitant no ha de veure les dades de l'anterior ni poder reenviar-les.
-export function handleSubmit(values, { products, search, lang, newId, dispatch, setErrors, bumpAttempt, clearEntryProfile, emitLead, goTo }) {
-  const result = submitForm(values, { products, lang, origin: resolveOrigin(search), newId });
-  if (result.errors) {
-    setErrors(result.errors);
+// Pas 1: els errors es veuen abans de seguir. El correu es desa com a lead parcial (privacy: false) amb un id que
+// es conserva si el visitant torna enrere i avança de nou.
+export function advanceStep1(values, { products, search, lang, leadId, newId, setLeadId, setErrors, bumpAttempt, emitPartial, goTo }) {
+  const errors = validateStep1(values, products);
+  if (Object.keys(errors).length) {
+    setErrors(errors);
     bumpAttempt();
     return false;
   }
+  const id = leadId || newId();
+  setLeadId(id);
+  setErrors({});
+  emitPartial(buildPartialLead(values, { id, lang, origin: resolveOrigin(search) }));
+  goTo('step2');
+  return true;
+}
+
+// El document s'obre abans de qualsevol altra cosa: el navegador només ho permet dins del gest de l'usuari.
+// Un enviament vàlid deixa el formulari net per al següent visitant de la tauleta; la confirmació conserva
+// només el que necessita per al WhatsApp (receipt).
+export function handleSubmit(values, {
+  products, search, lang, leadId, newId, dispatch, setErrors, setLeadId, setReceipt, bumpAttempt, openDocument, emitLead, goTo,
+}) {
+  const result = submitForm(values, { products, id: leadId || newId(), lang, origin: resolveOrigin(search) });
+  if (result.errors) {
+    setErrors(result.errors);
+    bumpAttempt();
+    goTo(STEP_FIELDS[1].includes(firstErrorField(result.errors)) ? 'step1' : 'step2');
+    return false;
+  }
+  openDocument();
   emitLead(result.lead);
+  setReceipt({ product: values.product, profile: values.profile, hasBoat: values.hasBoat, name: values.name });
   dispatch({ type: 'reset', initial: { product: resolveProduct(search, products) } });
   setErrors({});
-  clearEntryProfile();
-  goTo('pending');
+  setLeadId('');
+  goTo('done');
   return true;
 }
