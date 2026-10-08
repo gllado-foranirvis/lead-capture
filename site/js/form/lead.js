@@ -1,14 +1,17 @@
-import { MAX } from './model.js';
+import { MAX, clip } from './model.js';
 import { validateContact } from './validate.js';
-
-// Array.from evita partir un emoji (parell subrogat) pel mig.
-const clip = (value, max) => Array.from(String(value ?? '').trim()).slice(0, max).join('');
-const answered = (value) => clip(value, 1) !== '';
 
 export const newLeadId = () =>
   globalThis.crypto?.randomUUID?.() ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 
-function buildContact(values, id, { lang, origin }) {
+const BOAT_ANSWERS = ['si', 'no'];
+
+// El pas 1 desa el correu abans del consentiment: queda registrat que la privacitat NO s'ha acceptat.
+export function buildPartialLead(values, { id, lang, origin }) {
+  return { id, stage: 'step1', product: values.product, email: clip(values.email, MAX.email).toLowerCase(), privacy: false, lang, origin };
+}
+
+function buildContact(values, { id, lang, origin }) {
   return {
     id, product: values.product,
     name: clip(values.name, MAX.name),
@@ -22,23 +25,16 @@ function buildContact(values, id, { lang, origin }) {
 
 function buildProfiling(values, id) {
   const profiling = { id };
-  if (values.profile === 'profesional' && values.activity) {
-    profiling.activity = values.activity;
-    if (values.activity === 'otra' && answered(values.activityOther)) profiling.activityOther = clip(values.activityOther, MAX.activityOther);
-  }
-  if (values.hasElectric) profiling.hasElectric = values.hasElectric;
-  if (values.investing) profiling.investing = values.investing;
-  if (answered(values.demo)) profiling.demo = clip(values.demo, MAX.demo);
+  if (BOAT_ANSWERS.includes(values.hasBoat)) profiling.hasBoat = values.hasBoat;
   return profiling;
 }
 
-export function buildLead(values, { lang, origin, newId }) {
-  const id = newId();
-  const profiling = buildProfiling(values, id);
-  return { contact: buildContact(values, id, { lang, origin }), profiling, hasProfiling: Object.keys(profiling).length > 1 };
+export function buildLead(values, context) {
+  const profiling = buildProfiling(values, context.id);
+  return { contact: buildContact(values, context), profiling, hasProfiling: Object.keys(profiling).length > 1 };
 }
 
-export function submitForm(values, { products, lang, origin, newId }) {
+export function submitForm(values, { products, ...context }) {
   const errors = validateContact(values, products);
-  return Object.keys(errors).length ? { errors } : { lead: buildLead(values, { lang, origin, newId }) };
+  return Object.keys(errors).length ? { errors } : { lead: buildLead(values, context) };
 }
