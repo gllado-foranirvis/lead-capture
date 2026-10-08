@@ -12,18 +12,30 @@ export function mailtoUrl(email, subject, body) {
 
 // Un perfil desconegut o absent cau al missatge genèric.
 const messageFor = (dict, profile) => (Object.hasOwn(dict.messages, profile) ? dict.messages[profile] : dict.messages.none);
+const fill = (template, value) => template.replace('{value}', () => value);
 
-export function whatsappText(dict, profile) {
-  return `${dict.greeting}\n\n${messageFor(dict, profile).text}`;
+// Línies amb el que el visitant ja ha donat a la sessió; les buides no hi surten.
+function contextLines(dict, { name, product, hasBoat } = {}) {
+  return [
+    name && fill(dict.messageContext.name, name),
+    product && fill(dict.messageContext.product, product),
+    hasBoat && fill(dict.messageContext.boat, hasBoat),
+  ].filter(Boolean);
 }
 
-export function emailBody(dict, profile) {
-  return `${dict.greeting}\n\n${messageFor(dict, profile).text}\n\n${dict.closing}`;
+const block = (lines) => (lines.length ? [lines.join('\n')] : []);
+
+export function whatsappText(dict, session = {}) {
+  return [dict.greeting, messageFor(dict, session.profile).text, ...block(contextLines(dict, session))].join('\n\n');
 }
 
-export function contactLinks(config, dict, profile) {
+export function emailBody(dict, session = {}) {
+  return [dict.greeting, messageFor(dict, session.profile).text, ...block(contextLines(dict, session)), dict.closing].join('\n\n');
+}
+
+export function contactLinks(config, dict, session = {}) {
   return {
-    whatsapp: whatsappUrl(normalizeNumber(config.whatsappNumber), whatsappText(dict, profile)),
-    email: mailtoUrl(config.email, messageFor(dict, profile).subject, emailBody(dict, profile)),
+    whatsapp: whatsappUrl(normalizeNumber(config.whatsappNumber), whatsappText(dict, session)),
+    email: mailtoUrl(config.email, messageFor(dict, session.profile).subject, emailBody(dict, session)),
   };
 }

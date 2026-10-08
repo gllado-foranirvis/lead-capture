@@ -82,6 +82,7 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 - **WhatsApp:** salutació, salt de línia en blanc i text del perfil. Sense assumpte ni comiat.
 - **Correu** (cap a `info@thesilentfleet.com`): assumpte del perfil; cos amb salutació, text del perfil i comiat.
 - **Perfil «Cap»:** és el missatge genèric, quan el visitant no ha triat perfil.
+- **Dades de la sessió:** si el visitant ja ha donat el nom, el producte o si té embarcació, es nota en una línia entre el text i el comiat; les que no té no hi surten.
 
 ### Castellà (ES)
 
@@ -93,6 +94,8 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | Distribuïdor | Correu | Distribución · Salón Náutico | Hola, ⏎ Soy distribuidor y me interesa trabajar con The Silent Fleet. ¿Podemos hablar de volumen y condiciones? ⏎ Gracias. |
 | Particular | WhatsApp | — | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? |
 | Particular | Correu | Propulsión eléctrica · Salón Náutico | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? ⏎ Gracias. |
+| Particular amb dades de sessió (exemple) | WhatsApp | — | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? ⏎ Me llamo Ana. / Producto de interés: Modelo A / Tengo embarcación: Sí |
+| Particular amb dades de sessió (exemple) | Correu | Propulsión eléctrica · Salón Náutico | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? ⏎ Me llamo Ana. / Producto de interés: Modelo A / Tengo embarcación: Sí ⏎ Gracias. |
 
 ### Català (CA)
 
@@ -104,6 +107,8 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | Distribuïdor | Correu | Distribució · Saló Nàutic | Hola, ⏎ Sóc distribuïdor i m'interessa treballar amb The Silent Fleet. Podem parlar de volum i condicions? ⏎ Gràcies. |
 | Particular | WhatsApp | — | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? |
 | Particular | Correu | Propulsió elèctrica · Saló Nàutic | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? ⏎ Gràcies. |
+| Particular amb dades de sessió (exemple) | WhatsApp | — | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? ⏎ Em dic Ana. / Producte d'interès: Modelo A / Tinc embarcació: Sí |
+| Particular amb dades de sessió (exemple) | Correu | Propulsió elèctrica · Saló Nàutic | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? ⏎ Em dic Ana. / Producte d'interès: Modelo A / Tinc embarcació: Sí ⏎ Gràcies. |
 
 ### Portuguès (PT)
 
@@ -115,6 +120,8 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | Distribuïdor | Correu | Distribuição · Salão Náutico | Olá, ⏎ Sou distribuidor e tenho interesse em trabalhar com a The Silent Fleet. Podemos falar de volume e condições? ⏎ Obrigado. |
 | Particular | WhatsApp | — | Olá, ⏎ Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me? |
 | Particular | Correu | Propulsão elétrica · Salão Náutico | Olá, ⏎ Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me? ⏎ Obrigado. |
+| Particular amb dades de sessió (exemple) | WhatsApp | — | Olá, ⏎ Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me? ⏎ Chamo-me Ana. / Produto de interesse: Modelo A / Tenho embarcação: Sim |
+| Particular amb dades de sessió (exemple) | Correu | Propulsão elétrica · Salão Náutico | Olá, ⏎ Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me? ⏎ Chamo-me Ana. / Produto de interesse: Modelo A / Tenho embarcação: Sim ⏎ Obrigado. |
 
 ### Anglès (EN)
 
@@ -126,6 +133,8 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | Distribuïdor | Correu | Distribution · Boat Show | Hello, ⏎ I am a distributor and I am interested in working with The Silent Fleet. Can we talk about volume and terms? ⏎ Thank you. |
 | Particular | WhatsApp | — | Hello, ⏎ I am an individual interested in electric propulsion for my boat. Could you send me some information? |
 | Particular | Correu | Electric propulsion · Boat Show | Hello, ⏎ I am an individual interested in electric propulsion for my boat. Could you send me some information? ⏎ Thank you. |
+| Particular amb dades de sessió (exemple) | WhatsApp | — | Hello, ⏎ I am an individual interested in electric propulsion for my boat. Could you send me some information? ⏎ My name is Ana. / Product of interest: Modelo A / I own a boat: Yes |
+| Particular amb dades de sessió (exemple) | Correu | Electric propulsion · Boat Show | Hello, ⏎ I am an individual interested in electric propulsion for my boat. Could you send me some information? ⏎ My name is Ana. / Product of interest: Modelo A / I own a boat: Yes ⏎ Thank you. |
 
 ## Per revisar
 

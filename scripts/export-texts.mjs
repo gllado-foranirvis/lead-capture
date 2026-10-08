@@ -44,15 +44,19 @@ export function renderTexts(dict, config) {
     '- **WhatsApp:** salutació, salt de línia en blanc i text del perfil. Sense assumpte ni comiat.',
     `- **Correu** (cap a \`${config.email}\`): assumpte del perfil; cos amb salutació, text del perfil i comiat.`,
     '- **Perfil «Cap»:** és el missatge genèric, quan el visitant no ha triat perfil.',
+    '- **Dades de la sessió:** si el visitant ja ha donat el nom, el producte o si té embarcació, es nota en una línia entre el text i el comiat; les que no té no hi surten.',
     '',
   ];
   for (const lang of config.languages) {
     const d = dict[lang];
     out.push(`### ${LANGS[lang]}`, '', '| Perfil | Via | Assumpte | Missatge |', '|---|---|---|---|');
     for (const [key, label] of PROFILES) {
-      out.push(`| ${label} | WhatsApp | — | ${cell(whatsappText(d, key))} |`);
-      out.push(`| ${label} | Correu | ${cell(d.messages[key].subject)} | ${cell(emailBody(d, key))} |`);
+      out.push(`| ${label} | WhatsApp | — | ${cell(whatsappText(d, { profile: key }))} |`);
+      out.push(`| ${label} | Correu | ${cell(d.messages[key].subject)} | ${cell(emailBody(d, { profile: key }))} |`);
     }
+    const example = { profile: 'particular', name: 'Ana', product: 'Modelo A', hasBoat: d.form.yes };
+    out.push(`| Particular amb dades de sessió (exemple) | WhatsApp | — | ${cell(whatsappText(d, example))} |`);
+    out.push(`| Particular amb dades de sessió (exemple) | Correu | ${cell(d.messages.particular.subject)} | ${cell(emailBody(d, example))} |`);
     out.push('');
   }
   out.push(

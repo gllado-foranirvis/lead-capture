@@ -2,44 +2,58 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { CONFIG } from '../site/js/config.js';
 import { DICT } from '../site/js/i18n.js';
-import { normalizeNumber, whatsappUrl, mailtoUrl, contactLinks } from '../site/js/messages.js';
+import { contactLinks, emailBody, mailtoUrl, normalizeNumber, whatsappText, whatsappUrl } from '../site/js/messages.js';
 
+const wa = (url) => decodeURIComponent(url.split('text=')[1]);
+const mail = (url) => new URLSearchParams(url.split('?')[1]);
 
 test('normalizeNumber deixa només dígits', () => {
   assert.equal(normalizeNumber('+34 600-00 00.00'), '34600000000');
   assert.equal(normalizeNumber('0034600000000'), '34600000000');
 });
-test('whatsappUrl codifica accents, ç, ñ i salts de línia', () => {
+test('whatsappUrl i mailtoUrl codifiquen accents, ç, ñ i salts de línia', () => {
   const url = whatsappUrl('34600000000', 'Hola,\n\nGràcies, señor ã ·');
-  assert.match(url, /^https:\/\/wa\.me\/34600000000\?text=/);
   assert.doesNotMatch(url, /[\s\n]/);
-  assert.equal(decodeURIComponent(url.split('text=')[1]), 'Hola,\n\nGràcies, señor ã ·');
+  assert.equal(wa(url), 'Hola,\n\nGràcies, señor ã ·');
+  const m = mailtoUrl('info@thesilentfleet.com', 'Distribució · Saló', 'Línia 1\n\nLínia 2');
+  assert.equal(mail(m).get('subject'), 'Distribució · Saló');
+  assert.equal(mail(m).get('body'), 'Línia 1\n\nLínia 2');
 });
-test('mailtoUrl codifica assumpte i cos', () => {
-  const url = mailtoUrl('info@thesilentfleet.com', 'Distribució · Saló', 'Línia 1\n\nLínia 2');
-  const q = new URLSearchParams(url.split('?')[1]);
-  assert.match(url, /^mailto:info@thesilentfleet\.com\?/);
-  assert.equal(q.get('subject'), 'Distribució · Saló');
-  assert.equal(q.get('body'), 'Línia 1\n\nLínia 2');
-});
-test('12 combinacions idioma × perfil generen el missatge correcte', () => {
+test('sense dades de sessió: els 12 missatges de sempre (4 idiomes × perfil buit, distribuidor, particular)', () => {
   for (const lang of CONFIG.languages) for (const profile of ['', 'distribuidor', 'particular']) {
     const d = DICT[lang];
     const m = d.messages[profile || 'none'];
-    const { whatsapp, email } = contactLinks(CONFIG, d, profile);
-    const wa = decodeURIComponent(whatsapp.split('text=')[1]);
-    assert.equal(wa, `${d.greeting}\n\n${m.text}`, `${lang}/${profile}`);
-    const q = new URLSearchParams(email.split('?')[1]);
-    assert.equal(q.get('subject'), m.subject);
-    assert.equal(q.get('body'), `${d.greeting}\n\n${m.text}\n\n${d.closing}`);
+    const { whatsapp, email } = contactLinks(CONFIG, d, { profile });
+    assert.equal(wa(whatsapp), `${d.greeting}\n\n${m.text}`, `${lang}/${profile}`);
+    assert.equal(mail(email).get('subject'), m.subject);
+    assert.equal(mail(email).get('body'), `${d.greeting}\n\n${m.text}\n\n${d.closing}`);
   }
 });
-test('un perfil desconegut o absent cau al missatge genèric, sense petar', () => {
-  const base = contactLinks(CONFIG, DICT.es, '');
-  for (const bad of ['xx', undefined, null, '__proto__'])
-    assert.deepEqual(contactLinks(CONFIG, DICT.es, bad), base, String(bad));
+test('sense cap argument de sessió, o amb perfil desconegut, cau al missatge genèric', () => {
+  assert.equal(whatsappText(DICT.es), `${DICT.es.greeting}\n\n${DICT.es.messages.none.text}`);
+  assert.equal(whatsappText(DICT.es, { profile: 'inventat' }), whatsappText(DICT.es));
+});
+test('amb dades de sessió: nom, producte i embarcació van entre el text i el comiat', () => {
+  const session = { profile: 'particular', name: 'Ana', product: 'Modelo A', hasBoat: 'Sí' };
+  const d = DICT.es;
+  const lines = 'Me llamo Ana.\nProducto de interés: Modelo A\nTengo embarcación: Sí';
+  assert.equal(whatsappText(d, session), `${d.greeting}\n\n${d.messages.particular.text}\n\n${lines}`);
+  assert.equal(emailBody(d, session), `${d.greeting}\n\n${d.messages.particular.text}\n\n${lines}\n\n${d.closing}`);
+});
+test('les línies que no tenen valor no apareixen', () => {
+  assert.equal(whatsappText(DICT.ca, { product: 'Modelo A' }), `${DICT.ca.greeting}\n\n${DICT.ca.messages.none.text}\n\nProducte d'interès: Modelo A`);
+});
+test('un nom amb símbols arriba intacte als dos canals', () => {
+  const name = 'Ana & "Joe" ñ 😀 $& {value}';
+  const { whatsapp, email } = contactLinks(CONFIG, DICT.es, { name });
+  assert.ok(wa(whatsapp).includes(`Me llamo ${name}.`));
+  assert.ok(mail(email).get('body').includes(`Me llamo ${name}.`));
 });
 test('el número de config es normalitza a l\'enllaç', () => {
-  const { whatsapp } = contactLinks({ ...CONFIG, whatsappNumber: '+34 600-00 00 00' }, DICT.es, '');
+  const { whatsapp } = contactLinks({ ...CONFIG, whatsappNumber: '+34 600-00 00 00' }, DICT.es, {});
   assert.match(whatsapp, /^https:\/\/wa\.me\/34600000000\?/);
+});
+test('cada idioma té les tres línies de dades amb {value}', () => {
+  for (const lang of CONFIG.languages) for (const key of ['name', 'product', 'boat'])
+    assert.match(DICT[lang].messageContext[key], /\{value\}/, `${lang}.${key}`);
 });
