@@ -2,10 +2,10 @@ import { buildPartialLead, submitForm } from './lead.js';
 import { resolveOrigin, resolveProduct } from './context.js';
 import { STEP_FIELDS, firstErrorField, validateStep1 } from './validate.js';
 
-// Pas 1: els errors es veuen abans de seguir. El correu es desa com a lead parcial (privacy: false) amb un id que
+// Pas 1: els errors es veuen abans de seguir. El contacte (ja amb consentiment) es desa com a lead parcial amb un id que
 // es conserva si el visitant torna enrere i avança de nou.
-export function advanceStep1(values, { products, search, lang, leadId, newId, setLeadId, setErrors, bumpAttempt, emitPartial, goTo }) {
-  const errors = validateStep1(values, products);
+export function advanceStep1(values, { search, lang, leadId, newId, setLeadId, setErrors, bumpAttempt, emitPartial, goTo }) {
+  const errors = validateStep1(values);
   if (Object.keys(errors).length) {
     setErrors(errors);
     bumpAttempt();
@@ -25,7 +25,7 @@ export function advanceStep1(values, { products, search, lang, leadId, newId, se
 export function handleSubmit(values, {
   products, search, lang, leadId, newId, dispatch, setErrors, setLeadId, setReceipt, bumpAttempt, openDocument, emitLead, goTo,
 }) {
-  const result = submitForm(values, { products, id: leadId || newId(), lang, origin: resolveOrigin(search) });
+  const result = submitForm(values, { id: leadId || newId(), lang, origin: resolveOrigin(search) });
   if (result.errors) {
     setErrors(result.errors);
     bumpAttempt();
@@ -34,7 +34,10 @@ export function handleSubmit(values, {
   }
   openDocument();
   emitLead(result.lead);
-  setReceipt({ product: values.product, profile: values.profile, hasBoat: values.hasBoat, name: values.name });
+  setReceipt({
+    product: values.product, profile: values.profile, activity: values.activity, activityOther: values.activityOther,
+    hasBoat: values.hasBoat, intent: values.intent, name: values.name,
+  });
   dispatch({ type: 'reset', initial: { product: resolveProduct(search, products) } });
   setErrors({});
   setLeadId('');

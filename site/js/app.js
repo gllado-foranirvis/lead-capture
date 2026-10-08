@@ -3,7 +3,7 @@ import { DICT, resolveLang } from './i18n.js';
 import { contactLinks } from './messages.js';
 import { icon } from './icons.js';
 import { isExtra1Enabled, legalQuery, resolveProduct } from './form/context.js';
-import { emptyForm, formReducer } from './form/model.js';
+import { PROFILES, emptyForm, formReducer } from './form/model.js';
 import { clearError } from './form/validate.js';
 import { newLeadId } from './form/lead.js';
 import { advanceStep1, handleSubmit, leaveToEntry } from './form/flow.js';
@@ -12,8 +12,8 @@ import { focusFirstError, focusStepHeading } from './form/focus.js';
 import { advanceOnEnter, applyFieldHints } from './form/hints.js';
 import { createChrome } from './ui/chrome.js';
 import { createEntryScreen } from './ui/entry-screen.js';
-import { createStepProduct } from './ui/step-product.js';
 import { createStepContact } from './ui/step-contact.js';
+import { createStepProfile } from './ui/step-profile.js';
 import { createDoneScreen } from './ui/done-screen.js';
 
 const R = window.React;
@@ -24,8 +24,8 @@ const extra1 = isExtra1Enabled(CONFIG, search);
 
 const Header = createChrome({ h, T, brand: CONFIG.brand, languages: CONFIG.languages });
 const EntryScreen = createEntryScreen({ h, T, icon });
-const StepProduct = createStepProduct({ h, T });
 const StepContact = createStepContact({ h, T });
+const StepProfile = createStepProfile({ h, T });
 const DoneScreen = createDoneScreen({ h, T, icon });
 
 const emit = (name) => (detail) => window.dispatchEvent(new CustomEvent(name, { detail }));
@@ -33,7 +33,6 @@ const openDocument = () => { if (CONFIG.dossierUrl) window.open(CONFIG.dossierUr
 
 function App() {
   const [lang, setLang] = R.useState(() => resolveLang(search, CONFIG));
-  const [profile, setProfile] = R.useState(''); // només l'entrada de l'MVP
   const [view, setView] = R.useState('entry'); // entry | step1 | step2 | done
   const [values, dispatch] = R.useReducer(formReducer, undefined, () => emptyForm({ product: resolveProduct(search, CONFIG.products) }));
   const [errors, setErrors] = R.useState({});
@@ -58,7 +57,7 @@ function App() {
     } else {
       mounted.current = true;
     }
-    if (view === 'step1' || view === 'step2') applyFieldHints(document);
+    if (view === 'step1') applyFieldHints(document);
   }, [view]);
   R.useEffect(() => {
     if (attempt > 0) focusFirstError(errors, document);
@@ -74,17 +73,24 @@ function App() {
   const goHome = () => { setReceipt(null); setView('entry'); };
   const goBack = (to) => () => { setErrors({}); setView(to); };
 
+  // El mateix xip de perfil a l'inici, al pas 2 i als missatges: una sola dada (values.profile).
+  const profileOptions = extra1
+    ? PROFILES.map((p) => ({ value: p, label: t.form.profiles[p] }))
+    : [{ value: 'profesional', label: t.profileDistribuidor }, { value: 'particular', label: t.profileParticular }];
+
   const screens = {
     entry: () => h(EntryScreen, {
-      t, links: contactLinks(CONFIG, t, extra1 ? sessionOf(values) : { profile }), email: CONFIG.email, profile, legalQuery: query,
-      onProfile: setProfile, onClearProfile: () => setProfile(''), onOpenForm: extra1 ? () => setView('step1') : undefined,
+      t, links: contactLinks(CONFIG, t, sessionOf(values)), email: CONFIG.email, legalQuery: query,
+      profile: values.profile, profileLegend: extra1 ? t.form.entryProfileLegend : t.profileLegend, profileOptions,
+      onProfile: (v) => change('profile', v), onClearProfile: () => change('profile', ''),
+      onOpenForm: extra1 ? () => setView('step1') : undefined,
     }),
-    step1: () => h(StepProduct, {
-      t, products: CONFIG.products, values, errors, onChange: change, onNext: next, onKeyDown: (e) => advanceOnEnter(e, document), onBack: () => leaveToEntry({ ...common, dispatch }),
+    step1: () => h(StepContact, {
+      t, values, errors, onChange: change, onNext: next, onKeyDown: (e) => advanceOnEnter(e, document),
+      onBack: () => leaveToEntry({ ...common, dispatch }), privacyHref: `privacy.html${query}#privacy`,
     }),
-    step2: () => h(StepContact, {
-      t, values, errors, onChange: change, onSubmit: submit, onKeyDown: (e) => advanceOnEnter(e, document), onBack: goBack('step1'),
-      privacyHref: `privacy.html${query}#privacy`,
+    step2: () => h(StepProfile, {
+      t, products: CONFIG.products, values, errors, onChange: change, onSubmit: submit, onBack: goBack('step1'),
     }),
     done: () => h(DoneScreen, {
       t, emailDelivery: CONFIG.emailDelivery, onOpen: openDocument, onHome: goHome,
