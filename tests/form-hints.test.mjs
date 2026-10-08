@@ -13,8 +13,9 @@ test('els camps de text porten autocompletat, teclat i tecla d\'Intro adequats',
   assert.deepEqual(FIELD_HINTS.name, { autocomplete: 'name', autocapitalize: 'words', enterkeyhint: 'next' });
   assert.deepEqual(FIELD_HINTS.phone, { autocomplete: 'tel-national', inputmode: 'tel', enterkeyhint: 'next' });
   assert.deepEqual(FIELD_HINTS.phonePrefix, { autocomplete: 'tel-country-code', inputmode: 'tel', enterkeyhint: 'next' });
-  assert.deepEqual(Object.keys(FIELD_HINTS).sort(), ['activityOther', 'email', 'name', 'phone', 'phonePrefix']);
+  assert.deepEqual(Object.keys(FIELD_HINTS).sort(), ['activityOther', 'demo', 'email', 'name', 'phone', 'phonePrefix']);
   assert.equal(FIELD_HINTS.activityOther.enterkeyhint, 'next');
+  assert.deepEqual(FIELD_HINTS.demo, { autocomplete: 'address-level2', enterkeyhint: 'done' });
 });
 test('applyFieldHints aplica els atributs als camps presents i compta els aplicats', () => {
   const doc = fakeDoc(['email']);

@@ -36,7 +36,7 @@ export function handleSubmit(values, {
   emitLead(result.lead);
   setReceipt({
     product: values.product, profile: values.profile, activity: values.activity, activityOther: values.activityOther,
-    hasBoat: values.hasBoat, intent: values.intent, name: values.name,
+    hasBoat: values.hasBoat, hasElectric: values.hasElectric, intent: values.intent, demo: values.demo, name: values.name,
   });
   dispatch({ type: 'reset', initial: { product: resolveProduct(search, products) } });
   setErrors({});

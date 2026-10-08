@@ -15,14 +15,16 @@ const messageFor = (dict, profile) => (Object.hasOwn(dict.messages, profile) ? d
 const fill = (template, value) => template.replace('{value}', () => value);
 
 // Línies amb el que el visitant ja ha donat a la sessió; les buides no hi surten.
-function contextLines(dict, { name, product, activity, hasBoat, intent } = {}) {
+function contextLines(dict, { name, product, activity, hasBoat, hasElectric, intent, demo } = {}) {
   const c = dict.messageContext;
   return [
     name && fill(c.name, name),
     product && fill(c.product, product),
     activity && fill(c.activity, activity),
     hasBoat && fill(c.boat, hasBoat),
+    hasElectric && fill(c.electric, hasElectric),
     intent && fill(c.intent, intent),
+    demo && fill(c.demo, demo),
   ].filter(Boolean);
 }
 

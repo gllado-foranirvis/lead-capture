@@ -34,7 +34,9 @@ function buildProfiling(values, id) {
     if (values.activity === 'otra' && answered(values.activityOther)) profiling.activityOther = clip(values.activityOther, MAX.activityOther);
   }
   if (YES_NO.includes(values.hasBoat)) profiling.hasBoat = values.hasBoat;
+  if (YES_NO.includes(values.hasElectric)) profiling.hasElectric = values.hasElectric;
   if (YES_NO.includes(values.intent)) profiling.intent = values.intent;
+  if (answered(values.demo)) profiling.demo = clip(values.demo, MAX.demo);
   return profiling;
 }
 

@@ -1,7 +1,7 @@
 export const PROFILES = ['particular', 'profesional'];
 export const ACTIVITIES = ['ocio', 'charter', 'vela', 'buceo', 'skiwake', 'seguridad', 'pasajeros', 'pesca', 'marina', 'otra'];
 export const ADVICE = 'asesoramiento';
-export const MAX = { name: 100, email: 254, phone: 30, activityOther: 120 };
+export const MAX = { name: 100, email: 254, phone: 30, activityOther: 120, demo: 80 };
 export const DEFAULT_PREFIX = '+34';
 
 // Array.from evita partir un emoji (parell subrogat) pel mig.
@@ -9,7 +9,7 @@ export const clip = (value, max) => Array.from(String(value ?? '').trim()).slice
 
 export const emptyForm = ({ product = '' } = {}) => ({
   product, email: '', name: '', profile: '', phonePrefix: DEFAULT_PREFIX, phone: '',
-  activity: '', activityOther: '', hasBoat: '', intent: '',
+  activity: '', activityOther: '', hasBoat: '', hasElectric: '', intent: '', demo: '',
   privacy: false, newsletter: false,
 });
 

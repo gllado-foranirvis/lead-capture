@@ -5,6 +5,7 @@ export const FIELD_HINTS = {
   phonePrefix: { autocomplete: 'tel-country-code', inputmode: 'tel', enterkeyhint: 'next' },
   phone: { autocomplete: 'tel-national', inputmode: 'tel', enterkeyhint: 'next' },
   activityOther: { enterkeyhint: 'next' },
+  demo: { autocomplete: 'address-level2', enterkeyhint: 'done' },
 };
 
 export function applyFieldHints(doc, hints = FIELD_HINTS) {

@@ -45,16 +45,16 @@ test('el número de config es normalitza a l\'enllaç', () => {
 });
 
 test('amb dades de sessió: les línies van entre el text i el comiat, en ordre', () => {
-  const session = { profile: 'particular', name: 'Ana', product: 'Modelo A', activity: 'Deporte: vela', hasBoat: 'Sí', intent: 'No' };
+  const session = { profile: 'particular', name: 'Ana', product: 'Modelo A', activity: 'Deporte: vela', hasBoat: 'Sí', hasElectric: 'No', intent: 'No', demo: 'Girona' };
   const d = DICT.es;
-  const lines = 'Me llamo Ana.\nProducto de interés: Modelo A\nActividad: Deporte: vela\nTengo embarcación: Sí\nIntención de compra: No';
+  const lines = 'Me llamo Ana.\nProducto de interés: Modelo A\nActividad: Deporte: vela\nTengo embarcación: Sí\nEmbarcación eléctrica: No\nIntención de compra: No\nMe interesa una demostración en Girona.';
   assert.equal(whatsappText(d, session), `${d.greeting}\n\n${d.messages.particular.text}\n\n${lines}`);
   assert.equal(emailBody(d, session), `${d.greeting}\n\n${d.messages.particular.text}\n\n${lines}\n\n${d.closing}`);
 });
 test('les línies que no tenen valor no apareixen', () => {
   assert.equal(whatsappText(DICT.ca, { intent: 'Sí' }), `${DICT.ca.greeting}\n\n${DICT.ca.messages.none.text}\n\nIntenció de compra: Sí`);
 });
-test('cada idioma té les cinc línies de dades amb {value}', () => {
-  for (const lang of CONFIG.languages) for (const key of ['name', 'product', 'activity', 'boat', 'intent'])
+test('cada idioma té les set línies de dades amb {value}', () => {
+  for (const lang of CONFIG.languages) for (const key of ['name', 'product', 'activity', 'boat', 'electric', 'intent', 'demo'])
     assert.match(DICT[lang].messageContext[key], /\{value\}/, `${lang}.${key}`);
 });

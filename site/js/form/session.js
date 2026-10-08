@@ -21,7 +21,9 @@ export function toSession(values, { products, dict }) {
     product: product ?? '',
     activity: activityLabel(values, dict),
     hasBoat: answer(values.hasBoat, dict),
+    hasElectric: answer(values.hasElectric, dict),
     intent: answer(values.intent, dict),
+    demo: clip(values.demo, MAX.demo),
     name: clip(values.name, MAX.name),
   };
 }

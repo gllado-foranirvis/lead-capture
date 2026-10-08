@@ -5,7 +5,7 @@ import { emptyForm } from '../site/js/form/model.js';
 
 const values = {
   ...emptyForm({ product: 'model-a' }), email: ' Ana@Example.com ', name: '  Ana  ', profile: 'profesional',
-  phonePrefix: '+34', phone: ' 600 00 00 00 ', activity: 'vela', hasBoat: 'si', intent: 'no', privacy: true, newsletter: true,
+  phonePrefix: '+34', phone: ' 600 00 00 00 ', activity: 'vela', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: ' Barcelona ', privacy: true, newsletter: true,
 };
 const ctx = { id: 'id-1', lang: 'es', origin: 'mobil' };
 
@@ -26,7 +26,7 @@ test('lead final: contacte i producte', () => {
 });
 test('perfilació completa d\'un Profesional', () => {
   const { profiling, hasProfiling } = buildLead(values, ctx);
-  assert.deepEqual(profiling, { id: 'id-1', activity: 'vela', hasBoat: 'si', intent: 'no' });
+  assert.deepEqual(profiling, { id: 'id-1', activity: 'vela', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: 'Barcelona' });
   assert.equal(hasProfiling, true);
 });
 test('activitat «otra» porta el text escrit, retallat a 120 caràcters sense trencar un emoji', () => {
@@ -38,8 +38,12 @@ test('un Particular no envia activitat encara que el camp tingui valor', () => {
   const { profiling } = buildLead({ ...values, profile: 'particular', activity: 'vela' }, ctx);
   assert.equal(Object.hasOwn(profiling, 'activity'), false);
 });
-test('«hasBoat» i «intent» només si són sí o no; sense res, no hi ha perfilació', () => {
-  const none = buildLead({ ...values, activity: '', hasBoat: 'potser', intent: '' }, ctx);
+test('la localitat de la demostració es retalla a 80 caràcters sense trencar un emoji i no surt si és buida', () => {
+  assert.equal(Array.from(buildLead({ ...values, demo: '😀'.repeat(200) }, ctx).profiling.demo).length, 80);
+  assert.equal(Object.hasOwn(buildLead({ ...values, demo: '   ' }, ctx).profiling, 'demo'), false);
+});
+test('«hasBoat», «hasElectric» i «intent» només si són sí o no; sense res, no hi ha perfilació', () => {
+  const none = buildLead({ ...values, activity: '', hasBoat: 'potser', hasElectric: 'quizá', intent: '', demo: '' }, ctx);
   assert.deepEqual([none.profiling, none.hasProfiling], [{ id: 'id-1' }, false]);
 });
 test('el nom llarg es retalla sense trencar un emoji', () => {

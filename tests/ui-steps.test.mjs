@@ -117,13 +117,13 @@ test('pas 1: cada control notifica el seu camp i el contenidor del títol rep el
 test('pas 2: indicador 2 de 2 i preguntes en l\'ordre del brief; l\'activitat no hi surt per a un Particular', () => {
   const tree = profile({ values: { ...emptyForm(), profile: 'particular' } });
   assert.equal(bar(tree).props['aria-valuenow'], 2);
-  const order = findAll(tree, (n) => ['T.ChoiceChips', 'T.Select'].includes(n.type)).map((n) => n.props.name);
-  assert.deepEqual(order, ['profile', 'hasBoat', 'intent', 'product']);
+  const order = findAll(tree, (n) => ['T.ChoiceChips', 'T.Select', 'T.Field'].includes(n.type)).map((n) => n.props.name);
+  assert.deepEqual(order, ['profile', 'hasBoat', 'hasElectric', 'intent', 'product', 'demo']);
 });
 test('pas 2: Profesional veu l\'activitat; «otra» mostra el camp d\'especificar', () => {
   const pro = profile({ values: { ...emptyForm(), profile: 'profesional' } });
-  const order = findAll(pro, (n) => ['T.ChoiceChips', 'T.Select'].includes(n.type)).map((n) => n.props.name);
-  assert.deepEqual(order, ['profile', 'activity', 'hasBoat', 'intent', 'product']);
+  const order = findAll(pro, (n) => ['T.ChoiceChips', 'T.Select', 'T.Field'].includes(n.type)).map((n) => n.props.name);
+  assert.deepEqual(order, ['profile', 'activity', 'hasBoat', 'hasElectric', 'intent', 'product', 'demo']);
   assert.deepEqual(byName(pro, 'activity')[0].props.options.map((o) => o.value), ['', ...ACTIVITIES]);
   assert.equal(byName(pro, 'activity')[0].props.options[0].label, f.activityNone, 'es pot tornar a «sense especificar»');
   assert.equal(byName(pro, 'activityOther').length, 0);
@@ -133,14 +133,17 @@ test('pas 2: Profesional veu l\'activitat; «otra» mostra el camp d\'especifica
 test('pas 2: només el perfil és obligatori i no es pot desmarcar; la resta és opcional i desmarcable', () => {
   const tree = profile({ values: { ...emptyForm(), profile: 'profesional' } });
   assert.equal(byName(tree, 'profile')[0].props.legend, `${f.profileLegend} *`);
-  for (const n of ['hasBoat', 'intent']) assert.equal(byName(tree, n)[0].props.legend.endsWith('*'), false, n);
+  for (const n of ['hasBoat', 'hasElectric', 'intent']) assert.equal(byName(tree, n)[0].props.legend.endsWith('*'), false, n);
   assert.equal(byName(tree, 'product')[0].props.legend, f.productLegend);
-  assert.equal(deselectable(tree).length, 3, 'embarcació, intenció i producte');
+  assert.equal(deselectable(tree).length, 4, 'embarcació, embarcació elèctrica, intenció i producte');
+  const demo = byName(tree, 'demo')[0];
+  assert.deepEqual([demo.props.label, demo.props.placeholder, demo.props.required], [f.demo, f.demoPlaceholder, undefined]);
 });
 test('pas 2: embarcació i intenció són Sí/No; el producte afegeix l\'assessorament al final', () => {
   const tree = profile();
   assert.deepEqual(byName(tree, 'hasBoat')[0].props.options.map((o) => o.label), ['Sí', 'No']);
   assert.deepEqual(byName(tree, 'intent')[0].props.options.map((o) => o.label), ['Sí', 'No']);
+  assert.deepEqual(byName(tree, 'hasElectric')[0].props.options.map((o) => o.label), ['Sí', 'No']);
   assert.deepEqual(byName(tree, 'product')[0].props.options.map((o) => o.label), [...CONFIG.products.map((p) => p.name), f.productAdvice]);
   assert.equal(byName(tree, 'product')[0].props.options.at(-1).value, 'asesoramiento');
 });

@@ -18,7 +18,7 @@ test('«Ski / Wake» no es tradueix a cap idioma', () => {
   for (const l of CONFIG.languages) assert.match(DICT[l].form.activities.skiwake, /Ski \/ Wake/, l);
 });
 test('ja no queden claus de versions anteriors', () => {
-  for (const l of CONFIG.languages) for (const key of ['hasElectric', 'investing', 'demo', 'demoPlaceholder', 'profilingTitle', 'pendingTitle', 'entryHint'])
+  for (const l of CONFIG.languages) for (const key of ['investing', 'profilingTitle', 'pendingTitle', 'entryHint'])
     assert.equal(Object.hasOwn(DICT[l].form, key), false, `${l}.${key}`);
 });
 test('l\'indicador de pas té {n} i {total}', () => {
@@ -90,10 +90,15 @@ test('el subtítol del pas 2 no repeteix el títol', () => {
 test('cada idioma té un exemple per a nom, correu, telèfon i activitat «altra»; el correu i el telèfon tenen forma d\'exemple', () => {
   for (const l of CONFIG.languages) {
     const form = DICT[l].form;
-    for (const key of ['namePlaceholder', 'emailPlaceholder', 'phonePlaceholder', 'activityOtherPlaceholder', 'activityNone']) assert.ok(form[key]?.trim(), `${l}.${key}`);
+    for (const key of ['namePlaceholder', 'emailPlaceholder', 'phonePlaceholder', 'activityOtherPlaceholder', 'activityNone', 'hasElectric', 'demo', 'demoPlaceholder']) assert.ok(form[key]?.trim(), `${l}.${key}`);
     assert.match(form.emailPlaceholder, /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i, l);
     assert.match(form.phonePlaceholder, /^\d[\d ]+$/, l);
     assert.ok(form.phonePrefix?.trim(), `${l}.phonePrefix`);
     assert.ok(form.errors.prefix.length <= 24, `${l}: el missatge del prefix cap en una columna estreta`);
   }
+});
+
+test('el text de privacitat també cita l\'embarcació elèctrica i la localitat de la demostració', () => {
+  const parts = { es: [/embarcación eléctrica/, /localidad/], ca: [/embarcació elèctrica/, /localitat/], pt: [/embarcação elétrica/, /localidade/], en: [/electric boat/, /town or city/] };
+  for (const l of CONFIG.languages) for (const re of parts[l]) assert.match(DICT[l].form.privacyText, re, `${l} ${re}`);
 });

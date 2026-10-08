@@ -23,8 +23,10 @@ export function createStepProfile({ h, T }) {
           showsActivity(values) ? select('activity', f.activity, [{ value: '', label: f.activityNone }, ...ACTIVITIES.map((a) => ({ value: a, label: f.activities[a] }))], { placeholder: f.activityPlaceholder }) : null,
           showsActivityOther(values) ? text('activityOther', f.activityOther, { placeholder: f.activityOtherPlaceholder }) : null,
           chips('hasBoat', f.hasBoat, yesNo),
+          chips('hasElectric', f.hasElectric, yesNo),
           chips('intent', f.intent, yesNo),
-          chips('product', f.productLegend, productOptions, { className: 'form__chips--wide' })),
+          chips('product', f.productLegend, productOptions, { className: 'form__chips--wide' }),
+          text('demo', f.demo, { placeholder: f.demoPlaceholder })),
         h('div', { className: 'form__actions' },
           h(T.Button, { type: 'submit', full: true }, f.submit),
           h(T.Button, { variant: 'link', onClick: onBack }, `← ${t.back}`))));

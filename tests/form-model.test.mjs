@@ -4,7 +4,7 @@ import { ACTIVITIES, ADVICE, DEFAULT_PREFIX, MAX, fullPhone, PROFILES, clip, emp
 
 test('formulari buit: contacte, perfilació i consentiments nets', () => {
   assert.deepEqual(emptyForm(), {
-    product: '', email: '', name: '', profile: '', phonePrefix: '+34', phone: '', activity: '', activityOther: '', hasBoat: '', intent: '', privacy: false, newsletter: false,
+    product: '', email: '', name: '', profile: '', phonePrefix: '+34', phone: '', activity: '', activityOther: '', hasBoat: '', hasElectric: '', intent: '', demo: '', privacy: false, newsletter: false,
   });
 });
 test('emptyForm accepta el producte inicial', () => {
@@ -15,7 +15,7 @@ test('constants', () => {
   assert.equal(ACTIVITIES.length, 10);
   assert.equal(ACTIVITIES.at(-1), 'otra');
   assert.equal(ADVICE, 'asesoramiento');
-  assert.deepEqual(MAX, { name: 100, email: 254, phone: 30, activityOther: 120 });
+  assert.deepEqual(MAX, { name: 100, email: 254, phone: 30, activityOther: 120, demo: 80 });
 });
 test('l\'activitat només s\'aplica a Profesional; «altra» mostra el camp d\'especificar', () => {
   assert.equal(showsActivity({ profile: 'profesional' }), true);
@@ -27,7 +27,7 @@ test('l\'activitat només s\'aplica a Profesional; «altra» mostra el camp d\'e
 test('set canvia un camp existent i ignora els desconeguts', () => {
   const s = emptyForm();
   assert.equal(formReducer(s, { type: 'set', field: 'name', value: 'Ana' }).name, 'Ana');
-  assert.equal(formReducer(s, { type: 'set', field: 'demo', value: 'x' }), s);
+  assert.equal(formReducer(s, { type: 'set', field: 'camp-inexistent', value: 'x' }), s);
 });
 test('passar de Profesional a Particular (o desmarcar el perfil) esborra l\'activitat i l\'activitat «altra»', () => {
   let s = formReducer(emptyForm(), { type: 'set', field: 'profile', value: 'profesional' });
