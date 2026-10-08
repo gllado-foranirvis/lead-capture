@@ -22,6 +22,15 @@ body { background: var(--surface-100); color: var(--ink); font-family: var(--fon
 .page__address { color: var(--ink); user-select: all; }
 /* El sistema cobreix a, button, input i textarea; el select (idioma) quedava amb l'anell del navegador */
 select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+/* Cada pantalla és una columna; el formulari ocupa l'alçada i empeny les accions cap avall (sense posició fixa: salta amb el teclat del mòbil) */
+.page__screen { display: flex; flex-direction: column; gap: var(--space-3); }
+.page--form { min-height: 100dvh; }
+.page__screen--form { flex: 1; }
+.form { display: flex; flex: 1; flex-direction: column; gap: var(--space-5); }
+.form__group { display: flex; flex-direction: column; gap: var(--space-3); }
+.form__error { color: var(--error); }
+.form__actions { display: flex; flex-direction: column; gap: var(--space-2); margin-top: auto; padding-top: var(--space-5); }
 @media (min-width: 768px) {
-  .page { gap: var(--space-5); padding-top: var(--space-7); }
+  .page, .page__screen { gap: var(--space-5); }
+  .page { padding-top: var(--space-7); }
 }

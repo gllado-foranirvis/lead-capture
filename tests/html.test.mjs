@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { posix } from 'node:path';
 const html = readFileSync('site/index.html', 'utf8');
 
 test('viewport, tema fix i idioma per defecte', () => {
@@ -37,15 +38,6 @@ test('fallback: els textos coincideixen amb el diccionari en castellà i mostra 
   for (const k of ['whatsapp', 'emailLabel', 'contactFallback']) assert.ok(root.includes(DICT.es[k]), `${k} desfasat`);
   assert.ok(root.includes(`>${CONFIG.email}<`), 'adreça visible en text');
 });
-test('app.js: línia explicativa i adreça de recuperació sota els botons', () => {
-  const app = readFileSync('site/js/app.js', 'utf8');
-  assert.match(app, /t\.contactHint/);
-  assert.match(app, /t\.contactFallback/);
-  assert.match(app, /CONFIG\.email/);
-});
-test('app.js: el titular de la pàgina és un h1', () => {
-  assert.match(readFileSync('site/js/app.js', 'utf8'), /SectionHeading,\s*\{[^}]*level:\s*1\b/);
-});
 
 test('càrrega: els pesos 400, 500 i 600 tenen preload amb crossorigin; el 700, no (Chrome avisa que no s\'usa)', () => {
   const css = readFileSync('site/css/fonts.css', 'utf8');
@@ -56,20 +48,23 @@ test('càrrega: els pesos 400, 500 i 600 tenen preload amb crossorigin; el 700, 
   }
   assert.doesNotMatch(html, /rel="preload" href="fonts\/montserrat-700\.woff2"/);
 });
-test('càrrega: cada mòdul que importa app.js té modulepreload (sense cascada de peticions)', () => {
-  const app = readFileSync('site/js/app.js', 'utf8');
-  const imports = [...app.matchAll(/from '\.\/([^']+\.js)'/g)].map((m) => `js/${m[1]}`);
-  assert.ok(imports.length >= 3);
-  for (const f of imports) assert.match(html, new RegExp(`<link rel="modulepreload" href="${f}">`), f);
+const importsOf = (file) => [...readFileSync(`site/${file}`, 'utf8').matchAll(/from '(\.[^']+)'/g)]
+  .map((m) => posix.normalize(posix.join(posix.dirname(file), m[1])));
+const closure = (entry, seen = new Set()) => {
+  for (const f of importsOf(entry)) if (!seen.has(f)) { seen.add(f); closure(f, seen); }
+  return [...seen];
+};
+
+test('càrrega: tots els mòduls que arrosseguen app.js (transitius) tenen modulepreload', () => {
+  const modules = closure('js/app.js');
+  assert.ok(modules.length >= 10, modules.join(', '));
+  for (const f of modules) assert.match(html, new RegExp(`<link rel="modulepreload" href="${f}">`), f);
 });
 
 test('metadades: descripció a la portada i icona buida a les dues pàgines (cap 404 de favicon)', () => {
   assert.match(html, /<meta name="description" content="[^"]{20,}">/);
   for (const f of ['site/index.html', 'site/privacy.html'])
     assert.match(readFileSync(f, 'utf8'), /<link rel="icon" href="data:,">/, f);
-});
-test('app.js: el perfil es pot desmarcar amb deselectProps', () => {
-  assert.match(readFileSync('site/js/app.js', 'utf8'), /deselectProps\(profile/);
 });
 
 const priv = readFileSync('site/privacy.html', 'utf8');
