@@ -5,7 +5,7 @@ import { emptyForm } from '../site/js/form/model.js';
 
 const values = {
   ...emptyForm({ product: 'model-a' }), email: ' Ana@Example.com ', name: '  Ana  ', profile: 'profesional',
-  phonePrefix: '+34', phone: ' 600 00 00 00 ', activity: 'vela', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: ' Barcelona ', privacy: true, newsletter: true,
+  phonePrefix: '+34', phone: ' 600 00 00 00 ', activity: 'vela', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: ' Barcelona ', enthusiasm: ['noise', 'other'], enthusiasmOther: ' Silenci ', concerns: ['range'], factors: ['price', 'warranty'], comments: ' Molt bé ', privacy: true, newsletter: true,
 };
 const ctx = { id: 'id-1', lang: 'es', origin: 'mobil' };
 
@@ -26,7 +26,10 @@ test('lead final: contacte i producte', () => {
 });
 test('perfilació completa d\'un Profesional', () => {
   const { profiling, hasProfiling } = buildLead(values, ctx);
-  assert.deepEqual(profiling, { id: 'id-1', activity: 'vela', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: 'Barcelona' });
+  assert.deepEqual(profiling, {
+    id: 'id-1', activity: 'vela', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: 'Barcelona',
+    enthusiasm: ['noise', 'other'], enthusiasmOther: 'Silenci', concerns: ['range'], factors: ['price', 'warranty'], comments: 'Molt bé',
+  });
   assert.equal(hasProfiling, true);
 });
 test('activitat «otra» porta el text escrit, retallat a 120 caràcters sense trencar un emoji', () => {
@@ -43,7 +46,7 @@ test('la localitat de la demostració es retalla a 80 caràcters sense trencar u
   assert.equal(Object.hasOwn(buildLead({ ...values, demo: '   ' }, ctx).profiling, 'demo'), false);
 });
 test('«hasBoat», «hasElectric» i «intent» només si són sí o no; sense res, no hi ha perfilació', () => {
-  const none = buildLead({ ...values, activity: '', hasBoat: 'potser', hasElectric: 'quizá', intent: '', demo: '' }, ctx);
+  const none = buildLead({ ...values, activity: '', hasBoat: 'potser', hasElectric: 'quizá', intent: '', demo: '', enthusiasm: [], concerns: [], factors: [], comments: '' }, ctx);
   assert.deepEqual([none.profiling, none.hasProfiling], [{ id: 'id-1' }, false]);
 });
 test('el nom llarg es retalla sense trencar un emoji', () => {
@@ -59,4 +62,16 @@ test('submitForm: sense perfil no hi ha lead', () => {
 });
 test('newLeadId dona identificadors diferents', () => {
   assert.notEqual(newLeadId(), newLeadId());
+});
+
+test('opinió: només opcions vàlides, en l\'ordre de la llista; el text «altre» només si «other» és marcat', () => {
+  const { profiling } = buildLead({ ...values, enthusiasm: ['inventada', 'costs', 'noise'], enthusiasmOther: 'No ha de sortir', concerns: [], factors: ['other'], factorsOther: ` ${'😀'.repeat(200)} ` }, ctx);
+  assert.deepEqual(profiling.enthusiasm, ['noise', 'costs']);
+  assert.equal(Object.hasOwn(profiling, 'enthusiasmOther'), false);
+  assert.equal(Object.hasOwn(profiling, 'concerns'), false);
+  assert.equal(Array.from(profiling.factorsOther).length, 120);
+});
+test('comentaris: retallats a 500 caràcters i absents si són buits', () => {
+  assert.equal(Array.from(buildLead({ ...values, comments: 'x'.repeat(900) }, ctx).profiling.comments).length, 500);
+  assert.equal(Object.hasOwn(buildLead({ ...values, comments: '  ' }, ctx).profiling, 'comments'), false);
 });

@@ -63,3 +63,7 @@ test('page.css: la privacitat és una columna de paràgrafs amb ritme (més aire
   assert.match(page, /\.privacy h1, \.privacy h2, \.privacy p\s*\{[^}]*margin:\s*0/);
   assert.match(page, /\.privacy section \+ section\s*\{[^}]*margin-top:\s*var\(--space-5\)/);
 });
+
+test('page.css: les files de les caselles múltiples fan 44px (el sistema compacte les deixa a 40px)', () => {
+  assert.match(page, /\.tsf-compact\s*\{[^}]*--option-h:\s*var\(--tap-min\)/);
+});

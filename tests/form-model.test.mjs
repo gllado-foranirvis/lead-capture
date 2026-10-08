@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { ACTIVITIES, ADVICE, DEFAULT_PREFIX, MAX, fullPhone, PROFILES, clip, emptyForm, formReducer, showsActivity, showsActivityOther } from '../site/js/form/model.js';
+import { ACTIVITIES, ADVICE, CONCERNS, ENTHUSIASM, FACTORS, DEFAULT_PREFIX, MAX, fullPhone, PROFILES, clip, emptyForm, formReducer, showsActivity, showsActivityOther } from '../site/js/form/model.js';
 
 test('formulari buit: contacte, perfilació i consentiments nets', () => {
   assert.deepEqual(emptyForm(), {
-    product: '', email: '', name: '', profile: '', phonePrefix: '+34', phone: '', activity: '', activityOther: '', hasBoat: '', hasElectric: '', intent: '', demo: '', privacy: false, newsletter: false,
+    product: '', email: '', name: '', profile: '', phonePrefix: '+34', phone: '', activity: '', activityOther: '', hasBoat: '', hasElectric: '', intent: '', demo: '', enthusiasm: [], enthusiasmOther: '', concerns: [], concernsOther: '', factors: [], factorsOther: '', comments: '', privacy: false, newsletter: false,
   });
 });
 test('emptyForm accepta el producte inicial', () => {
@@ -15,7 +15,7 @@ test('constants', () => {
   assert.equal(ACTIVITIES.length, 10);
   assert.equal(ACTIVITIES.at(-1), 'otra');
   assert.equal(ADVICE, 'asesoramiento');
-  assert.deepEqual(MAX, { name: 100, email: 254, phone: 30, activityOther: 120, demo: 80 });
+  assert.deepEqual(MAX, { name: 100, email: 254, phone: 30, activityOther: 120, demo: 80, other: 120, comments: 500 });
 });
 test('l\'activitat només s\'aplica a Profesional; «altra» mostra el camp d\'especificar', () => {
   assert.equal(showsActivity({ profile: 'profesional' }), true);
@@ -66,4 +66,24 @@ test('fullPhone uneix prefix i número amb «+» i un espai, tant si el prefix p
   assert.equal(fullPhone({ phonePrefix: ' 34 ', phone: '600 00 00 00' }), '+34 600 00 00 00');
   assert.equal(fullPhone({ phonePrefix: '+351', phone: '912 345 678' }), '+351 912 345 678');
   assert.ok(Array.from(fullPhone({ phonePrefix: '+34', phone: '6'.repeat(60) })).length <= 30);
+});
+
+test('llistes de les preguntes d\'opinió: l\'última opció és «other»', () => {
+  assert.deepEqual(ENTHUSIASM, ['sustainability', 'noise', 'maintenance', 'costs', 'regulation', 'other']);
+  assert.deepEqual(CONCERNS, ['range', 'charging', 'price', 'infrastructure', 'depreciation', 'other']);
+  assert.deepEqual(FACTORS, ['price', 'range', 'maker', 'design', 'warranty', 'support', 'other']);
+});
+test('toggle marca i desmarca una opció d\'una llista, en l\'ordre en què es marquen, sense duplicats', () => {
+  let s = emptyForm();
+  s = formReducer(s, { type: 'toggle', field: 'concerns', value: 'price' });
+  s = formReducer(s, { type: 'toggle', field: 'concerns', value: 'range' });
+  assert.deepEqual(s.concerns, ['price', 'range']);
+  s = formReducer(s, { type: 'toggle', field: 'concerns', value: 'price' });
+  assert.deepEqual(s.concerns, ['range']);
+  assert.equal(formReducer(s, { type: 'toggle', field: 'name', value: 'x' }), s, 'només s\'aplica a camps de llista');
+});
+test('desmarcar «other» esborra el text escrit d\'aquell grup (i només d\'aquell)', () => {
+  let s = { ...emptyForm(), enthusiasm: ['other'], enthusiasmOther: 'Silenci', concerns: ['other'], concernsOther: 'Soroll' };
+  s = formReducer(s, { type: 'toggle', field: 'enthusiasm', value: 'other' });
+  assert.deepEqual([s.enthusiasmOther, s.concernsOther], ['', 'Soroll']);
 });

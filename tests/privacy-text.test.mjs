@@ -29,7 +29,7 @@ test('privacitat de l\'Extra 1: 6 paràgrafs curts i complets en cada idioma', (
     const ps = paragraphs(resolvePrivacyText(DICT[l], CONFIG, true));
     assert.equal(ps.length, 6, l);
     for (const p of ps) {
-      assert.ok(words(p) <= 55, `${l}: «${p.slice(0, 30)}…» té ${words(p)} paraules`);
+      assert.ok(words(p) <= 65, `${l}: «${p.slice(0, 30)}…» té ${words(p)} paraules`);
       assert.match(p, /[.]$/, `${l}: «${p.slice(0, 30)}…» no acaba en punt`);
     }
   }

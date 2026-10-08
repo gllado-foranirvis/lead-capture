@@ -45,16 +45,16 @@ test('el número de config es normalitza a l\'enllaç', () => {
 });
 
 test('amb dades de sessió: les línies van entre el text i el comiat, en ordre', () => {
-  const session = { profile: 'particular', name: 'Ana', product: 'Modelo A', activity: 'Deporte: vela', hasBoat: 'Sí', hasElectric: 'No', intent: 'No', demo: 'Girona' };
+  const session = { profile: 'particular', name: 'Ana', product: 'Modelo A', activity: 'Deporte: vela', hasBoat: 'Sí', hasElectric: 'No', intent: 'No', demo: 'Girona', enthusiasm: 'Reducción de ruido', concerns: 'Autonomía limitada', factors: 'Precio', comments: 'Todo bien' };
   const d = DICT.es;
-  const lines = 'Me llamo Ana.\nProducto de interés: Modelo A\nActividad: Deporte: vela\nTengo embarcación: Sí\nEmbarcación eléctrica: No\nIntención de compra: No\nMe interesa una demostración en Girona.';
+  const lines = 'Me llamo Ana.\nProducto de interés: Modelo A\nActividad: Deporte: vela\nTengo embarcación: Sí\nEmbarcación eléctrica: No\nMe entusiasma: Reducción de ruido\nMe preocupa: Autonomía limitada\nIntención de compra: No\nFactores decisivos: Precio\nMe interesa una demostración en Girona.\nComentarios: Todo bien';
   assert.equal(whatsappText(d, session), `${d.greeting}\n\n${d.messages.particular.text}\n\n${lines}`);
   assert.equal(emailBody(d, session), `${d.greeting}\n\n${d.messages.particular.text}\n\n${lines}\n\n${d.closing}`);
 });
 test('les línies que no tenen valor no apareixen', () => {
   assert.equal(whatsappText(DICT.ca, { intent: 'Sí' }), `${DICT.ca.greeting}\n\n${DICT.ca.messages.none.text}\n\nIntenció de compra: Sí`);
 });
-test('cada idioma té les set línies de dades amb {value}', () => {
-  for (const lang of CONFIG.languages) for (const key of ['name', 'product', 'activity', 'boat', 'electric', 'intent', 'demo'])
+test('cada idioma té les onze línies de dades amb {value}', () => {
+  for (const lang of CONFIG.languages) for (const key of ['name', 'product', 'activity', 'boat', 'electric', 'enthusiasm', 'concerns', 'intent', 'factors', 'demo', 'comments'])
     assert.match(DICT[lang].messageContext[key], /\{value\}/, `${lang}.${key}`);
 });

@@ -40,6 +40,8 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .page__screen { display: flex; flex-direction: column; gap: var(--space-3); }
 /* El sistema compacte deixa els enllaços legals a 40px; el terra tàctil del projecte és 44px. */
 .tsf-compact .tsf-legal__link { min-height: 44px; }
+/* Les files de les caselles (opinió) també arriben al terra tàctil de 44px. */
+.tsf-compact { --option-h: var(--tap-min); }
 .page--form { min-height: 100dvh; }
 .page__screen--form { flex: 1; }
 .form { display: flex; flex: 1; flex-direction: column; gap: var(--space-5); }

@@ -37,6 +37,8 @@ export function handleSubmit(values, {
   setReceipt({
     product: values.product, profile: values.profile, activity: values.activity, activityOther: values.activityOther,
     hasBoat: values.hasBoat, hasElectric: values.hasElectric, intent: values.intent, demo: values.demo, name: values.name,
+    enthusiasm: values.enthusiasm, enthusiasmOther: values.enthusiasmOther, concerns: values.concerns, concernsOther: values.concernsOther,
+    factors: values.factors, factorsOther: values.factorsOther, comments: values.comments,
   });
   dispatch({ type: 'reset', initial: { product: resolveProduct(search, products) } });
   setErrors({});

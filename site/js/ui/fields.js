@@ -14,7 +14,7 @@ const linkGroup = (message, errorId) => (wrapper) => {
   }
 };
 
-export function makeFields({ h, T, f, values, errors, onChange }) {
+export function makeFields({ h, T, f, values, errors, onChange, onToggle }) {
   const set = (field) => (e) => onChange(field, e.target.value);
   const error = (field) => (errors[field] ? f.errors[errors[field]] : undefined);
 
@@ -33,5 +33,9 @@ export function makeFields({ h, T, f, values, errors, onChange }) {
   const select = (field, label, options, extra = {}) =>
     h(T.Select, { label, name: field, id: field, value: values[field], error: error(field), onChange: set(field), options, ...extra });
 
-  return { text, chips, select };
+  // Preguntes de marcatge múltiple: el component del sistema avisa amb l'esdeveniment del canvi (valor de la casella).
+  const checks = (field, legend, options) =>
+    h(T.CheckboxGroup, { legend, name: field, values: values[field], options, onChange: (e) => onToggle(field, e.target.value) });
+
+  return { text, chips, select, checks };
 }

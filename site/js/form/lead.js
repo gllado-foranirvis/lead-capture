@@ -1,4 +1,4 @@
-import { ACTIVITIES, MAX, PROFILES, clip, fullPhone, showsActivity } from './model.js';
+import { ACTIVITIES, MAX, OPINION_GROUPS, PROFILES, clip, fullPhone, showsActivity } from './model.js';
 import { validateContact } from './validate.js';
 
 export const newLeadId = () =>
@@ -27,6 +27,17 @@ export function buildPartialLead(values, { id, lang, origin }) {
   return lead;
 }
 
+// Només opcions vàlides, en l'ordre de la llista; el text «altre» només si «other» és marcat.
+function addOpinion(values, profiling) {
+  for (const [group, options] of Object.entries(OPINION_GROUPS)) {
+    const chosen = options.filter((option) => (values[group] ?? []).includes(option));
+    if (!chosen.length) continue;
+    profiling[group] = chosen;
+    const other = `${group}Other`;
+    if (chosen.includes('other') && answered(values[other])) profiling[other] = clip(values[other], MAX.other);
+  }
+}
+
 function buildProfiling(values, id) {
   const profiling = { id };
   if (showsActivity(values) && ACTIVITIES.includes(values.activity)) {
@@ -37,6 +48,8 @@ function buildProfiling(values, id) {
   if (YES_NO.includes(values.hasElectric)) profiling.hasElectric = values.hasElectric;
   if (YES_NO.includes(values.intent)) profiling.intent = values.intent;
   if (answered(values.demo)) profiling.demo = clip(values.demo, MAX.demo);
+  addOpinion(values, profiling);
+  if (answered(values.comments)) profiling.comments = clip(values.comments, MAX.comments);
   return profiling;
 }
 

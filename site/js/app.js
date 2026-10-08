@@ -79,6 +79,7 @@ function App() {
   const common = { products: CONFIG.products, search, lang, leadId, newId: newLeadId, setLeadId, setErrors, bumpAttempt, goTo: setView };
   const next = () => advanceStep1(values, { ...common, emitPartial: emit('tsf:lead-partial') });
   const submit = () => handleSubmit(values, { ...common, dispatch, setReceipt, openDocument, emitLead: emit('tsf:lead') });
+  const toggle = (field, value) => dispatch({ type: 'toggle', field, value });
   const goHome = () => { setReceipt(null); setView('entry'); };
   const goBack = (to) => () => { setErrors({}); setView(to); };
 
@@ -99,7 +100,7 @@ function App() {
       onBack: () => leaveToEntry({ ...common, dispatch }), privacyHref: `privacy.html${query}#privacy`,
     }),
     step2: () => h(StepProfile, {
-      t, products: CONFIG.products, values, errors, onChange: change, onSubmit: submit, onKeyDown: (e) => advanceOnEnter(e, document), onBack: goBack('step1'),
+      t, products: CONFIG.products, values, errors, onChange: change, onToggle: toggle, onSubmit: submit, onKeyDown: (e) => advanceOnEnter(e, document), onBack: goBack('step1'),
     }),
     done: () => h(DoneScreen, {
       t, emailDelivery: CONFIG.emailDelivery, onOpen: openDocument, onHome: goHome,

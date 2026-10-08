@@ -5,7 +5,7 @@ import { emptyForm } from '../site/js/form/model.js';
 
 const PRODUCTS = [{ id: 'model-a', name: 'Modelo A' }];
 const contact = { ...emptyForm({ product: 'model-a' }), name: 'Ana', email: 'Ana@Example.com', phone: '600 00 00 00', privacy: true, newsletter: true };
-const full = { ...contact, profile: 'profesional', activity: 'vela', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: 'Girona' };
+const full = { ...contact, profile: 'profesional', activity: 'vela', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: 'Girona', enthusiasm: ['noise'], concerns: ['range'], factors: ['price'], comments: 'Hola' };
 
 const harness = (extra = {}, search = '?producto=model-a&o=tauleta') => {
   const calls = [];
@@ -56,7 +56,7 @@ test('enviament final: obre el document PRIMER, després emet el lead i neteja p
   assert.equal(names(calls)[0], 'openDocument');
   const lead = call(calls, 'emitLead')[1];
   assert.deepEqual([lead.contact.id, lead.profiling.id, lead.contact.profile, lead.profiling.activity, lead.profiling.hasBoat, lead.profiling.intent], ['id-0', 'id-0', 'profesional', 'vela', 'si', 'no']);
-  assert.deepEqual(call(calls, 'setReceipt')[1], { product: 'model-a', profile: 'profesional', activity: 'vela', activityOther: '', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: 'Girona', name: 'Ana' });
+  assert.deepEqual(call(calls, 'setReceipt')[1], { product: 'model-a', profile: 'profesional', activity: 'vela', activityOther: '', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: 'Girona', enthusiasm: ['noise'], enthusiasmOther: '', concerns: ['range'], concernsOther: '', factors: ['price'], factorsOther: '', comments: 'Hola', name: 'Ana' });
   assert.deepEqual(call(calls, 'dispatch')[1], { type: 'reset', initial: { product: 'model-a' } });
   assert.deepEqual(call(calls, 'setLeadId'), ['setLeadId', '']);
   assert.deepEqual(call(calls, 'setErrors'), ['setErrors', {}]);

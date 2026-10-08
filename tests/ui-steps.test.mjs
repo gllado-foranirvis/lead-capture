@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { h, T, byType, byName, findAll, textOf } from './helpers/fake-react.mjs';
 import { DICT } from '../site/js/i18n.js';
 import { CONFIG } from '../site/js/config.js';
-import { ACTIVITIES, PROFILES, emptyForm } from '../site/js/form/model.js';
+import { ACTIVITIES, CONCERNS, ENTHUSIASM, FACTORS, PROFILES, emptyForm } from '../site/js/form/model.js';
 import { icon } from '../site/js/icons.js';
 import { createStepIndicator } from '../site/js/ui/step-indicator.js';
 import { createEntryScreen } from '../site/js/ui/entry-screen.js';
@@ -32,7 +32,7 @@ const contact = (extra = {}) => StepContact({
   t: DICT.es, values: emptyForm(), errors: {}, onChange: noop, onNext: noop, onBack: noop, privacyHref: 'privacy.html?lang=es#privacy', ...extra,
 });
 const profile = (extra = {}) => StepProfile({
-  t: DICT.es, products: CONFIG.products, values: emptyForm(), errors: {}, onChange: noop, onSubmit: noop, onBack: noop, ...extra,
+  t: DICT.es, products: CONFIG.products, values: emptyForm(), errors: {}, onChange: noop, onToggle: noop, onSubmit: noop, onBack: noop, ...extra,
 });
 
 test('indicador: text visible, barra accessible i segments plens segons el pas', () => {
@@ -117,13 +117,13 @@ test('pas 1: cada control notifica el seu camp i el contenidor del títol rep el
 test('pas 2: indicador 2 de 2 i preguntes en l\'ordre del brief; l\'activitat no hi surt per a un Particular', () => {
   const tree = profile({ values: { ...emptyForm(), profile: 'particular' } });
   assert.equal(bar(tree).props['aria-valuenow'], 2);
-  const order = findAll(tree, (n) => ['T.ChoiceChips', 'T.Select', 'T.Field'].includes(n.type)).map((n) => n.props.name);
-  assert.deepEqual(order, ['profile', 'hasBoat', 'hasElectric', 'intent', 'product', 'demo']);
+  const order = findAll(tree, (n) => ['T.ChoiceChips', 'T.Select', 'T.Field', 'T.CheckboxGroup'].includes(n.type)).map((n) => n.props.name);
+  assert.deepEqual(order, ['profile', 'hasBoat', 'hasElectric', 'enthusiasm', 'concerns', 'intent', 'factors', 'product', 'demo', 'comments']);
 });
 test('pas 2: Profesional veu l\'activitat; «otra» mostra el camp d\'especificar', () => {
   const pro = profile({ values: { ...emptyForm(), profile: 'profesional' } });
-  const order = findAll(pro, (n) => ['T.ChoiceChips', 'T.Select', 'T.Field'].includes(n.type)).map((n) => n.props.name);
-  assert.deepEqual(order, ['profile', 'activity', 'hasBoat', 'hasElectric', 'intent', 'product', 'demo']);
+  const order = findAll(pro, (n) => ['T.ChoiceChips', 'T.Select', 'T.Field', 'T.CheckboxGroup'].includes(n.type)).map((n) => n.props.name);
+  assert.deepEqual(order, ['profile', 'activity', 'hasBoat', 'hasElectric', 'enthusiasm', 'concerns', 'intent', 'factors', 'product', 'demo', 'comments']);
   assert.deepEqual(byName(pro, 'activity')[0].props.options.map((o) => o.value), ['', ...ACTIVITIES]);
   assert.equal(byName(pro, 'activity')[0].props.options[0].label, f.activityNone, 'es pot tornar a «sense especificar»');
   assert.equal(byName(pro, 'activityOther').length, 0);
@@ -221,4 +221,34 @@ test('error dels xips: el grup (fieldset) queda enllaçat amb aria-describedby i
   chipsWrapper(profile(), 'profile').props.ref(clean.el);
   assert.deepEqual(clean.attrs, {});
   chipsWrapper(profile(), 'profile').props.ref(null);
+});
+
+test('pas 2: les tres preguntes d\'opinió són llistes de caselles opcionals amb les opcions del formulari original', () => {
+  const tree = profile();
+  for (const [name, expected] of [['enthusiasm', ENTHUSIASM], ['concerns', CONCERNS], ['factors', FACTORS]]) {
+    const group = byName(tree, name)[0];
+    assert.equal(group.type, 'T.CheckboxGroup', name);
+    assert.deepEqual(group.props.options.map((o) => o.value), expected, name);
+    assert.equal(group.props.required, undefined, name);
+    assert.equal(group.props.legend, f[`${name}Legend`], name);
+  }
+});
+test('pas 2: marcar una casella crida onToggle amb el camp i el valor; les marcades surten com a values', () => {
+  const calls = [];
+  const tree = profile({ onToggle: (field, value) => calls.push([field, value]), values: { ...emptyForm(), concerns: ['range'] } });
+  const group = byName(tree, 'concerns')[0];
+  assert.deepEqual(group.props.values, ['range']);
+  group.props.onChange({ target: { value: 'price' } });
+  assert.deepEqual(calls, [['concerns', 'price']]);
+});
+test('pas 2: «Otro» d\'una pregunta d\'opinió mostra el seu camp d\'especificar, i només aquell', () => {
+  const tree = profile({ values: { ...emptyForm(), enthusiasm: ['other'], factors: ['price'] } });
+  assert.equal(byName(tree, 'enthusiasmOther')[0].props.label, f.otherLabel);
+  assert.equal(byName(tree, 'enthusiasmOther')[0].props.placeholder, f.otherPlaceholder);
+  assert.equal(byName(tree, 'concernsOther').length, 0);
+  assert.equal(byName(tree, 'factorsOther').length, 0);
+});
+test('pas 2: els comentaris són un camp de text llarg (multiline) opcional', () => {
+  const comments = byName(profile(), 'comments')[0];
+  assert.deepEqual([comments.props.multiline, comments.props.required, comments.props.label, comments.props.placeholder], [true, undefined, f.comments, f.commentsPlaceholder]);
 });

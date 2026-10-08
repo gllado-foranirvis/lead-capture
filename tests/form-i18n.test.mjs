@@ -90,7 +90,7 @@ test('el subtítol del pas 2 no repeteix el títol', () => {
 test('cada idioma té un exemple per a nom, correu, telèfon i activitat «altra»; el correu i el telèfon tenen forma d\'exemple', () => {
   for (const l of CONFIG.languages) {
     const form = DICT[l].form;
-    for (const key of ['namePlaceholder', 'emailPlaceholder', 'phonePlaceholder', 'activityOtherPlaceholder', 'activityNone', 'hasElectric', 'demo', 'demoPlaceholder']) assert.ok(form[key]?.trim(), `${l}.${key}`);
+    for (const key of ['namePlaceholder', 'emailPlaceholder', 'phonePlaceholder', 'activityOtherPlaceholder', 'activityNone', 'hasElectric', 'demo', 'demoPlaceholder', 'otherLabel', 'otherPlaceholder', 'comments', 'commentsPlaceholder', 'enthusiasmLegend', 'concernsLegend', 'factorsLegend']) assert.ok(form[key]?.trim(), `${l}.${key}`);
     assert.match(form.emailPlaceholder, /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i, l);
     assert.match(form.phonePlaceholder, /^\d[\d ]+$/, l);
     assert.ok(form.phonePrefix?.trim(), `${l}.phonePrefix`);
@@ -99,6 +99,15 @@ test('cada idioma té un exemple per a nom, correu, telèfon i activitat «altra
 });
 
 test('el text de privacitat també cita l\'embarcació elèctrica i la localitat de la demostració', () => {
-  const parts = { es: [/embarcación eléctrica/, /localidad/], ca: [/embarcació elèctrica/, /localitat/], pt: [/embarcação elétrica/, /localidade/], en: [/electric boat/, /town or city/] };
+  const parts = { es: [/si es eléctrica/, /localidad/, /comentarios/], ca: [/si és elèctrica/, /localitat/, /comentaris/], pt: [/se é elétrica/, /localidade/, /comentários/], en: [/whether it is electric/, /town or city/, /comments/] };
   for (const l of CONFIG.languages) for (const re of parts[l]) assert.match(DICT[l].form.privacyText, re, `${l} ${re}`);
+});
+
+test('cada idioma té una etiqueta per a cada opció de les tres preguntes d\'opinió', async () => {
+  const { CONCERNS, ENTHUSIASM, FACTORS } = await import('../site/js/form/model.js');
+  for (const l of CONFIG.languages) {
+    assert.deepEqual(Object.keys(DICT[l].form.enthusiasmOptions).sort(), [...ENTHUSIASM].sort(), `${l} enthusiasm`);
+    assert.deepEqual(Object.keys(DICT[l].form.concernsOptions).sort(), [...CONCERNS].sort(), `${l} concerns`);
+    assert.deepEqual(Object.keys(DICT[l].form.factorsOptions).sort(), [...FACTORS].sort(), `${l} factors`);
+  }
 });
