@@ -44,9 +44,10 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `name` | Nombre | Nom | Nome | Name |
 | `email` | Correo electrónico | Correu electrònic | E-mail | Email |
 | `phone` | Teléfono | Telèfon | Telefone | Phone |
+| `phonePrefix` | Prefijo | Prefix | Prefixo | Prefix |
 | `namePlaceholder` | Ana García | Anna Garcia | Ana Silva | Jane Smith |
 | `emailPlaceholder` | nombre@empresa.com | nom@empresa.com | nome@empresa.pt | name@company.com |
-| `phonePlaceholder` | +34 600 00 00 00 | +34 600 00 00 00 | +351 912 345 678 | +44 7700 900123 |
+| `phonePlaceholder` | 600 00 00 00 | 600 00 00 00 | 912 345 678 | 600 00 00 00 |
 | `consentBefore` | Acepto la  | Accepto la  | Aceito a  | I accept the  |
 | `consentLink` | política de privacidad | política de privacitat | política de privacidade | privacy policy |
 | `newsletter` | Quiero recibir novedades (opcional) | Vull rebre novetats (opcional) | Quero receber novidades (opcional) | I'd like to receive updates (optional) |
@@ -79,7 +80,8 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `errors.required` | Completa este campo | Omple aquest camp | Preenche este campo | Fill in this field |
 | `errors.profileRequired` | Elige una opción | Tria una opció | Escolhe uma opção | Choose an option |
 | `errors.email` | Introduce un correo válido | Introdueix un correu vàlid | Introduz um e-mail válido | Enter a valid email |
-| `errors.phone` | Introduce un teléfono válido, por ejemplo +34 600 00 00 00 | Introdueix un telèfon vàlid, per exemple +34 600 00 00 00 | Introduz um telefone válido, por exemplo +351 912 345 678 | Enter a valid phone number, for example +34 600 00 00 00 |
+| `errors.phone` | Introduce un teléfono válido, por ejemplo 600 00 00 00 | Introdueix un telèfon vàlid, per exemple 600 00 00 00 | Introduz um telefone válido, por exemplo 912 345 678 | Enter a valid phone number, for example 600 00 00 00 |
+| `errors.prefix` | Prefijo no válido | Prefix no vàlid | Prefixo inválido | Invalid prefix |
 | `errors.privacy` | Acepta la política de privacidad para continuar | Accepta la política de privacitat per continuar | Aceita a política de privacidade para continuar | Accept the privacy policy to continue |
 | `doneTitle` | Aquí tienes el dossier de The Silent Fleet | Aquí tens el dossier de The Silent Fleet | Aqui tens o dossier da The Silent Fleet | Here is The Silent Fleet dossier |
 | `doneText` | Hemos abierto el dossier en tu navegador. | Hem obert el dossier al teu navegador. | Abrimos o dossier no teu navegador. | We have opened the dossier in your browser. |

@@ -1,4 +1,4 @@
-import { ACTIVITIES, MAX, PROFILES, clip, showsActivity } from './model.js';
+import { ACTIVITIES, MAX, PROFILES, clip, fullPhone, showsActivity } from './model.js';
 import { validateContact } from './validate.js';
 
 export const newLeadId = () =>
@@ -12,7 +12,7 @@ function buildContact(values, { id, lang, origin }) {
     id, product: values.product,
     name: clip(values.name, MAX.name),
     email: clip(values.email, MAX.email).toLowerCase(),
-    phone: clip(values.phone, MAX.phone),
+    phone: fullPhone(values),
     privacy: true,
     newsletter: values.newsletter === true,
     lang, profile: values.profile, origin,

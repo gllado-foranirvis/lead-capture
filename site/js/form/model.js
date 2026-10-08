@@ -2,15 +2,20 @@ export const PROFILES = ['particular', 'profesional'];
 export const ACTIVITIES = ['ocio', 'charter', 'vela', 'buceo', 'skiwake', 'seguridad', 'pasajeros', 'pesca', 'marina', 'otra'];
 export const ADVICE = 'asesoramiento';
 export const MAX = { name: 100, email: 254, phone: 30, activityOther: 120 };
+export const DEFAULT_PREFIX = '+34';
 
 // Array.from evita partir un emoji (parell subrogat) pel mig.
 export const clip = (value, max) => Array.from(String(value ?? '').trim()).slice(0, max).join('');
 
 export const emptyForm = ({ product = '' } = {}) => ({
-  product, email: '', name: '', profile: '', phone: '',
+  product, email: '', name: '', profile: '', phonePrefix: DEFAULT_PREFIX, phone: '',
   activity: '', activityOther: '', hasBoat: '', intent: '',
   privacy: false, newsletter: false,
 });
+
+// Telèfon complet per al lead: «+» i les xifres del prefix, un espai i el número.
+export const fullPhone = (values) =>
+  clip(`+${String(values.phonePrefix ?? '').replace(/\D/g, '')} ${clip(values.phone, MAX.phone)}`, MAX.phone);
 
 export const showsActivity = (values) => values.profile === 'profesional';
 export const showsActivityOther = (values) => showsActivity(values) && values.activity === 'otra';

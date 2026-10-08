@@ -11,8 +11,9 @@ const enter = (name, extra = {}) => ({ key: 'Enter', target: { name, tagName: 'I
 test('els camps de text porten autocompletat, teclat i tecla d\'Intro adequats', () => {
   assert.deepEqual(FIELD_HINTS.email, { autocomplete: 'email', inputmode: 'email', autocapitalize: 'none', spellcheck: 'false', enterkeyhint: 'next' });
   assert.deepEqual(FIELD_HINTS.name, { autocomplete: 'name', autocapitalize: 'words', enterkeyhint: 'next' });
-  assert.deepEqual(FIELD_HINTS.phone, { autocomplete: 'tel', inputmode: 'tel', enterkeyhint: 'next' });
-  assert.deepEqual(Object.keys(FIELD_HINTS).sort(), ['activityOther', 'email', 'name', 'phone']);
+  assert.deepEqual(FIELD_HINTS.phone, { autocomplete: 'tel-national', inputmode: 'tel', enterkeyhint: 'next' });
+  assert.deepEqual(FIELD_HINTS.phonePrefix, { autocomplete: 'tel-country-code', inputmode: 'tel', enterkeyhint: 'next' });
+  assert.deepEqual(Object.keys(FIELD_HINTS).sort(), ['activityOther', 'email', 'name', 'phone', 'phonePrefix']);
   assert.equal(FIELD_HINTS.activityOther.enterkeyhint, 'next');
 });
 test('applyFieldHints aplica els atributs als camps presents i compta els aplicats', () => {
@@ -21,12 +22,14 @@ test('applyFieldHints aplica els atributs als camps presents i compta els aplica
   assert.equal(doc.els.email.attrs.inputmode, 'email');
 });
 test('Intro avança: nom → correu → telèfon → privacitat', () => {
-  assert.deepEqual(NEXT_FIELD, { name: 'email', email: 'phone', phone: 'privacy', activityOther: 'hasBoat' });
-  const doc = fakeDoc(['email', 'phone', 'privacy']);
+  assert.deepEqual(NEXT_FIELD, { name: 'email', email: 'phonePrefix', phonePrefix: 'phone', phone: 'privacy', activityOther: 'hasBoat' });
+  const doc = fakeDoc(['email', 'phonePrefix', 'phone', 'privacy']);
   const a = enter('name');
   assert.equal(advanceOnEnter(a, doc), true);
   assert.deepEqual([a.prevented, doc.els.email.focused], [true, true]);
   assert.equal(advanceOnEnter(enter('email'), doc), true);
+  assert.equal(doc.els.phonePrefix.focused, true);
+  assert.equal(advanceOnEnter(enter('phonePrefix'), doc), true);
   assert.equal(doc.els.phone.focused, true);
   assert.equal(advanceOnEnter(enter('phone'), doc), true);
   assert.equal(doc.els.privacy.focused, true);

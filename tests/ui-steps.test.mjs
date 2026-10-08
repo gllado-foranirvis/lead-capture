@@ -73,9 +73,12 @@ test('pas 1: indicador 1 de 2, camps de contacte obligatoris amb el teclat adequ
   assert.equal(bar(tree).props['aria-valuenow'], 1);
   assert.ok(textOf(tree).includes('Paso 1 de 2') && textOf(tree).includes(f.requiredNote));
   const order = findAll(tree, (n) => ['T.Field', 'T.Checkbox'].includes(n.type)).map((n) => n.props.name);
-  assert.deepEqual(order, ['name', 'email', 'phone', 'privacy', 'newsletter']);
+  assert.deepEqual(order, ['name', 'email', 'phonePrefix', 'phone', 'privacy', 'newsletter']);
   assert.deepEqual([byName(tree, 'email')[0].props.type, byName(tree, 'phone')[0].props.type], ['email', 'tel']);
-  for (const n of ['name', 'email', 'phone']) assert.equal(byName(tree, n)[0].props.required, true, n);
+  for (const n of ['name', 'email', 'phonePrefix', 'phone']) assert.equal(byName(tree, n)[0].props.required, true, n);
+  assert.equal(byName(tree, 'phonePrefix')[0].props.value, '+34', 'el prefix surt omplert amb +34');
+  assert.equal(byName(tree, 'phonePrefix')[0].props.label, f.phonePrefix);
+  assert.equal(byName(tree, 'phonePrefix')[0].props.type, 'tel');
   assert.equal(byType(tree, 'T.ChoiceChips').length, 0);
 });
 test('pas 1: privacitat sense marcar amb enllaç a pestanya nova, text d\'un sol element; novetats opcional', () => {

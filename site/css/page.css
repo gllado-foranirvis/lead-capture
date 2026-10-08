@@ -47,6 +47,10 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .steps__seg { height: var(--space-1); border-radius: var(--radius-pill); background: var(--border-strong); }
 .steps__seg--on { background: var(--action); }
 .page__heading:focus { outline: none; }
+/* Telèfon: prefix estret (+34 per defecte) i el número ocupa la resta. */
+.form__phone { display: flex; gap: var(--space-3); align-items: flex-start; }
+.form__phone > :first-child { flex: 0 0 var(--space-9); min-width: 0; }
+.form__phone > :last-child { flex: 1; min-width: 0; }
 
 @keyframes screen-in { from { opacity: 0; transform: translateY(var(--space-2)); } }
 @media (prefers-reduced-motion: no-preference) {

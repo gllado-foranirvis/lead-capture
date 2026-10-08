@@ -4,7 +4,7 @@ import { advanceStep1, discardSession, handleSubmit, leaveToEntry } from '../sit
 import { emptyForm } from '../site/js/form/model.js';
 
 const PRODUCTS = [{ id: 'model-a', name: 'Modelo A' }];
-const contact = { ...emptyForm({ product: 'model-a' }), name: 'Ana', email: 'Ana@Example.com', phone: '+34 600 00 00 00', privacy: true, newsletter: true };
+const contact = { ...emptyForm({ product: 'model-a' }), name: 'Ana', email: 'Ana@Example.com', phone: '600 00 00 00', privacy: true, newsletter: true };
 const full = { ...contact, profile: 'profesional', activity: 'vela', hasBoat: 'si', intent: 'no' };
 
 const harness = (extra = {}, search = '?producto=model-a&o=tauleta') => {
@@ -48,7 +48,7 @@ test('tornar al pas 1 i continuar de nou reutilitza l\'id i emet el lead parcial
   const { calls, deps } = harness({ leadId: 'id-0', newId: () => { throw new Error('no ha de crear un id nou'); } });
   advanceStep1({ ...contact, phone: '600 11 22 33' }, deps);
   assert.equal(call(calls, 'emitPartial')[1].id, 'id-0');
-  assert.equal(call(calls, 'emitPartial')[1].phone, '600 11 22 33');
+  assert.equal(call(calls, 'emitPartial')[1].phone, '+34 600 11 22 33');
 });
 test('enviament final: obre el document PRIMER, després emet el lead i neteja per al següent visitant', () => {
   const { calls, deps } = harness({ leadId: 'id-0' });

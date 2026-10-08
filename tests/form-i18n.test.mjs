@@ -4,7 +4,7 @@ import { CONFIG } from '../site/js/config.js';
 import { DICT } from '../site/js/i18n.js';
 import { ACTIVITIES, PROFILES } from '../site/js/form/model.js';
 
-const ERROR_CODES = ['required', 'profileRequired', 'email', 'phone', 'privacy'];
+const ERROR_CODES = ['required', 'profileRequired', 'email', 'phone', 'prefix', 'privacy'];
 const leaves = (o) => Object.values(o).flatMap((v) => (typeof v === 'object' ? leaves(v) : [v]));
 
 test('cada idioma té una etiqueta per a cada activitat i perfil, i un missatge per a cada codi d\'error', () => {
@@ -92,6 +92,8 @@ test('cada idioma té un exemple per a nom, correu, telèfon i activitat «altra
     const form = DICT[l].form;
     for (const key of ['namePlaceholder', 'emailPlaceholder', 'phonePlaceholder', 'activityOtherPlaceholder']) assert.ok(form[key]?.trim(), `${l}.${key}`);
     assert.match(form.emailPlaceholder, /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i, l);
-    assert.match(form.phonePlaceholder, /^\+\d[\d ]+$/, l);
+    assert.match(form.phonePlaceholder, /^\d[\d ]+$/, l);
+    assert.ok(form.phonePrefix?.trim(), `${l}.phonePrefix`);
+    assert.ok(form.errors.prefix.length <= 24, `${l}: el missatge del prefix cap en una columna estreta`);
   }
 });

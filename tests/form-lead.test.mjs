@@ -5,7 +5,7 @@ import { emptyForm } from '../site/js/form/model.js';
 
 const values = {
   ...emptyForm({ product: 'model-a' }), email: ' Ana@Example.com ', name: '  Ana  ', profile: 'profesional',
-  phone: ' +34 600 00 00 00 ', activity: 'vela', hasBoat: 'si', intent: 'no', privacy: true, newsletter: true,
+  phonePrefix: '+34', phone: ' 600 00 00 00 ', activity: 'vela', hasBoat: 'si', intent: 'no', privacy: true, newsletter: true,
 };
 const ctx = { id: 'id-1', lang: 'es', origin: 'mobil' };
 
