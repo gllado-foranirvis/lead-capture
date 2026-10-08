@@ -275,7 +275,7 @@ El ritme és una escala d'espaiat de 4 a 128px (4, 8, 12, 16, 24, 32, 48, 64, 96
 
 El CSS és pla i mobile first: s'escriu primer l'estil base i s'afegeix `@media (min-width: 768px)`; mai `max-width`.
 
-**Excepció: la pantalla del formulari.** El botó principal s'ancora a la base de la pantalla quan el contingut hi cap (`min-height: 100dvh` i `margin-top: auto`, mai `position: fixed`, que salta amb el teclat del mòbil), seguint el wireframe; si el contingut és més alt que la pantalla, el botó segueix l'últim camp. Això s'aparta de la regla de `mobile-first.md` («el botó segueix l'últim camp; no es fixa a la base») perquè l'acció principal quedi a l'abast del polze. Per a un Profesional el formulari fa uns 1,8 pantalles d'alçada a 360×740 (mesurat).
+**Excepció: la pantalla del formulari.** El botó principal s'ancora a la base de la pantalla quan el contingut hi cap (`min-height: 100dvh` i `margin-top: auto`, mai `position: fixed`, que salta amb el teclat del mòbil), seguint el wireframe; si el contingut és més alt que la pantalla, el botó segueix l'últim camp. Això s'aparta de la regla de `mobile-first.md` («el botó segueix l'últim camp; no es fixa a la base») perquè l'acció principal quedi a l'abast del polze. El pas 1 fa uns 1,2 pantalles a 360×740 i el pas 2 uns 3 (mesurat amb un Particular: 2.200 px), de manera que a la pràctica el botó segueix l'últim camp i només s'ancora a la base en pantalles altes. La longitud del pas 2 és una decisió oberta (vegeu el README).
 
 ### Usability floor
 
@@ -341,6 +341,19 @@ Només es mou el color: botons, enllaços i xips canvien de color en 150ms (`eas
 - **Focus:** anell sòlid de 2px en Deep Lagoon.
 - **Error / Disabled:** la vora inferior passa a Error Red i apareix una frase amb signe «!»; deshabilitat al 60%. El placeholder és `text-muted` i no substitueix l'etiqueta.
 - **Select** i **Checkbox:** mateix patró; la fletxa és ink i la casella de 24px usa Action Black.
+
+### Telèfon
+- **Dos camps a la mateixa fila:** «Prefijo» (96px, amb +34 per defecte, editable) i «Teléfono» (la resta). El prefix accepta «+34» o «34»; el número, només xifres, espais, parèntesis i guions. Les 7–15 xifres es compten sobre el telèfon sencer i el lead porta `+34 600 00 00 00`.
+- **Errors:** el del prefix és curt («Prefijo no válido») perquè cap en la columna estreta; el del número té el seu exemple.
+
+### Caselles múltiples (opinió)
+- **Component:** `CheckboxGroup` del sistema, amb la llegenda en estil `label` (no en majúscules) i files de 44px (el sistema compacte les deixa a 40px; `page.css` ho puja al terra tàctil del projecte).
+- **«Otro»:** és l'última casella de cada pregunta i només obre el seu camp «Otro (especifica)» quan es marca; desmarcar-la esborra el text.
+- **Opcionals:** cap casella és obligatòria.
+
+### Pàgina de lectura (privacitat)
+- **Text en paràgrafs curts:** un `<p>` per bloc (6 a l'Extra 1), amb 16px entre paràgrafs i 12px entre títol i text; els marges per defecte de `h1`, `h2` i `p` s'anul·len perquè se sumaven al gap. Cada secció nova té 24px d'aire a sobre, més que sota el seu títol.
+- **Estructura:** la capçalera és un `<header>` fora de `<main>` (landmark de banner) a totes les pantalles de l'app.
 
 ### Cards / Containers
 - **Product panel:** panell Abyss Navy quadrat amb text blanc, centrat, i botó `outline-light`; el producte es mostra retallat sobre blanc, sense ombra.

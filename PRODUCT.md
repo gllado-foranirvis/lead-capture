@@ -33,10 +33,11 @@ Propulsió elèctrica silenciosa per a embarcacions: TSF presenta el canvi cap a
 ## Capabilities and Constraints
 
 - MVP: selecció d'idioma, perfil opcional, WhatsApp i correu sempre actius amb missatge predefinit (12 combinacions idioma × perfil), privacitat i cookies.
-- Fora de l'MVP: formulari amb PDF (Extra 1), correu de seguiment (Extra 1b), Linktree, NFC, analítica i banner de cookies. L'estructura ha de permetre afegir-los sense reescriure.
-- Cost recurrent 0 €. La pàgina no desa dades ni usa cookies, `localStorage` ni analítica.
+- Extra 1 (flux de captació en 2 passos amb perfilació i dossier general): **construït però apagat** per un interruptor (`extra1`); l'MVP continua igual per als visitants. No envia res a cap servidor: només emet esdeveniments `window`. Detall al README.
+- Fora de l'abast actual: enviament real dels leads i del correu amb el dossier (Google Forms o similar), correu de seguiment (Extra 1b), Linktree, NFC, analítica i banner de cookies. L'estructura ha de permetre afegir-los sense reescriure.
+- Cost recurrent 0 €. L'MVP no desa dades ni usa cookies, `localStorage` ni analítica; l'Extra 1, quan s'activi, recollirà dades de contacte i perfilació amb el consentiment del visitant (text de privacitat pendent de Bruno).
 - Cap petició externa per a estil o scripts (cobertura dolenta): React i Montserrat són locals.
-- Terminologia: «The Silent Fleet», «Salón Náutico». Els noms dels perfils no estan decidits: «Distribuïdor/Particular» (proposta) o «Propietario/Interesado» (wireframe).
+- Terminologia: «The Silent Fleet», «Salón Náutico». Els perfils: a l'MVP «Distribuïdor o professional» / «Particular»; a l'Extra 1 «Particular» / «Profesional» (el missatge de «Profesional» continua dient «distribuidor», pendent de Bruno). El document final es diu «dossier» fins que Bruno decideixi.
 
 ## Brand Commitments
 
@@ -47,7 +48,7 @@ Propulsió elèctrica silenciosa per a embarcacions: TSF presenta el canvi cap a
 
 - Proposta v2, spec i wireframes de l'Extra 1: són confidencials (porten preus) i viuen només en local, a `docs-privats/`, que no és al repositori.
 - Sistema de disseny local `the-silent-fleet-ds/` amb tokens, 21 components i pantalles d'exemple.
-- **Dades de prova, no reals:** número de WhatsApp, URL de GitHub Pages, textos de la pàgina (títol, subtítol, missatges, privacitat) i noms dels perfils. No hi ha fotografies, logotip, productes ni PDFs. No s'han de presentar com a confirmats.
+- **Dades de prova, no reals:** número de WhatsApp, URL de GitHub Pages, textos de la pàgina (títol, subtítol, missatges, privacitat) i noms dels perfils. No hi ha fotografies ni logotip, i els productes (Modelo A/B/C) i el dossier (`dossier-prova.pdf`) són de prova. No s'han de presentar com a confirmats.
 
 ## Product Principles
 
