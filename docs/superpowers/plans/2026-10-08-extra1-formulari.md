@@ -12,7 +12,7 @@
 
 ## Abast
 
-**Dins:** pantalla d'entrada amb el botó nou, pantalla del formulari (contacte + perfilació opcional), validació, camps condicionals, literals en 4 idiomes (amb el tracte proper unificat també al portuguès), esborrany de privacitat per a l'Extra 1, interruptor `extra1`, document de textos per validar.
+**Dins:** pantalla d'entrada amb el botó nou, pantalla del formulari (contacte + perfilació opcional), validació, camps condicionals, teclat i autocompletat al mòbil, literals en 4 idiomes (amb el tracte proper unificat també al portuguès), esborrany de privacitat per a l'Extra 1, interruptor `extra1`, document de textos per validar.
 
 **Fora (pla següent):** enviament al Google Form (`fetch`, reintent, identificadors `entry.*`), pantalla de gràcies i PDF, camí d'error de xarxa, «Nueva solicitud», dos passos, correu de seguiment.
 
@@ -20,6 +20,7 @@
 
 - Node ≥ 22; cap dependència nova; cap petició externa; cap `localStorage`, cookies ni anàlisi.
 - Mobile first, base 360px, una columna, `tsf-compact`; WCAG AA; zones tàctils ≥ 44px; només components del sistema de disseny.
+- Usabilitat al mòbil: el teclat ha de ser el del tipus de camp (telèfon, correu) i el navegador ha de poder reutilitzar el que l'usuari té guardat (nom, correu, telèfon, ciutat).
 - **Els missatges de correu i WhatsApp no es toquen** (`messages.*.subject/text`, `greeting`, `closing`).
 - Tracte **proper** (tu) a tots els literals visibles: castellà, català, portuguès (`tu`) i anglès neutre. Sense signes d'exclamació ni emojis.
 - **«Ski / Wake» no es tradueix a cap idioma.**
@@ -30,11 +31,12 @@
 
 ## Decisions obertes i supòsits
 
-1. **Noms del perfil.** El formulari usa «Particular / Profesional». L'entrada de l'MVP encara diu «Distribuidor o profesional» i els missatges parlen de «distribuidor». Aquest pla **no els toca**: converteix el perfil de l'entrada al del formulari amb `profileFromEntry`. Canviar el xip és una línia a `i18n.js` quan l'Olga ho decideixi.
-2. **Botó d'entrada:** «Pedir información de un producto» (wireframe). Alinear-lo amb el títol («Recibir la ficha de un producto») és opcional.
+1. **Noms del perfil.** El formulari usa «Particular / Profesional». L'entrada de l'MVP encara diu «Distribuidor o profesional» i els missatges parlen de «distribuidor». Aquest pla **no els toca**: converteix el perfil de l'entrada al del formulari amb `profileFromEntry`. Canviar el xip és una línia a `i18n.js` que en aquest pla no es tocarà.
+2. **Botó d'entrada:** «Saber más» (decisió de l'Olga; al wireframe deia «Pedir información de un producto»). Traduccions: «Saber-ne més», «Saber mais», «Learn more». Alinear-lo amb el títol («Recibir la ficha de un producto») és opcional.
 3. **Productes de prova:** «Modelo A/B/C» a `config.js`. Els reals els dona Bruno.
 4. **Nom legal:** `legalName` és de prova fins que Bruno el doni; el text de privacitat és un esborrany sense validar (no és assessorament legal).
 5. **Preu i hores:** fora d'aquest pla.
+6. **Validacions i teclat:** al voler el formulari el més usable possible es farà tots els ajustos perquè quan el camp sigui només numèric surti el teclat numèric al mòbil i que si l'usuari té formularis previs guardats en memòria es puguin reutilizar (Task 4b). El telèfon és l'únic camp numèric: usa el teclat de telèfon (que inclou el `+`), no el numèric pur, perquè els prefixos internacionals comencen amb `+`. El sistema de disseny no reenvia aquests atributs, així que es posen al DOM des d'un mòdul propi.
 
 ## Review Focus
 
@@ -65,6 +67,7 @@ site/js/
   form/validate.js          (nou) validateContact, firstErrorField, clearError
   form/lead.js              (nou) buildLead, submitForm, newLeadId
   form/focus.js             (nou) focusFirstError
+  form/hints.js             (nou) teclat i autocompletat al mòbil (atributs al DOM)
   ui/chrome.js              (nou) capçalera: marca + idioma
   ui/entry-screen.js        (nou) pantalla d'entrada (extreta d'app.js)
   ui/form-screen.js         (nou) pantalla del formulari
@@ -72,7 +75,7 @@ site/css/page.css           (modifica) .page__screen, .page--form, .form*
 site/index.html             (modifica) modulepreload de tots els mòduls
 scripts/export-texts.mjs    (modifica) taula del formulari
 tests/helpers/fake-react.mjs  (nou) h, T i cercadors per provar components sense DOM
-tests/form-context|model|validate|lead|i18n, chips, ui, privacy-text .test.mjs (nous)
+tests/form-context|model|validate|lead|hints|i18n, chips, ui, privacy-text .test.mjs (nous)
 tests/html|css|i18n|messages|config.test.mjs (es modifiquen)
 ```
 
@@ -81,11 +84,16 @@ tests/html|css|i18n|messages|config.test.mjs (es modifiquen)
 ### Task 1: Configuració, interruptor i helpers de context
 
 **Files:**
+
 - Modify: `site/js/config.js`
 - Create: `site/js/form/context.js`
 - Test: `tests/form-context.test.mjs`, `tests/config.test.mjs` (afegir)
 
 **Interfaces:**
+
+- [ ] 
+
+- \[ \]
 - Produces: `CONFIG.extra1: boolean`, `CONFIG.products: {id: string, name: string}[]`, `CONFIG.legalName: string`; `isExtra1Enabled(config, search) -> boolean`; `resolveOrigin(search) -> 'mobil'|'tauleta'`; `resolveProduct(search, products) -> string` (id o `''`); `profileFromEntry(entryProfile) -> 'particular'|'profesional'|''`; `legalQuery(lang, extra1) -> string` (`'?lang=es'` o `'?lang=es&extra1=1'`).
 
 - [ ] **Step 1: Escriure els tests que fallen**
@@ -175,6 +183,7 @@ export const legalQuery = (lang, extra1) => `?lang=${lang}${extra1 ? '&extra1=1'
 ```
 
 - [ ] **Step 4:** `npm test` → PASS.
+
 - [ ] **Step 5: Commit**
 
 ```bash
@@ -185,10 +194,15 @@ git commit -m "feat: interruptor de l'Extra 1 i helpers de context" -m "Co-Autho
 ### Task 2: Model del formulari i reductor
 
 **Files:**
+
 - Create: `site/js/form/model.js`
 - Test: `tests/form-model.test.mjs`
 
 **Interfaces:**
+
+- [ ] 
+
+- \[ \]
 - Produces: `PROFILES = ['particular','profesional']`; `ACTIVITIES = ['ocio','charter','vela','buceo','skiwake','seguridad','pasajeros','pesca','marina','otra']`; `MAX = {name:100,email:254,phone:30,activityOther:120,demo:80}`; `emptyForm({product?, profile?}) -> FormValues`; `formReducer(state, action)` amb accions `{type:'set', field, value}`, `{type:'prefill', field, value}` (només si el camp és buit) i `{type:'reset', initial?}`; `showsActivity(values) -> boolean`; `showsActivityOther(values) -> boolean`.
 - `FormValues = { product, name, email, phone, profile, activity, activityOther, hasElectric, investing, demo: string; privacy, newsletter: boolean }`.
 
@@ -257,6 +271,7 @@ test('accions desconegudes no canvien l\'estat', () => {
 ```
 
 - [ ] **Step 2:** `npm test` → FAIL (mòdul inexistent).
+
 - [ ] **Step 3: Implementació**
 
 ```js
@@ -299,6 +314,7 @@ export function formReducer(state, action) {
 ```
 
 - [ ] **Step 4:** `npm test` → PASS.
+
 - [ ] **Step 5: Commit**
 
 ```bash
@@ -309,10 +325,15 @@ git commit -m "feat: model i reductor del formulari" -m "Co-Authored-By: Claude 
 ### Task 3: Validació
 
 **Files:**
+
 - Create: `site/js/form/validate.js`
 - Test: `tests/form-validate.test.mjs`
 
 **Interfaces:**
+
+- [ ] 
+
+- \[ \]
 - Consumes: `PROFILES` (Task 2).
 - Produces: `validateContact(values, products) -> Record<field, errorCode>` amb camps `product|name|email|phone|profile|privacy` i codis `'required'|'productRequired'|'profileRequired'|'email'|'phone'|'privacy'`; `FIELD_ORDER`; `firstErrorField(errors) -> string|undefined`; `clearError(errors, field) -> errors` (còpia sense `field`).
 
@@ -370,6 +391,7 @@ test('clearError treu només aquell camp i no muta l\'original', () => {
 ```
 
 - [ ] **Step 2:** `npm test` → FAIL.
+
 - [ ] **Step 3: Implementació**
 
 ```js
@@ -414,6 +436,7 @@ export function clearError(errors, field) {
 ```
 
 - [ ] **Step 4:** `npm test` → PASS. (`'0034 600000000'` té 13 dígits i només caràcters permesos.)
+
 - [ ] **Step 5: Commit**
 
 ```bash
@@ -424,10 +447,15 @@ git commit -m "feat: validació del formulari" -m "Co-Authored-By: Claude Sonnet
 ### Task 4: El lead (payload) i l'enviament pur
 
 **Files:**
+
 - Create: `site/js/form/lead.js`
 - Test: `tests/form-lead.test.mjs`
 
 **Interfaces:**
+
+- [ ] 
+
+- \[ \]
 - Consumes: `MAX` (Task 2), `validateContact` (Task 3).
 - Produces: `buildLead(values, {lang, origin, newId}) -> {contact, profiling, hasProfiling}` amb `contact = {id, product, name, email, phone, privacy:true, newsletter, lang, profile, origin}` i `profiling = {id, activity?, activityOther?, hasElectric?, investing?, demo?}`; `submitForm(values, {products, lang, origin, newId}) -> {errors} | {lead}`; `newLeadId() -> string`.
 
@@ -503,6 +531,7 @@ test('submitForm: amb dades vàlides dona el lead', () => {
 ```
 
 - [ ] **Step 2:** `npm test` → FAIL.
+
 - [ ] **Step 3: Implementació**
 
 ```js
@@ -554,6 +583,7 @@ export function submitForm(values, { products, lang, origin, newId }) {
 ```
 
 - [ ] **Step 4:** `npm test` → PASS.
+
 - [ ] **Step 5: Commit**
 
 ```bash
@@ -561,14 +591,120 @@ git add site/js/form/lead.js tests/form-lead.test.mjs
 git commit -m "feat: lead i enviament pur del formulari" -m "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 ```
 
+### Task 4b: Teclat i autocompletat al mòbil
+
+**Per què al DOM:** el `Field` del sistema de disseny només reenvia `id`, `name`, `placeholder`, `required`, `disabled`, `value`, `onChange` i atributs `aria-*`; no `autocomplete`, `inputmode`, `autocapitalize` ni `enterkeyhint`. Tocar `site/ds/bundle.js` no serveix (és generat). El que sí es pot fer és posar els atributs als `<input>` ja renderitzats. La millora de fons (que `Field` accepti aquestes propietats) és un canvi al sistema de disseny, fora d'aquest pla.
+
+**Files:**
+- Create: `site/js/form/hints.js`
+- Test: `tests/form-hints.test.mjs`
+
+**Interfaces:**
+- Produces: `FIELD_HINTS: Record<field, Record<attribute, string>>` per als camps `name`, `email`, `phone` i `demo`; `applyFieldHints(doc, hints = FIELD_HINTS) -> number` (quants camps ha tocat; salta els que no són al DOM).
+
+- [ ] **Step 1: Test que falla**
+
+```js
+// tests/form-hints.test.mjs
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { FIELD_HINTS, applyFieldHints } from '../site/js/form/hints.js';
+
+const AUTOCOMPLETE_TOKENS = ['name', 'email', 'tel', 'address-level2']; // tokens vàlids de l'estàndard HTML
+
+const fakeDoc = (present) => {
+  const elements = {};
+  return {
+    elements,
+    querySelector: (selector) => {
+      const field = selector.match(/\[name="(.+)"\]/)[1];
+      if (!present.includes(field)) return null;
+      return (elements[field] ??= { attrs: {}, setAttribute(k, v) { this.attrs[k] = v; } });
+    },
+  };
+};
+
+test('telèfon: teclat de telèfon (inclou el +) i el telèfon guardat', () => {
+  assert.equal(FIELD_HINTS.phone.inputmode, 'tel');
+  assert.equal(FIELD_HINTS.phone.autocomplete, 'tel');
+});
+test('correu: teclat de correu, sense majúscula inicial ni correcció, i el correu guardat', () => {
+  assert.deepEqual(
+    [FIELD_HINTS.email.inputmode, FIELD_HINTS.email.autocapitalize, FIELD_HINTS.email.spellcheck, FIELD_HINTS.email.autocomplete],
+    ['email', 'none', 'false', 'email'],
+  );
+});
+test('nom: el nom guardat i majúscula a cada paraula; localitat: la ciutat guardada', () => {
+  assert.deepEqual([FIELD_HINTS.name.autocomplete, FIELD_HINTS.name.autocapitalize], ['name', 'words']);
+  assert.equal(FIELD_HINTS.demo.autocomplete, 'address-level2');
+});
+test('cap pista desactiva l\'autocompletat i tots els tokens són vàlids', () => {
+  for (const [field, hint] of Object.entries(FIELD_HINTS)) {
+    assert.ok(AUTOCOMPLETE_TOKENS.includes(hint.autocomplete), `${field}: ${hint.autocomplete}`);
+  }
+});
+test('la tecla d\'enviar del teclat diu «següent» als camps intermedis i «fet» a l\'últim', () => {
+  for (const field of ['name', 'email', 'phone']) assert.equal(FIELD_HINTS[field].enterkeyhint, 'next', field);
+  assert.equal(FIELD_HINTS.demo.enterkeyhint, 'done');
+});
+test('applyFieldHints posa els atributs als camps presents, salta els absents i diu quants ha tocat', () => {
+  const doc = fakeDoc(['name', 'email', 'phone']);
+  assert.equal(applyFieldHints(doc), 3);
+  assert.equal(doc.elements.phone.attrs.inputmode, 'tel');
+  assert.equal(doc.elements.email.attrs.autocomplete, 'email');
+  assert.equal(doc.elements.demo, undefined);
+});
+test('applyFieldHints sense cap camp al DOM no fa res', () => {
+  assert.equal(applyFieldHints(fakeDoc([])), 0);
+});
+```
+
+- [ ] **Step 2:** `npm test` → FAIL (mòdul inexistent).
+- [ ] **Step 3: Implementació**
+
+```js
+// site/js/form/hints.js
+// Ajustos de teclat i autocompletat dels <input> del formulari. Tokens d'autocomplete de l'estàndard HTML.
+export const FIELD_HINTS = {
+  name: { autocomplete: 'name', autocapitalize: 'words', enterkeyhint: 'next' },
+  email: { autocomplete: 'email', inputmode: 'email', autocapitalize: 'none', spellcheck: 'false', enterkeyhint: 'next' },
+  phone: { autocomplete: 'tel', inputmode: 'tel', enterkeyhint: 'next' },
+  demo: { autocomplete: 'address-level2', enterkeyhint: 'done' },
+};
+
+export function applyFieldHints(doc, hints = FIELD_HINTS) {
+  let applied = 0;
+  for (const [field, attributes] of Object.entries(hints)) {
+    const element = doc.querySelector(`[name="${field}"]`);
+    if (!element) continue;
+    for (const [attribute, value] of Object.entries(attributes)) element.setAttribute(attribute, value);
+    applied += 1;
+  }
+  return applied;
+}
+```
+
+- [ ] **Step 4:** `npm test` → PASS.
+- [ ] **Step 5: Commit**
+
+```bash
+git add site/js/form/hints.js tests/form-hints.test.mjs
+git commit -m "feat: teclat i autocompletat al mòbil dels camps del formulari" -m "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
+```
+
 ### Task 5: Xips desmarcables (refactor de l'MVP)
 
 **Files:**
+
 - Create: `site/js/chips.js`
 - Modify: `site/js/app.js` (usa `deselectProps`), `site/js/messages.js` (treu `toggleProfile`), `tests/messages.test.mjs` (treu el test de `toggleProfile`), `tests/html.test.mjs` (ajusta el test d'`app.js`)
 - Test: `tests/chips.test.mjs`
 
 **Interfaces:**
+
+- [ ] 
+
+- \[ \]
 - Produces: `deselectProps(current: string, clear: () => void) -> {onClick, onKeyDown}`: handlers per posar a l'`div` que embolcalla un `ChoiceChips` opcional (tocar de nou el xip seleccionat, o prémer l'espai, desmarca).
 
 - [ ] **Step 1: Test que falla**
@@ -612,6 +748,7 @@ test('altres tecles no fan res', () => {
 ```
 
 - [ ] **Step 2:** `npm test` → FAIL.
+
 - [ ] **Step 3: Implementació**
 
 ```js
@@ -629,7 +766,9 @@ export function deselectProps(current, clear) {
 ```
 
 - [ ] **Step 4:** `npm test` → PASS només `chips.test.mjs` (els altres continuen verds perquè encara no hem canviat res més).
+
 - [ ] **Step 5: Refactor de l'MVP.** A `site/js/app.js`:
+
   - importa `import { deselectProps } from './chips.js';` i treu `toggleProfile` de l'import de `./messages.js`;
   - substitueix l'`h('div', { onClick: ..., onKeyDown: ... }, ...)` pel següent (la resta de l'arbre del xip no canvia):
 
@@ -642,9 +781,9 @@ export function deselectProps(current, clear) {
       })),
 ```
 
-  - A `site/js/messages.js` elimina la funció `toggleProfile` i el seu comentari.
-  - A `tests/messages.test.mjs` elimina `toggleProfile` de l'import i el test «toggleProfile: triar, canviar i desmarcar el perfil».
-  - A `tests/html.test.mjs` canvia el test `app.js: el perfil es pot desmarcar…` perquè esperi `deselectProps` en comptes de `toggleProfile`/`onClick`/`onKeyDown`:
+- A `site/js/messages.js` elimina la funció `toggleProfile` i el seu comentari.
+- A `tests/messages.test.mjs` elimina `toggleProfile` de l'import i el test «toggleProfile: triar, canviar i desmarcar el perfil».
+- A `tests/html.test.mjs` canvia el test `app.js: el perfil es pot desmarcar…` perquè esperi `deselectProps` en comptes de `toggleProfile`/`onClick`/`onKeyDown`:
 
 ```js
 test('app.js: el perfil es pot desmarcar amb deselectProps', () => {
@@ -653,6 +792,7 @@ test('app.js: el perfil es pot desmarcar amb deselectProps', () => {
 ```
 
 - [ ] **Step 6:** `npm test` → tots PASS. `npm run serve`, obre `http://localhost:8080/?lang=es`, tria «Particular» i torna a tocar-lo: es desmarca (és el comportament d'abans; només comprovem que no s'ha trencat).
+
 - [ ] **Step 7: Commit**
 
 ```bash
@@ -663,11 +803,16 @@ git commit -m "refactor: xips desmarcables en un helper reutilitzable" -m "Co-Au
 ### Task 6: Literals del formulari, tracte proper al portuguès i document de validació
 
 **Files:**
+
 - Create: `site/js/i18n-form.js`
 - Modify: `site/js/i18n.js`, `scripts/export-texts.mjs`, `docs/textos-contacte.md` (regenerat), `tests/i18n.test.mjs`
 - Test: `tests/form-i18n.test.mjs`
 
 **Interfaces:**
+
+- [ ] 
+
+- \[ \]
 - Consumes: `PROFILES`, `ACTIVITIES` (Task 2).
 - Produces: `FORM[lang]` amb: `entryCta, entryContactLabel, title, subtitle, product, productPlaceholder, name, email, phone, profileLegend, profiles{particular,profesional}, profilingTitle, activity, activityPlaceholder, activities{…10 ids}, activityOther, hasElectric, investing, yes, no, demo, demoPlaceholder, consentBefore, consentLink, newsletter, submit, errors{required,productRequired,profileRequired,email,phone,privacy}, pendingTitle, pendingText, privacyText`; i `DICT[lang].form === FORM[lang]`.
 
@@ -725,7 +870,7 @@ test('registre consistent a la interfície: ES i CA de tu, sense «usted» ni «
 
 - [ ] **Step 2:** `npm test` → FAIL (`DICT.es.form` és `undefined`; el PT encara és formal).
 
-- [ ] **Step 3: Escriure `site/js/i18n-form.js`** (tots els idiomes, mateixa forma; el castellà és la font, la resta és la seva traducció):
+- [ ] **Step 3: Escriure** `site/js/i18n-form.js` (tots els idiomes, mateixa forma; el castellà és la font, la resta és la seva traducció):
 
 ```js
 // site/js/i18n-form.js
@@ -733,7 +878,7 @@ test('registre consistent a la interfície: ES i CA de tu, sense «usted» ni «
 // Esborrany pendent de validar per Bruno (vegeu docs/textos-contacte.md).
 export const FORM = {
   es: {
-    entryCta: 'Pedir información de un producto',
+    entryCta: 'Saber más',
     entryContactLabel: 'O escríbenos directamente',
     title: 'Recibe la ficha del producto',
     subtitle: 'Déjanos tus datos y descárgala al instante',
@@ -765,7 +910,7 @@ export const FORM = {
     privacyText: 'Si usas el formulario, guardamos tu nombre, correo, teléfono, el producto que te interesa, el idioma y tu perfil (particular o profesional). Si respondes a las preguntas opcionales, también tu actividad, si ya tienes embarcaciones eléctricas, si piensas invertir y tu localidad. Los usamos para enviarte la ficha y contactarte sobre tu interés; si marcas la casilla de novedades, también para enviarte novedades. Responsable: {responsable}. Los datos se guardan en Google (Formularios y Hojas de cálculo), que actúa como encargado del tratamiento. Puedes pedirnos acceso, rectificación o supresión escribiendo a {email}.',
   },
   ca: {
-    entryCta: 'Demanar informació d\'un producte',
+    entryCta: 'Saber-ne més',
     entryContactLabel: 'O escriu-nos directament',
     title: 'Rep la fitxa del producte',
     subtitle: 'Deixa\'ns les teves dades i descarrega-la a l\'instant',
@@ -797,7 +942,7 @@ export const FORM = {
     privacyText: 'Si fas servir el formulari, desem el teu nom, correu, telèfon, el producte que t\'interessa, l\'idioma i el teu perfil (particular o professional). Si respons les preguntes opcionals, també la teva activitat, si ja tens embarcacions elèctriques, si penses invertir i la teva localitat. Els fem servir per enviar-te la fitxa i contactar-te sobre el teu interès; si marques la casella de novetats, també per enviar-te novetats. Responsable: {responsable}. Les dades es desen a Google (Formularis i Fulls de càlcul), que actua com a encarregat del tractament. Pots demanar-nos accés, rectificació o supressió escrivint a {email}.',
   },
   pt: {
-    entryCta: 'Pedir informação sobre um produto',
+    entryCta: 'Saber mais',
     entryContactLabel: 'Ou escreve-nos diretamente',
     title: 'Recebe a ficha do produto',
     subtitle: 'Deixa-nos os teus dados e descarrega-a já',
@@ -829,7 +974,7 @@ export const FORM = {
     privacyText: 'Se usares o formulário, guardamos o teu nome, e-mail, telefone, o produto que te interessa, o idioma e o teu perfil (particular ou profissional). Se responderes às perguntas opcionais, também a tua atividade, se já tens embarcações elétricas, se pensas investir e a tua localidade. Usamos estes dados para te enviar a ficha e contactar-te sobre o teu interesse; se marcares a caixa de novidades, também para te enviar novidades. Responsável: {responsable}. Os dados ficam guardados na Google (Formulários e Folhas de cálculo), que atua como subcontratante. Podes pedir-nos acesso, retificação ou apagamento escrevendo para {email}.',
   },
   en: {
-    entryCta: 'Request information on a product',
+    entryCta: 'Learn more',
     entryContactLabel: 'Or write to us directly',
     title: 'Get the product sheet',
     subtitle: 'Leave us your details and download it instantly',
@@ -869,7 +1014,7 @@ export const FORM = {
 export const DICT = Object.fromEntries(Object.entries(PAGE).map(([lang, page]) => [lang, { ...page, form: FORM[lang] }]));
 ```
 
-  Al bloc `pt` de `PAGE` canvia només aquests literals visibles (no `messages`, `greeting` ni `closing`):
+Al bloc `pt` de `PAGE` canvia només aquests literals visibles (no `messages`, `greeting` ni `closing`):
 
 ```js
     subtitle: 'Diz-nos o que procuras e respondemos',
@@ -887,7 +1032,7 @@ const flat = (o, prefix = '') => Object.entries(o).flatMap(([k, v]) => (typeof v
 const at = (o, path) => path.split('.').reduce((acc, k) => acc[k], o);
 ```
 
-  i, dins de `renderTexts`, just després de la taula «Textos de la pàgina»:
+i, dins de `renderTexts`, just després de la taula «Textos de la pàgina»:
 
 ```js
     '## Formulari de l\'Extra 1 (esborrany)',
@@ -898,9 +1043,10 @@ const at = (o, path) => path.split('.').reduce((acc, k) => acc[k], o);
     '',
 ```
 
-  (Insereix-ho dins l'array `out` amb l'operador d'escampament, igual que el bloc `UI.map`.) Després executa `npm run texts`.
+(Insereix-ho dins l'array `out` amb l'operador d'escampament, igual que el bloc `UI.map`.) Després executa `npm run texts`.
 
 - [ ] **Step 6:** `npm test` → PASS (inclou `texts-doc`, que compara el document regenerat).
+
 - [ ] **Step 7: Commit**
 
 ```bash
@@ -911,10 +1057,15 @@ git commit -m "feat: literals del formulari en 4 idiomes i tracte proper al port
 ### Task 7: Components d'UI presentacionals (amb renderitzador fals)
 
 **Files:**
+
 - Create: `tests/helpers/fake-react.mjs`, `site/js/form/focus.js`, `site/js/ui/chrome.js`, `site/js/ui/entry-screen.js`, `site/js/ui/form-screen.js`
 - Test: `tests/ui.test.mjs`, `tests/form-focus.test.mjs`
 
 **Interfaces:**
+
+- [ ] 
+
+- \[ \]
 - Consumes: `DICT[lang].form` (Task 6), `showsActivity`, `showsActivityOther`, `ACTIVITIES`, `PROFILES` (Task 2), `deselectProps` (Task 5), `firstErrorField` (Task 3), `icon` (existent).
 - Produces: `createChrome({h,T,brand,languages}) -> Header({t,lang,onLang})`; `createEntryScreen({h,T,icon}) -> EntryScreen({t,links,email,profile,onProfile,onClearProfile,legalQuery,onOpenForm?})` (si no hi ha `onOpenForm`, és l'MVP d'ara); `createFormScreen({h,T}) -> FormScreen({t,products,values,errors,onChange(field,value),onSubmit(),onBack(),privacyHref})`; `focusFirstError(errors, doc) -> boolean`.
 
@@ -973,7 +1124,7 @@ export function focusFirstError(errors, doc) {
 }
 ```
 
-  **Step 4:** `npm test` → PASS.
+**Step 4:** `npm test` → PASS.
 
 - [ ] **Step 5: Tests de la UI que fallen**
 
@@ -1226,6 +1377,7 @@ export function createFormScreen({ h, T }) {
 ```
 
 - [ ] **Step 8:** `npm test` → PASS. Si un test del formulari falla perquè `byName` troba el `h(T.Field…)` i el `name` del `div` del xip, revisa que només el component porti `name`.
+
 - [ ] **Step 9: Commit**
 
 ```bash
@@ -1236,11 +1388,16 @@ git commit -m "feat: components d'UI del formulari, l'entrada i la capçalera" -
 ### Task 8: Orquestració (`app.js`), CSS, preloads i privacitat
 
 **Files:**
+
 - Modify: `site/js/app.js` (reescriptura), `site/css/page.css`, `site/index.html`, `site/js/privacy.js`
 - Create: `site/js/privacy-text.js`
 - Test: `tests/privacy-text.test.mjs`; modifica `tests/html.test.mjs` i `tests/css.test.mjs`
 
 **Interfaces:**
+
+- [ ] 
+
+- \[ \]
 - Consumes: tot l'anterior. Produces: l'esdeveniment `window` `tsf:lead` amb `detail = {contact, profiling, hasProfiling}` en un enviament vàlid (el consumeix el pla d'enviament); `resolvePrivacyText(t, config, extra1) -> string`.
 
 - [ ] **Step 1: Tests que fallen**
@@ -1266,9 +1423,10 @@ test('amb Extra 1 el text diu qui és el responsable i el correu, sense marcador
 });
 ```
 
-  A `tests/html.test.mjs`:
-  - **elimina** els tests `app.js: línia explicativa i adreça de recuperació…`, `app.js: el perfil es pot desmarcar amb deselectProps` i `app.js: el titular de la pàgina és un h1` (ara són proves de comportament a `tests/ui.test.mjs`);
-  - **substitueix** el test `càrrega: cada mòdul que importa app.js té modulepreload…` per aquest, que segueix tots els imports (transitius):
+A `tests/html.test.mjs`:
+
+- **elimina** els tests `app.js: línia explicativa i adreça de recuperació…`, `app.js: el perfil es pot desmarcar amb deselectProps` i `app.js: el titular de la pàgina és un h1` (ara són proves de comportament a `tests/ui.test.mjs`);
+- **substitueix** el test `càrrega: cada mòdul que importa app.js té modulepreload…` per aquest, que segueix tots els imports (transitius):
 
 ```js
 import { posix } from 'node:path';
@@ -1287,7 +1445,7 @@ test('càrrega: tots els mòduls que arrosseguen app.js (transitius) tenen modul
 });
 ```
 
-  A `tests/css.test.mjs` afegeix:
+A `tests/css.test.mjs` afegeix:
 
 ```js
 test('page.css: la pantalla del formulari ocupa l\'alçada i el botó s\'ancora a la base sense posició fixa', () => {
@@ -1339,6 +1497,7 @@ import { emptyForm, formReducer } from './form/model.js';
 import { clearError } from './form/validate.js';
 import { newLeadId, submitForm } from './form/lead.js';
 import { focusFirstError } from './form/focus.js';
+import { applyFieldHints } from './form/hints.js';
 import { createChrome } from './ui/chrome.js';
 import { createEntryScreen } from './ui/entry-screen.js';
 import { createFormScreen } from './ui/form-screen.js';
@@ -1370,6 +1529,9 @@ function App() {
   R.useEffect(() => {
     if (attempt > 0) focusFirstError(errors, document);
   }, [attempt]);
+  R.useEffect(() => {
+    if (view === 'form') applyFieldHints(document);
+  }, [view]);
 
   const change = (field, value) => {
     dispatch({ type: 'set', field, value });
@@ -1413,7 +1575,7 @@ function App() {
 window.ReactDOM.createRoot(document.getElementById('root')).render(h(App));
 ```
 
-  `site/css/page.css`: substitueix el bloc `@media (min-width: 768px) { … }` final per aquest i afegeix les regles noves just abans:
+`site/css/page.css`: substitueix el bloc `@media (min-width: 768px) { … }` final per aquest i afegeix les regles noves just abans:
 
 ```css
 /* Cada pantalla és una columna; el formulari ocupa l'alçada i empeny les accions cap avall (sense posició fixa: salta amb el teclat del mòbil) */
@@ -1430,7 +1592,7 @@ window.ReactDOM.createRoot(document.getElementById('root')).render(h(App));
 }
 ```
 
-  `site/index.html`: afegeix, després de `<link rel="modulepreload" href="js/icons.js">`, els mòduls que falten (els tres primers ja hi són):
+`site/index.html`: afegeix, després de `<link rel="modulepreload" href="js/icons.js">`, els mòduls que falten (els tres primers ja hi són):
 
 ```html
 <link rel="modulepreload" href="js/i18n-form.js">
@@ -1440,12 +1602,14 @@ window.ReactDOM.createRoot(document.getElementById('root')).render(h(App));
 <link rel="modulepreload" href="js/form/validate.js">
 <link rel="modulepreload" href="js/form/lead.js">
 <link rel="modulepreload" href="js/form/focus.js">
+<link rel="modulepreload" href="js/form/hints.js">
 <link rel="modulepreload" href="js/ui/chrome.js">
 <link rel="modulepreload" href="js/ui/entry-screen.js">
 <link rel="modulepreload" href="js/ui/form-screen.js">
 ```
 
 - [ ] **Step 4:** `npm test` → PASS.
+
 - [ ] **Step 5: Comprovar que l'MVP no ha canviat (interruptor apagat).** La referència és la versió publicada, que encara és la d'abans: `https://gllado-foranirvis.github.io/lead-capture/?lang=es`. A 360×740, mesura a les dues versions (la publicada i `http://localhost:8080/?lang=es`) amb `javascript_tool` el `top` i l'`height` de `h1`, dels xips, dels botons i dels enllaços legals:
 
 ```js
@@ -1455,7 +1619,8 @@ JSON.stringify(['h1', '.tsf-chips', 'a.tsf-btn--solid', 'a.tsf-btn--outline', '.
 }))
 ```
 
-  Han de coincidir a ±1px, WhatsApp ha de continuar `solid`, el correu `outline`, i no hi ha d'haver botó nou. Recorda recarregar el local sense memòria cau (`fetch(url, { cache: 'reload' })`).
+Han de coincidir a ±1px, WhatsApp ha de continuar `solid`, el correu `outline`, i no hi ha d'haver botó nou. Recorda recarregar el local sense memòria cau (`fetch(url, { cache: 'reload' })`).
+
 - [ ] **Step 6: Commit**
 
 ```bash
@@ -1466,17 +1631,30 @@ git commit -m "feat: orquestració del formulari, CSS, preloads i privacitat de 
 ### Task 9: Verificació al navegador, disseny i documentació
 
 **Files:**
+
+- [ ] 
+
+- \[ \]
 - Modify: `DESIGN.md`, `README.md`, `PRODUCT.md` (només si la verificació ho demana)
 - Evidència: captures i mesures a `out/verificacio-extra1/` (fora de Git)
 
-- [ ] **Step 1: Camí feliç amb `?extra1=1`** (`http://localhost:8080/?lang=es&extra1=1`, 360×740): el botó nou és l'únic negre; clicar-lo mostra la pantalla neta (logo i idioma, títol, camps, caselles, botó, «← Volver»). Escolta l'esdeveniment abans d'enviar: `window.__leads=[];addEventListener('tsf:lead',e=>__leads.push(e.detail))`. Omple producte, nom, correu, telèfon, perfil i marca privacitat; envia: apareix l'avís provisional i `__leads` té **un** element amb `contact` i `profiling` coherents.
+- [ ] **Step 1: Camí feliç amb** `?extra1=1` (`http://localhost:8080/?lang=es&extra1=1`, 360×740): el botó nou és l'únic negre; clicar-lo mostra la pantalla neta (logo i idioma, títol, camps, caselles, botó, «← Volver»). Escolta l'esdeveniment abans d'enviar: `window.__leads=[];addEventListener('tsf:lead',e=>__leads.push(e.detail))`. Omple producte, nom, correu, telèfon, perfil i marca privacitat; envia: apareix l'avís provisional i `__leads` té **un** element amb `contact` i `profiling` coherents.
+
+  **Teclat i autocompletat.** Amb el formulari obert, comprova al DOM que els quatre camps porten els atributs (`document.querySelector('[name="phone"]').getAttribute('inputmode')` és `tel`; el correu porta `inputmode="email"` i `autocomplete="email"`; el nom, `autocomplete="name"`; la localitat, `autocomplete="address-level2"`). Això **només verifica els atributs**: que el navegador ofereixi de debò el teclat de telèfon i les dades guardades s'ha de provar en un mòbil real (iOS Safari i Android Chrome) i queda pendent d'aquest pas. Comprova també que, si el navegador omple un camp, el valor arriba al lead (l'autocompletat dispara `input`, i React el recull).
 - [ ] **Step 2: Errors.** Envia buit: errors a cada camp, en l'ordre de la pantalla; el focus va al **producte**. Corregeix un camp: el seu error desapareix sol. Canvia a català amb errors visibles: el text canvia i els valors s'hi queden.
+
 - [ ] **Step 3: Dependències.** Tria «Profesional»: apareix «Actividad principal»; tria «Otra»: apareix el camp d'especificar; passa a «Particular»: tots dos desapareixen, i en tornar a «Profesional» estan buits. Les preguntes de sí/no es desmarquen tocant de nou el xip i amb la barra d'espai.
+
 - [ ] **Step 4: Layout.** Amb el contingut més baix que la pantalla (finestra alta) el botó queda a la base; amb el contingut més alt (360×640) segueix l'últim camp i es pot fer scroll. Mesura que a 360px no hi ha scroll horitzontal en els **4 idiomes** i que cap opció del desplegable d'activitat es talla (mira PT i CA). Repeteix amb l'arrel a 24px de mida de lletra. Tema fosc (`data-theme="dark"`) i 768px.
+
 - [ ] **Step 5: Privacitat.** L'enllaç de la casella obre una pestanya nova i `privacy.html?lang=es&extra1=1` mostra el text de l'Extra 1 amb el nom legal i el correu; sense `extra1=1` mostra el de l'MVP.
+
 - [ ] **Step 6: Interruptor apagat.** Sense `?extra1=1` la pàgina és idèntica a la de producció (cap botó nou); amb `?extra1=1` el formulari es veu. Comprova també `?producto=model-b` (preselecciona) i `?o=tauleta` (el lead porta `origin: 'tauleta'`).
+
 - [ ] **Step 7: Qualitat de disseny.** Executa `/Users/olgagarcia/.claude/skills/impeccable/scripts/impeccable detect --json site/js site/css site/index.html` (només ha de sortir el fals positiu de Montserrat) i passa `/impeccable audit site/` per accessibilitat i rendiment; arregla en un sol lot el que sigui real (focus, noms accessibles, contrast) i torna a executar `npm test`. Després `/impeccable polish` sobre la pantalla del formulari.
+
 - [ ] **Step 8: Documentació.** A `DESIGN.md`, a Layout, afegeix l'excepció: «A la pantalla del formulari el botó principal s'ancora a la base de la pantalla quan el contingut hi cap (`min-height: 100dvh` i `margin-top: auto`, mai `position: fixed`), seguint el wireframe; si no hi cap, segueix l'últim camp. Això s'aparta de la regla de `mobile-first.md` perquè l'acció principal quedi a l'abast del polze.» A `README.md`, afegeix a «Comandes» el que ja existeix i una secció **Extra 1** que expliqui l'interruptor (`extra1` a `config.js`, `?extra1=1`), que el formulari acaba en l'esdeveniment `tsf:lead`, que `legalName` i `products` són de prova, i que `docs-privats/` no és al repo. Actualitza `.impeccable/design.json` amb `/impeccable document`.
+
 - [ ] **Step 9: Commit final.** `npm test` → tot PASS; `git status` net. Després:
 
 ```bash
@@ -1484,13 +1662,13 @@ git add DESIGN.md README.md PRODUCT.md .impeccable/design.json
 git commit -m "docs: excepció d'ancoratge del botó i guia de l'Extra 1" -m "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 ```
 
-  **No fer `git push` fins que l'Olga ho demani:** el codi desplegat és inert sense `?extra1=1`, però el formulari seria visible per a qui conegui el paràmetre.
+**No fer** `git push` **fins que l'Olga ho demani:** el codi desplegat és inert sense `?extra1=1`, però el formulari seria visible per a qui conegui el paràmetre.
 
 ---
 
 ## Self-review
 
-**Cobertura del brief.** Camps i perfil premarcat → T1, T2, T7. Perfilació opcional amb activitat només per a Profesional i «Otra» → T2, T7. Validació, errors a l'idioma actiu → T3, T6, T7. Tracte proper al PT i «Ski / Wake» → T6. Botó ancorat i excepció al `DESIGN.md` → T8, T9. Dos Forms enllaçats per identificador → T4 (`id` compartit i `hasProfiling`; el mapatge a `entry.*` és el pla següent). Privacitat esborrany nostre → T6 (text) i T8 (pàgina). Interruptor i MVP intacte → T1, T8, T9. Document de validació → T6. Fora d'abast declarat: enviament, gràcies/PDF, dos passos.
+**Cobertura del brief.** Camps i perfil premarcat → T1, T2, T7. Perfilació opcional amb activitat només per a Profesional i «Otra» → T2, T7. Validació, errors a l'idioma actiu → T3, T6, T7. Tracte proper al PT i «Ski / Wake» → T6. Botó ancorat i excepció al `DESIGN.md` → T8, T9. Dos Forms enllaçats per identificador → T4 (`id` compartit i `hasProfiling`; el mapatge a `entry.*` és el pla següent). Privacitat esborrany nostre → T6 (text) i T8 (pàgina). Interruptor i MVP intacte → T1, T8, T9. Document de validació → T6. Teclat i autocompletat al mòbil → T4b (i comprovació en un mòbil real a T9). Fora d'abast declarat: enviament, gràcies/PDF, dos passos.
 
 **Placeholders.** Les dades de prova (`Modelo A/B/C`, `legalName`) són valors reals de configuració, llistades a «Decisions obertes» i al README. No hi ha passos que descriguin què fer sense mostrar el codi, llevat dels de verificació manual (T9) i de les dues modificacions d'edició d'`i18n.js` i `export-texts.mjs`, que indiquen exactament quines línies canviar.
 
