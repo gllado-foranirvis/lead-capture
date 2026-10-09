@@ -19,8 +19,9 @@ npm run texts      # regenera docs/textos-contacte.md (textos per validar) a par
 
 - `site/`: el que es publica. `ds/`, `vendor/` i `fonts/` són generats per `npm run sync` i es versionen.
 - `the-silent-fleet-ds/`: còpia local del sistema de disseny (font de la veritat visual; no s'edita aquí).
-- `scripts/`: `sync-assets` (sistema de disseny, React i Montserrat), `make-qr`, `export-texts` (textos per validar), `make-test-pdf` (dossier de prova) i `rem-migration` (migració de tipografia preparada).
-- `tests/`: tests (`node:test`, uns 190) de la lògica, de les pantalles amb un renderitzador fals (`tests/helpers/fake-react.mjs`), dels textos, del CSS i del HTML.
+- `apps-script/Code.gs`: l'script de Google que rep els leads i els desa al full (es copia a l'editor d'Apps Script; guia a `docs/google-sheet.md`).
+- `scripts/`: `smoke-sheet` (prova de fum de l'script desplegat), `sync-assets` (sistema de disseny, React i Montserrat), `make-qr`, `export-texts` (textos per validar), `make-test-pdf` (dossier de prova) i `rem-migration` (migració de tipografia preparada).
+- `tests/`: tests (`node:test`, 231) de la lògica, de les pantalles amb un renderitzador fals (`tests/helpers/fake-react.mjs`), dels textos, del CSS i del HTML.
 - `docs/`: `textos-contacte.md` (generat), `typeset-rem/` i `superpowers/` (especificacions i plans de cada fase; el pla `2026-10-09-extra1-reordenat` substitueix l'ordre del `2026-10-08-extra1-2-passos`).
 - `.github/workflows/pages.yml`: desplegament a GitHub Pages en cada push a `main`.
 
@@ -75,6 +76,7 @@ El flux és **apagat per defecte**: l'MVP continua igual per als visitants. Es v
 | On | Valor de prova | Qui el dona |
 |---|---|---|
 | `products` (`config.js`) | Modelo A / B / C, més l'opció fixa d'assessorament | Bruno: models o potències reals |
+| `leadEndpoint` i `leadToken` (`config.js`) | URL `/exec` i token d'un full de prova de l'Olga | Bruno: el full definitiu, en el seu compte (vegeu `docs/google-sheet.md`) |
 | `dossierUrl` (`config.js`) | `dossier-prova.pdf` | Bruno: el document general de l'empresa |
 | `legalName` (`config.js`) | PENDIENTE… | Bruno |
 | `privacyText` (`i18n-form.js`) | Esborrany, ara amb el correu parcial | Bruno (no és assessorament legal) |
@@ -90,9 +92,21 @@ El flux és **apagat per defecte**: l'MVP continua igual per als visitants. Es v
 - Decidir si el pas 2 (uns 2,3 pantalles, 1.730 px a 360 px, després de compactar-lo) es deixa així, es parteix en un tercer pas opcional d'opinió o es plega en un bloc que s'obre.
 
 **Tècnic**
-- Enviament real dels leads i del correu amb el dossier (pla posterior).
+- Enviament del correu amb el dossier (pla posterior).
+- Prova de l'enviament al full en un mòbil real i amb mala cobertura (mode avió). Ja provat: fum contra l'script desplegat, flux real al navegador i CORS.
+- Menors diferits de l'enviament al full: `sendBeacon` no comprova si ha estat acceptat (Brave Shields el bloqueja amb `ERR_BLOCKED_BY_CLIENT`; l'enviament normal no es veu afectat); el client no deixa diagnòstic a la consola; una nota escrita a mà al full desplaça on s'afegeixen les files; l'identificador de producte només admet `[a-z0-9-]`; el text de privacitat no esmenta les marques de temps.
 - Prova en un mòbil real: bloquejador de finestres en obrir el PDF, teclats, tecla «Next» i autocompletat del telèfon en dos camps.
 - Menors diferits de la revisió final: el missatge «Producto de interés» surt a l'MVP si l'URL porta `?producto=`; `maxLength` als camps; `ADVICE` com a literal a `session.js`; sense esdeveniment si es retira el consentiment.
+
+## Abans de publicar
+
+1. `npm test` en verd (231) i `npm run sync` sense canvis a `git status`.
+2. **Interruptor `extra1`:** a `config.js` és `false`; la fira el posa a `true` només quan Bruno hagi validat el text de privacitat, el dossier i els models.
+3. **`leadEndpoint` i `leadToken`** apunten ara a un full de prova. Passar-los al full de Bruno abans de la fira (`docs/google-sheet.md`, passos 1–6) i tornar a fer `node scripts/smoke-sheet.mjs <url> <token>`. El token i l'URL queden visibles al web publicat: és per disseny, no són secrets.
+4. `dossierUrl` apunta al PDF de prova; substituir-lo pel document real.
+5. `siteUrl` és provisional: si el repo canvia de compte, actualitzar-lo i regenerar el QR (`npm run qr`).
+6. Després de publicar: provar a la URL real (idioma, WhatsApp, correu, i amb `?extra1=1` el flux sencer), i el QR amb un mòbil.
+7. Congelació de canvis el 13/10.
 
 ## Pendent
 

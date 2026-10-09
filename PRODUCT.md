@@ -27,14 +27,14 @@ Propulsió elèctrica silenciosa per a embarcacions: TSF presenta el canvi cap a
 
 - Ús en una fira, de peu, amb una mà, al mòbil; el QR i l'NFC porten a la pàgina.
 - Calendari fix: construcció 10–12/10, congelació 13/10, fira 14–18/10/2026.
-- Els contactes arriben a WhatsApp Business i a info@thesilentfleet.com; l'MVP no desa cap dada.
+- Els contactes arriben a WhatsApp Business i a info@thesilentfleet.com; l'MVP no desa cap dada. Amb l'Extra 1 actiu, els leads es desen a un Google Sheet (vegeu `docs/google-sheet.md`).
 - Hi ha un pla de contingència: dos QR d'emergència (WhatsApp directe i una targeta de contacte).
 
 ## Capabilities and Constraints
 
 - MVP: selecció d'idioma, perfil opcional, WhatsApp i correu sempre actius amb missatge predefinit (12 combinacions idioma × perfil), privacitat i cookies.
-- Extra 1 (flux de captació en 2 passos amb perfilació i dossier general): **construït però apagat** per un interruptor (`extra1`); l'MVP continua igual per als visitants. No envia res a cap servidor: només emet esdeveniments `window`. Detall al README.
-- Fora de l'abast actual: enviament real dels leads i del correu amb el dossier (Google Forms o similar), correu de seguiment (Extra 1b), Linktree, NFC, analítica i banner de cookies. L'estructura ha de permetre afegir-los sense reescriure.
+- Extra 1 (flux de captació en 2 passos amb perfilació i dossier general): **construït però apagat** per un interruptor (`extra1`); l'MVP continua igual per als visitants. Emet esdeveniments `window` i, si `leadEndpoint` té una URL, els envia a un Google Apps Script que desa una fila per lead (desplegat i provat; guia a `docs/google-sheet.md`). Detall al README.
+- Fora de l'abast actual: enviament del correu amb el dossier, correu de seguiment (Extra 1b), Linktree, NFC, analítica i banner de cookies. L'estructura ha de permetre afegir-los sense reescriure.
 - Cost recurrent 0 €. L'MVP no desa dades ni usa cookies, `localStorage` ni analítica; l'Extra 1, quan s'activi, recollirà dades de contacte i perfilació amb el consentiment del visitant (text de privacitat pendent de Bruno).
 - Cap petició externa per a estil o scripts (cobertura dolenta): React i Montserrat són locals.
 - Terminologia: «The Silent Fleet», «Salón Náutico». Els perfils: a l'MVP «Distribuïdor o professional» / «Particular»; a l'Extra 1 «Particular» / «Profesional» (el missatge de «Profesional» continua dient «distribuidor», pendent de Bruno). El document final es diu «dossier» fins que Bruno decideixi.
