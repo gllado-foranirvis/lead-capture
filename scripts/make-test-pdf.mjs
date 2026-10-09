@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { CONFIG } from '../site/js/config.js';
 
@@ -23,9 +23,20 @@ function pdfFor(label) {
   return pdf;
 }
 
+// Només escriu si el fitxer no existeix o ja és un PDF de prova: mai no trepitja un document real de Bruno.
+function writeTestPdf(url, label) {
+  const path = `site/${url}`;
+  if (existsSync(path) && !readFileSync(path, 'latin1').includes('documento de prueba')) {
+    console.log(`conservat (no és de prova): ${path}`);
+    return;
+  }
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, pdfFor(label), 'latin1');
+  console.log(`generat: ${path}`);
+}
+
 // Documents de prova: el general i un per cada model amb dossier propi (el títol diu quin és, per veure quin s'ha obert).
-writeFileSync(`site/${CONFIG.dossierUrl}`, pdfFor('The Silent Fleet - documento de prueba'), 'latin1');
+writeTestPdf(CONFIG.dossierUrl, 'The Silent Fleet - documento de prueba');
 for (const product of CONFIG.products.filter((p) => p.dossierUrl)) {
-  mkdirSync(dirname(`site/${product.dossierUrl}`), { recursive: true });
-  writeFileSync(`site/${product.dossierUrl}`, pdfFor(`The Silent Fleet - documento de prueba - ${product.name}`), 'latin1');
+  writeTestPdf(product.dossierUrl, `The Silent Fleet - documento de prueba - ${product.name}`);
 }

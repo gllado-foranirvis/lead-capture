@@ -21,7 +21,7 @@ npm run texts      # regenera docs/textos-contacte.md (textos per validar) a par
 - `the-silent-fleet-ds/`: còpia local del sistema de disseny (font de la veritat visual; no s'edita aquí).
 - `apps-script/Code.gs`: l'script de Google que rep els leads i els desa al full (es copia a l'editor d'Apps Script; guia a `docs/google-sheet.md`).
 - `scripts/`: `smoke-sheet` (prova de fum de l'script desplegat), `sync-assets` (sistema de disseny, React i Montserrat), `make-qr`, `export-texts` (textos per validar), `make-test-pdf` (dossier de prova) i `rem-migration` (migració de tipografia preparada).
-- `tests/`: tests (`node:test`, 231) de la lògica, de les pantalles amb un renderitzador fals (`tests/helpers/fake-react.mjs`), dels textos, del CSS i del HTML.
+- `tests/`: tests (`node:test`, 239) de la lògica, de les pantalles amb un renderitzador fals (`tests/helpers/fake-react.mjs`), dels textos, del CSS i del HTML.
 - `docs/`: `textos-contacte.md` (generat), `typeset-rem/` i `superpowers/` (especificacions i plans de cada fase; el pla `2026-10-09-extra1-reordenat` substitueix l'ordre del `2026-10-08-extra1-2-passos`).
 - `.github/workflows/pages.yml`: desplegament a GitHub Pages en cada push a `main`.
 
@@ -84,7 +84,7 @@ El flux és **apagat per defecte**: l'MVP continua igual per als visitants. Es v
 
 ### Pendent
 **De Bruno**
-- El document general (fitxer real) i el seu nom: «dossier» o un altre.
+- El document general (fitxer real) i el seu nom: «dossier» o un altre; i un PDF per model (o potència), amb quins models en tenen de propi (els altres obren el general).
 - Models o potències reals, nom legal i text de privacitat (el text s'ha ampliat amb les preguntes d'opinió i els comentaris).
 - Si «Profesional» ha d'enviar el missatge «distribuidor».
 
@@ -100,10 +100,10 @@ El flux és **apagat per defecte**: l'MVP continua igual per als visitants. Es v
 
 ## Abans de publicar
 
-1. `npm test` en verd (231) i `npm run sync` sense canvis a `git status`.
+1. `npm test` en verd (239) i `npm run sync` sense canvis a `git status`.
 2. **Interruptor `extra1`:** a `config.js` és `false`; la fira el posa a `true` només quan Bruno hagi validat el text de privacitat, el dossier i els models.
 3. **`leadEndpoint` i `leadToken`** apunten ara a un full de prova. Passar-los al full de Bruno abans de la fira (`docs/google-sheet.md`, passos 1–6) i tornar a fer `node scripts/smoke-sheet.mjs <url> <token>`. El token i l'URL queden visibles al web publicat: és per disseny, no són secrets.
-4. `dossierUrl` apunta al PDF de prova; substituir-lo pel document real.
+4. `dossierUrl` (general) i el `dossierUrl` de cada producte apunten a PDF de prova (`site/dossier-prova.pdf` i `site/dossiers/`): substituir-los pels documents reals, i no tornar a executar `scripts/make-test-pdf.mjs` (només refà fitxers de prova, però així no hi ha dubtes).
 5. `siteUrl` és provisional: si el repo canvia de compte, actualitzar-lo i regenerar el QR (`npm run qr`).
 6. Després de publicar: provar a la URL real (idioma, WhatsApp, correu, i amb `?extra1=1` el flux sencer), i el QR amb un mòbil.
 7. Congelació de canvis el 13/10.
