@@ -32,3 +32,7 @@ test('el document de prova existeix a site/ i és un PDF', async () => {
   const pdf = readFileSync(`site/${CONFIG.dossierUrl}`, 'latin1');
   assert.ok(pdf.startsWith('%PDF-') && pdf.trimEnd().endsWith('%%EOF'));
 });
+test('l\'enviament al full és apagat per defecte: sense URL ni token', () => {
+  assert.equal(CONFIG.leadEndpoint, '');
+  assert.equal(CONFIG.leadToken, '');
+});

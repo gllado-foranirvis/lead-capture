@@ -6,6 +6,8 @@ export const CONFIG = {
   extra1: false, // L'Extra 1 és ocult als visitants fins que s'activi; es previsualitza amb ?extra1=1
   dossierUrl: 'dossier-prova.pdf', // PROVA: substituir pel document real de Bruno (a site/)
   emailDelivery: false, // posar-ho a true quan l'enviament del correu amb la ficha existeixi: només canvia el text de la confirmació
+  leadEndpoint: '', // URL /exec de l'script de Google (docs/google-sheet.md). Buit = no s'envia res; només els esdeveniments tsf:lead*
+  leadToken: '', // opcional: el mateix valor que la propietat TOKEN de l'script. És visible al codi del web: talla el correu brossa casual, no és un secret
   products: [ // PROVA: substituir per la llista real de Bruno
     { id: 'model-a', name: 'Modelo A' },
     { id: 'model-b', name: 'Modelo B' },

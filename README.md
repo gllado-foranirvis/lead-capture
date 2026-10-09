@@ -54,7 +54,9 @@ El flux és **apagat per defecte**: l'MVP continua igual per als visitants. Es v
 
 «← Volver» conserva el que s'ha escrit. A la tauleta (`?o=tauleta`), tornar a l'inici o 90 segons sense tocar res descarta dades, perfil i identificador de lead.
 
-**Dades i esdeveniments** (res no s'envia encara a cap servidor; només s'emeten esdeveniments a `window`):
+**Enviament al full de Google:** si `leadEndpoint` (`config.js`) té una URL, els dos esdeveniments s'envien a un Google Apps Script que desa una fila per lead; sense URL (per defecte) no s'envia res. Guia: `docs/google-sheet.md`; script: `apps-script/Code.gs`; prova: `node scripts/smoke-sheet.mjs <url>`.
+
+**Dades i esdeveniments** (només s'emeten esdeveniments a `window`; l'enviament és opcional, vegeu més amunt):
 - `tsf:lead-partial` en continuar el pas 1: `{ id, stage: 'step1', name, email, phone, privacy: true, newsletter, lang, origin, profile? }`. El telèfon va com `+34 600 00 00 00`. Ja porta consentiment: no hi ha cap lead amb `privacy: false`.
 - `tsf:lead` en acabar: `{ contact, profiling, hasProfiling }`; `profiling` pot portar `activity`, `activityOther`, `hasBoat`, `hasElectric`, `intent`, `demo`, `enthusiasm`, `concerns`, `factors` (llistes d'opcions amb els seus `…Other`) i `comments` (màxim 500). Comparteix `id` amb el parcial.
 

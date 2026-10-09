@@ -11,6 +11,7 @@ import { ACTIVITY_EVENTS, IDLE_MS, watchIdle } from './form/idle.js';
 import { toSession } from './form/session.js';
 import { focusFirstError, focusStepHeading } from './form/focus.js';
 import { advanceOnEnter, applyFieldHints } from './form/hints.js';
+import { connectSender, createSender } from './form/sender.js';
 import { createChrome } from './ui/chrome.js';
 import { createEntryScreen } from './ui/entry-screen.js';
 import { createStepContact } from './ui/step-contact.js';
@@ -28,6 +29,10 @@ const EntryScreen = createEntryScreen({ h, T, icon });
 const StepContact = createStepContact({ h, T });
 const StepProfile = createStepProfile({ h, T });
 const DoneScreen = createDoneScreen({ h, T, icon });
+
+// Els leads s'envien al full de Google si hi ha URL configurada; la cua viu aquí (no a l'estat de React) perquè
+// canviar de pantalla o la neteja per inactivitat de la tauleta no perdin res.
+connectSender(window, createSender({ endpoint: CONFIG.leadEndpoint, token: CONFIG.leadToken }));
 
 const emit = (name) => (detail) => window.dispatchEvent(new CustomEvent(name, { detail }));
 const openDocument = () => { if (CONFIG.dossierUrl) window.open(CONFIG.dossierUrl, '_blank', 'noopener'); };

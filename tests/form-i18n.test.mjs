@@ -111,3 +111,10 @@ test('cada idioma té una etiqueta per a cada opció de les tres preguntes d\'op
     assert.deepEqual(Object.keys(DICT[l].form.factorsOptions).sort(), [...FACTORS].sort(), `${l} factors`);
   }
 });
+test('el text de privacitat diu que les dades es desen a Google Sheets (no a Forms)', () => {
+  const expect = { es: /Google \(Hojas de cálculo\)/, ca: /Google \(Fulls de càlcul\)/, pt: /Google \(Folhas de cálculo\)/, en: /Google \(Sheets\)/ };
+  for (const l of CONFIG.languages) {
+    assert.match(DICT[l].form.privacyText, expect[l], l);
+    assert.doesNotMatch(DICT[l].form.privacyText, /Formularios|Formularis|Formulários|Forms/, l);
+  }
+});
