@@ -32,7 +32,8 @@ test('el document de prova existeix a site/ i és un PDF', async () => {
   const pdf = readFileSync(`site/${CONFIG.dossierUrl}`, 'latin1');
   assert.ok(pdf.startsWith('%PDF-') && pdf.trimEnd().endsWith('%%EOF'));
 });
-test('l\'enviament al full és apagat per defecte: sense URL ni token', () => {
-  assert.equal(CONFIG.leadEndpoint, '');
-  assert.equal(CONFIG.leadToken, '');
+test('l\'enviament al full: buit (apagat) o una URL /exec de Google; el token és un text', () => {
+  assert.match(CONFIG.leadEndpoint, /^(|https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec)$/);
+  assert.equal(typeof CONFIG.leadToken, 'string');
+  if (CONFIG.leadToken) assert.ok(CONFIG.leadEndpoint, 'un token sense URL no té sentit');
 });

@@ -145,6 +145,17 @@ test('upsert: quan el full s\'omple (1000 files) s\'amplia en lloc de fallar', (
   assert.equal(sheet.rows.length, 1001);
   assert.ok(sheet.maxRows > 1000);
 });
+test('un valor que comença per «=» es desa escapat amb apòstrof perquè Sheets no l\'executi com a fórmula (setValues ignora el format de text)', () => {
+  const { api, sheet } = load();
+  api.ensureHeader(sheet);
+  const evil = { ...complete, contact: { ...contact, name: '=HYPERLINK("http://example.com","x")' }, profiling: { ...complete.profiling, comments: '=IMPORTXML("http://e.com","//a")', demo: '+34 prova' } };
+  api.upsertLead(sheet, api.sanitizeLead(evil), 't1');
+  const col = (name) => sheet.rows[1][api.COLUMNS.indexOf(name)];
+  assert.equal(col('name'), `'=HYPERLINK("http://example.com","x")`);
+  assert.equal(col('comments'), `'=IMPORTXML("http://e.com","//a")`);
+  assert.equal(col('demo'), '+34 prova', 'els altres prefixos ja els cobreix el format de text');
+  assert.equal(col('email'), 'ana@example.com');
+});
 test('doPost: crea, respon ok i allibera el bloqueig', () => {
   const { api, sheet, lock } = load();
   assert.deepEqual(post(api, step1), { ok: true, result: 'created' });

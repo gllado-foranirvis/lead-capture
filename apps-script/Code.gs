@@ -76,12 +76,18 @@ function ensureHeader(sheet) {
   sheet.setFrozenRows(1);
 }
 
+// setValues executa com a fórmula qualsevol text que comenci per «=», encara que la cel·la tingui format de text:
+// l'apòstrof inicial el converteix en text. («+» i «@» ja queden com a text gràcies al format de la columna.)
+function asText(value) {
+  return typeof value === 'string' && value.charAt(0) === '=' ? "'" + value : value;
+}
+
 function rowFor(lead, current, now) {
   return COLUMNS.map(function (column, i) {
     if (column === 'createdAt') return current ? current[i] : now;
     if (column === 'updatedAt') return now;
     if (column === 'privacy' || column === 'newsletter') return lead[column] ? 'si' : 'no';
-    return lead[column] === undefined ? '' : lead[column];
+    return asText(lead[column] === undefined ? '' : lead[column]);
   });
 }
 
