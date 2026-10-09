@@ -101,12 +101,13 @@ El flux és **actiu** (`extra1: true` a `config.js`, decidit el 9/10/2026 per a 
 ## Abans de publicar
 
 1. `npm test` en verd (239) i `npm run sync` sense canvis a `git status`.
-2. **Interruptor `extra1`:** a `config.js` és `true` (l'Extra 1 va a la fira). **Bloquejos abans de publicar:** `legalName` diu `PENDIENTE…` i es veu al text de privacitat; el text de privacitat és un esborrany; el dossier i els models són de prova; el full de Google és el de prova de l'Olga; el número de WhatsApp és de prova. Si alguna cosa no està llesta, `extra1: false` torna a l'MVP sol.
+2. **Interruptor `extra1`:** a `config.js` és `true` (l'Extra 1 va a la fira). **Bloquejos abans de publicar:** `legalName` diu «versión beta de prueba: usa datos inventados» i es veu al text de privacitat (posar-hi el nom legal real); el text de privacitat és un esborrany; el dossier i els models són de prova; el full de Google és el de prova de l'Olga; el número de WhatsApp és de prova. Si alguna cosa no està llesta, `extra1: false` torna a l'MVP sol.
 3. **`leadEndpoint` i `leadToken`** apunten ara a un full de prova. Passar-los al full de Bruno abans de la fira (`docs/google-sheet.md`, passos 1–6) i tornar a fer `node scripts/smoke-sheet.mjs <url> <token>`. El token i l'URL queden visibles al web publicat: és per disseny, no són secrets.
 4. `dossierUrl` (general) i el `dossierUrl` de cada producte apunten a PDF de prova (`site/dossier-prova.pdf` i `site/dossiers/`): substituir-los pels documents reals, i no tornar a executar `scripts/make-test-pdf.mjs` (només refà fitxers de prova, però així no hi ha dubtes).
 5. `siteUrl` és provisional: si el repo canvia de compte, actualitzar-lo i regenerar el QR (`npm run qr`).
 6. Després de publicar: provar a la URL real (idioma, WhatsApp, correu, i amb `?extra1=1` el flux sencer), i el QR amb un mòbil.
-7. Congelació de canvis el 13/10.
+7. **Beta:** les dues pàgines porten `<meta name="robots" content="noindex">` perquè els cercadors no les indexin; **treure-ho de `index.html` i `privacy.html` abans de la fira** (i el test `beta: les dues pàgines porten noindex` de `tests/html.test.mjs`).
+8. Congelació de canvis el 13/10.
 
 ## Pendent
 

@@ -13,7 +13,7 @@ export const CONFIG = {
     { id: 'model-b', name: 'Modelo B', dossierUrl: 'dossiers/model-b.pdf' },
     { id: 'model-c', name: 'Modelo C' },
   ],
-  legalName: 'PENDIENTE: nombre legal de The Silent Fleet', // PROVA: el dona Bruno
+  legalName: 'The Silent Fleet (versión beta de prueba: usa datos inventados)', // BETA: el nom legal real el dona Bruno; es veu al text de privacitat
   defaultLang: 'es',
   languages: ['es', 'ca', 'pt', 'en'],
 };
