@@ -85,7 +85,7 @@ El flux és **apagat per defecte**: l'MVP continua igual per als visitants. Es v
 - Si «Profesional» ha d'enviar el missatge «distribuidor».
 
 **De l'Olga**
-- Decidir si el pas 2 (uns 3 pantalles, 2.200 px a 360 px) es deixa així, es parteix en un tercer pas opcional d'opinió o es plega en un bloc que s'obre.
+- Decidir si el pas 2 (uns 2,3 pantalles, 1.730 px a 360 px, després de compactar-lo) es deixa així, es parteix en un tercer pas opcional d'opinió o es plega en un bloc que s'obre.
 
 **Tècnic**
 - Enviament real dels leads i del correu amb el dossier (pla posterior).

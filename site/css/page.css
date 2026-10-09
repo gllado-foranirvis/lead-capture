@@ -8,9 +8,9 @@ body { background: var(--surface-100); color: var(--ink); font-family: var(--fon
 .page {
   display: flex; flex-direction: column; gap: var(--space-3);
   width: 100%; max-width: 560px; margin: 0 auto; box-sizing: border-box;
-  padding: var(--space-4) var(--gutter) var(--space-6);
+  padding: var(--space-3) var(--gutter) var(--space-5);
 }
-.page__top { display: flex; align-items: center; justify-content: space-between; min-height: var(--header-h); }
+.page__top { display: flex; align-items: center; justify-content: space-between; min-height: var(--tap-min-compact); }
 .page__stack { display: flex; flex-direction: column; gap: var(--space-2); }
 .page__title { overflow-wrap: anywhere; }
 .tsf-btn svg { flex: none; }
@@ -21,6 +21,7 @@ body { background: var(--surface-100); color: var(--ink); font-family: var(--fon
 /* Amb tres o més xips (producte) la fila fa salt de línia en lloc de tallar l'últim. */
 .form .tsf-chips__row { flex-wrap: wrap; }
 .form .tsf-chip { flex: 1 1 40%; }
+.form__chips--wide .tsf-chip { flex-basis: 30%; }
 .form__chips--wide .tsf-chip:last-child { flex-basis: 100%; }
 /* El CTA principal tanca l'inici: separat del bloc de contacte. */
 .page__cta { margin-top: var(--space-4); }
@@ -43,14 +44,18 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 /* Les files de les caselles (opinió) també arriben al terra tàctil de 44px. */
 .tsf-compact { --option-h: var(--tap-min); }
 .page--form { min-height: 100dvh; }
-.page__screen--form { flex: 1; }
-.form { display: flex; flex: 1; flex-direction: column; gap: var(--space-5); }
+.page__screen--form { flex: 1; gap: var(--space-2); }
+.form { display: flex; flex: 1; flex-direction: column; gap: var(--space-4); }
 .form__group { display: flex; flex-direction: column; gap: var(--space-3); }
+/* Mòbil compacte: la llegenda dels xips i les caselles de marcatge múltiple (2 columnes) ocupen menys alçada. */
+.tsf-chips__legend { margin-bottom: var(--space-1); }
+.form .tsf-group__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-3); }
 .form__error { color: var(--error); }
-.form__actions { display: flex; flex-direction: column; gap: var(--space-2); margin-top: auto; padding-top: var(--space-5); }
+.form__actions { display: flex; flex-direction: column; gap: var(--space-2); margin-top: auto; padding-top: var(--space-4); }
 @media (min-width: 768px) {
   .page, .page__main, .page__screen { gap: var(--space-5); }
   .page { padding-top: var(--space-7); }
+  .form { gap: var(--space-5); }
 }
 
 .steps { display: flex; flex-direction: column; gap: var(--space-2); }

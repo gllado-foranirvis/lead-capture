@@ -67,3 +67,16 @@ test('page.css: la privacitat és una columna de paràgrafs amb ritme (més aire
 test('page.css: les files de les caselles múltiples fan 44px (el sistema compacte les deixa a 40px)', () => {
   assert.match(page, /\.tsf-compact\s*\{[^}]*--option-h:\s*var\(--tap-min\)/);
 });
+
+test('page.css (mòbil compacte): caselles múltiples en dues columnes i ritme vertical més curt', () => {
+  assert.match(page, /\.form \.tsf-group__list\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(page, /\.form\s*\{[^}]*gap:\s*var\(--space-4\)/);
+  assert.match(page, /\.form__group\s*\{[^}]*gap:\s*var\(--space-3\)/);
+  assert.match(page, /\.page__top\s*\{[^}]*min-height:\s*var\(--tap-min-compact\)/);
+  assert.match(page, /\.tsf-chips__legend\s*\{[^}]*margin-bottom:\s*var\(--space-1\)/);
+  assert.match(page, /\.form__chips--wide \.tsf-chip\s*\{[^}]*flex-basis:\s*30%/);
+});
+test('page.css: a pantalles amples (≥768px) el ritme torna a ser generós', () => {
+  const wide = page.slice(page.indexOf('@media (min-width: 768px)'));
+  assert.match(wide, /\.form\s*\{[^}]*gap:\s*var\(--space-5\)/);
+});

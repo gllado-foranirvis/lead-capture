@@ -275,7 +275,7 @@ El ritme és una escala d'espaiat de 4 a 128px (4, 8, 12, 16, 24, 32, 48, 64, 96
 
 El CSS és pla i mobile first: s'escriu primer l'estil base i s'afegeix `@media (min-width: 768px)`; mai `max-width`.
 
-**Excepció: la pantalla del formulari.** El botó principal s'ancora a la base de la pantalla quan el contingut hi cap (`min-height: 100dvh` i `margin-top: auto`, mai `position: fixed`, que salta amb el teclat del mòbil), seguint el wireframe; si el contingut és més alt que la pantalla, el botó segueix l'últim camp. Això s'aparta de la regla de `mobile-first.md` («el botó segueix l'últim camp; no es fixa a la base») perquè l'acció principal quedi a l'abast del polze. El pas 1 fa uns 1,2 pantalles a 360×740 i el pas 2 uns 3 (mesurat amb un Particular: 2.200 px), de manera que a la pràctica el botó segueix l'últim camp i només s'ancora a la base en pantalles altes. La longitud del pas 2 és una decisió oberta (vegeu el README).
+**Excepció: la pantalla del formulari.** El botó principal s'ancora a la base de la pantalla quan el contingut hi cap (`min-height: 100dvh` i `margin-top: auto`, mai `position: fixed`, que salta amb el teclat del mòbil), seguint el wireframe; si el contingut és més alt que la pantalla, el botó segueix l'últim camp. Això s'aparta de la regla de `mobile-first.md` («el botó segueix l'últim camp; no es fixa a la base») perquè l'acció principal quedi a l'abast del polze. El pas 1 hi cap en una pantalla a 360×740 (740 px) i el pas 2 fa uns 2,3 (mesurat amb un Particular: 1.730 px; a 320 px, 1.780), de manera que al pas 2 el botó segueix l'últim camp i només s'ancora a la base en pantalles altes. La longitud del pas 2 és una decisió oberta (vegeu el README).
 
 ### Usability floor
 
@@ -349,7 +349,11 @@ Només es mou el color: botons, enllaços i xips canvien de color en 150ms (`eas
 ### Caselles múltiples (opinió)
 - **Component:** `CheckboxGroup` del sistema, amb la llegenda en estil `label` (no en majúscules) i files de 44px (el sistema compacte les deixa a 40px; `page.css` ho puja al terra tàctil del projecte).
 - **«Otro»:** és l'última casella de cada pregunta i només obre el seu camp «Otro (especifica)» quan es marca; desmarcar-la esborra el text.
+- **Dues columnes:** al formulari, les llistes de caselles es disposen en 2 columnes (`grid`) per estalviar alçada; les etiquetes llargues fan salt de línia i la fila creix. Cap etiqueta es talla a 320 ni a 360 px.
 - **Opcionals:** cap casella és obligatòria.
+
+### Ritme vertical del formulari (mòbil)
+- **Compacte per defecte:** 16px entre blocs de pregunta, 12px entre camps d'un mateix grup, 4px entre la llegenda i les seves opcions (proximitat 3:1), capçalera de 44px i 12px de marge superior de pàgina. A partir de 768px el ritme torna a ser generós (24px entre blocs).
 
 ### Pàgina de lectura (privacitat)
 - **Text en paràgrafs curts:** un `<p>` per bloc (6 a l'Extra 1), amb 16px entre paràgrafs i 12px entre títol i text; els marges per defecte de `h1`, `h2` i `p` s'anul·len perquè se sumaven al gap. Cada secció nova té 24px d'aire a sobre, més que sota el seu títol.
