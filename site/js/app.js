@@ -32,7 +32,7 @@ const DoneScreen = createDoneScreen({ h, T, icon });
 
 // Els leads s'envien al full de Google si hi ha URL configurada; la cua viu aquí (no a l'estat de React) perquè
 // canviar de pantalla o la neteja per inactivitat de la tauleta no perdin res.
-connectSender(window, createSender({ endpoint: CONFIG.leadEndpoint, token: CONFIG.leadToken }));
+connectSender(window, createSender({ endpoint: CONFIG.leadEndpoint, token: CONFIG.leadToken }), document);
 
 const emit = (name) => (detail) => window.dispatchEvent(new CustomEvent(name, { detail }));
 const openDocument = () => { if (CONFIG.dossierUrl) window.open(CONFIG.dossierUrl, '_blank', 'noopener'); };

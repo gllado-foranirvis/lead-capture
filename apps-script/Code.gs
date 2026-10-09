@@ -85,6 +85,13 @@ function rowFor(lead, current, now) {
   });
 }
 
+// Cada fila es formata com a text abans d'escriure-hi: així la protecció contra fórmules no depèn de quan es va crear el full.
+function writeRow(sheet, rowNumber, values) {
+  var range = sheet.getRange(rowNumber, 1, 1, COLUMNS.length);
+  range.setNumberFormat('@');
+  range.setValues([values]);
+}
+
 // Una fila per lead: el final completa el parcial; un parcial tardà no degrada una fila completa.
 function upsertLead(sheet, lead, now) {
   var last = sheet.getLastRow();
@@ -94,13 +101,15 @@ function upsertLead(sheet, lead, now) {
     if (String(ids[i][0]) === lead.id) { index = i; break; }
   }
   if (index === -1) {
-    sheet.getRange(last + 1, 1, 1, COLUMNS.length).setValues([rowFor(lead, null, now)]);
+    // Un full nou té 1000 files: quan s'omple, l'ampliem (getRange fora de la quadrícula falla).
+    if (last + 1 > sheet.getMaxRows()) sheet.insertRowsAfter(sheet.getMaxRows(), 500);
+    writeRow(sheet, last + 1, rowFor(lead, null, now));
     return 'created';
   }
   var rowNumber = index + 2;
   var current = sheet.getRange(rowNumber, 1, 1, COLUMNS.length).getValues()[0];
   if (current[COLUMNS.indexOf('stage')] === 'complete' && lead.stage === 'step1') return 'ignored';
-  sheet.getRange(rowNumber, 1, 1, COLUMNS.length).setValues([rowFor(lead, current, now)]);
+  writeRow(sheet, rowNumber, rowFor(lead, current, now));
   return 'updated';
 }
 
@@ -120,7 +129,8 @@ function doPost(e) {
     return reply({ ok: false, error: 'invalid' });
   }
   var token = PropertiesService.getScriptProperties().getProperty('TOKEN');
-  if (token && (!payload || payload.token !== token)) return reply({ ok: false, error: 'invalid' });
+  // «token» (no «invalid»): el client el reintenta, perquè un token mal configurat no ha de fer perdre leads en silenci.
+  if (token && (!payload || payload.token !== token)) return reply({ ok: false, error: 'token' });
   var lead = sanitizeLead(payload);
   if (!lead) return reply({ ok: false, error: 'invalid' });
   var lock = LockService.getScriptLock();

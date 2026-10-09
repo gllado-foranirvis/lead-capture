@@ -8,16 +8,19 @@ const SOURCE = readFileSync('apps-script/Code.gs', 'utf8');
 
 // Full de càlcul fals: una matriu de files, amb els formats que s'hi apliquen.
 class FakeSheet {
-  constructor() { this.rows = []; this.formats = []; this.frozen = 0; }
+  constructor() { this.rows = []; this.formats = []; this.formatted = new Set(); this.frozen = 0; this.maxRows = 1000; }
   getLastRow() { return this.rows.length; }
-  getMaxRows() { return Math.max(this.rows.length, 1000); }
+  getMaxRows() { return this.maxRows; }
+  insertRowsAfter(position, howMany) { assert.equal(position, this.maxRows); this.maxRows += howMany; }
   setFrozenRows(n) { this.frozen = n; }
   getRange(row, col, nRows = 1, nCols = 1) {
     const sheet = this;
+    // Com al full real: fora de la quadrícula, l'accés falla.
+    if (row + nRows - 1 > sheet.maxRows) throw new Error('The coordinates of the range are outside the dimensions of the sheet.');
     return {
       getValues: () => Array.from({ length: nRows }, (_, i) => Array.from({ length: nCols }, (_, j) => (sheet.rows[row - 1 + i] ?? [])[col - 1 + j] ?? '')),
       setValues(values) { values.forEach((v, i) => { sheet.rows[row - 1 + i] = [...(sheet.rows[row - 1 + i] ?? [])]; v.forEach((x, j) => { sheet.rows[row - 1 + i][col - 1 + j] = x; }); }); },
-      setNumberFormat(format) { sheet.formats.push(format); },
+      setNumberFormat(format) { sheet.formats.push(format); for (let i = 0; i < nRows; i++) sheet.formatted.add(row + i); },
     };
   }
 }
@@ -123,6 +126,25 @@ test('upsert: dos leads diferents són dues files', () => {
   api.upsertLead(sheet, api.sanitizeLead({ ...step1, id: 'altre-id-99' }), 't2');
   assert.equal(sheet.rows.length, 3);
 });
+test('upsert: cada fila escrita (nova o actualitzada) té format de text, també fora de les files del format inicial', () => {
+  const { api, sheet } = load();
+  api.ensureHeader(sheet);
+  api.upsertLead(sheet, api.sanitizeLead(step1), 't1');
+  api.upsertLead(sheet, api.sanitizeLead(complete), 't2');
+  assert.ok(sheet.formatted.has(2));
+  sheet.formatted.clear();
+  api.upsertLead(sheet, api.sanitizeLead({ ...step1, id: 'altre-id-99' }), 't3');
+  assert.ok(sheet.formatted.has(3), 'la fila nova es formata abans d\'escriure-hi');
+});
+test('upsert: quan el full s\'omple (1000 files) s\'amplia en lloc de fallar', () => {
+  const { api, sheet } = load();
+  api.ensureHeader(sheet);
+  for (let i = 0; i < 999; i++) sheet.rows.push(['x']);
+  assert.equal(sheet.rows.length, 1000);
+  assert.equal(api.upsertLead(sheet, api.sanitizeLead(step1), 't1'), 'created');
+  assert.equal(sheet.rows.length, 1001);
+  assert.ok(sheet.maxRows > 1000);
+});
 test('doPost: crea, respon ok i allibera el bloqueig', () => {
   const { api, sheet, lock } = load();
   assert.deepEqual(post(api, step1), { ok: true, result: 'created' });
@@ -137,8 +159,8 @@ test('doPost: JSON invàlid o càrrega invàlida → «invalid» sense tocar el 
 });
 test('doPost: amb la propietat TOKEN cal enviar el token correcte', () => {
   const { api, sheet } = load({ token: 's3cret' });
-  assert.deepEqual(post(api, step1), { ok: false, error: 'invalid' });
-  assert.deepEqual(post(api, { ...step1, token: 'incorrecte' }), { ok: false, error: 'invalid' });
+  assert.deepEqual(post(api, step1), { ok: false, error: 'token' });
+  assert.deepEqual(post(api, { ...step1, token: 'incorrecte' }), { ok: false, error: 'token' });
   assert.deepEqual(post(api, { ...step1, token: 's3cret' }), { ok: true, result: 'created' });
   assert.equal(sheet.rows.length, 2);
 });

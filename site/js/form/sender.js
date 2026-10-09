@@ -3,6 +3,9 @@ import { finalPayload, partialPayload } from './payload.js';
 // Espera entre reintents (ms); després de l'últim valor es manté.
 export const RETRY_MS = [2000, 5000, 15000, 30000, 60000];
 
+// Una connexió encallada no ha de bloquejar tota la cua: passat el temps límit, es reintenta.
+export const FETCH_TIMEOUT_MS = 15000;
+
 const defaultTimers = { set: (fn, ms) => setTimeout(fn, ms), clear: (id) => clearTimeout(id) };
 
 // Cua d'enviament només en memòria (tauleta compartida: res de personal al navegador). De cada id només es guarda
@@ -20,7 +23,7 @@ export function createSender({
 
   async function post(payload) {
     try {
-      const response = await fetchFn(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: body(payload) });
+      const response = await fetchFn(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: body(payload), signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
       const result = await response.json();
       if (response.ok && result.ok === true) return 'sent';
       return result?.error === 'invalid' ? 'drop' : 'retry';
@@ -69,9 +72,11 @@ export function createSender({
 }
 
 // Connecta el sender amb els esdeveniments públics del flux i amb l'estat de la xarxa i de la pàgina.
-export function connectSender(target, sender) {
+export function connectSender(target, sender, doc) {
   target.addEventListener('tsf:lead-partial', (e) => sender.send(partialPayload(e.detail)));
   target.addEventListener('tsf:lead', (e) => sender.send(finalPayload(e.detail)));
   target.addEventListener('online', () => sender.flush());
   target.addEventListener('pagehide', () => sender.beaconAll());
+  // Al mòbil, pagehide sovint no arriba: quan la pestanya passa a segon pla (p. ex. en obrir el dossier) també fem el darrer intent.
+  doc?.addEventListener('visibilitychange', () => { if (doc.visibilityState === 'hidden') sender.beaconAll(); });
 }

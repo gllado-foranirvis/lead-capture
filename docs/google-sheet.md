@@ -10,7 +10,7 @@ L'Extra 1 emet dos esdeveniments (`tsf:lead-partial` i `tsf:lead`). Si `CONFIG.l
 4. **Token (opcional).** *Project Settings → Script properties → Add*: `TOKEN` = un valor llarg i aleatori.
 5. **Desplegar.** *Deploy → New deployment → Web app*; *Execute as: Me*; *Who has access: Anyone*. Autoritza els permisos (accés al full) i copia la URL que acaba en `/exec`.
 6. **Configurar el web.** A `site/js/config.js`: `leadEndpoint` = la URL i `leadToken` = el token (si n'has posat). El token és visible al codi del web: frena el correu brossa casual, no és un secret.
-7. **Prova de fum.** `node scripts/smoke-sheet.mjs <url> [token]`. Al full ha d'haver-hi una sola fila, amb `stage` `complete`, i el nom com a text (`=HYPERLINK…` visible), no com a fórmula.
+7. **Prova de fum.** `node scripts/smoke-sheet.mjs <url> [token]` (amb el mateix token que hi ha a `config.js`: si no coincideix, l'script respon `token` i el web ho reintenta sense desar res). Al full ha d'haver-hi una sola fila, amb `stage` `complete`, i el nom com a text (`=HYPERLINK…` visible), no com a fórmula.
 8. **Prova real.** `npm run serve`, fes el flux a `?extra1=1` i comprova la fila. Talla la xarxa (DevTools → Offline) abans d'enviar el pas 1 i comprova que arriba en tornar-la.
 9. **Actualitzar l'script.** *Deploy → Manage deployments → editar → Version: New version*. La URL no canvia.
 10. **Operació.** Si un visitant ho demana, esborra la seva fila a mà. El full no caduca sol (la retenció és a decidir amb Bruno).

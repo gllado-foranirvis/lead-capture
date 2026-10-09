@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { RETRY_MS, connectSender, createSender } from '../site/js/form/sender.js';
+import { FETCH_TIMEOUT_MS, RETRY_MS, connectSender, createSender } from '../site/js/form/sender.js';
 
 const partial = { id: 'id-0001', stage: 'step1', contact: { name: 'Ana' } };
 const complete = { id: 'id-0001', stage: 'complete', contact: { name: 'Ana' }, profiling: { hasBoat: 'si' } };
@@ -125,4 +125,27 @@ test('connectSender: els esdeveniments del flux s\'envien amb la forma correcta;
     { id: 'id-0001', stage: 'complete', contact: { name: 'Ana' }, profiling: { hasBoat: 'si' } },
     'flush', 'beacon',
   ]);
+});
+test('cada petició porta un temps límit perquè un fetch penjat no bloquegi la cua', async () => {
+  const h = harness([OK]);
+  await make(h).send(partial);
+  assert.ok(h.calls[0].options.signal instanceof AbortSignal);
+  assert.equal(typeof FETCH_TIMEOUT_MS, 'number');
+});
+test('una resposta «token» (token mal configurat) es reintenta i no es descarta', async () => {
+  const h = harness([reply({ ok: false, error: 'token' })]);
+  const sender = make(h);
+  await sender.send(partial);
+  assert.equal(sender.size(), 1);
+});
+test('connectSender: quan la pestanya passa a segon pla es fa el darrer intent (pagehide no és fiable al mòbil)', () => {
+  const listeners = {};
+  const doc = { visibilityState: 'visible', addEventListener: (name, fn) => { listeners[name] = fn; } };
+  const sent = [];
+  connectSender({ addEventListener() {} }, { send() {}, flush() {}, beaconAll: () => sent.push('beacon') }, doc);
+  listeners.visibilitychange();
+  assert.deepEqual(sent, []);
+  doc.visibilityState = 'hidden';
+  listeners.visibilitychange();
+  assert.deepEqual(sent, ['beacon']);
 });
