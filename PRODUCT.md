@@ -33,7 +33,7 @@ Propulsió elèctrica silenciosa per a embarcacions: TSF presenta el canvi cap a
 ## Capabilities and Constraints
 
 - MVP: selecció d'idioma, perfil opcional, WhatsApp i correu sempre actius amb missatge predefinit (12 combinacions idioma × perfil), privacitat i cookies.
-- Extra 1 (flux de captació en 2 passos amb perfilació i dossier segons el model triat, o el general): **construït però apagat** per un interruptor (`extra1`); l'MVP continua igual per als visitants. Emet esdeveniments `window` i, si `leadEndpoint` té una URL, els envia a un Google Apps Script que desa una fila per lead (desplegat i provat; guia a `docs/google-sheet.md`). Detall al README.
+- Extra 1 (flux de captació en 2 passos amb perfilació i dossier segons el model triat, o el general): **actiu a la fira** (decidit el 9/10/2026) amb l'interruptor `extra1` de `config.js`; amb `false` torna l'MVP sol. Emet esdeveniments `window` i, si `leadEndpoint` té una URL, els envia a un Google Apps Script que desa una fila per lead (desplegat i provat; guia a `docs/google-sheet.md`). Detall al README.
 - Fora de l'abast actual: enviament del correu amb el dossier, correu de seguiment (Extra 1b), Linktree, NFC, analítica i banner de cookies. L'estructura ha de permetre afegir-los sense reescriure.
 - Cost recurrent 0 €. L'MVP no desa dades ni usa cookies, `localStorage` ni analítica; l'Extra 1, quan s'activi, recollirà dades de contacte i perfilació amb el consentiment del visitant (text de privacitat pendent de Bruno).
 - Cap petició externa per a estil o scripts (cobertura dolenta): React i Montserrat són locals.

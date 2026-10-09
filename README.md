@@ -1,6 +1,6 @@
 # The Silent Fleet · Pàgina de captació (MVP)
 
-Pàgina única i estàtica, en català, castellà, portuguès i anglès, perquè els visitants del Salón Náutico de Barcelona (14–18/10/2026) contactin amb The Silent Fleet per WhatsApp o correu amb un missatge ja escrit segons l'idioma i el perfil (distribuïdor o particular). L'MVP no desa dades ni usa cookies. Hi ha a més l'**Extra 1** (flux de captació en 2 passos), construït però apagat: vegeu més avall.
+Pàgina única i estàtica, en català, castellà, portuguès i anglès, perquè els visitants del Salón Náutico de Barcelona (14–18/10/2026) contactin amb The Silent Fleet per WhatsApp o correu amb un missatge ja escrit segons l'idioma i el perfil (distribuïdor o particular). L'MVP no desa dades ni usa cookies. Hi ha a més l'**Extra 1** (flux de captació en 2 passos), actiu a la fira: vegeu més avall.
 
 Context i decisions: [PRODUCT.md](PRODUCT.md), [DESIGN.md](DESIGN.md) i [docs/](docs/).
 
@@ -45,7 +45,7 @@ Els botons de WhatsApp i correu porten una icona en línia (`site/js/icons.js`, 
 
 ## Extra 1: flux de captació en 2 passos
 
-El flux és **apagat per defecte**: l'MVP continua igual per als visitants. Es veu amb `?extra1=1` (per exemple `?lang=es&extra1=1`) o posant `extra1: true` a `site/js/config.js`. Altres paràmetres: `?producto=<id>|asesoramiento` preselecciona el producte i `?o=tauleta` marca l'origen.
+El flux és **actiu** (`extra1: true` a `config.js`, decidit el 9/10/2026 per a la fira); amb `false` l'MVP torna a ser l'únic que veuen els visitants. També es veu amb `?extra1=1` (per exemple `?lang=es&extra1=1`) o posant `extra1: true` a `site/js/config.js`. Altres paràmetres: `?producto=<id>|asesoramiento` preselecciona el producte i `?o=tauleta` marca l'origen.
 
 **Recorregut**
 1. **Inici:** pregunta de perfil sempre visible (Particular / Profesional, opcional), WhatsApp i correu, i al final el CTA «Quiero saber más de The Silent Fleet».
@@ -101,7 +101,7 @@ El flux és **apagat per defecte**: l'MVP continua igual per als visitants. Es v
 ## Abans de publicar
 
 1. `npm test` en verd (239) i `npm run sync` sense canvis a `git status`.
-2. **Interruptor `extra1`:** a `config.js` és `false`; la fira el posa a `true` només quan Bruno hagi validat el text de privacitat, el dossier i els models.
+2. **Interruptor `extra1`:** a `config.js` és `true` (l'Extra 1 va a la fira). **Bloquejos abans de publicar:** `legalName` diu `PENDIENTE…` i es veu al text de privacitat; el text de privacitat és un esborrany; el dossier i els models són de prova; el full de Google és el de prova de l'Olga; el número de WhatsApp és de prova. Si alguna cosa no està llesta, `extra1: false` torna a l'MVP sol.
 3. **`leadEndpoint` i `leadToken`** apunten ara a un full de prova. Passar-los al full de Bruno abans de la fira (`docs/google-sheet.md`, passos 1–6) i tornar a fer `node scripts/smoke-sheet.mjs <url> <token>`. El token i l'URL queden visibles al web publicat: és per disseny, no són secrets.
 4. `dossierUrl` (general) i el `dossierUrl` de cada producte apunten a PDF de prova (`site/dossier-prova.pdf` i `site/dossiers/`): substituir-los pels documents reals, i no tornar a executar `scripts/make-test-pdf.mjs` (només refà fitxers de prova, però així no hi ha dubtes).
 5. `siteUrl` és provisional: si el repo canvia de compte, actualitzar-lo i regenerar el QR (`npm run qr`).
