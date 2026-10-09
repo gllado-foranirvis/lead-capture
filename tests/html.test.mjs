@@ -85,5 +85,5 @@ test('privacy.html: el text de privacitat va en un contenidor de paràgrafs, no 
   assert.doesNotMatch(priv, /<p[^>]*data-key="privacyText"/);
 });
 test('beta: les dues pàgines porten noindex perquè els cercadors no les indexin (treure-ho abans de la fira)', () => {
-  for (const page of [html, priv]) assert.match(page, /<meta name="robots" content="noindex">/);
+  for (const page of [html, priv]) assert.match(page, /<meta name="robots" content="noindex, nofollow">/);
 });

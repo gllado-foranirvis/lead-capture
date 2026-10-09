@@ -106,7 +106,7 @@ El flux és **actiu** (`extra1: true` a `config.js`, decidit el 9/10/2026 per a 
 4. `dossierUrl` (general) i el `dossierUrl` de cada producte apunten a PDF de prova (`site/dossier-prova.pdf` i `site/dossiers/`): substituir-los pels documents reals, i no tornar a executar `scripts/make-test-pdf.mjs` (només refà fitxers de prova, però així no hi ha dubtes).
 5. `siteUrl` és provisional: si el repo canvia de compte, actualitzar-lo i regenerar el QR (`npm run qr`).
 6. Després de publicar: provar a la URL real (idioma, WhatsApp, correu, i amb `?extra1=1` el flux sencer), i el QR amb un mòbil.
-7. **Beta:** les dues pàgines porten `<meta name="robots" content="noindex">` perquè els cercadors no les indexin; **treure-ho de `index.html` i `privacy.html` abans de la fira** (i el test `beta: les dues pàgines porten noindex` de `tests/html.test.mjs`).
+7. **Beta:** les dues pàgines porten `<meta name="robots" content="noindex, nofollow">` perquè els cercadors no les indexin; **treure-ho de `index.html` i `privacy.html` abans de la fira** (i el test `beta: les dues pàgines porten noindex` de `tests/html.test.mjs`).
 8. Congelació de canvis el 13/10.
 
 ## Pendent
