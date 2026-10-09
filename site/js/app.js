@@ -9,6 +9,7 @@ import { newLeadId } from './form/lead.js';
 import { advanceStep1, discardSession, handleSubmit, leaveToEntry } from './form/flow.js';
 import { ACTIVITY_EVENTS, IDLE_MS, watchIdle } from './form/idle.js';
 import { toSession } from './form/session.js';
+import { openDossier } from './form/dossier.js';
 import { focusFirstError, focusStepHeading } from './form/focus.js';
 import { advanceOnEnter, applyFieldHints } from './form/hints.js';
 import { connectSender, createSender } from './form/sender.js';
@@ -35,7 +36,7 @@ const DoneScreen = createDoneScreen({ h, T, icon });
 connectSender(window, createSender({ endpoint: CONFIG.leadEndpoint, token: CONFIG.leadToken }), document);
 
 const emit = (name) => (detail) => window.dispatchEvent(new CustomEvent(name, { detail }));
-const openDocument = () => { if (CONFIG.dossierUrl) window.open(CONFIG.dossierUrl, '_blank', 'noopener'); };
+const openDocument = (productId) => openDossier(productId, CONFIG);
 
 function App() {
   const [lang, setLang] = R.useState(() => resolveLang(search, CONFIG));
@@ -108,7 +109,7 @@ function App() {
       t, products: CONFIG.products, values, errors, onChange: change, onToggle: toggle, onSubmit: submit, onKeyDown: (e) => advanceOnEnter(e, document), onBack: goBack('step1'),
     }),
     done: () => h(DoneScreen, {
-      t, emailDelivery: CONFIG.emailDelivery, onOpen: openDocument, onHome: goHome,
+      t, emailDelivery: CONFIG.emailDelivery, onOpen: () => openDocument(receipt?.product), onHome: goHome,
       whatsappHref: contactLinks(CONFIG, t, receipt ? sessionOf(receipt) : {}).whatsapp,
     }),
   };

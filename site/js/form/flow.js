@@ -32,7 +32,7 @@ export function handleSubmit(values, {
     goTo(STEP_FIELDS[1].includes(firstErrorField(result.errors)) ? 'step1' : 'step2');
     return false;
   }
-  openDocument();
+  openDocument(values.product);
   emitLead(result.lead);
   setReceipt({
     product: values.product, profile: values.profile, activity: values.activity, activityOther: values.activityOther,

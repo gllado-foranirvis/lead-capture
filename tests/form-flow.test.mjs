@@ -54,6 +54,7 @@ test('enviament final: obre el document PRIMER, després emet el lead i neteja p
   const { calls, deps } = harness({ leadId: 'id-0' });
   assert.equal(handleSubmit(full, deps), true);
   assert.equal(names(calls)[0], 'openDocument');
+  assert.deepEqual(calls[0], ['openDocument', 'model-a'], 'el producte arriba a openDocument abans que el formulari es buidi');
   const lead = call(calls, 'emitLead')[1];
   assert.deepEqual([lead.contact.id, lead.profiling.id, lead.contact.profile, lead.profiling.activity, lead.profiling.hasBoat, lead.profiling.intent], ['id-0', 'id-0', 'profesional', 'vela', 'si', 'no']);
   assert.deepEqual(call(calls, 'setReceipt')[1], { product: 'model-a', profile: 'profesional', activity: 'vela', activityOther: '', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: 'Girona', enthusiasm: ['noise'], enthusiasmOther: '', concerns: ['range'], concernsOther: '', factors: ['price'], factorsOther: '', comments: 'Hola', name: 'Ana' });

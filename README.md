@@ -51,7 +51,7 @@ El flux és **apagat per defecte**: l'MVP continua igual per als visitants. Es v
 1. **Inici:** pregunta de perfil sempre visible (Particular / Profesional, opcional), WhatsApp i correu, i al final el CTA «Quiero saber más de The Silent Fleet».
 2. **Pas 1 de 2, contacte:** nom, correu, telèfon (prefix `+34` per defecte i número en camps separats), privacitat obligatòria i novetats. Els errors es veuen abans de seguir.
 3. **Pas 2 de 2, perfilació:** perfil (obligatori, ja marcat des de l'inici), activitat (només si és Profesional, amb «Otra»), embarcació, embarcació elèctrica, què t'entusiasma, què et preocupa, intenció de compra, factors decisius (les tres últimes amb «Otro» que obre el seu camp), model o potència, localitat per a una demostració i comentaris. Només el perfil és obligatori.
-4. **Confirmació:** s'obre el dossier general (dins del gest del clic, perquè el navegador no el bloquegi), hi ha el botó per reobrir-lo i un bloc de WhatsApp amb les dades de la sessió.
+4. **Confirmació:** s'obre el dossier del model triat, o el general si no n'hi ha (dins del gest del clic, perquè el navegador no el bloquegi), hi ha el botó per reobrir-lo i un bloc de WhatsApp amb les dades de la sessió.
 
 «← Volver» conserva el que s'ha escrit. A la tauleta (`?o=tauleta`), tornar a l'inici o 90 segons sense tocar res descarta dades, perfil i identificador de lead.
 
@@ -65,7 +65,7 @@ El flux és **apagat per defecte**: l'MVP continua igual per als visitants. Es v
 
 **Altres peces**
 - **`emailDelivery`** (`config.js`) és `false` fins que existeixi l'enviament del correu amb el dossier; només canvia el text de la confirmació.
-- **`site/dossier-prova.pdf`** el genera `node scripts/make-test-pdf.mjs` i és de prova: ha de ser el document general de l'empresa.
+- **`site/dossier-prova.pdf` i `site/dossiers/*.pdf`** els genera `node scripts/make-test-pdf.mjs` i són de prova: han de ser els documents reals (un general i un per model; un model sense `dossierUrl` propi obre el general).
 - **Literals:** a `site/js/i18n-form.js`, de tu als 4 idiomes; el document es diu «dossier» fins que Bruno decideixi. «Ski / Wake» no es tradueix.
 - **Privacitat:** la pàgina mostra el text de l'Extra 1 (6 paràgrafs curts) amb `?extra1=1`; és un esborrany (no és assessorament legal).
 - **Accessibilitat:** indicador de pas amb `progressbar`, focus al títol en canviar de pantalla, errors enllaçats amb els camps i capçalera com a `<header>`.
@@ -77,7 +77,7 @@ El flux és **apagat per defecte**: l'MVP continua igual per als visitants. Es v
 |---|---|---|
 | `products` (`config.js`) | Modelo A / B / C, més l'opció fixa d'assessorament | Bruno: models o potències reals |
 | `leadEndpoint` i `leadToken` (`config.js`) | URL `/exec` i token d'un full de prova de l'Olga | Bruno: el full definitiu, en el seu compte (vegeu `docs/google-sheet.md`) |
-| `dossierUrl` (`config.js`) | `dossier-prova.pdf` | Bruno: el document general de l'empresa |
+| `dossierUrl` (`config.js`) i el `dossierUrl` de cada producte | `dossier-prova.pdf` general; `dossiers/model-a.pdf` i `model-b.pdf` de prova (el Modelo C usa el general) | Bruno: un PDF per model i el general |
 | `legalName` (`config.js`) | PENDIENTE… | Bruno |
 | `privacyText` (`i18n-form.js`) | Esborrany, ara amb el correu parcial | Bruno (no és assessorament legal) |
 | Nom del document | «dossier» | Bruno |

@@ -25,12 +25,21 @@ test('legalName és present (de prova fins que Bruno el doni)', () => {
   assert.ok(CONFIG.legalName.trim().length > 0);
 });
 
-test('el document de prova existeix a site/ i és un PDF', async () => {
+test('cada dossier configurat (general i per model) és una ruta relativa a un PDF que existeix a site/', async () => {
   const { existsSync, readFileSync } = await import('node:fs');
   assert.equal(CONFIG.emailDelivery, false);
-  assert.ok(existsSync(`site/${CONFIG.dossierUrl}`));
-  const pdf = readFileSync(`site/${CONFIG.dossierUrl}`, 'latin1');
-  assert.ok(pdf.startsWith('%PDF-') && pdf.trimEnd().endsWith('%%EOF'));
+  const urls = [CONFIG.dossierUrl, ...CONFIG.products.map((p) => p.dossierUrl).filter(Boolean)];
+  assert.ok(urls.length >= 3, 'el general i almenys dos models amb dossier propi');
+  for (const url of urls) {
+    assert.doesNotMatch(url, /^[a-z]+:|^\/|\.\./i, `${url}: ha de ser una ruta relativa dins de site/`);
+    assert.ok(existsSync(`site/${url}`), `${url} no existeix a site/`);
+    const pdf = readFileSync(`site/${url}`, 'latin1');
+    assert.ok(pdf.startsWith('%PDF-') && pdf.trimEnd().endsWith('%%EOF'), `${url} no és un PDF`);
+  }
+});
+test('hi ha com a mínim un model amb dossier propi i un que usa el general', () => {
+  assert.ok(CONFIG.products.some((p) => p.dossierUrl));
+  assert.ok(CONFIG.products.some((p) => !p.dossierUrl));
 });
 test('l\'enviament al full: buit (apagat) o una URL /exec de Google; el token és un text', () => {
   assert.match(CONFIG.leadEndpoint, /^(|https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec)$/);
