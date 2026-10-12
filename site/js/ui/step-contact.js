@@ -1,17 +1,24 @@
 // site/js/ui/step-contact.js — pas 1: dades de contacte i consentiment
-import { formatPhone, keepCaret } from '../form/phone.js';
+import { formatPhone, keepCaret, phoneExample, prefixSuggestions, splitInternational } from '../form/phone.js';
 import { stepLabel } from '../form/steps.js';
 import { makeFields } from './fields.js';
 import { createStepIndicator } from './step-indicator.js';
 
 export function createStepContact({ h, T }) {
   const StepIndicator = createStepIndicator({ h });
-  return function StepContact({ t, values, errors, onChange, onNext, onBack, onKeyDown, privacyHref }) {
+  return function StepContact({ t, lang = 'es', values, errors, onChange, onNext, onBack, onKeyDown, privacyHref }) {
     const f = t.form;
     const { text } = makeFields({ h, T, f, values, errors, onChange });
     const error = (field) => (errors[field] ? f.errors[errors[field]] : undefined);
     // El número es reagrupa mentre s'escriu (segons el prefix) i també quan es canvia de prefix.
     const onPhone = (e) => {
+      // Un número internacional («+351 912…», «0034…») passa el prefix al seu camp.
+      const international = splitInternational(e.target.value);
+      if (international) {
+        onChange('phonePrefix', international.prefix);
+        onChange('phone', formatPhone(international.prefix, international.number));
+        return;
+      }
       const formatted = formatPhone(values.phonePrefix, e.target.value);
       onChange('phone', formatted);
       keepCaret(e.target, formatted);
@@ -31,10 +38,11 @@ export function createStepContact({ h, T }) {
         h('div', { className: 'form__group' },
           text('name', f.name, { required: true, placeholder: f.namePlaceholder }),
           text('email', f.email, { required: true, type: 'email', placeholder: f.emailPlaceholder }),
-          // Prefix i número en camps separats: el prefix surt amb +34 i es pot canviar.
+          // Prefix i número en camps separats: el prefix surt amb +34 i es pot canviar (amb suggeriments).
           h('div', { className: 'form__phone' },
             text('phonePrefix', f.phonePrefix, { required: true, type: 'tel', onChange: onPrefix }),
-            text('phone', f.phone, { required: true, type: 'tel', placeholder: f.phonePlaceholder, onChange: onPhone }))),
+            h('datalist', { id: 'phone-prefixes' }, prefixSuggestions(lang).map((o) => h('option', { key: o.value, value: o.value, label: o.label }))),
+            text('phone', f.phone, { required: true, type: 'tel', placeholder: phoneExample(values.phonePrefix, f.phonePlaceholder), onChange: onPhone }))),
         h('div', { className: 'form__group' },
           h(T.Checkbox, { name: 'privacy', id: 'privacy', required: true, checked: values.privacy, error: error('privacy'), onChange: (e) => onChange('privacy', e.target.checked) },
             // Un sol element: l'etiqueta del Checkbox és flex i, amb tres fills, es perdria l'espai abans de l'enllaç.

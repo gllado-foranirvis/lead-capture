@@ -102,7 +102,7 @@ function App() {
       onOpenForm: extra1 ? () => setView('step1') : undefined,
     }),
     step1: () => h(StepContact, {
-      t, values, errors, onChange: change, onNext: next, onKeyDown: (e) => advanceOnEnter(e, document),
+      t, lang, values, errors, onChange: change, onNext: next, onKeyDown: (e) => advanceOnEnter(e, document),
       onBack: () => leaveToEntry({ ...common, dispatch }), privacyHref: `privacy.html${query}#privacy`,
     }),
     step2: () => h(StepProfile, {

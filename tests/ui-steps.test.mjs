@@ -5,6 +5,7 @@ import { DICT } from '../site/js/i18n.js';
 import { CONFIG } from '../site/js/config.js';
 import { ACTIVITIES, CONCERNS, ENTHUSIASM, FACTORS, PROFILES, emptyForm } from '../site/js/form/model.js';
 import { icon } from '../site/js/icons.js';
+import { FIELD_HINTS } from '../site/js/form/hints.js';
 import { createStepIndicator } from '../site/js/ui/step-indicator.js';
 import { createEntryScreen } from '../site/js/ui/entry-screen.js';
 import { createStepContact } from '../site/js/ui/step-contact.js';
@@ -122,6 +123,27 @@ test('pas 1: el telèfon s\'agrupa mentre s\'escriu segons el prefix, i en canvi
   byName(contact({ onChange, values: { ...emptyForm(), phone: '912 34 56 78' } }), 'phonePrefix')[0].props.onChange({ target: { value: '+351' } });
   byName(contact({ onChange, values: { ...emptyForm(), phone: '123456789' } }), 'phonePrefix')[0].props.onChange({ target: { value: '+1' } });
   assert.deepEqual(calls, [['phone', '666 66 66 66'], ['phone', '912 345 678'], ['phonePrefix', '+351'], ['phone', '912 345 678'], ['phonePrefix', '+1']]);
+});
+
+test('pas 1: un número internacional escrit al camp del número en separa el prefix', () => {
+  const calls = [];
+  const onChange = (field, v) => calls.push([field, v]);
+  const phone = (value, selectionStart = value.length) => byName(contact({ onChange }), 'phone')[0].props.onChange({ target: { value, selectionStart } });
+  phone('+351912345678');
+  phone('+34 666666666');
+  phone('+34');
+  assert.deepEqual(calls, [['phonePrefix', '+351'], ['phone', '912 345 678'], ['phonePrefix', '+34'], ['phone', '666 66 66 66'], ['phone', '+34']]);
+});
+test('pas 1: el marcador del número segueix el prefix i el prefix porta suggeriments', () => {
+  const placeholder = (values, t = DICT.es) => byName(contact({ t, values: { ...emptyForm(), ...values } }), 'phone')[0].props.placeholder;
+  assert.equal(placeholder({}), '600 00 00 00');
+  assert.equal(placeholder({}, DICT.pt), '600 00 00 00', 'amb +34 el marcador no depèn de l\'idioma');
+  assert.equal(placeholder({ phonePrefix: '+351' }, DICT.en), '912 345 678');
+  assert.equal(placeholder({ phonePrefix: '+44' }, DICT.pt), DICT.pt.form.phonePlaceholder);
+  const [list] = byType(contact(), 'datalist');
+  assert.equal(list.props.id, 'phone-prefixes');
+  assert.deepEqual([list.children[0].props.value, list.children[0].props.label, list.children.length], ['+34', 'España (+34)', 16]);
+  assert.equal(FIELD_HINTS.phonePrefix.list, 'phone-prefixes');
 });
 
 test('pas 2: indicador 2 de 2 i preguntes en l\'ordre del brief; l\'activitat no hi surt per a un Particular', () => {

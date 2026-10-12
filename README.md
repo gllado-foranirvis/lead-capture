@@ -49,7 +49,7 @@ El flux és **actiu** (`extra1: true` a `config.js`, decidit el 9/10/2026 per a 
 
 **Recorregut**
 1. **Inici:** pregunta de perfil sempre visible (Particular / Profesional, opcional), WhatsApp i correu, i al final el CTA «Quiero saber más de The Silent Fleet».
-2. **Pas 1 de 2, contacte:** nom, correu, telèfon (prefix `+34` per defecte i número en camps separats; el número s'agrupa mentre s'escriu: `+34` → «600 00 00 00», `+351` → «912 345 678», la resta de prefixos es deixen com s'escriuen), privacitat obligatòria i novetats. Els errors es veuen abans de seguir.
+2. **Pas 1 de 2, contacte:** nom, correu, telèfon (prefix `+34` per defecte i número en camps separats; el número s'agrupa mentre s'escriu: `+34` → «600 00 00 00», `+351` → «912 345 678», la resta de prefixos es deixen com s'escriuen; si s'escriu o enganxa un número internacional («+351 912 345 678», «0034…») al camp del número, el prefix passa al seu camp; el marcador segueix el prefix i el camp de prefix porta suggeriments amb el nom del país en l'idioma de la pàgina), privacitat obligatòria i novetats. Els errors es veuen abans de seguir.
 3. **Pas 2 de 2, perfilació:** perfil (obligatori, ja marcat des de l'inici), activitat (només si és Profesional, amb «Otra»), embarcació, embarcació elèctrica, què t'entusiasma, què et preocupa, intenció de compra, factors decisius (les tres últimes amb «Otro» que obre el seu camp), model o potència, localitat per a una demostració i comentaris. Només el perfil és obligatori.
 4. **Confirmació:** s'obre el dossier del model triat, o el general si no n'hi ha (dins del gest del clic, perquè el navegador no el bloquegi), hi ha el botó per reobrir-lo i un bloc de WhatsApp amb les dades de la sessió.
 
