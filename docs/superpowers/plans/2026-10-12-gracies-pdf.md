@@ -29,10 +29,20 @@
 - Canvi d'idioma a la pantalla de gràcies → targeta, botó i CTA es tradueixen (Task 2: tots els literals vénen de `t`).
 - `emailDelivery: true` canvia només el subtítol (Task 2).
 
+## Control de versions
+- **Branca:** `feat/pantalla-gracies-dossier`, creada des de `main` (`a84e24d`, l'estat publicat). Tot el desenvolupament hi viu; **no es fan commits a `main`** i la branca no es reutilitza per a res més. (Ja existeix: era la branca automàtica del worktree i s'ha reanomenat; de moment només porta els commits de documentació d'aquest pla.)
+- **`main` publica sol:** `.github/workflows/pages.yml` desplega a GitHub Pages a cada push a `main` (després d'`npm test`). Per tant: res no arriba a `main` sense PR, sense CI en verd i sense el vistiplau d'Olga, i **no s'envia res al remot sense que ho demani** (ni `git push`, ni PR, ni merge).
+- **Punt de retorn:** abans de fer el merge es crea l'etiqueta `pre-gracies-pdf` a `a84e24d` (`git tag pre-gracies-pdf a84e24d`) per poder tornar a la versió actual de la beta amb un sol revert/redeploy.
+- **Commits:** petits i en català, un per tasca (o per correcció), amb prefix convencional com la resta de l'historial (`feat:`, `fix:`, `docs:`, `chore:`), cos opcional que explica el *per què*, i la línia `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>` al final. Abans de cada commit: `npm test` en verd, `git status` net de fitxers que no toquen (`out/`, `.DS_Store`, `docs-privats/` són a `.gitignore`) i `npm run sync` sense canvis.
+- **Cap secret nou:** `leadToken` ja és al codi per disseny (vegeu README); no s'hi afegeix cap altre valor sensible i `docs-privats/` no s'hi toca.
+- **Calendari:** congelació de canvis el 13/10 i fira del 14 al 18/10. El merge (Task 5) es fa només amb l'auditoria feta; si cau després de la congelació, el decideix Olga.
+
 ## File Structure
 ```
 site/js/form/flow.js        handleSubmit sense openDocument
-site/js/form/dossier.js     dossierFor + dossierMeta (es retira openDossier)
+site/js/form/dossier.js     dossierFor + dossierMeta + dossierFileFor (es retira openDossier)
+site/js/config.js           noms de fitxer de descàrrega + capçalera que documenta cada clau
+.github/workflows/ci.yml    (nou) npm test a cada pull request
 site/js/ui/done-screen.js   pantalla del wireframe
 site/js/app.js              cabla la URL, els enllaços i la classe de pàgina
 site/js/i18n-form.js        literals nous i retirats (4 idiomes)
@@ -41,6 +51,47 @@ tests/form-flow.test.mjs, form-dossier.test.mjs, ui-steps.test.mjs, css.test.mjs
 docs/superpowers/specs/2026-10-12-gracies-pdf-brief.md   (nou, Task 0)
 docs/superpowers/specs/2026-10-12-gracies-pdf-audit.md   (nou, Task 3)
 docs/textos-contacte.md (regenerat), README.md, docs/superpowers/specs/2026-10-09-dossier-per-model.md (nota)
+```
+
+---
+
+### Task P: Branca i CI (abans de la Task 0)
+
+**Files:**
+- Create: `.github/workflows/ci.yml`
+
+**Interfaces:**
+- Produces: la branca `feat/pantalla-gracies-dossier` (ja creada) i un CI que executa els tests a cada PR, perquè `pages.yml` només corre quan ja s'ha fet push a `main`.
+
+- [ ] **Step 1:** Comprovar la branca: `git branch --show-current` → `feat/pantalla-gracies-dossier`; `git log --oneline main..HEAD` → només commits de documentació.
+- [ ] **Step 2:** Crear `.github/workflows/ci.yml` amb la mateixa configuració de Node i de cache que `pages.yml`:
+
+```yaml
+name: CI
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm test
+      - run: npm run sync
+      - name: Els recursos sincronitzats no han de canviar
+        run: git diff --exit-code
+```
+- [ ] **Step 3:** Run: `npm test && npm run sync && git status --short` → tests en verd i només apareix `ci.yml` com a fitxer nou (si `sync` modifica res, parar i avisar Olga: la branca no parteix d'un estat net).
+- [ ] **Step 4: Commit**
+
+```bash
+git add .github/workflows/ci.yml
+git commit -m "chore: CI que executa els tests a cada pull request"
 ```
 
 ---
@@ -71,10 +122,11 @@ git commit -m "docs: brief de disseny de la pantalla de gràcies (impeccable sha
 - Modify: `site/js/form/flow.js:24-36`
 - Modify: `site/js/form/dossier.js`
 - Modify: `site/js/app.js:87`
-- Test: `tests/form-flow.test.mjs`, `tests/form-dossier.test.mjs`
+- Modify: `site/js/config.js`
+- Test: `tests/form-flow.test.mjs`, `tests/form-dossier.test.mjs`, `tests/config.test.mjs`
 
 **Interfaces:**
-- Produces: `handleSubmit(values, deps)` amb `deps` **sense** `openDocument`; `dossierFor(productId, config) -> string` (ja existent; `openDossier` es manté fins a Task 2 perquè el botó «Abrir» de l'app encara el fa servir); `dossierMeta(productId, config, fallback) -> string` (nom del producte si té `dossierUrl` propi, si no `fallback`).
+- Produces: `handleSubmit(values, deps)` amb `deps` **sense** `openDocument`; `dossierFor(productId, config) -> string` (ja existent; `openDossier` es manté fins a Task 2 perquè el botó «Abrir» de l'app encara el fa servir); `dossierMeta(productId, config, fallback) -> string` (nom del producte si té `dossierUrl` propi, si no `fallback`); `dossierFileFor(productId, config) -> string` (nom amb què es desa la descàrrega: el `dossierFileName` del producte si el seu dossier és propi, si no el `dossierFileName` general, si no `''` i el navegador fa servir el nom del fitxer). Claus noves de `CONFIG`: `dossierFileName` (general) i `products[].dossierFileName` (opcional).
 
 - [ ] **Step 1: Escriure els tests que fallen**
 
@@ -106,9 +158,37 @@ test('dossierMeta: el nom del model si té dossier propi; si no, el text alterna
 });
 ```
 
+A `tests/form-dossier.test.mjs` (importar també `dossierFileFor`) afegir:
+
+```js
+test('dossierFileFor: nom propi del model, si no el del general, si no buit', () => {
+  const cfg = {
+    dossierUrl: 'g.pdf', dossierFileName: 'tsf-dossier.pdf',
+    products: [{ id: 'a', dossierUrl: 'a.pdf', dossierFileName: 'tsf-a.pdf' }, { id: 'b', dossierUrl: 'b.pdf' }, { id: 'c' }],
+  };
+  assert.equal(dossierFileFor('a', cfg), 'tsf-a.pdf');
+  assert.equal(dossierFileFor('b', cfg), '', 'dossier propi sense nom: no es dona al model el nom del general');
+  for (const id of ['c', '', 'asesoramiento', undefined]) assert.equal(dossierFileFor(id, cfg), 'tsf-dossier.pdf', String(id));
+  assert.equal(dossierFileFor('c', { dossierUrl: 'g.pdf', products: [{ id: 'c' }] }), '');
+});
+```
+
+A `tests/config.test.mjs` afegir (a continuació del test dels dossiers):
+
+```js
+test('els noms de fitxer de descàrrega, si hi són, són «nom.pdf» sense carpetes ni caràcters estranys', () => {
+  const names = [CONFIG.dossierFileName, ...CONFIG.products.map((p) => p.dossierFileName)].filter((n) => n !== undefined);
+  assert.ok(CONFIG.dossierFileName, 'el general ha de tenir nom de descàrrega');
+  for (const n of names) assert.match(n, /^[a-z0-9][a-z0-9._-]*\.pdf$/, n);
+});
+test('cada model amb dossier propi té nom de descàrrega propi (si no, es descarregaria amb el nom intern)', () => {
+  for (const p of CONFIG.products.filter((x) => x.dossierUrl)) assert.ok(p.dossierFileName, p.id);
+});
+```
+
 - [ ] **Step 2: Executar-los i veure que fallen**
 
-Run: `node --test tests/form-flow.test.mjs tests/form-dossier.test.mjs`
+Run: `node --test tests/form-flow.test.mjs tests/form-dossier.test.mjs tests/config.test.mjs`
 Expected: FAIL (`openDocument is not a function` i `dossierMeta` no exportat).
 
 - [ ] **Step 3: Implementar**
@@ -121,7 +201,15 @@ export function dossierMeta(productId, config, fallback) {
   const product = config.products?.find((p) => p.id === productId);
   return product?.dossierUrl ? product.name : fallback;
 }
+
+// Nom amb què es desa la descàrrega (atribut download). '' = el navegador fa servir el nom del fitxer.
+export function dossierFileFor(productId, config) {
+  const product = config.products?.find((p) => p.id === productId);
+  return (product?.dossierUrl ? product.dossierFileName : config.dossierFileName) || '';
+}
 ```
+
+`site/js/config.js`: afegir `dossierFileName: 'the-silent-fleet-dossier.pdf', // nom amb què es desa la descàrrega del dossier general (PROVA: el posa Bruno amb el document real)` sota `dossierUrl`, i a cada producte amb dossier propi `dossierFileName: 'the-silent-fleet-modelo-a.pdf'` / `'the-silent-fleet-modelo-b.pdf'` (el Modelo C no en porta: usa el general). Afegir també una capçalera comentada al principi de l'objecte que documenti **totes** les claus (què fa, obligatòria o opcional, qui la dona i el que passa si és buida): `brand`, `whatsappNumber`, `email`, `siteUrl`, `extra1`, `dossierUrl`, `dossierFileName`, `emailDelivery`, `leadEndpoint`, `leadToken`, `products[]` (`id`, `name`, `dossierUrl?`, `dossierFileName?`), `legalName`, `defaultLang`, `languages`. Sense canviar cap valor existent (en particular `leadEndpoint`, `leadToken`, `whatsappNumber`, `legalName`).
 
 `site/js/form/flow.js`: treure `openDocument` de la signatura de `handleSubmit`, treure la línia `openDocument(values.product);` i canviar el comentari que la precedeix per:
 ```js
@@ -138,8 +226,8 @@ Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add site/js/form site/js/app.js tests/form-flow.test.mjs tests/form-dossier.test.mjs
-git commit -m "feat: l'enviament ja no obre el dossier automàticament"
+git add site/js/form site/js/app.js site/js/config.js tests/form-flow.test.mjs tests/form-dossier.test.mjs tests/config.test.mjs
+git commit -m "feat: l'enviament ja no obre el dossier automàticament i la config porta el nom de descàrrega"
 ```
 
 ---
@@ -151,8 +239,8 @@ git commit -m "feat: l'enviament ja no obre el dossier automàticament"
 - Test: `tests/ui-steps.test.mjs:162-179`, `tests/form-i18n.test.mjs`, `tests/css.test.mjs`, `tests/form-dossier.test.mjs`
 
 **Interfaces:**
-- Consumes: el brief de Task 0 (guanya sobre el marcatge/CSS d'exemple); `dossierFor`, `dossierMeta` (Task 1); `T.PdfCard({ title, meta })`; `contactLinks(...) -> { whatsapp, email }`.
-- Produces: `DoneScreen({ t, emailDelivery, dossierHref, docMeta, whatsappHref, emailHref, onHome })`. Claus noves de `form`: `doneDownload`, `doneCardTitle`, `doneCardGeneral`. Claus retirades: `doneOpen`, `doneHelp`. `doneText`/`doneTextMail` canvien de text.
+- Consumes: el brief de Task 0 (guanya sobre el marcatge/CSS d'exemple); `dossierFor`, `dossierMeta`, `dossierFileFor` (Task 1); `T.PdfCard({ title, meta })`; `contactLinks(...) -> { whatsapp, email }`.
+- Produces: `DoneScreen({ t, emailDelivery, dossierHref, dossierFile, docMeta, whatsappHref, emailHref, onHome })`. Claus noves de `form`: `doneDownload`, `doneCardTitle`, `doneCardGeneral`. Claus retirades: `doneOpen`, `doneHelp`. `doneText`/`doneTextMail` canvien de text.
 
 - [ ] **Step 1: Escriure els tests que fallen**
 
@@ -160,7 +248,7 @@ A `tests/ui-steps.test.mjs`, substituir els dos tests de confirmació (línies 1
 
 ```js
 const done = (extra = {}) => DoneScreen({
-  t: DICT.es, emailDelivery: false, dossierHref: 'dossiers/model-a.pdf', docMeta: 'Modelo A',
+  t: DICT.es, emailDelivery: false, dossierHref: 'dossiers/model-a.pdf', dossierFile: 'tsf-model-a.pdf', docMeta: 'Modelo A',
   whatsappHref: 'https://wa.me/1', emailHref: 'mailto:x@y.z', onHome: noop, ...extra,
 });
 const link = (tree, text) => findAll(tree, (n) => n.type === 'a' && textOf(n) === text)[0];
@@ -171,7 +259,8 @@ test('confirmació: marca d\'èxit, títol, targeta del dossier i descàrrega re
   const card = byType(tree, 'T.PdfCard')[0];
   assert.deepEqual([card.props.title, card.props.meta, card.props.href], [f.doneCardTitle, 'Modelo A', undefined]);
   const dl = link(tree, f.doneDownload);
-  assert.deepEqual([dl.props.href, dl.props.download], ['dossiers/model-a.pdf', '']);
+  assert.deepEqual([dl.props.href, dl.props.download], ['dossiers/model-a.pdf', 'tsf-model-a.pdf']);
+  assert.equal(link(done({ dossierFile: '' }), f.doneDownload).props.download, '', 'sense nom configurat, el navegador tria el nom');
   assert.match(dl.props.className, /tsf-btn--solid/);
   assert.ok(findAll(tree, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length >= 1, 'marca d\'èxit decorativa');
 });
@@ -231,7 +320,7 @@ Expected: FAIL.
 export function createDoneScreen({ h, T, icon }) {
   const mark = h('svg', { className: 'page__done-mark', viewBox: '0 0 24 24', 'aria-hidden': 'true', focusable: 'false' },
     h('path', { d: 'M7 12.5l3.2 3.2L17 8.8', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round' }));
-  return function DoneScreen({ t, emailDelivery, dossierHref, docMeta, whatsappHref, emailHref, onHome }) {
+  return function DoneScreen({ t, emailDelivery, dossierHref, dossierFile, docMeta, whatsappHref, emailHref, onHome }) {
     const f = t.form;
     return h('div', { className: 'page__screen page__screen--done' },
       mark,
@@ -243,7 +332,7 @@ export function createDoneScreen({ h, T, icon }) {
       // Descàrrega real per gest del visitant: el dossier ja no s'obre sol. Button no reenvia `download`, d'aquí l'<a> amb les classes del sistema.
       dossierHref ? h('div', { className: 'page__stack' },
         h(T.PdfCard, { title: f.doneCardTitle, meta: docMeta }),
-        h('a', { className: 'tsf-btn button tsf-btn--solid tsf-btn--full', href: dossierHref, download: '' }, f.doneDownload)) : null,
+        h('a', { className: 'tsf-btn button tsf-btn--solid tsf-btn--full', href: dossierHref, download: dossierFile || '' }, f.doneDownload)) : null,
       h('div', { className: 'page__done-actions' },
         h(T.Button, { full: true, variant: 'outline', href: whatsappHref }, icon(h, 'whatsapp'), f.entryWhatsapp),
         h(T.Button, { full: true, variant: 'outline', href: emailHref }, icon(h, 'mail'), f.entryEmail),
@@ -254,13 +343,13 @@ export function createDoneScreen({ h, T, icon }) {
 
 Retirar `openDossier` de `site/js/form/dossier.js` i, a `tests/form-dossier.test.mjs`, el seu import i els dos tests `openDossier…` (ja no el fa servir ningú).
 
-`site/js/app.js`: canviar l'import a `import { dossierFor, dossierMeta } from './form/dossier.js';` i esborrar `const openDocument = …`; substituir el bloc `done:` per
+`site/js/app.js`: canviar l'import a `import { dossierFor, dossierFileFor, dossierMeta } from './form/dossier.js';` i esborrar `const openDocument = …`; substituir el bloc `done:` per
 ```js
     done: () => {
       const links = contactLinks(CONFIG, t, receipt ? sessionOf(receipt) : {});
       return h(DoneScreen, {
         t, emailDelivery: CONFIG.emailDelivery, onHome: goHome, whatsappHref: links.whatsapp, emailHref: links.email,
-        dossierHref: dossierFor(receipt?.product, CONFIG), docMeta: dossierMeta(receipt?.product, CONFIG, t.form.doneCardGeneral),
+        dossierHref: dossierFor(receipt?.product, CONFIG), dossierFile: dossierFileFor(receipt?.product, CONFIG), docMeta: dossierMeta(receipt?.product, CONFIG, t.form.doneCardGeneral),
       });
     },
 ```
@@ -335,6 +424,7 @@ git commit -m "fix: correccions de l'auditoria de la pantalla de gràcies"
 
 - [ ] **Step 1:** Regenerar els textos: `npm run texts`. Run: `node --test tests/texts-doc.test.mjs` → PASS.
 - [ ] **Step 2:** A `README.md` punt 4 («Confirmació»), reescriure: «**Confirmació:** pantalla de gràcies amb la targeta del dossier del model triat (o el general), botó de descàrrega, WhatsApp i correu, i un enllaç per tornar a l'inici. El dossier ja no s'obre automàticament.»
+- [ ] **Step 2b:** Al README, a la taula «Dades a substituir abans d'activar `extra1`», afegir una fila: `dossierFileName` (`config.js`, general i per model) | `the-silent-fleet-dossier.pdf` i `…-modelo-a/b.pdf` | Bruno: el nom amb què es desa cada document; i a l'apartat «Altres peces» una línia que expliqui que `dossierFileName` només canvia el nom de la descàrrega (no el fitxer de `site/`). Actualitzar el recompte de tests de «Abans de publicar» punt 1 amb el resultat real d'`npm test`.
 - [ ] **Step 3:** Al començament de `docs/superpowers/specs/2026-10-09-dossier-per-model.md`, sota el títol, afegir: «> **Actualitzat:** l'obertura automàtica s'ha substituït per una pantalla de descàrrega; vegeu `2026-10-12-gracies-pdf.md`. La tria del dossier (model → general) no canvia.» I a la línia «El botó «Abrir el dossier»…» de «Comportament», prefixar «(Substituït)».
 - [ ] **Step 4:** Run: `npm test` → tot PASS; `grep -rn "window.open\|openDocument\|openDossier" site/js` → cap resultat.
 - [ ] **Step 5: Commit**
@@ -346,8 +436,21 @@ git commit -m "docs: confirmació amb descàrrega (README, textos i spec del dos
 
 ---
 
+### Task 5: Tancament de la branca (PR i merge, només amb el vistiplau d'Olga)
+
+**Files:** cap.
+
+- [ ] **Step 1:** Run: `npm test`, `npm run sync && git status --short` (net) i `git log --oneline main..HEAD` (cada commit amb prefix i en català). `superpowers:verification-before-completion`: res no es dona per bo sense aquesta sortida.
+- [ ] **Step 2:** Revisió de tota la branca (`/code-review` o `superpowers:requesting-code-review`) i resum a Olga amb: l'informe de l'auditoria, el que queda de P2/P3 i els recordatoris de la beta (el dossier, els models, el WhatsApp i el nom legal continuen sent de prova).
+- [ ] **Step 3: Demanar permís explícit** per fer `git tag pre-gracies-pdf a84e24d`, `git push -u origin feat/pantalla-gracies-dossier` i obrir el PR contra `main` (títol `feat: pantalla de gràcies amb descàrrega del dossier`, cos amb resum, enllaç al brief i a l'informe, i la línia `🤖 Generated with [Claude Code](https://claude.com/claude-code)`). El CI de Task P ha de passar.
+- [ ] **Step 4:** El merge a `main` el fa Olga (o ho demana explícitament). Atenció: **desplega la beta pública**. Després, comprovar la URL publicada (`siteUrl`): enviar un formulari de prova amb dades inventades i veure que no s'obre cap pestanya i que el PDF es descarrega amb el nom configurat. Si falla, redeploy de l'etiqueta `pre-gracies-pdf`.
+- [ ] **Step 5:** Netejar la branca local i la remota només quan Olga ho confirmi.
+
+---
+
 ## Self-Review
 - **Cobertura del flux acordat:** shape abans del codi (Task 0), audit per acabar (Task 3), sense `window.open` ni `openDocument` al final (Task 4 grep).
+- **Control de versions i config:** branca pròpia, CI, etiqueta de retorn, commits convencionals i PR sense push automàtic (Control de versions, Task P, Task 5); `config.js` documentat clau per clau i amb `dossierFileName` (Task 1, Task 4).
 - **Cobertura de l'spec:** no s'obre cap pestanya (T1); mateix criteri de dossier (`dossierFor`, T1/T2); `<a download>` (T2); targeta amb meta model/general (T1 `dossierMeta` + T2); CTA WhatsApp/Correu + enllaç inici (T2); `doneHelp` retirat (T2 i18n); literals sense «PDF» (T2 test); sense dossier → amagat (T2 test); docs (T3).
 - **Placeholders:** cap.
 - **Consistència de noms:** `dossierFor`, `dossierMeta`, `dossierHref`, `docMeta`, `emailHref`, `doneDownload`, `doneCardTitle`, `doneCardGeneral` coincideixen entre tasques.
