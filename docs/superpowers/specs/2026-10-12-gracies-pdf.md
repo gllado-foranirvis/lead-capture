@@ -5,7 +5,7 @@ Substitueix l'obertura automàtica del dossier de `2026-10-09-dossier-per-model.
 ## Comportament
 - En enviar el formulari **no s'obre cap pestanya**: s'envia el lead, es neteja el formulari i es mostra la pantalla de gràcies.
 - El dossier que ofereix la pantalla és el mateix de sempre (`dossierFor`: el del model triat o, si no n'hi ha, el general).
-- «Descargar el dossier» és un enllaç `<a href download>` (descàrrega real; iOS Safari el pot obrir en visor, però només per gest explícit del visitant).
+- «Descargar el dossier» és un enllaç `<a href download>` amb el nom de fitxer de `CONFIG.dossierFileName` (general) o `products[].dossierFileName` (descàrrega real; iOS Safari el pot obrir en visor, però només per gest explícit del visitant).
 - La targeta mostra la insígnia «PDF» del sistema de disseny (`T.PdfCard`, sense enllaç), el títol «Dossier The Silent Fleet» i, com a segona línia, el nom del model si té dossier propi o «Información general» si s'ofereix el general.
 - Sota el botó, al peu de la pantalla: WhatsApp i Correo electrónico (els mateixos enllaços amb el missatge de la sessió que a l'entrada), i un enllaç discret «Volver al inicio» (decisió d'Olga, no és al wireframe).
 - S'elimina el paràgraf d'ajuda `doneHelp` (no és al wireframe).
