@@ -8,8 +8,8 @@ export function createEntryScreen({ h, T, icon }) {
     return h('div', { className: 'page__screen page__screen--entry' },
       h('section', { className: 'stage tsf-on-dark' },
         h('div', { className: 'page__heading stage__copy', tabIndex: -1, 'data-step-heading': '' },
-          h('h1', { className: 'display stage__title' }, withForm ? f.entryTitle : t.title),
-          h('p', { className: 'body stage__sub' }, withForm ? f.entrySubtitle : t.subtitle))),
+          h('h1', { className: 'h2 stage__title' }, withForm ? f.entryTitle : t.title),
+          h('p', { className: 'body-sm stage__sub' }, withForm ? f.entrySubtitle : t.subtitle))),
       h('div', { className: 'page__body' },
       // La pregunta de perfil és sempre visible: el missatge de WhatsApp i correu i el pas 2 la fan servir.
       h('div', deselectProps(profile, onClearProfile),

@@ -90,3 +90,10 @@ test('page.css (mòbil): sense hover enganxat en un tàctil, amb feedback de toc
   for (const sel of ['.tsf-btn--solid:hover', '.tsf-btn--outline:hover', '.tsf-btn--link:hover', '.tsf-pdf--link:hover']) assert.ok(touch.includes(sel), `${sel} neutralitzat en tàctil`);
   for (const sel of ['.tsf-btn--solid:active', '.tsf-btn--outline:active', '.tsf-pdf--link:active']) assert.match(page, new RegExp(`${sel.replace(/[.:]/g, '\\$&')}\\s*\\{`), `${sel}: feedback del toc`);
 });
+
+test('page.css (mòbil): l\'escena de l\'inici és compacta, la seva alçada la dona el contingut i no una alçada mínima', () => {
+  const mobileStage = page.match(/\n\.stage\s*\{([^}]*)\}/)?.[1] ?? '';
+  assert.ok(mobileStage.length > 0, 'regla .stage de mòbil');
+  assert.doesNotMatch(mobileStage, /min-height/);
+  assert.match(page, /@media \(min-width: 768px\)\s*\{[\s\S]*\.stage\s*\{[^}]*min-height/, 'la tauleta sí que té una escena més alta');
+});

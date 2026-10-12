@@ -65,6 +65,16 @@ test('inici amb Extra 1: el CTA principal va després dels contactes, la línia 
   assert.equal(textOf(stack).includes(DICT.es.contactFallback), false, 'ja no és dins del bloc dels contactes');
   assert.ok(textOf(stack).includes(DICT.es.contactHint), 'la línia explicativa es queda amb els botons');
 });
+test('inici amb Extra 1: escena fotogràfica compacta amb el títol (h1) i el subtítol, i el cos del contacte a sota', () => {
+  const tree = entry({ onOpenForm: noop });
+  const [stage, body] = tree.children;
+  assert.deepEqual([stage.type, stage.props.className, body.props.className], ['section', 'stage tsf-on-dark', 'page__body']);
+  const [h1] = findAll(stage, (n) => n.type === 'h1');
+  assert.equal(findAll(stage, (n) => n.type === 'h1').length, 1);
+  assert.match(h1.props.className, /\bh2\b/, 'títol compacte (28px) per no ocupar tota l\'alçada de la pantalla');
+  assert.equal(textOf(stage), `${f.entryTitle}${f.entrySubtitle}`);
+  assert.equal(findAll(tree, (n) => n.props?.['data-step-heading'] !== undefined).length, 1, 'el focus del canvi de pantalla va al títol');
+});
 test('inici sense Extra 1: l\'MVP amb xips de perfil i WhatsApp principal', () => {
   const t = DICT.es;
   const tree = entry({ profileLegend: t.profileLegend, profileOptions: [{ value: 'profesional', label: t.profileDistribuidor }, { value: 'particular', label: t.profileParticular }] });
