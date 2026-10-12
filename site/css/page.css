@@ -3,6 +3,7 @@
 [data-theme="light"] { color-scheme: light; }
 [data-theme="dark"] { color-scheme: dark; }
 ::selection { background: var(--navy-800); color: var(--on-navy); }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; }
 body { background: var(--surface-100); color: var(--ink); font-family: var(--font-sans); }
 .page {
@@ -81,3 +82,15 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
   .steps__seg { transition: background-color 200ms ease-out; }
   .page__screen { animation: screen-in 180ms ease-out; }
 }
+
+/* Tàctil: no hi ha hover i el darrer element tocat es quedava «premut» (ple) fins al toc següent. El sistema només defineix hover:
+   aquí el neutralitzem en tàctil i donem feedback al toc (:active), ja que treiem el ressalt del navegador. */
+@media (hover: none) {
+  .tsf-btn--solid:hover { opacity: 1; }
+  .tsf-btn--outline:hover { background: transparent; color: var(--ink); }
+  .tsf-btn--link:hover { text-decoration: none; }
+  .tsf-pdf--link:hover { background: var(--surface-100); }
+}
+.tsf-btn--solid:active { opacity: .85; }
+.tsf-btn--outline:active { background: var(--ink); color: var(--surface-100); }
+.tsf-pdf--link:active { background: var(--surface-200); }
