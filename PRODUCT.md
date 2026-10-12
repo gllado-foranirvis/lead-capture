@@ -33,7 +33,7 @@ Propulsió elèctrica silenciosa per a embarcacions: TSF presenta el canvi cap a
 ## Capabilities and Constraints
 
 - MVP: selecció d'idioma, perfil opcional, WhatsApp i correu sempre actius amb missatge predefinit (12 combinacions idioma × perfil), privacitat i cookies.
-- Extra 1 (flux de captació en 2 passos amb perfilació i dossier segons el model triat, o el general): **actiu a la fira** (decidit el 9/10/2026) amb l'interruptor `extra1` de `config.js`; amb `false` torna l'MVP sol. Emet esdeveniments `window` i, si `leadEndpoint` té una URL, els envia a un Google Apps Script que desa una fila per lead (desplegat i provat; guia a `docs/google-sheet.md`). Detall al README.
+- Extra 1 (flux de captació en 2 passos amb perfilació i, en acabar, una pantalla de gràcies que ofereix la descàrrega del dossier del model triat o del general; no s'obre cap pestanya sola): **actiu a la fira** (decidit el 9/10/2026) amb l'interruptor `extra1` de `config.js`; amb `false` torna l'MVP sol. Emet esdeveniments `window` i, si `leadEndpoint` té una URL, els envia a un Google Apps Script que desa una fila per lead (desplegat i provat; guia a `docs/google-sheet.md`). Detall al README. Al camp del telèfon, el número s'agrupa mentre s'escriu (+34 → 600 00 00 00, +351 → 912 345 678), un número internacional escrit al camp del número en separa el prefix i el prefix porta suggeriments de país.
 - Fora de l'abast actual: enviament del correu amb el dossier, correu de seguiment (Extra 1b), Linktree, NFC, analítica i banner de cookies. L'estructura ha de permetre afegir-los sense reescriure.
 - Cost recurrent 0 €. L'MVP no desa dades ni usa cookies, `localStorage` ni analítica; l'Extra 1, quan s'activi, recollirà dades de contacte i perfilació amb el consentiment del visitant (text de privacitat pendent de Bruno).
 - Cap petició externa per a estil o scripts (cobertura dolenta): React i Montserrat són locals.
@@ -41,7 +41,7 @@ Propulsió elèctrica silenciosa per a embarcacions: TSF presenta el canvi cap a
 
 ## Brand Commitments
 
-- El sistema de disseny `the-silent-fleet-ds/` és vinculant com a font de veritat visual i de contingut (to, components, tokens).
+- El sistema de disseny `the-silent-fleet-ds/` és vinculant com a font de veritat visual i de contingut (to, components, tokens). El redisseny fotogràfic (octubre de 2026) l'amplia amb fotografia a tall viu i vel pla `overlay-hero`; no el substitueix.
 - El nom de marca és text en `wordmark`; no hi ha logotip dibuixat i no se n'ha d'inventar cap. Si Bruno en té, l'ha de subministrar.
 
 ## Evidence on Hand
