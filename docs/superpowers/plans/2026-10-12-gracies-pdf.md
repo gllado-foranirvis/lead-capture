@@ -259,6 +259,8 @@ test('confirmació: marca d\'èxit, títol, targeta del dossier i descàrrega re
   const card = byType(tree, 'T.PdfCard')[0];
   assert.deepEqual([card.props.title, card.props.meta, card.props.href], [f.doneCardTitle, 'Modelo A', undefined]);
   const dl = link(tree, f.doneDownload);
+  const cardLink = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc')[0];
+  assert.deepEqual([cardLink.props.href, cardLink.props.download, cardLink.props.tabIndex], ['dossiers/model-a.pdf', 'tsf-model-a.pdf', -1], 'la targeta descarrega el mateix fitxer amb el mateix nom i no és parada de tabulador');
   assert.deepEqual([dl.props.href, dl.props.download], ['dossiers/model-a.pdf', 'tsf-model-a.pdf']);
   assert.equal(link(done({ dossierFile: '' }), f.doneDownload).props.download, '', 'sense nom configurat, el navegador tria el nom');
   assert.match(dl.props.className, /tsf-btn--solid/);
@@ -273,7 +275,7 @@ test('confirmació: WhatsApp i correu sota el dossier, i tornada discreta a l\'i
   assert.deepEqual([back.props.variant, textOf(back)], ['link', f.doneHome]);
   back.props.onClick();
   assert.equal(home, 1);
-  const order = findAll(tree, (n) => n.type === 'a' || n.type === 'T.Button' || n.type === 'T.PdfCard').map((n) => n.type === 'T.PdfCard' ? 'card' : textOf(n));
+  const order = findAll(tree, (n) => (n.type === 'a' && n.props.className !== 'page__doc') || n.type === 'T.Button' || n.type === 'T.PdfCard').map((n) => n.type === 'T.PdfCard' ? 'card' : textOf(n));
   assert.deepEqual(order, ['card', f.doneDownload, f.entryWhatsapp, f.entryEmail, f.doneHome]);
   assert.equal(textOf(tree).includes('PDF'), false, 'cap literal propi diu PDF (la insígnia és del sistema de disseny)');
 });
@@ -331,7 +333,9 @@ export function createDoneScreen({ h, T, icon }) {
         })),
       // Descàrrega real per gest del visitant: el dossier ja no s'obre sol. Button no reenvia `download`, d'aquí l'<a> amb les classes del sistema.
       dossierHref ? h('div', { className: 'page__stack' },
-        h(T.PdfCard, { title: f.doneCardTitle, meta: docMeta }),
+        // Targeta clicable (decidit al brief): mateix fitxer i nom que el botó; no és una segona parada de tabulador. `T.PdfCard` amb href no deixa posar el nom de descàrrega, d'aquí l'<a> que l'embolcalla.
+        h('a', { className: 'page__doc', href: dossierHref, download: dossierFile || '', tabIndex: -1 },
+          h(T.PdfCard, { title: f.doneCardTitle, meta: docMeta })),
         h('a', { className: 'tsf-btn button tsf-btn--solid tsf-btn--full', href: dossierHref, download: dossierFile || '' }, f.doneDownload)) : null,
       h('div', { className: 'page__done-actions' },
         h(T.Button, { full: true, variant: 'outline', href: whatsappHref }, icon(h, 'whatsapp'), f.entryWhatsapp),
@@ -370,6 +374,7 @@ i la classe de pàgina (la pantalla de gràcies també ocupa l'alçada perquè e
 /* Pantalla de gràcies: marca d'èxit centrada i CTA al peu (com el wireframe «Gracias + PDF»). */
 .page__screen--done { flex: 1; align-items: stretch; }
 .page__done-mark { align-self: center; box-sizing: border-box; width: 56px; height: 56px; padding: var(--space-3); border-radius: 50%; background: var(--success-bg); color: var(--success); }
+.page__doc { display: block; color: inherit; text-decoration: none; border-radius: var(--radius-md); }
 .page__done-actions { display: flex; flex-direction: column; gap: var(--space-2); margin-top: auto; padding-top: var(--space-4); }
 ```
 
