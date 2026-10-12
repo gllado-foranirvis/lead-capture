@@ -2,7 +2,7 @@
 export const FIELD_HINTS = {
   name: { autocomplete: 'name', autocapitalize: 'words', enterkeyhint: 'next' },
   email: { autocomplete: 'email', inputmode: 'email', autocapitalize: 'none', spellcheck: 'false', enterkeyhint: 'next' },
-  phonePrefix: { autocomplete: 'tel-country-code', inputmode: 'tel', enterkeyhint: 'next' },
+  phonePrefix: { autocomplete: 'tel-country-code', inputmode: 'tel', enterkeyhint: 'next', list: 'phone-prefixes' },
   phone: { autocomplete: 'tel-national', inputmode: 'tel', enterkeyhint: 'next' },
   activityOther: { enterkeyhint: 'next' },
   demo: { autocomplete: 'address-level2', enterkeyhint: 'done' },
