@@ -163,13 +163,15 @@ const done = (extra = {}) => DoneScreen({
   t: DICT.es, emailDelivery: false, dossierHref: 'dossiers/model-a.pdf', dossierFile: 'tsf-model-a.pdf', docMeta: 'Modelo A',
   whatsappHref: 'https://wa.me/1', emailHref: 'mailto:x@y.z', onHome: noop, ...extra,
 });
+const cardOf = (tree) => findAll(tree, (n) => typeof n.props?.className === 'string' && n.props.className.split(' ').includes('tsf-pdf'))[0];
 const link = (tree, text) => findAll(tree, (n) => n.type === 'a' && textOf(n) === text)[0];
 
 test('confirmació: marca d\'èxit, títol, targeta del dossier i descàrrega real', () => {
   const tree = done();
   assert.equal(byType(tree, 'T.SectionHeading')[0].props.title, f.doneTitle);
-  const card = byType(tree, 'T.PdfCard')[0];
-  assert.deepEqual([card.props.title, card.props.meta, card.props.href], [f.doneCardTitle, 'Modelo A', undefined]);
+  const card = cardOf(tree);
+  assert.deepEqual([textOf(card), card.props.className], [`${f.doneCardTitle}Modelo A`, 'tsf-pdf tsf-pdf--link']);
+  assert.ok(findAll(card, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length === 1, 'icona de document decorativa en lloc de la insígnia «PDF»');
   const dl = link(tree, f.doneDownload);
   const cardLink = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc')[0];
   assert.deepEqual([cardLink.props.href, cardLink.props.download, cardLink.props.tabIndex], ['dossiers/model-a.pdf', 'tsf-model-a.pdf', -1], 'la targeta descarrega el mateix fitxer amb el mateix nom i no és parada de tabulador');
@@ -187,13 +189,13 @@ test('confirmació: WhatsApp i correu sota el dossier, i tornada discreta a l\'i
   assert.deepEqual([back.props.variant, textOf(back)], ['link', f.doneHome]);
   back.props.onClick();
   assert.equal(home, 1);
-  const order = findAll(tree, (n) => (n.type === 'a' && n.props.className !== 'page__doc') || n.type === 'T.Button' || n.type === 'T.PdfCard').map((n) => n.type === 'T.PdfCard' ? 'card' : textOf(n));
+  const order = findAll(tree, (n) => (n.type === 'a' && n.props.className !== 'page__doc') || n.type === 'T.Button' || n.props?.className === 'page__doc').map((n) => n.props?.className === 'page__doc' ? 'card' : textOf(n));
   assert.deepEqual(order, ['card', f.doneDownload, f.entryWhatsapp, f.entryEmail, f.doneHome]);
-  assert.equal(textOf(tree).includes('PDF'), false, 'cap literal propi diu PDF (la insígnia és del sistema de disseny)');
+  assert.equal(textOf(tree).includes('PDF'), false, 'cap text visible diu PDF');
 });
 test('confirmació: sense dossier configurat no hi ha targeta ni botó de descàrrega', () => {
   const tree = done({ dossierHref: '' });
-  assert.equal(byType(tree, 'T.PdfCard').length, 0);
+  assert.equal(cardOf(tree), undefined);
   assert.equal(link(tree, f.doneDownload), undefined);
   assert.equal(buttons(tree).length, 3);
 });

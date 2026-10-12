@@ -13,7 +13,7 @@ Resultat de `/impeccable shape` (12/10/2026). Estat: **pendent de confirmació d
 ## 3. Direcció escollida
 - Marca d'èxit: **cercle ple `--success-bg` de 56 px amb check `--success`** (no el cercle de punts del wireframe, que és un marcador de posició).
 - **Marca, títol i subtítol centrats**, com al wireframe; targeta i botons a tota l'amplada.
-- **Targeta del dossier clicable**: descarrega el mateix fitxer, amb el mateix nom que el botó (enllaç `<a download>` que embolcalla `T.PdfCard`). El botó és el gest principal; la targeta és un objectiu tàctil gran addicional i **no és una segona parada de tabulador** (`tabIndex: -1`; el lector de pantalla troba el botó).
+- **Targeta del dossier clicable**: descarrega el mateix fitxer, amb el mateix nom que el botó (enllaç `<a download>` que embolcalla la targeta `tsf-pdf` amb la icona Lucide `file-text` en lloc de la insígnia «PDF»; decisió posterior d'Olga). El botó és el gest principal; la targeta és un objectiu tàctil gran addicional i **no és una segona parada de tabulador** (`tabIndex: -1`; el lector de pantalla troba el botó).
 - **CTA al peu**: WhatsApp i Correo electrónico (`outline`, amb icona) ancorats a baix amb espai flexible al mig (`margin-top: auto`); «Volver al inicio» com a enllaç discret sota ells.
 - Focus: en entrar a la pantalla va al títol (`data-step-heading`), com a la resta.
 
@@ -34,6 +34,6 @@ Resultat de `/impeccable shape` (12/10/2026). Estat: **pendent de confirmació d
 - Animació: només l'`screen-in` existent (ja en `prefers-reduced-motion: no-preference`); res més.
 
 ## 7. Restriccions i decisions obertes
-- La paraula «PDF» només surt a la insígnia del component; els literals diuen «dossier».
+- La paraula «PDF» no es veu enlloc: ni literals ni insígnia (la targeta porta la icona `file-text`); els literals diuen «dossier».
 - `download` amb el nom de `dossierFileName`; a iOS Safari el navegador pot obrir el PDF en visor (només per gest del visitant).
 - Obert per a l'auditoria: si la targeta clicable aporta confusió amb el botó (dos enllaços al mateix fitxer) es revisa a Task 3.
