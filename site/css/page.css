@@ -38,13 +38,12 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 /* Més aire sobre cada secció que sota el seu títol; el botó de tornada se separa del text. */
 .privacy section + section { margin-top: var(--space-5); }
 .privacy #back { margin-top: var(--space-4); }
-.page__main { display: flex; flex: 1; flex-direction: column; gap: var(--space-3); }
+.page__main { display: flex; flex: 1; flex-direction: column; gap: var(--space-3); box-sizing: border-box; width: 100%; max-width: 560px; margin-inline: auto; padding: var(--space-3) var(--gutter) var(--space-5); }
 .page__screen { display: flex; flex-direction: column; gap: var(--space-3); }
 /* El sistema compacte deixa els enllaços legals a 40px; el terra tàctil del projecte és 44px. */
 .tsf-compact .tsf-legal__link { min-height: 44px; }
 /* Les files de les caselles (opinió) també arriben al terra tàctil de 44px. */
 .tsf-compact { --option-h: var(--tap-min); }
-.page--form { min-height: 100dvh; }
 .page__screen--form { flex: 1; gap: var(--space-2); }
 .form { display: flex; flex: 1; flex-direction: column; gap: var(--space-4); }
 .form__group { display: flex; flex-direction: column; gap: var(--space-3); }
@@ -77,10 +76,45 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .page__doc { display: block; color: inherit; text-decoration: none; border-radius: var(--radius-md); }
 .page__done-actions { display: flex; flex-direction: column; gap: var(--space-2); margin-top: auto; padding-top: var(--space-4); }
 
+/* Fotografia subministrada per The Silent Fleet. El DESIGN.md la vol a tall viu, sense marc i amb el vel pla `overlay-hero` (sense degradats): dues capes planes del token la fan llegible per a text blanc. */
+.site { display: flex; flex-direction: column; min-height: 100dvh; position: relative; }
+.site__top {
+  background: linear-gradient(var(--overlay-hero), var(--overlay-hero)), linear-gradient(var(--overlay-hero), var(--overlay-hero)), url("../img/hero-m.webp") 62% 60% / cover;
+  color: var(--on-navy);
+}
+.site__top .page__top { box-sizing: border-box; max-width: 560px; margin-inline: auto; padding: var(--space-4) var(--gutter); min-height: 5rem; }
+.site__top .wordmark { color: var(--on-navy); }
+.site__top .tsf-lang__select { background: transparent; color: var(--on-navy); border-color: var(--on-navy); }
+.site__top .tsf-lang::after { border-top-color: var(--on-navy); }
+/* Inici: la fotografia ocupa l'escena i la capçalera hi va a sobre. */
+.site--entry .site__top { position: absolute; inset: 0 0 auto 0; z-index: 2; background: none; }
+.site--entry .page__main { max-width: none; padding: 0; gap: 0; }
+.page__screen--entry { gap: 0; }
+.stage {
+  display: flex; flex-direction: column; justify-content: flex-end; box-sizing: border-box; min-height: 21rem; padding: 6rem var(--gutter) var(--space-5);
+  background: linear-gradient(var(--overlay-hero), var(--overlay-hero)), linear-gradient(var(--overlay-hero), var(--overlay-hero)), url("../img/hero-m.webp") 60% 0% / cover;
+  color: var(--on-navy);
+}
+.stage__copy { width: 100%; max-width: 560px; margin-inline: auto; box-sizing: border-box; }
+.stage__title { margin: 0; text-wrap: balance; overflow-wrap: anywhere; }
+.stage__sub { margin: var(--space-2) 0 0; color: var(--on-navy); }
+.page__body { display: flex; flex-direction: column; gap: var(--space-3); box-sizing: border-box; width: 100%; max-width: 560px; margin-inline: auto; padding: var(--space-4) var(--gutter) var(--space-5); }
+/* Gràcies: la franja és més alta i la marca d'èxit s'hi recolza a la vora. */
+.site--done .site__top { padding-bottom: var(--space-6); }
+.site--done .page__main { padding-top: 0; }
+.site--done .page__done-mark { position: relative; z-index: 1; margin-top: -1.75rem; border: var(--space-2) solid var(--surface-100); padding: var(--space-2); }
+@media (min-width: 768px) {
+  .site__top { background-image: linear-gradient(var(--overlay-hero), var(--overlay-hero)), linear-gradient(var(--overlay-hero), var(--overlay-hero)), url("../img/hero-d.webp"); background-position: 50% 58%; }
+  .site--entry .site__top { background: none; }
+  .stage { min-height: 28rem; background-image: linear-gradient(var(--overlay-hero), var(--overlay-hero)), linear-gradient(var(--overlay-hero), var(--overlay-hero)), url("../img/hero-d.webp"); background-position: 50% 45%; }
+}
+
 @keyframes screen-in { from { opacity: 0; transform: translateY(var(--space-2)); } }
 @media (prefers-reduced-motion: no-preference) {
   .steps__seg { transition: background-color 200ms ease-out; }
   .page__screen { animation: screen-in 180ms ease-out; }
+  /* La fotografia de l'inici no entra des del blanc: carrega ja a lloc. */
+  .page__screen--entry { animation: none; }
 }
 
 /* Tàctil: no hi ha hover i el darrer element tocat es quedava «premut» (ple) fins al toc següent. El sistema només defineix hover:

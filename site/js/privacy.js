@@ -18,4 +18,9 @@ privacyBox.replaceChildren(...paragraphs(resolvePrivacyText(t, CONFIG, extra1)).
   p.textContent = text;
   return p;
 }));
-document.getElementById('back').href = `index.html${legalQuery(lang, extra1)}`;
+const home = `index.html${legalQuery(lang, extra1)}`;
+document.getElementById('back').href = home;
+// La marca de la franja fotogràfica porta a l'inici, com a la resta de pàgines.
+const brand = document.getElementById('home');
+brand.textContent = CONFIG.brand;
+brand.href = home;

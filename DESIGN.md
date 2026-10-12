@@ -379,7 +379,7 @@ Només es mou el color: botons, enllaços i xips canvien de color en 150ms (`eas
 - **Do** usar Deep Lagoon per a text i icones sobre blanc, i Lagoon Aqua només sobre navy.
 - **Do** donar 48px de zona tàctil (44px en compacte) amb 8px entre elements.
 - **Do** escriure titulars en frase normal, amb verbs curts als botons i sense emojis ni signes d'exclamació.
-- **Do** mostrar la fotografia a tall viu amb `overlay-hero` quan porti text a sobre.
+- **Do** mostrar la fotografia a tall viu amb `overlay-hero` quan porti text a sobre. A la web de la fira: l'inici i la franja de capçalera de la resta de pantalles (`.site__top`, `.stage`) la porten amb dues capes planes d'`overlay-hero` (sense degradats) perquè el text blanc sigui llegible.
 
 ### Don't:
 - **Don't** usar ombres ni degradats; la profunditat és tonal.

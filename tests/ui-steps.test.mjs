@@ -50,15 +50,24 @@ test('inici amb Extra 1: xip de perfil sempre visible, CTA nou únic principal, 
   const [wa, mail, cta] = buttons(tree);
   assert.deepEqual([textOf(cta), cta.props.variant, cta.props.onClick], [f.entryCta, undefined, noop]);
   assert.deepEqual([textOf(wa), wa.props.variant, textOf(mail), mail.props.variant], [f.entryWhatsapp, 'outline', f.entryEmail, 'outline']);
-  assert.equal(byType(tree, 'T.SectionHeading')[0].props.title, f.entryTitle);
+  assert.equal(textOf(findAll(tree, (n) => n.type === 'h1')[0]), f.entryTitle);
   assert.equal(deselectable(tree).length, 1, 'el perfil és desmarcable a l\'inici');
 });
 test('inici amb Extra 1: el CTA principal va després dels contactes i just abans dels enllaços legals', () => {
-  const kinds = entry({ onOpenForm: noop }).children.map((n) => (typeof n === 'object' && n ? n.type : null));
+  const body = findAll(entry({ onOpenForm: noop }), (n) => n.props?.className === 'page__body')[0];
+  const kinds = body.children.map((n) => (typeof n === 'object' && n ? n.type : null));
   const at = (type) => kinds.indexOf(type);
   assert.ok(at('T.SectionLabel') < kinds.lastIndexOf('T.Button'), 'els contactes abans del CTA');
   assert.equal(kinds.at(-2), 'T.Button');
   assert.equal(kinds.at(-1), 'T.LegalLinks');
+});
+test('inici amb Extra 1: escena fotogràfica amb el títol (h1) i el subtítol, i el cos del contacte a sota', () => {
+  const tree = entry({ onOpenForm: noop });
+  const [stage, body] = tree.children;
+  assert.deepEqual([stage.type, stage.props.className, body.props.className], ['section', 'stage tsf-on-dark', 'page__body']);
+  assert.equal(findAll(stage, (n) => n.type === 'h1').length, 1);
+  assert.equal(textOf(stage), `${f.entryTitle}${f.entrySubtitle}`);
+  assert.equal(findAll(tree, (n) => n.props?.['data-step-heading'] !== undefined).length, 1, 'el focus del canvi de pantalla va al títol');
 });
 test('inici sense Extra 1: l\'MVP amb xips de perfil i WhatsApp principal', () => {
   const t = DICT.es;
