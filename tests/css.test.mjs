@@ -97,3 +97,8 @@ test('page.css (mòbil): l\'escena de l\'inici és compacta, la seva alçada la 
   assert.doesNotMatch(mobileStage, /min-height/);
   assert.match(page, /@media \(min-width: 768px\)\s*\{[\s\S]*\.stage\s*\{[^}]*min-height/, 'la tauleta sí que té una escena més alta');
 });
+
+test('page.css: la marca de la capçalera és un enllaç sense subratllat i amb zona tàctil de 44px', () => {
+  assert.match(page, /\.page__top \.wordmark\s*\{[^}]*text-decoration:\s*none/);
+  assert.match(page, /\.page__top \.wordmark\s*\{[^}]*min-height:\s*var\(--tap-min-compact\)/);
+});

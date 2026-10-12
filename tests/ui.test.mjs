@@ -27,6 +27,17 @@ test('capçalera: marca i selector d\'idioma amb codis en majúscules', () => {
   assert.deepEqual(lang.props.languages.map((l) => l.code), ['ES', 'CA', 'PT', 'EN']);
 });
 
+test('capçalera: la marca és un enllaç a l\'inici; el clic normal va a l\'inici sense recarregar i el clic amb modificador obre l\'enllaç', () => {
+  let home = 0;
+  const tree = Header({ t: DICT.es, lang: 'es', onLang: noop, onHome: () => home++, homeHref: '?o=tauleta&lang=es' });
+  const [brand] = findAll(tree, (n) => n.type === 'a' && n.props.className === 'wordmark');
+  assert.deepEqual([textOf(brand), brand.props.href], [CONFIG.brand, '?o=tauleta&lang=es']);
+  const click = (extra = {}) => { const e = { button: 0, prevented: false, preventDefault() { this.prevented = true; }, ...extra }; brand.props.onClick(e); return e.prevented; };
+  assert.equal(click(), true);
+  assert.equal(home, 1);
+  for (const modifier of [{ metaKey: true }, { ctrlKey: true }, { shiftKey: true }, { altKey: true }, { button: 1 }]) assert.equal(click(modifier), false, JSON.stringify(modifier));
+  assert.equal(home, 1, 'amb modificador no s\'executa l\'acció: el navegador obre l\'enllaç');
+});
 test('entrada sense Extra 1: com l\'MVP (WhatsApp principal, cap botó nou)', () => {
   const [wa, mail] = buttons(entry());
   assert.equal(wa.props.variant, undefined);

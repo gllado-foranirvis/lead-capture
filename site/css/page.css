@@ -84,6 +84,7 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 }
 .site__top .page__top { box-sizing: border-box; max-width: 560px; margin-inline: auto; padding: var(--space-4) var(--gutter); min-height: 5rem; }
 .site__top .wordmark { color: var(--on-navy); }
+.page__top .wordmark { display: inline-flex; align-items: center; min-height: var(--tap-min-compact); text-decoration: none; }
 .site__top .tsf-lang__select { background: transparent; color: var(--on-navy); border-color: var(--on-navy); }
 .site__top .tsf-lang::after { border-top-color: var(--on-navy); }
 /* Inici: la fotografia ocupa l'escena i la capçalera hi va a sobre. */

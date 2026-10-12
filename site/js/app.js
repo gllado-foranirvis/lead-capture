@@ -86,6 +86,12 @@ function App() {
   const submit = () => handleSubmit(values, { ...common, dispatch, setReceipt, emitLead: emit('tsf:lead') });
   const toggle = (field, value) => dispatch({ type: 'toggle', field, value });
   const goHome = () => { setReceipt(null); setView('entry'); };
+  // La marca de la capçalera porta a l'inici des de qualsevol pantalla. A la tauleta es descarten les dades del visitant (com en «← Volver» del pas 1); al mòbil es conserva la sessió.
+  const goToEntry = () => {
+    if (view === 'done') goHome();
+    else if (view !== 'entry') leaveToEntry({ ...common, dispatch });
+    window.scrollTo(0, 0);
+  };
   const goBack = (to) => () => { setErrors({}); setView(to); };
 
   // El mateix xip de perfil a l'inici, al pas 2 i als missatges: una sola dada (values.profile).
@@ -118,7 +124,7 @@ function App() {
 
   // La capçalera (landmark de banner) queda fora de <main>. Sobre la fotografia: a l'inici cobreix l'escena; a la resta és una franja.
   return h('div', { className: `site site--${view} tsf-compact` },
-    h('div', { className: 'site__top tsf-on-dark' }, h(Header, { t, lang, onLang: setLang })),
+    h('div', { className: 'site__top tsf-on-dark' }, h(Header, { t, lang, onLang: setLang, onHome: goToEntry, homeHref: `${window.location.pathname}${search}` })),
     h('main', { className: 'page__main' }, screens[view]()));
 }
 
