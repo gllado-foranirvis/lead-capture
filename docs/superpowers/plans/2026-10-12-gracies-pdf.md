@@ -8,6 +8,8 @@
 
 **Tech Stack:** JS ES modules sense build, React 18 via `h`, `node --test`.
 
+**Workflow (decidit amb Olga):** Task 0 és un `/impeccable shape` que confirma el brief de la pantalla abans de tocar codi; Task 1-2 implementen contra aquest brief; Task 3 és un `/impeccable audit` que tanca el desenvolupament (informe, correcció de P0/P1, un sol re-audit i `/impeccable polish` si hi ha correccions); Task 4 deixa la documentació al dia. `PRODUCT.md` i `DESIGN.md` són la font de veritat visual (mode **Persuade/Operate de fira**: una mà, dret, 360 px, cobertura dolenta).
+
 **Spec:** `docs/superpowers/specs/2026-10-12-gracies-pdf.md`
 
 ## Global Constraints
@@ -16,12 +18,14 @@
 - Tots els literals nous existeixen en `es`, `ca`, `pt`, `en`.
 - `site/ds/` no es modifica; colors només amb tokens (`--success`, `--success-bg`).
 - Terra tàctil de 44px (el `.tsf-btn` ja ho compleix).
+- **El brief confirmat a Task 0 guanya** sobre el marcatge i el CSS d'exemple de Task 2: si hi ha contradicció, es segueix el brief (i no s'inventa res que el brief deixi obert: es pregunta).
 - `docs/textos-contacte.md` es regenera amb `npm run texts` (un test comprova que és fresc).
 
 ## Review Focus
 - Model desconegut / buit / «asesoramiento» → el botó descarrega el dossier general i la targeta diu «Información general» (test a Task 1 i Task 2).
 - Cap dossier configurat → no es pinta ni targeta ni botó, i la resta de la pantalla funciona (Task 2).
 - El flux d'enviament no ha de dependre de `openDocument` (el harness del test no el proporciona; si es crida, peta) (Task 1).
+- Textos llargs (PT/CA) i zoom de text al 200 %: ni desbordament horitzontal ni botons tallats; terra tàctil de 44 px (Task 3: auditoria).
 - Canvi d'idioma a la pantalla de gràcies → targeta, botó i CTA es tradueixen (Task 2: tots els literals vénen de `t`).
 - `emailDelivery: true` canvia només el subtítol (Task 2).
 
@@ -34,7 +38,29 @@ site/js/app.js              cabla la URL, els enllaços i la classe de pàgina
 site/js/i18n-form.js        literals nous i retirats (4 idiomes)
 site/css/page.css           composició de la pantalla
 tests/form-flow.test.mjs, form-dossier.test.mjs, ui-steps.test.mjs, css.test.mjs
+docs/superpowers/specs/2026-10-12-gracies-pdf-brief.md   (nou, Task 0)
+docs/superpowers/specs/2026-10-12-gracies-pdf-audit.md   (nou, Task 3)
 docs/textos-contacte.md (regenerat), README.md, docs/superpowers/specs/2026-10-09-dossier-per-model.md (nota)
+```
+
+---
+
+### Task 0: Brief de disseny amb `/impeccable shape` (sense codi)
+
+**Files:**
+- Create: `docs/superpowers/specs/2026-10-12-gracies-pdf-brief.md`
+
+**Interfaces:**
+- Produces: un brief confirmat per Olga que Task 2 segueix. No es toca cap fitxer de `site/`.
+
+- [ ] **Step 1: Executar `/impeccable shape`** sobre la pantalla de gràcies (`DoneScreen`, vista `done` d'`app.js`). Alimentar-lo amb els fets ja decidits perquè només calgui **una ronda de confirmació** i no es tornin a preguntar: wireframe «3 · Gracias + PDF» (adjunt de la petició), l'spec `2026-10-12-gracies-pdf.md` i les quatre decisions d'Olga (text «Descargar el dossier»; descàrrega real; «Volver al inicio» discret; targeta amb nom del model + insígnia «PDF»). El visitant és el de `PRODUCT.md`: dret a la fira, una mà, 360 px, cobertura dolenta, o la tauleta de l'estand.
+- [ ] **Step 2: Fer-li resoldre els punts que el wireframe deixa oberts** (que el constructor no ha d'inventar): forma i to de la marca d'èxit (cercle sòlid `--success-bg` + traç `--success` en lloc del cercle de punts del wireframe); jerarquia i ritme entre marca, títol, subtítol, targeta i botó; si la targeta és només informativa (proposta: sí, no enllaçada, perquè només hi hagi un gest principal); alineació centrada vs a l'inici; com s'ancora el bloc de CTA al peu en pantalles curtes (mòbil petit amb teclat tancat) i llargues (tauleta, `max-width: 560px`); animació d'entrada (només el `screen-in` existent, amb `prefers-reduced-motion`); estat «sense dossier» i comportament amb text llarg (PT) i zoom de text.
+- [ ] **Step 3: Desar el brief** (`3-5` punts per apartat segons `shape.md`: feina i públic, resultat i prova, direcció escollida, abast i límits, estats i rangs, interacció i maquetació, restriccions i decisions obertes) a `docs/superpowers/specs/2026-10-12-gracies-pdf-brief.md`, presentar-lo a Olga i **esperar-ne la confirmació o una ronda de correcció**. Shape no escriu codi.
+- [ ] **Step 4: Commit**
+
+```bash
+git add docs/superpowers/specs/2026-10-12-gracies-pdf-brief.md
+git commit -m "docs: brief de disseny de la pantalla de gràcies (impeccable shape)"
 ```
 
 ---
@@ -44,11 +70,11 @@ docs/textos-contacte.md (regenerat), README.md, docs/superpowers/specs/2026-10-0
 **Files:**
 - Modify: `site/js/form/flow.js:24-36`
 - Modify: `site/js/form/dossier.js`
-- Modify: `site/js/app.js:12,39,87`
+- Modify: `site/js/app.js:87`
 - Test: `tests/form-flow.test.mjs`, `tests/form-dossier.test.mjs`
 
 **Interfaces:**
-- Produces: `handleSubmit(values, deps)` amb `deps` **sense** `openDocument`; `dossierFor(productId, config) -> string` (ja existent); `dossierMeta(productId, config, fallback) -> string` (nom del producte si té `dossierUrl` propi, si no `fallback`).
+- Produces: `handleSubmit(values, deps)` amb `deps` **sense** `openDocument`; `dossierFor(productId, config) -> string` (ja existent; `openDossier` es manté fins a Task 2 perquè el botó «Abrir» de l'app encara el fa servir); `dossierMeta(productId, config, fallback) -> string` (nom del producte si té `dossierUrl` propi, si no `fallback`).
 
 - [ ] **Step 1: Escriure els tests que fallen**
 
@@ -70,7 +96,7 @@ test('enviament final: no obre cap document; emet el lead i neteja per al següe
 ```
 I a «enviament final sense perfil…» canviar l'última assert per `assert.equal(names(calls).includes('emitLead'), false);`.
 
-A `tests/form-dossier.test.mjs`: canviar l'import per `import { dossierFor, dossierMeta } from '../site/js/form/dossier.js';`, esborrar els dos tests d'`openDossier` i afegir:
+A `tests/form-dossier.test.mjs`: canviar l'import per `import { dossierFor, dossierMeta, openDossier } from '../site/js/form/dossier.js';` i afegir:
 
 ```js
 test('dossierMeta: el nom del model si té dossier propi; si no, el text alternatiu', () => {
@@ -87,15 +113,9 @@ Expected: FAIL (`openDocument is not a function` i `dossierMeta` no exportat).
 
 - [ ] **Step 3: Implementar**
 
-`site/js/form/dossier.js` sencer:
+`site/js/form/dossier.js`: afegir al final (sense tocar `dossierFor` ni `openDossier`):
 
 ```js
-// Quin dossier s'ofereix: el del model triat si en té, i si no el general.
-export function dossierFor(productId, config) {
-  const own = config.products?.find((p) => p.id === productId)?.dossierUrl;
-  return own || config.dossierUrl || '';
-}
-
 // Segona línia de la targeta: el nom del model si el dossier és el seu; si és el general, el text alternatiu.
 export function dossierMeta(productId, config, fallback) {
   const product = config.products?.find((p) => p.id === productId);
@@ -108,7 +128,7 @@ export function dossierMeta(productId, config, fallback) {
 // Un enviament vàlid deixa el formulari net per al següent visitant de la tauleta; la confirmació conserva
 // només el que necessita (receipt): el WhatsApp, el correu i el dossier del model triat.
 ```
-`site/js/app.js`: canviar l'import a `import { dossierFor, dossierMeta } from './form/dossier.js';`, esborrar `const openDocument = …` (línia 39) i treure `openDocument` de la crida de `handleSubmit` (línia 87). (La pantalla `done` es cabla a Task 2; mentrestant la crida `onOpen: () => openDocument(...)` es retira allà.)
+`site/js/app.js`: només treure `openDocument` de la crida de `handleSubmit` (línia 87). La constant `openDocument` i el botó de la pantalla `done` queden fins a Task 2, així l'app funciona entre commits.
 
 - [ ] **Step 4: Passen**
 
@@ -118,21 +138,20 @@ Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add site/js/form tests/form-flow.test.mjs tests/form-dossier.test.mjs site/js/app.js
+git add site/js/form site/js/app.js tests/form-flow.test.mjs tests/form-dossier.test.mjs
 git commit -m "feat: l'enviament ja no obre el dossier automàticament"
 ```
-(Si `app.js` encara referencia `openDocument` a la pantalla `done`, fer Task 2 abans del commit o deixar-lo com a commit conjunt amb Task 2.)
 
 ---
 
 ### Task 2: Pantalla «Gracias + PDF»
 
 **Files:**
-- Modify: `site/js/ui/done-screen.js`, `site/js/app.js:108-115,118`, `site/js/i18n-form.js` (4 blocs), `site/css/page.css`
-- Test: `tests/ui-steps.test.mjs:162-179`, `tests/form-i18n.test.mjs`, `tests/css.test.mjs`
+- Modify: `site/js/ui/done-screen.js`, `site/js/form/dossier.js` (retirar `openDossier`), `site/js/app.js:12,39,108-115,118`, `site/js/i18n-form.js` (4 blocs), `site/css/page.css`
+- Test: `tests/ui-steps.test.mjs:162-179`, `tests/form-i18n.test.mjs`, `tests/css.test.mjs`, `tests/form-dossier.test.mjs`
 
 **Interfaces:**
-- Consumes: `dossierFor`, `dossierMeta` (Task 1); `T.PdfCard({ title, meta })`; `contactLinks(...) -> { whatsapp, email }`.
+- Consumes: el brief de Task 0 (guanya sobre el marcatge/CSS d'exemple); `dossierFor`, `dossierMeta` (Task 1); `T.PdfCard({ title, meta })`; `contactLinks(...) -> { whatsapp, email }`.
 - Produces: `DoneScreen({ t, emailDelivery, dossierHref, docMeta, whatsappHref, emailHref, onHome })`. Claus noves de `form`: `doneDownload`, `doneCardTitle`, `doneCardGeneral`. Claus retirades: `doneOpen`, `doneHelp`. `doneText`/`doneTextMail` canvien de text.
 
 - [ ] **Step 1: Escriure els tests que fallen**
@@ -233,7 +252,9 @@ export function createDoneScreen({ h, T, icon }) {
 }
 ```
 
-`site/js/app.js`: substituir el bloc `done:` per
+Retirar `openDossier` de `site/js/form/dossier.js` i, a `tests/form-dossier.test.mjs`, el seu import i els dos tests `openDossier…` (ja no el fa servir ningú).
+
+`site/js/app.js`: canviar l'import a `import { dossierFor, dossierMeta } from './form/dossier.js';` i esborrar `const openDocument = …`; substituir el bloc `done:` per
 ```js
     done: () => {
       const links = contactLinks(CONFIG, t, receipt ? sessionOf(receipt) : {});
@@ -268,9 +289,9 @@ i la classe de pàgina (la pantalla de gràcies també ocupa l'alçada perquè e
 Run: `npm test`
 Expected: PASS excepte `texts-doc` (es regenera a Task 3).
 
-- [ ] **Step 5: Verificar al navegador**
+- [ ] **Step 5: Comprovació ràpida al navegador** (la revisió a fons és Task 3)
 
-Arrencar `npm run serve` (o el `preview_start` de `.claude/launch.json`), obrir `/?o=tauleta&producto=model-a`, completar els dos passos amb dades inventades i comprovar: no s'obre cap pestanya; es veu la marca, el títol, la targeta («Modelo A»), el botó (baixa `model-a.pdf`), WhatsApp i Correu al peu i «Volver al inicio»; repetir amb el Modelo C (targeta «Información general», baixa el general) i a 360 px d'ample i en mode fosc; canviar l'idioma a la pantalla de gràcies.
+Arrencar `npm run serve` (o el `preview_start` de `.claude/launch.json`), obrir `/?o=tauleta&producto=model-a`, completar els dos passos amb dades inventades i comprovar: no s'obre cap pestanya; es veu la marca, el títol, la targeta («Modelo A»), el botó (baixa `model-a.pdf`), WhatsApp i Correu al peu i «Volver al inicio»; repetir amb el Modelo C (targeta «Información general», baixa el general).
 
 - [ ] **Step 6: Commit**
 
@@ -281,7 +302,31 @@ git commit -m "feat: pantalla de gràcies amb descàrrega del dossier, WhatsApp 
 
 ---
 
-### Task 3: Documentació al dia
+### Task 3: Auditoria final amb `/impeccable audit`
+
+**Files:**
+- Create: `docs/superpowers/specs/2026-10-12-gracies-pdf-audit.md`
+- Modify: només el que l'auditoria assenyali (`site/js/ui/done-screen.js`, `site/css/page.css`, `site/js/i18n-form.js` i els seus tests)
+
+**Interfaces:**
+- Consumes: la pantalla acabada de Task 2. Produeix un informe amb puntuació 0-4 per dimensió i incidències P0-P3.
+
+Passades **acotades** (no un bucle de polit): una ronda de comprovació en lot, una correcció en lot, com a molt una re-ronda.
+
+- [ ] **Step 1: Detector i tests.** Run: `/Users/olgagarcia/.claude/skills/impeccable/scripts/impeccable detect site/js/ui/done-screen.js site/css/page.css site/js/app.js` i `npm test`. Verificar cada troballa al seu context (separar els falsos positius).
+- [ ] **Step 2: Captures en lot** amb el navegador integrat (`npm run serve`, `/?o=tauleta&producto=model-a`, dades inventades): 360 px i 768 px, clar i fosc, en ES i PT (text més llarg), Modelo A i Modelo C; més un zoom de text del 200 % a 360 px. Comprovar: cap desbordament horitzontal, CTA al peu sense tallar-se, terra tàctil ≥ 44 px, focus visible i ordre de tab (títol → descàrrega → WhatsApp → correu → inici), contrast ≥ 4,5:1 (marca d'èxit i meta de la targeta en fosc), que el focus vagi al títol en entrar a la pantalla i el comportament amb `prefers-reduced-motion`.
+- [ ] **Step 3: Executar `/impeccable audit`** sobre la pantalla (cinc dimensions: accessibilitat, rendiment, tematització, responsiu, integritat d'implementació) i desar l'informe a `docs/superpowers/specs/2026-10-12-gracies-pdf-audit.md` amb la puntuació, les incidències per severitat i els positius.
+- [ ] **Step 4: Corregir P0 i P1** (cada correcció amb el seu test abans, com a Task 2); les P2/P3 es deixen anotades a l'informe per a Olga. Si hi ha hagut correccions: una sola re-ronda de comprovació i `/impeccable polish` com a últim pas. `npm test` ha de quedar en verd (excepte `texts-doc` fins a Task 4).
+- [ ] **Step 5: Commit**
+
+```bash
+git add docs/superpowers/specs/2026-10-12-gracies-pdf-audit.md site tests
+git commit -m "fix: correccions de l'auditoria de la pantalla de gràcies"
+```
+
+---
+
+### Task 4: Documentació al dia
 
 **Files:**
 - Modify: `README.md:54`, `docs/superpowers/specs/2026-10-09-dossier-per-model.md`
@@ -302,6 +347,7 @@ git commit -m "docs: confirmació amb descàrrega (README, textos i spec del dos
 ---
 
 ## Self-Review
+- **Cobertura del flux acordat:** shape abans del codi (Task 0), audit per acabar (Task 3), sense `window.open` ni `openDocument` al final (Task 4 grep).
 - **Cobertura de l'spec:** no s'obre cap pestanya (T1); mateix criteri de dossier (`dossierFor`, T1/T2); `<a download>` (T2); targeta amb meta model/general (T1 `dossierMeta` + T2); CTA WhatsApp/Correu + enllaç inici (T2); `doneHelp` retirat (T2 i18n); literals sense «PDF» (T2 test); sense dossier → amagat (T2 test); docs (T3).
 - **Placeholders:** cap.
 - **Consistència de noms:** `dossierFor`, `dossierMeta`, `dossierHref`, `docMeta`, `emailHref`, `doneDownload`, `doneCardTitle`, `doneCardGeneral` coincideixen entre tasques.
