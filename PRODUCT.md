@@ -48,7 +48,7 @@ Propulsió elèctrica silenciosa per a embarcacions: TSF presenta el canvi cap a
 
 - Proposta v2, spec i wireframes de l'Extra 1: són confidencials (porten preus) i viuen només en local, a `docs-privats/`, que no és al repositori.
 - Sistema de disseny local `the-silent-fleet-ds/` amb tokens, 21 components i pantalles d'exemple.
-- **Dades de prova, no reals:** número de WhatsApp, URL de GitHub Pages, textos de la pàgina (títol, subtítol, missatges, privacitat) i noms dels perfils. No hi ha fotografies ni logotip, i els productes (Modelo A/B/C) i el dossier (`dossier-prova.pdf`) són de prova. No s'han de presentar com a confirmats.
+- **Dades de prova, no reals:** número de WhatsApp, URL de GitHub Pages, textos de la pàgina (títol, subtítol, missatges, privacitat) i noms dels perfils. Hi ha una fotografia de The Silent Fleet (`site/img/hero-m.webp` i `hero-d.webp`, derivades de l'original que va subministrar l'Olga, per al fons de totes les pantalles); no hi ha logotip, i els productes (Modelo A/B/C) i el dossier (`dossier-prova.pdf`) són de prova. No s'han de presentar com a confirmats.
 
 ## Product Principles
 
