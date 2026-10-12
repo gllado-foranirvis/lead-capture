@@ -118,3 +118,10 @@ test('el text de privacitat diu que les dades es desen a Google Sheets (no a For
     assert.doesNotMatch(DICT[l].form.privacyText, /Formularios|Formularis|Formulários|Forms/, l);
   }
 });
+test('la pantalla de gràcies té els literals de descàrrega en tots els idiomes i cap resta de l\'obertura automàtica', () => {
+  for (const l of CONFIG.languages) {
+    for (const k of ['doneDownload', 'doneCardTitle', 'doneCardGeneral']) assert.ok(DICT[l].form[k], `${l}.${k}`);
+    for (const k of ['doneOpen', 'doneHelp']) assert.equal(DICT[l].form[k], undefined, `${l}.${k} ja no existeix`);
+    assert.doesNotMatch(DICT[l].form.doneText, /abiert|obert|abrimos|opened/i, l);
+  }
+});

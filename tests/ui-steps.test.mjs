@@ -159,21 +159,48 @@ test('pas 2: error del perfil visible, botó final i «← Volver», enviar no r
   assert.deepEqual([e.prevented, sent], [true, 1]);
 });
 
-test('confirmació: dossier, ajuda per WhatsApp amb l\'enllaç de la sessió i tornada a l\'inici', () => {
-  let home = 0;
-  let opened = 0;
-  const tree = DoneScreen({ t: DICT.es, emailDelivery: false, onOpen: () => { opened++; }, whatsappHref: 'https://wa.me/1', onHome: () => home++ });
-  const [open, wa, back] = buttons(tree);
-  assert.deepEqual([textOf(open), open.props.variant], [f.doneOpen, undefined]);
-  open.props.onClick();
-  assert.deepEqual([textOf(wa), wa.props.variant, wa.props.href, back.props.variant, textOf(back)], [f.entryWhatsapp, 'outline', 'https://wa.me/1', 'link', f.doneHome]);
-  back.props.onClick();
-  assert.deepEqual([opened, home], [1, 1]);
+const done = (extra = {}) => DoneScreen({
+  t: DICT.es, emailDelivery: false, dossierHref: 'dossiers/model-a.pdf', dossierFile: 'tsf-model-a.pdf', docMeta: 'Modelo A',
+  whatsappHref: 'https://wa.me/1', emailHref: 'mailto:x@y.z', onHome: noop, ...extra,
+});
+const cardOf = (tree) => findAll(tree, (n) => typeof n.props?.className === 'string' && n.props.className.split(' ').includes('tsf-pdf'))[0];
+const link = (tree, text) => findAll(tree, (n) => n.type === 'a' && textOf(n) === text)[0];
+
+test('confirmació: marca d\'èxit, títol, targeta del dossier i descàrrega real', () => {
+  const tree = done();
   assert.equal(byType(tree, 'T.SectionHeading')[0].props.title, f.doneTitle);
-  assert.ok(textOf(tree).includes(f.doneHelp));
+  const card = cardOf(tree);
+  assert.deepEqual([textOf(card), card.props.className], [`${f.doneCardTitle}Modelo A`, 'tsf-pdf tsf-pdf--link']);
+  assert.ok(findAll(card, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length === 1, 'icona de document decorativa en lloc de la insígnia «PDF»');
+  const dl = link(tree, f.doneDownload);
+  const cardLink = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc')[0];
+  assert.deepEqual([cardLink.props.href, cardLink.props.download, cardLink.props.tabIndex], ['dossiers/model-a.pdf', 'tsf-model-a.pdf', -1], 'la targeta descarrega el mateix fitxer amb el mateix nom i no és parada de tabulador');
+  assert.deepEqual([dl.props.href, dl.props.download], ['dossiers/model-a.pdf', 'tsf-model-a.pdf']);
+  assert.equal(link(done({ dossierFile: '' }), f.doneDownload).props.download, '', 'sense nom configurat, el navegador tria el nom');
+  assert.match(dl.props.className, /tsf-btn--solid/);
+  assert.ok(findAll(tree, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length >= 1, 'marca d\'èxit decorativa');
+});
+test('confirmació: WhatsApp i correu sota el dossier, i tornada discreta a l\'inici', () => {
+  let home = 0;
+  const tree = done({ onHome: () => home++ });
+  const [wa, mail, back] = buttons(tree);
+  assert.deepEqual([textOf(wa), wa.props.variant, wa.props.href], [f.entryWhatsapp, 'outline', 'https://wa.me/1']);
+  assert.deepEqual([textOf(mail), mail.props.variant, mail.props.href], [f.entryEmail, 'outline', 'mailto:x@y.z']);
+  assert.deepEqual([back.props.variant, textOf(back)], ['link', f.doneHome]);
+  back.props.onClick();
+  assert.equal(home, 1);
+  const order = findAll(tree, (n) => (n.type === 'a' && n.props.className !== 'page__doc') || n.type === 'T.Button' || n.props?.className === 'page__doc').map((n) => n.props?.className === 'page__doc' ? 'card' : textOf(n));
+  assert.deepEqual(order, ['card', f.doneDownload, f.entryWhatsapp, f.entryEmail, f.doneHome]);
+  assert.equal(textOf(tree).includes('PDF'), false, 'cap text visible diu PDF');
+});
+test('confirmació: sense dossier configurat no hi ha targeta ni botó de descàrrega', () => {
+  const tree = done({ dossierHref: '' });
+  assert.equal(cardOf(tree), undefined);
+  assert.equal(link(tree, f.doneDownload), undefined);
+  assert.equal(buttons(tree).length, 3);
 });
 test('confirmació: el subtítol parla del correu només si l\'enviament existeix', () => {
-  const sub = (emailDelivery) => byType(DoneScreen({ t: DICT.es, emailDelivery, onOpen: noop, whatsappHref: 'w', onHome: noop }), 'T.SectionHeading')[0].props.subtitle;
+  const sub = (emailDelivery) => byType(done({ emailDelivery }), 'T.SectionHeading')[0].props.subtitle;
   assert.equal(sub(false), f.doneText);
   assert.equal(sub(true), f.doneTextMail);
 });

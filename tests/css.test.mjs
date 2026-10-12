@@ -33,6 +33,8 @@ test('page.css: mobile first, sense alçades fixes ni nowrap', () => {
 });
 test('page.css: la pantalla del formulari ocupa l\'alçada i el botó s\'ancora a la base sense posició fixa', () => {
   assert.match(page, /\.page--form\s*\{[^}]*min-height:\s*100dvh/);
+  assert.match(page, /\.page__done-actions\s*\{[^}]*margin-top:\s*auto/);
+  assert.match(page, /\.page__done-mark\s*\{[^}]*var\(--success-bg\)/);
   assert.match(page, /\.page__screen\s*\{[^}]*display:\s*flex/);
   assert.match(page, /\.form__actions\s*\{[^}]*margin-top:\s*auto/);
   assert.doesNotMatch(page, /position:\s*fixed/);
@@ -79,4 +81,12 @@ test('page.css (mòbil compacte): caselles múltiples en dues columnes i ritme v
 test('page.css: a pantalles amples (≥768px) el ritme torna a ser generós', () => {
   const wide = page.slice(page.indexOf('@media (min-width: 768px)'));
   assert.match(wide, /\.form\s*\{[^}]*gap:\s*var\(--space-5\)/);
+});
+
+test('page.css (mòbil): sense hover enganxat en un tàctil, amb feedback de toc i sense inflat de text d\'iOS', () => {
+  assert.match(page, /html\s*\{[^}]*text-size-adjust:\s*100%/);
+  assert.match(page, /html\s*\{[^}]*-webkit-tap-highlight-color:\s*transparent/);
+  const touch = page.match(/@media \(hover: none\)\s*\{([^}]*\{[^}]*\}\s*)+\}/)?.[0] ?? '';
+  for (const sel of ['.tsf-btn--solid:hover', '.tsf-btn--outline:hover', '.tsf-btn--link:hover', '.tsf-pdf--link:hover']) assert.ok(touch.includes(sel), `${sel} neutralitzat en tàctil`);
+  for (const sel of ['.tsf-btn--solid:active', '.tsf-btn--outline:active', '.tsf-pdf--link:active']) assert.match(page, new RegExp(`${sel.replace(/[.:]/g, '\\$&')}\\s*\\{`), `${sel}: feedback del toc`);
 });

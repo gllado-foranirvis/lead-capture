@@ -21,7 +21,7 @@ npm run texts      # regenera docs/textos-contacte.md (textos per validar) a par
 - `the-silent-fleet-ds/`: còpia local del sistema de disseny (font de la veritat visual; no s'edita aquí).
 - `apps-script/Code.gs`: l'script de Google que rep els leads i els desa al full (es copia a l'editor d'Apps Script; guia a `docs/google-sheet.md`).
 - `scripts/`: `smoke-sheet` (prova de fum de l'script desplegat), `sync-assets` (sistema de disseny, React i Montserrat), `make-qr`, `export-texts` (textos per validar), `make-test-pdf` (dossier de prova) i `rem-migration` (migració de tipografia preparada).
-- `tests/`: tests (`node:test`, 239) de la lògica, de les pantalles amb un renderitzador fals (`tests/helpers/fake-react.mjs`), dels textos, del CSS i del HTML.
+- `tests/`: tests (`node:test`, 246) de la lògica, de les pantalles amb un renderitzador fals (`tests/helpers/fake-react.mjs`), dels textos, del CSS i del HTML.
 - `docs/`: `textos-contacte.md` (generat), `typeset-rem/` i `superpowers/` (especificacions i plans de cada fase; el pla `2026-10-09-extra1-reordenat` substitueix l'ordre del `2026-10-08-extra1-2-passos`).
 - `.github/workflows/pages.yml`: desplegament a GitHub Pages en cada push a `main`.
 
@@ -51,7 +51,7 @@ El flux és **actiu** (`extra1: true` a `config.js`, decidit el 9/10/2026 per a 
 1. **Inici:** pregunta de perfil sempre visible (Particular / Profesional, opcional), WhatsApp i correu, i al final el CTA «Quiero saber más de The Silent Fleet».
 2. **Pas 1 de 2, contacte:** nom, correu, telèfon (prefix `+34` per defecte i número en camps separats), privacitat obligatòria i novetats. Els errors es veuen abans de seguir.
 3. **Pas 2 de 2, perfilació:** perfil (obligatori, ja marcat des de l'inici), activitat (només si és Profesional, amb «Otra»), embarcació, embarcació elèctrica, què t'entusiasma, què et preocupa, intenció de compra, factors decisius (les tres últimes amb «Otro» que obre el seu camp), model o potència, localitat per a una demostració i comentaris. Només el perfil és obligatori.
-4. **Confirmació:** s'obre el dossier del model triat, o el general si no n'hi ha (dins del gest del clic, perquè el navegador no el bloquegi), hi ha el botó per reobrir-lo i un bloc de WhatsApp amb les dades de la sessió.
+4. **Confirmació:** pantalla de gràcies (no s'obre res sol) amb la targeta del dossier del model triat, o el general si no n'hi ha, un botó «Descargar el dossier» que descarrega el fitxer amb el nom de `dossierFileName`, els botons de WhatsApp (amb les dades de la sessió) i de correu, i un enllaç discret per tornar a l'inici.
 
 «← Volver» conserva el que s'ha escrit. A la tauleta (`?o=tauleta`), tornar a l'inici o 90 segons sense tocar res descarta dades, perfil i identificador de lead.
 
@@ -65,6 +65,7 @@ El flux és **actiu** (`extra1: true` a `config.js`, decidit el 9/10/2026 per a 
 
 **Altres peces**
 - **`emailDelivery`** (`config.js`) és `false` fins que existeixi l'enviament del correu amb el dossier; només canvia el text de la confirmació.
+- **`dossierFileName`** (`config.js`, general i per model) només canvia el nom amb què es desa la descàrrega, no el fitxer de `site/`. Un model amb dossier propi n'ha de tenir un (el test de config ho exigeix); un sense dossier propi descarrega el general amb el nom del general.
 - **`site/dossier-prova.pdf` i `site/dossiers/*.pdf`** els genera `node scripts/make-test-pdf.mjs` i són de prova: han de ser els documents reals (un general i un per model; un model sense `dossierUrl` propi obre el general).
 - **Literals:** a `site/js/i18n-form.js`, de tu als 4 idiomes; el document es diu «dossier» fins que Bruno decideixi. «Ski / Wake» no es tradueix.
 - **Privacitat:** la pàgina mostra el text de l'Extra 1 (6 paràgrafs curts) amb `?extra1=1`; és un esborrany (no és assessorament legal).
@@ -78,6 +79,7 @@ El flux és **actiu** (`extra1: true` a `config.js`, decidit el 9/10/2026 per a 
 | `products` (`config.js`) | Modelo A / B / C, més l'opció fixa d'assessorament | Bruno: models o potències reals |
 | `leadEndpoint` i `leadToken` (`config.js`) | URL `/exec` i token d'un full de prova de l'Olga | Bruno: el full definitiu, en el seu compte (vegeu `docs/google-sheet.md`) |
 | `dossierUrl` (`config.js`) i el `dossierUrl` de cada producte | `dossier-prova.pdf` general; `dossiers/model-a.pdf` i `model-b.pdf` de prova (el Modelo C usa el general) | Bruno: un PDF per model i el general |
+| `dossierFileName` (`config.js`, general i per model) | `the-silent-fleet-dossier.pdf` i `the-silent-fleet-modelo-a/b.pdf` | Bruno: el nom amb què es desa cada document |
 | `legalName` (`config.js`) | PENDIENTE… | Bruno |
 | `privacyText` (`i18n-form.js`) | Esborrany, ara amb el correu parcial | Bruno (no és assessorament legal) |
 | Nom del document | «dossier» | Bruno |
@@ -95,12 +97,12 @@ El flux és **actiu** (`extra1: true` a `config.js`, decidit el 9/10/2026 per a 
 - Enviament del correu amb el dossier (pla posterior).
 - Prova de l'enviament al full en un mòbil real i amb mala cobertura (mode avió). Ja provat: fum contra l'script desplegat, flux real al navegador i CORS.
 - Menors diferits de l'enviament al full: `sendBeacon` no comprova si ha estat acceptat (Brave Shields el bloqueja amb `ERR_BLOCKED_BY_CLIENT`; l'enviament normal no es veu afectat); el client no deixa diagnòstic a la consola; una nota escrita a mà al full desplaça on s'afegeixen les files; l'identificador de producte només admet `[a-z0-9-]`; el text de privacitat no esmenta les marques de temps.
-- Prova en un mòbil real: bloquejador de finestres en obrir el PDF, teclats, tecla «Next» i autocompletat del telèfon en dos camps.
+- Prova en un mòbil real: descàrrega del PDF (iOS Safari l'obre en visor), teclats, tecla «Next» i autocompletat del telèfon en dos camps.
 - Menors diferits de la revisió final: el missatge «Producto de interés» surt a l'MVP si l'URL porta `?producto=`; `maxLength` als camps; `ADVICE` com a literal a `session.js`; sense esdeveniment si es retira el consentiment.
 
 ## Abans de publicar
 
-1. `npm test` en verd (239) i `npm run sync` sense canvis a `git status`.
+1. `npm test` en verd (246) i `npm run sync` sense canvis a `git status`.
 2. **Interruptor `extra1`:** a `config.js` és `true` (l'Extra 1 va a la fira). **Bloquejos abans de publicar:** `legalName` diu «versión beta de prueba: usa datos inventados» i es veu al text de privacitat (posar-hi el nom legal real); el text de privacitat és un esborrany; el dossier i els models són de prova; el full de Google és el de prova de l'Olga; el número de WhatsApp és de prova. Si alguna cosa no està llesta, `extra1: false` torna a l'MVP sol.
 3. **`leadEndpoint` i `leadToken`** apunten ara a un full de prova. Passar-los al full de Bruno abans de la fira (`docs/google-sheet.md`, passos 1–6) i tornar a fer `node scripts/smoke-sheet.mjs <url> <token>`. El token i l'URL queden visibles al web publicat: és per disseny, no són secrets.
 4. `dossierUrl` (general) i el `dossierUrl` de cada producte apunten a PDF de prova (`site/dossier-prova.pdf` i `site/dossiers/`): substituir-los pels documents reals, i no tornar a executar `scripts/make-test-pdf.mjs` (només refà fitxers de prova, però així no hi ha dubtes).
