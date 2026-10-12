@@ -105,6 +105,10 @@ test('page.css: la marca de la capçalera és un enllaç sense subratllat i amb 
 
 test('page.css (mòbil): l\'escena de l\'inici deixa a dalt un espai sense text perquè hi llueixi el vaixell', () => {
   const mobileStage = page.match(/\n\.stage\s*\{([^}]*)\}/)?.[1] ?? '';
-  assert.match(mobileStage, /padding:\s*7\.5rem var\(--gutter\)/);
+  assert.match(mobileStage, /padding:\s*5\.75rem var\(--gutter\)/);
   assert.match(mobileStage, /hero-m\.webp/);
+});
+
+test('page.css (mòbil): a l\'inici la capçalera és baixa perquè la marca quedi a prop del títol', () => {
+  assert.match(page, /\.site--entry \.site__top \.page__top\s*\{[^}]*min-height:\s*3\.5rem/);
 });

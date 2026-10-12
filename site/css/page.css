@@ -87,13 +87,14 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .page__top .wordmark { display: inline-flex; align-items: center; min-height: var(--tap-min-compact); text-decoration: none; }
 .site__top .tsf-lang__select { background: transparent; color: var(--on-navy); border-color: var(--on-navy); }
 .site__top .tsf-lang::after { border-top-color: var(--on-navy); }
-/* Inici (mòbil): el retall de hero-m porta el vaixell a dalt a la dreta; el padding superior (7.5rem) li deixa un espai lliure de text, entre la capçalera i el títol. */
+/* Inici (mòbil): el retall de hero-m porta el vaixell a dalt a la dreta; el padding superior (5.75rem) li deixa un espai lliure de text, entre la capçalera (baixa, 3.5rem) i el títol. */
 /* Inici: la fotografia ocupa l'escena i la capçalera hi va a sobre. */
 .site--entry .site__top { position: absolute; inset: 0 0 auto 0; z-index: 2; background: none; }
+.site--entry .site__top .page__top { min-height: 3.5rem; padding-block: var(--space-2); }
 .site--entry .page__main { max-width: none; padding: 0; gap: 0; }
 .page__screen--entry { gap: 0; }
 .stage {
-  display: flex; flex-direction: column; justify-content: flex-end; box-sizing: border-box; padding: 7.5rem var(--gutter) var(--space-4);
+  display: flex; flex-direction: column; justify-content: flex-end; box-sizing: border-box; padding: 5.75rem var(--gutter) var(--space-4);
   background: linear-gradient(var(--overlay-hero), var(--overlay-hero)), linear-gradient(var(--overlay-hero), var(--overlay-hero)), url("../img/hero-m.webp") 50% 35% / cover;
   color: var(--on-navy);
 }
