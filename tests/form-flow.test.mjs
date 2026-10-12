@@ -15,7 +15,7 @@ const harness = (extra = {}, search = '?producto=model-a&o=tauleta') => {
     deps: {
       products: PRODUCTS, search, lang: 'es', leadId: '', newId: () => 'id-1',
       setLeadId: rec('setLeadId'), setErrors: rec('setErrors'), bumpAttempt: rec('bumpAttempt'), dispatch: rec('dispatch'),
-      setReceipt: rec('setReceipt'), openDocument: rec('openDocument'), emitPartial: rec('emitPartial'), emitLead: rec('emitLead'), goTo: rec('goTo'),
+      setReceipt: rec('setReceipt'), emitPartial: rec('emitPartial'), emitLead: rec('emitLead'), goTo: rec('goTo'),
       ...extra,
     },
   };
@@ -50,11 +50,10 @@ test('tornar al pas 1 i continuar de nou reutilitza l\'id i emet el lead parcial
   assert.equal(call(calls, 'emitPartial')[1].id, 'id-0');
   assert.equal(call(calls, 'emitPartial')[1].phone, '+34 600 11 22 33');
 });
-test('enviament final: obre el document PRIMER, després emet el lead i neteja per al següent visitant', () => {
+test('enviament final: no obre cap document; emet el lead i neteja per al següent visitant', () => {
   const { calls, deps } = harness({ leadId: 'id-0' });
   assert.equal(handleSubmit(full, deps), true);
-  assert.equal(names(calls)[0], 'openDocument');
-  assert.deepEqual(calls[0], ['openDocument', 'model-a'], 'el producte arriba a openDocument abans que el formulari es buidi');
+  assert.equal(names(calls).includes('openDocument'), false);
   const lead = call(calls, 'emitLead')[1];
   assert.deepEqual([lead.contact.id, lead.profiling.id, lead.contact.profile, lead.profiling.activity, lead.profiling.hasBoat, lead.profiling.intent], ['id-0', 'id-0', 'profesional', 'vela', 'si', 'no']);
   assert.deepEqual(call(calls, 'setReceipt')[1], { product: 'model-a', profile: 'profesional', activity: 'vela', activityOther: '', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: 'Girona', enthusiasm: ['noise'], enthusiasmOther: '', concerns: ['range'], concernsOther: '', factors: ['price'], factorsOther: '', comments: 'Hola', name: 'Ana' });
@@ -73,7 +72,7 @@ test('enviament final sense perfil: error al pas 2, cap document, cap lead', () 
   assert.equal(handleSubmit({ ...contact, profile: '' }, deps), false);
   assert.deepEqual(call(calls, 'setErrors')[1], { profile: 'profileRequired' });
   assert.deepEqual(call(calls, 'goTo'), ['goTo', 'step2']);
-  assert.equal(names(calls).includes('openDocument') || names(calls).includes('emitLead'), false);
+  assert.equal(names(calls).includes('emitLead'), false);
 });
 test('enviament final amb un error de contacte torna al pas 1', () => {
   const { calls, deps } = harness();

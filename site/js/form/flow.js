@@ -19,11 +19,10 @@ export function advanceStep1(values, { search, lang, leadId, newId, setLeadId, s
   return true;
 }
 
-// El document s'obre abans de qualsevol altra cosa: el navegador només ho permet dins del gest de l'usuari.
 // Un enviament vàlid deixa el formulari net per al següent visitant de la tauleta; la confirmació conserva
-// només el que necessita per al WhatsApp (receipt).
+// només el que necessita (receipt): el WhatsApp, el correu i el dossier del model triat.
 export function handleSubmit(values, {
-  products, search, lang, leadId, newId, dispatch, setErrors, setLeadId, setReceipt, bumpAttempt, openDocument, emitLead, goTo,
+  products, search, lang, leadId, newId, dispatch, setErrors, setLeadId, setReceipt, bumpAttempt, emitLead, goTo,
 }) {
   const result = submitForm(values, { id: leadId || newId(), lang, origin: resolveOrigin(search) });
   if (result.errors) {
@@ -32,7 +31,6 @@ export function handleSubmit(values, {
     goTo(STEP_FIELDS[1].includes(firstErrorField(result.errors)) ? 'step1' : 'step2');
     return false;
   }
-  openDocument(values.product);
   emitLead(result.lead);
   setReceipt({
     product: values.product, profile: values.profile, activity: values.activity, activityOther: values.activityOther,

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { dossierFor, openDossier } from '../site/js/form/dossier.js';
+import { dossierFor, dossierFileFor, dossierMeta, openDossier } from '../site/js/form/dossier.js';
 
 const config = {
   dossierUrl: 'dossier-general.pdf',
@@ -34,4 +34,19 @@ test('openDossier no fa res si no hi ha URL', () => {
   const calls = [];
   assert.equal(openDossier('a', { products: [] }, (...args) => calls.push(args)), '');
   assert.deepEqual(calls, []);
+});
+test('dossierMeta: el nom del model si té dossier propi; si no, el text alternatiu', () => {
+  const named = { ...config, products: config.products.map((p) => ({ ...p, name: `Model ${p.id}` })) };
+  assert.equal(dossierMeta('a', named, 'General'), 'Model a');
+  for (const id of ['b', 'c', '', 'asesoramiento', 'desconegut', undefined]) assert.equal(dossierMeta(id, named, 'General'), 'General', String(id));
+});
+test('dossierFileFor: nom propi del model, si no el del general, si no buit', () => {
+  const cfg = {
+    dossierUrl: 'g.pdf', dossierFileName: 'tsf-dossier.pdf',
+    products: [{ id: 'a', dossierUrl: 'a.pdf', dossierFileName: 'tsf-a.pdf' }, { id: 'b', dossierUrl: 'b.pdf' }, { id: 'c' }],
+  };
+  assert.equal(dossierFileFor('a', cfg), 'tsf-a.pdf');
+  assert.equal(dossierFileFor('b', cfg), '', 'dossier propi sense nom: no es dona al model el nom del general');
+  for (const id of ['c', '', 'asesoramiento', undefined]) assert.equal(dossierFileFor(id, cfg), 'tsf-dossier.pdf', String(id));
+  assert.equal(dossierFileFor('c', { dossierUrl: 'g.pdf', products: [{ id: 'c' }] }), '');
 });

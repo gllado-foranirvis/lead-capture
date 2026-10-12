@@ -37,6 +37,14 @@ test('cada dossier configurat (general i per model) és una ruta relativa a un P
     assert.ok(pdf.startsWith('%PDF-') && pdf.trimEnd().endsWith('%%EOF'), `${url} no és un PDF`);
   }
 });
+test('els noms de fitxer de descàrrega, si hi són, són «nom.pdf» sense carpetes ni caràcters estranys', () => {
+  const names = [CONFIG.dossierFileName, ...CONFIG.products.map((p) => p.dossierFileName)].filter((n) => n !== undefined);
+  assert.ok(CONFIG.dossierFileName, 'el general ha de tenir nom de descàrrega');
+  for (const n of names) assert.match(n, /^[a-z0-9][a-z0-9._-]*\.pdf$/, n);
+});
+test('cada model amb dossier propi té nom de descàrrega propi (si no, es descarregaria amb el nom intern)', () => {
+  for (const p of CONFIG.products.filter((x) => x.dossierUrl)) assert.ok(p.dossierFileName, p.id);
+});
 test('l\'enviament al full: buit (apagat) o una URL /exec de Google; el token és un text', () => {
   assert.match(CONFIG.leadEndpoint, /^(|https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec)$/);
   assert.equal(typeof CONFIG.leadToken, 'string');

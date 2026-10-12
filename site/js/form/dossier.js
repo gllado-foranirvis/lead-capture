@@ -9,3 +9,15 @@ export function openDossier(productId, config, open = (...args) => window.open(.
   if (url) open(url, '_blank', 'noopener');
   return url;
 }
+
+// Segona línia de la targeta: el nom del model si el dossier és el seu; si és el general, el text alternatiu.
+export function dossierMeta(productId, config, fallback) {
+  const product = config.products?.find((p) => p.id === productId);
+  return product?.dossierUrl ? product.name : fallback;
+}
+
+// Nom amb què es desa la descàrrega (atribut download). '' = el navegador fa servir el nom del fitxer.
+export function dossierFileFor(productId, config) {
+  const product = config.products?.find((p) => p.id === productId);
+  return (product?.dossierUrl ? product.dossierFileName : config.dossierFileName) || '';
+}
