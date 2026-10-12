@@ -343,6 +343,7 @@ Només es mou el color: botons, enllaços i xips canvien de color en 150ms (`eas
 - **Select** i **Checkbox:** mateix patró; la fletxa és ink i la casella de 24px usa Action Black.
 
 ### Telèfon
+- **Agrupació mentre s'escriu:** per prefix, `+34` → 3-2-2-2 («600 00 00 00») i `+351` → 3-3-3 («912 345 678»); la resta de prefixos es deixen com s'escriuen. El cursor es queda darrere de la mateixa xifra en editar al mig. El marcador segueix el prefix (el de l'idioma si no hi ha patró). Un número internacional («+351 912…», «0034…») escrit o enganxat al camp del número en separa el prefix. El camp de prefix porta suggeriments (`<datalist>`) amb el nom del país en l'idioma de la pàgina.
 - **Dos camps a la mateixa fila:** «Prefijo» (96px, amb +34 per defecte, editable) i «Teléfono» (la resta). El prefix accepta «+34» o «34»; el número, només xifres, espais, parèntesis i guions. Les 7–15 xifres es compten sobre el telèfon sencer i el lead porta `+34 600 00 00 00`.
 - **Errors:** el del prefix és curt («Prefijo no válido») perquè cap en la columna estreta; el del número té el seu exemple.
 
@@ -355,18 +356,25 @@ Només es mou el color: botons, enllaços i xips canvien de color en 150ms (`eas
 ### Ritme vertical del formulari (mòbil)
 - **Compacte per defecte:** 16px entre blocs de pregunta, 12px entre camps d'un mateix grup, 4px entre la llegenda i les seves opcions (proximitat 3:1), capçalera de 44px i 12px de marge superior de pàgina. A partir de 768px el ritme torna a ser generós (24px entre blocs).
 
+### Escena fotogràfica (inici) i franja (resta de pantalles)
+- **Fotografia a tall viu, sense marc ni degradats:** `hero-m.webp` (mòbil, retall 4:3 amb el vaixell a dalt a la dreta) i `hero-d.webp` (≥768px). El vel és `overlay-hero` en dues capes planes (≈58%); el text és blanc (`on-navy`).
+- **Inici (`.stage`):** a tot sang, sense alçada mínima en mòbil (la dona el contingut: ~220px a 360px). Capçalera de 56px (3,5rem) superposada a la foto, 40px de la marca al títol (`padding-top` de 5,75rem), títol `h2` de 28px (l'`h1` real) i subtítol de 14px. El vaixell queda en un espai sense text entre la capçalera i el títol. A partir de 768px l'escena fa 28rem, el títol 40px i el vaixell queda per sobre del text.
+- **Resta de pantalles (`.site__top`):** franja de 80px amb la mateixa foto i vel; la gràcies l'amplia amb 32px i hi recolza la marca d'èxit (cercle de 3,5rem, `success-bg`, vora de 8px del color de pàgina).
+- **Ritme de l'inici (base 8px):** 8 dins d'un grup (etiqueta i botons de contacte, botó i botó, botó i nota), 16 entre grups, 24 (= `gutter`) als laterals i al voltant de la vora de la foto (24 sota el subtítol i 24 fins al primer contingut), 24 entre els contactes i el CTA (16 + 8).
+- **Sense animació d'entrada a l'inici:** la foto no entra des del blanc (`.page__screen--entry { animation: none }`).
+
 ### Pàgina de lectura (privacitat)
 - **Text en paràgrafs curts:** un `<p>` per bloc (6 a l'Extra 1), amb 16px entre paràgrafs i 12px entre títol i text; els marges per defecte de `h1`, `h2` i `p` s'anul·len perquè se sumaven al gap. Cada secció nova té 24px d'aire a sobre, més que sota el seu títol.
-- **Estructura:** la capçalera és un `<header>` fora de `<main>` (landmark de banner) a totes les pantalles de l'app.
+- **Estructura:** la capçalera és un `<header>` fora de `<main>` (landmark de banner) a totes les pantalles de l'app. A `privacy.html` també hi ha la franja fotogràfica amb la marca com a enllaç a l'inici.
 
 ### Cards / Containers
 - **Product panel:** panell Abyss Navy quadrat amb text blanc, centrat, i botó `outline-light`; el producte es mostra retallat sobre blanc, sense ombra.
 - **Image card:** imatge 3:2 amb 16px de radi i descripció en `text-muted`.
 - **Notice:** radi 16px, fons suau del semàfor, icona de color i text sempre ink. La variant gran és una pantalla de confirmació centrada.
-- **PDF card:** vora 1px Control Edge, radi 16px, icona de document de 40×48px.
+- **PDF card:** vora 1px Control Edge, radi 16px. A la pantalla de gràcies és la «targeta del dossier»: classes `tsf-pdf` del sistema però amb la icona Lucide `file-text` (32px, traç d'1,5px, `currentColor`) en lloc de la insígnia «PDF» de `T.PdfCard`; és un enllaç `<a download>` (mateix fitxer i nom que el botó, `tabIndex: -1`) i té hover/`:active` de toc.
 
 ### Navigation
-- **Style:** capçalera enganxada de 56px (64px des de 768px), nom en `wordmark` i enllaços en `nav`.
+- **Style:** capçalera enganxada de 56px (64px des de 768px), nom en `wordmark` i enllaços en `nav`. A l'app, la marca és un enllaç a l'inici (zona tàctil de 44px, sense subratllat) i, sobre la foto, el `LangSwitch` és transparent amb vora i text `on-navy`.
 - **States:** l'enllaç actiu porta una línia d'1px ink; hover, una línia Control Edge.
 - **Mobile:** menú hamburguesa amb panell; els enllaços fan 48px d'alt. Als fluxos sense capçalera, el `LangSwitch` («ES ▾», radi 6px, 44px) va a la dreta.
 - **Legal links:** fila centrada en `caption` i `text-muted`; en compacte fan 40px d'alt, excepció documentada a la densitat compacta.
@@ -382,7 +390,8 @@ Només es mou el color: botons, enllaços i xips canvien de color en 150ms (`eas
 - **Do** mostrar la fotografia a tall viu amb `overlay-hero` quan porti text a sobre. A la web de la fira: l'inici i la franja de capçalera de la resta de pantalles (`.site__top`, `.stage`) la porten amb dues capes planes d'`overlay-hero` (sense degradats) perquè el text blanc sigui llegible.
 
 ### Don't:
-- **Don't** usar ombres ni degradats; la profunditat és tonal.
+- **Don't** usar ombres ni degradats; la profunditat és tonal (el vel de la fotografia és pla: capes d'`overlay-hero`, mai un degradat).
+- **Don't** deixar que un `:hover` quedi enganxat en un tàctil: en `@media (hover: none)` els botons tornen al seu estat base i el feedback del toc és `:active`.
 - **Don't** usar Lagoon Aqua ni Electric Sky com a text o icona sobre blanc.
 - **Don't** dibuixar un logotip: el nom és text en `wordmark` i els logotips de partners es mostren tal com els subministra cada marca (màx. 96px d'alt, sobre blanc, sense filtre).
 - **Don't** acolorir el glif de WhatsApp ni posar-lo amb els colors de la marca: és una marca de tercers i només va en la tinta del botó.
