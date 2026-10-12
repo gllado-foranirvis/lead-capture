@@ -116,12 +116,9 @@ function App() {
     },
   };
 
-  const isStep = view === 'step1' || view === 'step2';
-  // El <header> queda fora de <main>: així és el landmark de banner i el contingut és el principal.
-  // La pantalla de gràcies també ocupa l'alçada perquè els CTA quedin al peu.
-  const full = isStep || view === 'done';
-  return h('div', { className: full ? 'page page--form tsf-compact' : 'page tsf-compact' },
-    h(Header, { t, lang, onLang: setLang }),
+  // La capçalera (landmark de banner) queda fora de <main>. Sobre la fotografia: a l'inici cobreix l'escena; a la resta és una franja.
+  return h('div', { className: `site site--${view} tsf-compact` },
+    h('div', { className: 'site__top tsf-on-dark' }, h(Header, { t, lang, onLang: setLang })),
     h('main', { className: 'page__main' }, screens[view]()));
 }
 

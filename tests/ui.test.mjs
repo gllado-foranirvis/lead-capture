@@ -32,7 +32,7 @@ test('entrada sense Extra 1: com l\'MVP (WhatsApp principal, cap botó nou)', ()
   assert.equal(wa.props.variant, undefined);
   assert.equal(mail.props.variant, 'outline');
   assert.equal(buttons(entry()).length, 2);
-  assert.equal(byType(entry(), 'T.SectionHeading')[0].props.level, 1);
+  assert.equal(findAll(entry(), (n) => n.type === 'h1').length, 1);
 });
 test('entrada: línia explicativa, adreça visible i enllaços legals amb la query', () => {
   const tree = entry({ legalQuery: '?lang=es&extra1=1' });
