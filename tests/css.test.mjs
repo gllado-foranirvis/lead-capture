@@ -33,6 +33,8 @@ test('page.css: mobile first, sense alçades fixes ni nowrap', () => {
 });
 test('page.css: la pantalla del formulari ocupa l\'alçada i el botó s\'ancora a la base sense posició fixa', () => {
   assert.match(page, /\.page--form\s*\{[^}]*min-height:\s*100dvh/);
+  assert.match(page, /\.page__done-actions\s*\{[^}]*margin-top:\s*auto/);
+  assert.match(page, /\.page__done-mark\s*\{[^}]*var\(--success-bg\)/);
   assert.match(page, /\.page__screen\s*\{[^}]*display:\s*flex/);
   assert.match(page, /\.form__actions\s*\{[^}]*margin-top:\s*auto/);
   assert.doesNotMatch(page, /position:\s*fixed/);

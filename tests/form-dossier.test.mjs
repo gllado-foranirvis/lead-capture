@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { dossierFor, dossierFileFor, dossierMeta, openDossier } from '../site/js/form/dossier.js';
+import { dossierFor, dossierFileFor, dossierMeta } from '../site/js/form/dossier.js';
 
 const config = {
   dossierUrl: 'dossier-general.pdf',
@@ -23,17 +23,6 @@ test('sense model, amb «asesoramiento» o amb un id desconegut s\'obre el gener
 });
 test('sense cap dossier configurat no hi ha URL', () => {
   assert.equal(dossierFor('a', { products: [{ id: 'a' }] }), '');
-});
-test('openDossier obre en una pestanya nova, sense opener, i retorna la URL', () => {
-  const calls = [];
-  const url = openDossier('a', config, (...args) => calls.push(args));
-  assert.equal(url, 'dossiers/a.pdf');
-  assert.deepEqual(calls, [['dossiers/a.pdf', '_blank', 'noopener']]);
-});
-test('openDossier no fa res si no hi ha URL', () => {
-  const calls = [];
-  assert.equal(openDossier('a', { products: [] }, (...args) => calls.push(args)), '');
-  assert.deepEqual(calls, []);
 });
 test('dossierMeta: el nom del model si té dossier propi; si no, el text alternatiu', () => {
   const named = { ...config, products: config.products.map((p) => ({ ...p, name: `Model ${p.id}` })) };
