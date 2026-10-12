@@ -114,6 +114,16 @@ test('pas 1: cada control notifica el seu camp i el contenidor del títol rep el
   assert.deepEqual([head.props.tabIndex, head.props.className], [-1, 'page__heading']);
 });
 
+test('pas 1: el telèfon s\'agrupa mentre s\'escriu segons el prefix, i en canviar de prefix es reagrupa el número', () => {
+  const calls = [];
+  const onChange = (field, v) => calls.push([field, v]);
+  byName(contact({ onChange }), 'phone')[0].props.onChange({ target: { value: '666666666', selectionStart: 9 } });
+  byName(contact({ onChange, values: { ...emptyForm(), phonePrefix: '+351' } }), 'phone')[0].props.onChange({ target: { value: '912345678', selectionStart: 9 } });
+  byName(contact({ onChange, values: { ...emptyForm(), phone: '912 34 56 78' } }), 'phonePrefix')[0].props.onChange({ target: { value: '+351' } });
+  byName(contact({ onChange, values: { ...emptyForm(), phone: '123456789' } }), 'phonePrefix')[0].props.onChange({ target: { value: '+1' } });
+  assert.deepEqual(calls, [['phone', '666 66 66 66'], ['phone', '912 345 678'], ['phonePrefix', '+351'], ['phone', '912 345 678'], ['phonePrefix', '+1']]);
+});
+
 test('pas 2: indicador 2 de 2 i preguntes en l\'ordre del brief; l\'activitat no hi surt per a un Particular', () => {
   const tree = profile({ values: { ...emptyForm(), profile: 'particular' } });
   assert.equal(bar(tree).props['aria-valuenow'], 2);

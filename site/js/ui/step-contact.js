@@ -1,4 +1,5 @@
 // site/js/ui/step-contact.js — pas 1: dades de contacte i consentiment
+import { formatPhone, keepCaret } from '../form/phone.js';
 import { stepLabel } from '../form/steps.js';
 import { makeFields } from './fields.js';
 import { createStepIndicator } from './step-indicator.js';
@@ -9,6 +10,17 @@ export function createStepContact({ h, T }) {
     const f = t.form;
     const { text } = makeFields({ h, T, f, values, errors, onChange });
     const error = (field) => (errors[field] ? f.errors[errors[field]] : undefined);
+    // El número es reagrupa mentre s'escriu (segons el prefix) i també quan es canvia de prefix.
+    const onPhone = (e) => {
+      const formatted = formatPhone(values.phonePrefix, e.target.value);
+      onChange('phone', formatted);
+      keepCaret(e.target, formatted);
+    };
+    const onPrefix = (e) => {
+      onChange('phonePrefix', e.target.value);
+      const formatted = formatPhone(e.target.value, values.phone);
+      if (formatted !== values.phone) onChange('phone', formatted);
+    };
 
     return h('div', { className: 'page__screen page__screen--form' },
       StepIndicator({ step: 1, total: 2, label: stepLabel(f.stepOf, 1, 2) }),
@@ -21,8 +33,8 @@ export function createStepContact({ h, T }) {
           text('email', f.email, { required: true, type: 'email', placeholder: f.emailPlaceholder }),
           // Prefix i número en camps separats: el prefix surt amb +34 i es pot canviar.
           h('div', { className: 'form__phone' },
-            text('phonePrefix', f.phonePrefix, { required: true, type: 'tel' }),
-            text('phone', f.phone, { required: true, type: 'tel', placeholder: f.phonePlaceholder }))),
+            text('phonePrefix', f.phonePrefix, { required: true, type: 'tel', onChange: onPrefix }),
+            text('phone', f.phone, { required: true, type: 'tel', placeholder: f.phonePlaceholder, onChange: onPhone }))),
         h('div', { className: 'form__group' },
           h(T.Checkbox, { name: 'privacy', id: 'privacy', required: true, checked: values.privacy, error: error('privacy'), onChange: (e) => onChange('privacy', e.target.checked) },
             // Un sol element: l'etiqueta del Checkbox és flex i, amb tres fills, es perdria l'espai abans de l'enllaç.
