@@ -57,11 +57,13 @@ test('inici amb Extra 1: xip de perfil sempre visible, CTA nou únic principal, 
 test('inici amb Extra 1: el CTA principal va després dels contactes, la línia «¿No se abre?» després del CTA i els enllaços legals al final', () => {
   const body = findAll(entry({ onOpenForm: noop }), (n) => n.props?.className === 'page__body')[0];
   const kinds = body.children.map((n) => (typeof n === 'object' && n ? n.type : null));
-  assert.ok(kinds.indexOf('T.SectionLabel') < kinds.indexOf('T.Button'), 'els contactes abans del CTA');
+  const group = body.children.find((n) => n.props?.className === 'page__group');
+  assert.deepEqual(group.children.map((n) => n.type ?? null), ['T.SectionLabel', 'div'], 'etiqueta i botons de contacte formen un grup');
+  assert.ok(body.children.indexOf(group) < kinds.indexOf('T.Button'), 'els contactes abans del CTA');
   assert.deepEqual(kinds.slice(-3), ['T.Button', 'p', 'T.LegalLinks']);
   assert.equal(textOf(body.children.at(-3)), f.entryCta);
   assert.equal(textOf(body.children.at(-2)), `${DICT.es.contactFallback} ${CONFIG.email}`);
-  const stack = body.children.find((n) => n.props?.className === 'page__stack');
+  const stack = group.children.find((n) => n.props?.className === 'page__stack');
   assert.equal(textOf(stack).includes(DICT.es.contactFallback), false, 'ja no és dins del bloc dels contactes');
   assert.ok(textOf(stack).includes(DICT.es.contactHint), 'la línia explicativa es queda amb els botons');
 });

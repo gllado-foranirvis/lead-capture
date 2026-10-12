@@ -51,7 +51,7 @@ test('page.css: els xips del formulari fan salt de línia perquè cap opció que
 });
 
 test('page.css: separació del CTA de l\'inici i xip llarg a fila pròpia', () => {
-  assert.match(page, /\.page__cta\s*\{[^}]*margin-top:\s*var\(--space-4\)/);
+  assert.match(page, /\.page__cta\s*\{[^}]*margin-top:\s*var\(--space-2\)/); // 16 de gap + 8 = 24 respecte als contactes
   assert.match(page, /\.form__chips--wide \.tsf-chip:last-child\s*\{[^}]*flex-basis:\s*100%/);
 });
 
@@ -111,4 +111,15 @@ test('page.css (mòbil): l\'escena de l\'inici deixa a dalt un espai sense text 
 
 test('page.css (mòbil): a l\'inici la capçalera és baixa perquè la marca quedi a prop del títol', () => {
   assert.match(page, /\.site--entry \.site__top \.page__top\s*\{[^}]*min-height:\s*3\.5rem/);
+});
+
+test('page.css (inici): marges proporcionals sobre una base de 8px: 8 dins d\'un grup, 16 entre grups, 24 (= el gutter) a les vores i 40 de la marca al títol', () => {
+  const rule = (sel) => page.match(new RegExp(`\\n${sel.replace(/[.]/g, '\\.')}\\s*\\{([^}]*)\\}`))?.[1] ?? '';
+  assert.match(rule('.stage'), /padding:\s*5\.75rem var\(--gutter\) var\(--space-5\)/, 'sota l\'escena, 24');
+  assert.match(rule('.stage__sub'), /margin:\s*var\(--space-2\) 0 0/, 'títol → subtítol, 8');
+  const body = rule('.page__body');
+  assert.match(body, /gap:\s*var\(--space-4\)/, 'entre grups, 16');
+  assert.match(body, /padding:\s*var\(--space-5\) var\(--gutter\)/, 'tot al voltant, 24: també entre l\'escena i el contingut, simètric amb el peu de l\'escena');
+  assert.match(rule('.page__group'), /gap:\s*var\(--space-2\)/, 'etiqueta i botons de contacte, 8');
+  assert.match(page, /\.page__cta\s*\{[^}]*margin-top:\s*var\(--space-2\)/, 'CTA: 16 + 8 = 24 respecte als contactes');
 });
