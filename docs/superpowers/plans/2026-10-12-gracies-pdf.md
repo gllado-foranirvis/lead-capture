@@ -259,10 +259,9 @@ i la classe de pàgina (la pantalla de gràcies també ocupa l'alçada perquè e
 ```css
 /* Pantalla de gràcies: marca d'èxit centrada i CTA al peu (com el wireframe «Gracias + PDF»). */
 .page__screen--done { flex: 1; align-items: stretch; }
-.page__done-mark { align-self: center; box-sizing: border-box; width: var(--space-9); height: var(--space-9); padding: var(--space-3); border-radius: 50%; background: var(--success-bg); color: var(--success); }
+.page__done-mark { align-self: center; box-sizing: border-box; width: 56px; height: 56px; padding: var(--space-3); border-radius: 50%; background: var(--success-bg); color: var(--success); }
 .page__done-actions { display: flex; flex-direction: column; gap: var(--space-2); margin-top: auto; padding-top: var(--space-4); }
 ```
-(Comprovar que `--space-9` existeix a `site/ds/tokens.css`; si no, usar `56px`.)
 
 - [ ] **Step 4: Passen**
 
