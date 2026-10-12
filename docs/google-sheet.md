@@ -20,4 +20,4 @@ L'Extra 1 emet dos esdeveniments (`tsf:lead-partial` i `tsf:lead`). Si `CONFIG.l
 - El servidor no desa mai un lead sense `privacy: true`.
 - Les columnes tenen format de text pla, perquè un valor que comenci per `=`, `+` o `@` no s'executi com a fórmula.
 - La cua d'enviament del client és només en memòria (cap dada personal al navegador): reintenta amb espera creixent, torna a provar en recuperar la xarxa i fa un darrer intent amb `sendBeacon` en tancar la pàgina.
-- L'enviament no bloqueja el visitant: el dossier s'obre i la confirmació surt igualment.
+- L'enviament no bloqueja el visitant: la pantalla de gràcies amb el dossier surt igualment.
