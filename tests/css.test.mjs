@@ -102,3 +102,9 @@ test('page.css: la marca de la capçalera és un enllaç sense subratllat i amb 
   assert.match(page, /\.page__top \.wordmark\s*\{[^}]*text-decoration:\s*none/);
   assert.match(page, /\.page__top \.wordmark\s*\{[^}]*min-height:\s*var\(--tap-min-compact\)/);
 });
+
+test('page.css (mòbil): l\'escena de l\'inici deixa a dalt un espai sense text perquè hi llueixi el vaixell', () => {
+  const mobileStage = page.match(/\n\.stage\s*\{([^}]*)\}/)?.[1] ?? '';
+  assert.match(mobileStage, /padding:\s*7\.5rem var\(--gutter\)/);
+  assert.match(mobileStage, /hero-m\.webp/);
+});
