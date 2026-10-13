@@ -2,7 +2,7 @@
 //   brand            (obligatòria) nom de marca; es veu a la capçalera i al títol de la pestanya.
 //   whatsappNumber   (obligatòria) número internacional de WhatsApp Business. Bruno. PROVA fins que el doni.
 //   email            (obligatòria) adreça de contacte; es veu a l'entrada i és el destinatari del correu.
-//   siteUrl          (obligatòria) URL pública, https i acabada en «/»; l'usen el QR i els enllaços. Provisional.
+//   siteUrl          (obligatòria) URL pública, https i acabada en «/»; l'usen el QR i els enllaços. Definitiva.
 //   extra1           (obligatòria) true = flux de captació en 2 passos i dossier; false = només l'MVP (WhatsApp i correu).
 //   dossier          (opcional, per defecte true) false = versió de contingència sense PDF: no es pregunta el producte d'interès ni es parla de cap descàrrega. Es veu també amb ?dossier=0.
 //   dossierUrl       (obligatòria) ruta relativa dins de site/ del PDF general; és l'alternativa de tots els models.
@@ -14,14 +14,14 @@
 //                      id (únic, [a-z0-9-]), name (text visible),
 //                      dossierUrl (opcional: PDF propi dins de site/; si falta s'ofereix el general),
 //                      dossierFileName (obligatori si hi ha dossierUrl propi: nom de la descàrrega).
-//   legalName        (obligatòria) nom legal que es veu al text de privacitat. Bruno. BETA fins que el doni.
+//   legalName        (obligatòria) nom legal que es veu al text de privacitat. Bruno. Definitiu.
 //   defaultLang      (obligatòria) idioma per defecte; ha de ser un de languages.
 //   languages        (obligatòria) idiomes disponibles, en l'ordre del selector.
 export const CONFIG = {
   brand: 'The Silent Fleet',
   whatsappNumber: '+34 600 00 00 00', // PROVA: substituir pel número real de WhatsApp Business
   email: 'info@thesilentfleet.com',
-  siteUrl: 'https://gllado-foranirvis.github.io/lead-capture/', // PROVISIONAL: compte de prova; canviar-la si el repo passa al compte de The Silent Fleet
+  siteUrl: 'https://gllado-foranirvis.github.io/lead-capture/', // definitiva (decidit)
   extra1: true, // L'Extra 1 és actiu (decidit el 9/10/2026 per a la fira); amb false torna a l'MVP sol i es previsualitza amb ?extra1=1
   dossier: true, // false = versió de contingència sense PDF (sense pregunta de producte ni descàrrega); amb ?dossier=0 es previsualitza
   dossierUrl: 'dossier-prova.pdf', // PROVA: substituir pel document real de Bruno (a site/)
@@ -34,7 +34,7 @@ export const CONFIG = {
     { id: 'model-b', name: 'Modelo B', dossierUrl: 'dossiers/model-b.pdf', dossierFileName: 'the-silent-fleet-modelo-b.pdf' },
     { id: 'model-c', name: 'Modelo C' },
   ],
-  legalName: 'The Silent Fleet (versión beta de prueba: usa datos inventados)', // BETA: el nom legal real el dona Bruno; es veu al text de privacitat
+  legalName: 'The Silent Fleet', // nom legal definitiu (decidit); es veu al text de privacitat
   defaultLang: 'es',
   languages: ['es', 'ca', 'pt', 'en'],
 };
