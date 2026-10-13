@@ -6,7 +6,7 @@ import { createStepIndicator } from './step-indicator.js';
 
 export function createStepProfile({ h, T }) {
   const StepIndicator = createStepIndicator({ h });
-  return function StepProfile({ t, products, values, errors, onChange, onToggle, onSubmit, onBack, onKeyDown }) {
+  return function StepProfile({ t, products, askProduct = true, values, errors, onChange, onToggle, onSubmit, onBack, onKeyDown }) {
     const f = t.form;
     const { text, chips, select, checks } = makeFields({ h, T, f, values, errors, onChange, onToggle });
     const options = (list, labels) => list.map((value) => ({ value, label: labels[value] }));
@@ -34,7 +34,7 @@ export function createStepProfile({ h, T }) {
           ...opinion('concerns', CONCERNS),
           chips('intent', f.intent, yesNo),
           ...opinion('factors', FACTORS),
-          chips('product', f.productLegend, productOptions, { className: 'form__chips--wide' }),
+          askProduct ? chips('product', f.productLegend, productOptions, { className: 'form__chips--wide' }) : null,
           text('demo', f.demo, { placeholder: f.demoPlaceholder }),
           text('comments', f.comments, { multiline: true, placeholder: f.commentsPlaceholder })),
         h('div', { className: 'form__actions' },

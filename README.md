@@ -54,7 +54,7 @@ Els botons de WhatsApp i correu porten una icona en línia (`site/js/icons.js`, 
 
 ## Extra 1: flux de captació en 2 passos
 
-El flux és **actiu** (`extra1: true` a `config.js`, decidit el 9/10/2026 per a la fira); amb `false` l'MVP torna a ser l'únic que veuen els visitants. També es veu amb `?extra1=1` (per exemple `?lang=es&extra1=1`) o posant `extra1: true` a `site/js/config.js`. Altres paràmetres: `?producto=<id>|asesoramiento` preselecciona el producte i `?o=tauleta` marca l'origen.
+El flux és **actiu** (`extra1: true` a `config.js`, decidit el 9/10/2026 per a la fira); amb `false` l'MVP torna a ser l'únic que veuen els visitants. També es veu amb `?extra1=1` (per exemple `?lang=es&extra1=1`) o posant `extra1: true` a `site/js/config.js`. **Versió de contingència sense PDF:** amb `dossier: false` a `config.js` (o `?dossier=0` per previsualitzar-la) el pas 2 no pregunta el producte d'interès, la confirmació no ofereix cap descàrrega i els literals i el text de privacitat no parlen de dossier. Per tornar-hi, `dossier: true`. Altres paràmetres: `?producto=<id>|asesoramiento` preselecciona el producte i `?o=tauleta` marca l'origen.
 
 **Recorregut**
 1. **Inici:** escena fotogràfica compacta a tot sang (la foto de The Silent Fleet amb el vaixell a un espai sense text, títol i subtítol a sobre del vel i la capçalera damunt la foto); sota, la pregunta de perfil (Particular / Profesional, opcional), WhatsApp i correu amb la seva nota, el CTA «Quiero saber más de The Silent Fleet», la línia «¿No se abre? Escríbenos a …» i els enllaços legals. Tot el contingut cap en un mòbil de 360×740 (acaba a ~696 px; 710 px en anglès). Marges amb una escala de 8px: 8 dins d'un grup, 16 entre grups, 24 a les vores.
