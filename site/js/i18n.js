@@ -1,4 +1,4 @@
-import { FORM } from './i18n-form.js';
+import { FORM, FORM_NO_DOSSIER } from './i18n-form.js';
 
 const PAGE = {
   es: {
@@ -84,6 +84,19 @@ const PAGE = {
 };
 
 export const DICT = Object.fromEntries(Object.entries(PAGE).map(([lang, page]) => [lang, { ...page, form: FORM[lang] }]));
+
+// Versió sense dossier: els mateixos literals amb els canvis de FORM_NO_DOSSIER (i el text de privacitat sense el producte ni el dossier).
+function withoutDossier(lang) {
+  const { privacy, ...texts } = FORM_NO_DOSSIER[lang];
+  const privacyText = privacy.reduce((text, [from, to]) => {
+    if (!text.includes(from)) throw new Error(`i18n-form: «${from}» no és al text de privacitat (${lang})`);
+    return text.replace(from, to);
+  }, FORM[lang].privacyText);
+  return { ...DICT[lang], form: { ...FORM[lang], ...texts, privacyText } };
+}
+const DICT_NO_DOSSIER = Object.fromEntries(Object.keys(FORM_NO_DOSSIER).map((lang) => [lang, withoutDossier(lang)]));
+
+export const dictFor = (lang, dossier) => (dossier ? DICT : DICT_NO_DOSSIER)[lang];
 
 export function resolveLang(search, config) {
   const wanted = (new URLSearchParams(search).get('lang') || '').toLowerCase();

@@ -230,3 +230,40 @@ export const FORM = {
     privacyText: 'If you use the form, we store your name, email, phone, language, origin (mobile or tablet), whether you tick the updates box, your profile if you have already told us and the fact that you accepted the privacy policy as soon as you move to the second step, even if you do not finish it.\n\nIf you finish it, we also store your profile (private customer or professional) and, if you tell us, your activity, whether you own a boat and whether it is electric, what excites or concerns you, whether you intend to buy electric propulsion, the deciding factors, the product you are interested in, your town or city if you want a demo and your comments.\n\nWe use this to send you the dossier and contact you about your interest; if you tick the updates box, also to send you updates.\n\nController: {responsable}. The data is stored with Google (Sheets), which acts as data processor.\n\nYou can ask us for access, correction or deletion by writing to {email}.\n\nIf you write to us by WhatsApp or email, we will use your details only to reply.',
   },
 };
+
+// Versió de contingència (sense dossier): literals que canvien quan `dossier` és false. La resta del formulari és igual.
+// `drop` són fragments exactes del text de privacitat que ja no s'apliquen (el producte d'interès i l'enviament del dossier).
+export const FORM_NO_DOSSIER = {
+  es: {
+    entrySubtitle: 'Cuéntanos quién eres y nos pondremos en contacto contigo.',
+    step1Subtitle: 'Así podremos ponernos en contacto contigo.',
+    submit: 'Enviar',
+    doneTitle: 'Gracias, ya tenemos tus datos',
+    doneText: 'Nos pondremos en contacto contigo muy pronto. Si lo prefieres, escríbenos ahora mismo.',
+    privacy: [['el producto que te interesa, ', ''], ['para enviarte el dossier y contactarte', 'para contactarte']],
+  },
+  ca: {
+    entrySubtitle: 'Explica\'ns qui ets i ens posarem en contacte amb tu.',
+    step1Subtitle: 'Així podrem posar-nos en contacte amb tu.',
+    submit: 'Enviar',
+    doneTitle: 'Gràcies, ja tenim les teves dades',
+    doneText: 'Ens posarem en contacte amb tu ben aviat. Si ho prefereixes, escriu-nos ara mateix.',
+    privacy: [['el producte que t\'interessa, ', ''], ['per enviar-te el dossier i contactar-te', 'per contactar-te']],
+  },
+  pt: {
+    entrySubtitle: 'Diz-nos quem és e entraremos em contacto contigo.',
+    step1Subtitle: 'Assim poderemos entrar em contacto contigo.',
+    submit: 'Enviar',
+    doneTitle: 'Obrigado, já temos os teus dados',
+    doneText: 'Entraremos em contacto contigo muito em breve. Se preferires, escreve-nos já.',
+    privacy: [['o produto que te interessa, ', ''], ['para te enviar o dossier e contactar-te', 'para contactar-te']],
+  },
+  en: {
+    entrySubtitle: 'Tell us who you are and we will get in touch.',
+    step1Subtitle: 'So we can get in touch with you.',
+    submit: 'Send',
+    doneTitle: 'Thank you, we have your details',
+    doneText: 'We will get in touch with you very soon. If you prefer, write to us right now.',
+    privacy: [['the product you are interested in, ', ''], ['to send you the dossier and contact you', 'to contact you']],
+  },
+};

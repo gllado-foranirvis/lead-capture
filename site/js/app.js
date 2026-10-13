@@ -1,8 +1,8 @@
 import { CONFIG } from './config.js';
-import { DICT, resolveLang } from './i18n.js';
+import { dictFor, resolveLang } from './i18n.js';
 import { contactLinks } from './messages.js';
 import { icon } from './icons.js';
-import { isExtra1Enabled, legalQuery, resolveOrigin, resolveProduct } from './form/context.js';
+import { isDossierEnabled, isExtra1Enabled, legalQuery, resolveOrigin, resolveProduct } from './form/context.js';
 import { PROFILES, emptyForm, formReducer } from './form/model.js';
 import { clearError } from './form/validate.js';
 import { newLeadId } from './form/lead.js';
@@ -24,6 +24,7 @@ const T = window.TSF;
 const h = R.createElement;
 const search = window.location.search;
 const extra1 = isExtra1Enabled(CONFIG, search);
+const dossier = isDossierEnabled(CONFIG, search);
 
 const Header = createChrome({ h, T, brand: CONFIG.brand, languages: CONFIG.languages });
 const EntryScreen = createEntryScreen({ h, T, icon });
@@ -46,8 +47,8 @@ function App() {
   const [leadId, setLeadId] = R.useState('');
   const [receipt, setReceipt] = R.useState(null);
   const mounted = R.useRef(false);
-  const t = DICT[lang];
-  const query = legalQuery(lang, extra1);
+  const t = dictFor(lang, dossier);
+  const query = legalQuery(lang, extra1, dossier);
   const sessionOf = (source) => toSession(source, { products: CONFIG.products, dict: t });
   const bumpAttempt = () => setAttempt((n) => n + 1);
 
@@ -111,13 +112,13 @@ function App() {
       onBack: () => leaveToEntry({ ...common, dispatch }), privacyHref: `privacy.html${query}#privacy`,
     }),
     step2: () => h(StepProfile, {
-      t, products: CONFIG.products, values, errors, onChange: change, onToggle: toggle, onSubmit: submit, onKeyDown: (e) => advanceOnEnter(e, document), onBack: goBack('step1'),
+      t, products: CONFIG.products, askProduct: dossier, values, errors, onChange: change, onToggle: toggle, onSubmit: submit, onKeyDown: (e) => advanceOnEnter(e, document), onBack: goBack('step1'),
     }),
     done: () => {
       const links = contactLinks(CONFIG, t, receipt ? sessionOf(receipt) : {});
       return h(DoneScreen, {
-        t, emailDelivery: CONFIG.emailDelivery, onHome: goHome, whatsappHref: links.whatsapp, emailHref: links.email,
-        dossierHref: dossierFor(receipt?.product, CONFIG), dossierFile: dossierFileFor(receipt?.product, CONFIG), docMeta: dossierMeta(receipt?.product, CONFIG, t.form.doneCardGeneral),
+        t, emailDelivery: dossier && CONFIG.emailDelivery, onHome: goHome, whatsappHref: links.whatsapp, emailHref: links.email,
+        dossierHref: dossier ? dossierFor(receipt?.product, CONFIG) : '', dossierFile: dossierFileFor(receipt?.product, CONFIG), docMeta: dossierMeta(receipt?.product, CONFIG, t.form.doneCardGeneral),
       });
     },
   };
