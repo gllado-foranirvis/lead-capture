@@ -2,7 +2,7 @@ import { CONFIG } from './config.js';
 import { dictFor, resolveLang } from './i18n.js';
 import { contactLinks } from './messages.js';
 import { icon } from './icons.js';
-import { isDossierEnabled, isExtra1Enabled, legalQuery, resolveOrigin, resolveProducts } from './form/context.js';
+import { isDossierEnabled, isDossierPreview, isExtra1Enabled, legalQuery, resolveOrigin, resolveProducts } from './form/context.js';
 import { PROFILES, emptyForm, formReducer } from './form/model.js';
 import { clearError } from './form/validate.js';
 import { newLeadId } from './form/lead.js';
@@ -49,7 +49,7 @@ function App() {
   const [receipt, setReceipt] = R.useState(null);
   const mounted = R.useRef(false);
   const t = dictFor(lang, dossier);
-  const query = legalQuery(lang, extra1, dossier);
+  const query = legalQuery(lang, extra1, dossier, isDossierPreview(CONFIG, search));
   const sessionOf = (source) => toSession(source, { products: CONFIG.products, dict: t });
   const bumpAttempt = () => setAttempt((n) => n + 1);
 

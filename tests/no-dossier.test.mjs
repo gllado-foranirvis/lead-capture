@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { h, T, byName, findAll, textOf } from './helpers/fake-react.mjs';
 import { CONFIG } from '../site/js/config.js';
 import { DICT, dictFor } from '../site/js/i18n.js';
-import { isDossierEnabled, legalQuery } from '../site/js/form/context.js';
+import { isDossierEnabled, isDossierPreview, legalQuery } from '../site/js/form/context.js';
 import { emptyForm } from '../site/js/form/model.js';
 import { icon } from '../site/js/icons.js';
 import { createStepProfile } from '../site/js/ui/step-profile.js';
@@ -20,6 +20,13 @@ test('versió sense dossier: interruptor per config i per ?dossier=0', () => {
   assert.equal(isDossierEnabled({ dossier: false }, ''), false);
   assert.equal(isDossierEnabled({ dossier: true }, '?dossier=0'), false);
   assert.match(legalQuery('es', true, false), /&dossier=0$/);
+  // Previsualitzar el dossier amb config.dossier:false: ?dossier=1 el torna a activar i els enllaços legals ho conserven.
+  assert.equal(isDossierEnabled({ dossier: false }, '?dossier=1'), true);
+  assert.equal(isDossierEnabled({}, '?dossier=1'), true);
+  assert.equal(isDossierPreview({ dossier: false }, '?dossier=1'), true);
+  assert.equal(isDossierPreview({ dossier: true }, '?dossier=1'), false);
+  assert.equal(isDossierPreview({ dossier: false }, ''), false);
+  assert.equal(legalQuery('es', true, true, true), '?lang=es&extra1=1&dossier=1');
   assert.equal(legalQuery('es', true), '?lang=es&extra1=1');
 });
 test('versió sense dossier: cap literal de l\'usuari parla de dossier ni de descàrrega, en tots els idiomes', () => {

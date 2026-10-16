@@ -1,6 +1,6 @@
 import { CONFIG } from './config.js';
 import { dictFor, resolveLang } from './i18n.js';
-import { isDossierEnabled, isExtra1Enabled, legalQuery } from './form/context.js';
+import { isDossierEnabled, isDossierPreview, isExtra1Enabled, legalQuery } from './form/context.js';
 import { paragraphs, resolvePrivacyText } from './privacy-text.js';
 
 const search = window.location.search;
@@ -19,7 +19,7 @@ privacyBox.replaceChildren(...paragraphs(resolvePrivacyText(t, CONFIG, extra1)).
   p.textContent = text;
   return p;
 }));
-const home = `index.html${legalQuery(lang, extra1, dossier)}`;
+const home = `index.html${legalQuery(lang, extra1, dossier, isDossierPreview(CONFIG, search))}`;
 document.getElementById('back').href = home;
 // La marca de la franja fotogràfica porta a l'inici, com a la resta de pàgines.
 const brand = document.getElementById('home');
