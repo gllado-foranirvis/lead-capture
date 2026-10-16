@@ -1,5 +1,7 @@
 # Extra 1 · un dossier per model
 
+> **Actualitzat (16/10):** el visitant pot triar diversos models i descarregar-los tots; vegeu `2026-10-16-dossier-multiseleccio.md`.
+>
 > **Actualitzat:** l'obertura automàtica s'ha substituït per una pantalla de descàrrega; vegeu `2026-10-12-gracies-pdf.md`. La tria del dossier (model → general) no canvia.
 
 Substitueix la decisió 4 de `2026-10-09-extra1-reordenat.md` («un document general; el model d'interès ja no condiciona el document»): ara el dossier que s'obre al final del flux **depèn del model o potència triat**, i el document general queda com a alternativa.
