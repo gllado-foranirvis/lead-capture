@@ -50,6 +50,14 @@ test('page.css: els xips del formulari fan salt de línia perquè cap opció que
   assert.match(page, /\.form \.tsf-chip\s*\{[^}]*flex:\s*1 1 40%/);
 });
 
+test('page.css: l\'opció d\'assessorament de la tria de models ocupa tota la fila', () => {
+  assert.match(page, /\.form__products \.tsf-group__list > :last-child\s*\{[^}]*grid-column:\s*1 \/ -1/);
+});
+
+test('page.css: el nom d\'un model llarg es parteix a la targeta de descàrrega en lloc de sortir-ne', () => {
+  assert.match(page, /\.page__doc \.tsf-pdf__text\s*\{[^}]*overflow-wrap:\s*anywhere/);
+});
+
 test('page.css: separació del CTA de l\'inici', () => {
   assert.match(page, /\.page__cta\s*\{[^}]*margin-top:\s*var\(--space-2\)/); // 16 de gap + 8 = 24 respecte als contactes
 });
