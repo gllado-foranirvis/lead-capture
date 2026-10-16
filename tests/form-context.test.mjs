@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { isExtra1Enabled, legalQuery, resolveOrigin, resolveProduct } from '../site/js/form/context.js';
+import { isExtra1Enabled, legalQuery, resolveOrigin, resolveProducts } from '../site/js/form/context.js';
 
 const PRODUCTS = [{ id: 'model-a', name: 'Modelo A' }];
 
@@ -15,10 +15,10 @@ test('origen: mòbil per defecte, tauleta amb ?o=tauleta', () => {
   assert.equal(resolveOrigin('?o=altre'), 'mobil');
 });
 test('?producto= vàlid, «asesoramiento» vàlid i desconegut ignorat', () => {
-  assert.equal(resolveProduct('?producto=model-a', PRODUCTS), 'model-a');
-  assert.equal(resolveProduct('?producto=asesoramiento', PRODUCTS), 'asesoramiento');
-  assert.equal(resolveProduct('?producto=inventat', PRODUCTS), '');
-  assert.equal(resolveProduct('', PRODUCTS), '');
+  assert.deepEqual(resolveProducts('?producto=model-a', PRODUCTS), ['model-a']);
+  assert.deepEqual(resolveProducts('?producto=asesoramiento', PRODUCTS), ['asesoramiento']);
+  assert.deepEqual(resolveProducts('?producto=inventat', PRODUCTS), []);
+  assert.deepEqual(resolveProducts('', PRODUCTS), []);
 });
 test('la query legal conserva l\'idioma i, amb Extra 1, el paràmetre', () => {
   assert.equal(legalQuery('ca', false), '?lang=ca');

@@ -1,5 +1,5 @@
 import { buildPartialLead, submitForm } from './lead.js';
-import { resolveOrigin, resolveProduct } from './context.js';
+import { resolveOrigin, resolveProducts } from './context.js';
 import { STEP_FIELDS, firstErrorField, validateStep1 } from './validate.js';
 
 // Pas 1: els errors es veuen abans de seguir. El contacte (ja amb consentiment) es desa com a lead parcial amb un id que
@@ -20,7 +20,7 @@ export function advanceStep1(values, { search, lang, leadId, newId, setLeadId, s
 }
 
 // Un enviament vàlid deixa el formulari net per al següent visitant de la tauleta; la confirmació conserva
-// només el que necessita (receipt): el WhatsApp, el correu i el dossier del model triat.
+// només el que necessita (receipt): el WhatsApp, el correu i els dossiers dels models triats.
 export function handleSubmit(values, {
   products, search, lang, leadId, newId, dispatch, setErrors, setLeadId, setReceipt, bumpAttempt, emitLead, goTo,
 }) {
@@ -33,12 +33,12 @@ export function handleSubmit(values, {
   }
   emitLead(result.lead);
   setReceipt({
-    product: values.product, profile: values.profile, activity: values.activity, activityOther: values.activityOther,
+    products: values.products, profile: values.profile, activity: values.activity, activityOther: values.activityOther,
     hasBoat: values.hasBoat, hasElectric: values.hasElectric, intent: values.intent, demo: values.demo, name: values.name,
     enthusiasm: values.enthusiasm, enthusiasmOther: values.enthusiasmOther, concerns: values.concerns, concernsOther: values.concernsOther,
     factors: values.factors, factorsOther: values.factorsOther, comments: values.comments,
   });
-  dispatch({ type: 'reset', initial: { product: resolveProduct(search, products) } });
+  dispatch({ type: 'reset', initial: { products: resolveProducts(search, products) } });
   setErrors({});
   setLeadId('');
   goTo('done');
@@ -49,7 +49,7 @@ export function handleSubmit(values, {
 // al següent. Al mòbil propi es conserva la sessió: l'entrada la fa servir per als missatges.
 export function leaveToEntry({ products, search, dispatch, setErrors, setLeadId, goTo }) {
   if (resolveOrigin(search) === 'tauleta') {
-    dispatch({ type: 'reset', initial: { product: resolveProduct(search, products) } });
+    dispatch({ type: 'reset', initial: { products: resolveProducts(search, products) } });
     setLeadId('');
   }
   setErrors({});
@@ -58,7 +58,7 @@ export function leaveToEntry({ products, search, dispatch, setErrors, setLeadId,
 
 // Inactivitat a la tauleta: el visitant que s'allunya no ha de deixar res (dades, perfil, id de lead ni confirmació) al següent.
 export function discardSession({ products, search, dispatch, setErrors, setLeadId, setReceipt, goTo }) {
-  dispatch({ type: 'reset', initial: { product: resolveProduct(search, products) } });
+  dispatch({ type: 'reset', initial: { products: resolveProducts(search, products) } });
   setErrors({});
   setLeadId('');
   setReceipt(null);

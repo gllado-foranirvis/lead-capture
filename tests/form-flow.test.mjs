@@ -4,7 +4,7 @@ import { advanceStep1, discardSession, handleSubmit, leaveToEntry } from '../sit
 import { emptyForm } from '../site/js/form/model.js';
 
 const PRODUCTS = [{ id: 'model-a', name: 'Modelo A' }];
-const contact = { ...emptyForm({ product: 'model-a' }), name: 'Ana', email: 'Ana@Example.com', phone: '600 00 00 00', privacy: true, newsletter: true };
+const contact = { ...emptyForm({ products: ['model-a'] }), name: 'Ana', email: 'Ana@Example.com', phone: '600 00 00 00', privacy: true, newsletter: true };
 const full = { ...contact, profile: 'profesional', activity: 'vela', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: 'Girona', enthusiasm: ['noise'], concerns: ['range'], factors: ['price'], comments: 'Hola' };
 
 const harness = (extra = {}, search = '?producto=model-a&o=tauleta') => {
@@ -56,8 +56,8 @@ test('enviament final: no obre cap document; emet el lead i neteja per al següe
   assert.equal(names(calls).includes('openDocument'), false);
   const lead = call(calls, 'emitLead')[1];
   assert.deepEqual([lead.contact.id, lead.profiling.id, lead.contact.profile, lead.profiling.activity, lead.profiling.hasBoat, lead.profiling.intent], ['id-0', 'id-0', 'profesional', 'vela', 'si', 'no']);
-  assert.deepEqual(call(calls, 'setReceipt')[1], { product: 'model-a', profile: 'profesional', activity: 'vela', activityOther: '', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: 'Girona', enthusiasm: ['noise'], enthusiasmOther: '', concerns: ['range'], concernsOther: '', factors: ['price'], factorsOther: '', comments: 'Hola', name: 'Ana' });
-  assert.deepEqual(call(calls, 'dispatch')[1], { type: 'reset', initial: { product: 'model-a' } });
+  assert.deepEqual(call(calls, 'setReceipt')[1], { products: ['model-a'], profile: 'profesional', activity: 'vela', activityOther: '', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: 'Girona', enthusiasm: ['noise'], enthusiasmOther: '', concerns: ['range'], concernsOther: '', factors: ['price'], factorsOther: '', comments: 'Hola', name: 'Ana' });
+  assert.deepEqual(call(calls, 'dispatch')[1], { type: 'reset', initial: { products: ['model-a'] } });
   assert.deepEqual(call(calls, 'setLeadId'), ['setLeadId', '']);
   assert.deepEqual(call(calls, 'setErrors'), ['setErrors', {}]);
   assert.deepEqual(call(calls, 'goTo'), ['goTo', 'done']);
@@ -82,10 +82,10 @@ test('enviament final amb un error de contacte torna al pas 1', () => {
 test('el reinici torna a preseleccionar el producte de la URL, o cap', () => {
   const withProduct = harness({}, '?producto=model-a');
   handleSubmit(full, withProduct.deps);
-  assert.deepEqual(call(withProduct.calls, 'dispatch')[1].initial, { product: 'model-a' });
+  assert.deepEqual(call(withProduct.calls, 'dispatch')[1].initial, { products: ['model-a'] });
   const without = harness({}, '');
   handleSubmit(full, without.deps);
-  assert.deepEqual(call(without.calls, 'dispatch')[1].initial, { product: '' });
+  assert.deepEqual(call(without.calls, 'dispatch')[1].initial, { products: [] });
 });
 
 const leaveHarness = (search) => {
@@ -96,7 +96,7 @@ const leaveHarness = (search) => {
 test('tauleta: en tornar a l\'inici es descarta el que ha escrit el visitant (dades, perfil, errors i id de lead)', () => {
   const { calls, deps } = leaveHarness('?o=tauleta&producto=model-a');
   leaveToEntry(deps);
-  assert.deepEqual(call(calls, 'dispatch')[1], { type: 'reset', initial: { product: 'model-a' } });
+  assert.deepEqual(call(calls, 'dispatch')[1], { type: 'reset', initial: { products: ['model-a'] } });
   assert.deepEqual(call(calls, 'setLeadId'), ['setLeadId', '']);
   assert.deepEqual(call(calls, 'goTo'), ['goTo', 'entry']);
 });
@@ -110,6 +110,6 @@ test('discardSession (inactivitat a la tauleta): esborra dades, perfil, errors, 
   const calls = [];
   const rec = (name) => (...args) => calls.push([name, ...args]);
   discardSession({ products: PRODUCTS, search: '?o=tauleta&producto=model-a', dispatch: rec('dispatch'), setErrors: rec('setErrors'), setLeadId: rec('setLeadId'), setReceipt: rec('setReceipt'), goTo: rec('goTo') });
-  assert.deepEqual(call(calls, 'dispatch')[1], { type: 'reset', initial: { product: 'model-a' } });
+  assert.deepEqual(call(calls, 'dispatch')[1], { type: 'reset', initial: { products: ['model-a'] } });
   assert.deepEqual([call(calls, 'setErrors')[1], call(calls, 'setLeadId')[1], call(calls, 'setReceipt')[1], call(calls, 'goTo')[1]], [{}, '', null, 'entry']);
 });

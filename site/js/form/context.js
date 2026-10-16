@@ -12,9 +12,10 @@ export const isDossierEnabled = (config, search) => config.dossier !== false && 
 
 export const resolveOrigin = (search) => (param(search, 'o') === TABLET ? TABLET : MOBILE);
 
-export function resolveProduct(search, products) {
+// ?producto= preselecciona un sol model (o «asesoramiento»); un valor desconegut s'ignora.
+export function resolveProducts(search, products) {
   const wanted = param(search, 'producto');
-  return wanted === ADVICE || products.some((p) => p.id === wanted) ? wanted : '';
+  return wanted === ADVICE || products.some((p) => p.id === wanted) ? [wanted] : [];
 }
 
 export const legalQuery = (lang, extra1, dossier = true) => `?lang=${lang}${extra1 ? '&extra1=1' : ''}${dossier ? '' : '&dossier=0'}`;
