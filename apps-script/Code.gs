@@ -47,7 +47,8 @@ function sanitizeLead(payload) {
     id: id, stage: payload.stage, name: name, email: email, phone: phone,
     privacy: true, newsletter: c.newsletter === true, lang: c.lang, origin: c.origin,
     profile: oneOf(PROFILES, c.profile),
-    product: /^[a-z0-9-]{1,40}$/.test(String(c.product || '')) ? String(c.product) : ''
+    // Un o diversos ids de producte separats per comes (fins a 10); si el format no és vàlid, queda buit sense rebutjar el lead.
+    product: /^[a-z0-9-]{1,40}(,[a-z0-9-]{1,40}){0,9}$/.test(String(c.product || '')) ? String(c.product) : ''
   };
   if (payload.stage === 'complete' && !lead.profile) return null;
   var p = payload.stage === 'complete' && payload.profiling && typeof payload.profiling === 'object' ? payload.profiling : {};

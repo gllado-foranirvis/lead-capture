@@ -19,11 +19,9 @@ body { background: var(--surface-100); color: var(--ink); font-family: var(--fon
    i l'altre xip es quedava més baix. L'etiqueta omple l'alçada del xip perquè la fila sigui pareja. */
 .tsf-chip { display: flex; }
 .tsf-chip__label { flex: 1; padding-block: var(--space-2); }
-/* Amb tres o més xips (producte) la fila fa salt de línia en lloc de tallar l'últim. */
+/* Amb tres o més xips la fila fa salt de línia en lloc de tallar l'últim. */
 .form .tsf-chips__row { flex-wrap: wrap; }
 .form .tsf-chip { flex: 1 1 40%; }
-.form__chips--wide .tsf-chip { flex-basis: 30%; }
-.form__chips--wide .tsf-chip:last-child { flex-basis: 100%; }
 /* El CTA principal tanca l'inici: separat del bloc de contacte. */
 .page__group { display: flex; flex-direction: column; gap: var(--space-2); }
 .page__cta { margin-top: var(--space-2); }
@@ -52,6 +50,8 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .tsf-chips__legend { margin-bottom: var(--space-1); }
 .form .tsf-group__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-3); }
 .form__error { color: var(--error); }
+/* Tria de models: els models van de dos en dos i l'opció llarga d'assessorament (l'última) ocupa tota la fila en lloc de partir-se en dues línies. */
+.form__products .tsf-group__list > :last-child { grid-column: 1 / -1; }
 .form__actions { display: flex; flex-direction: column; gap: var(--space-2); margin-top: auto; padding-top: var(--space-4); }
 @media (min-width: 768px) {
   .page, .page__main, .page__screen { gap: var(--space-5); }
@@ -75,6 +75,7 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .page__done-mark { align-self: center; box-sizing: border-box; width: 3.5rem; aspect-ratio: 1; padding: var(--space-3); border-radius: 50%; background: var(--success-bg); color: var(--success); }
 .page__doc-icon { display: flex; flex: none; }
 .page__doc { display: block; color: inherit; text-decoration: none; border-radius: var(--radius-md); }
+.page__doc .tsf-pdf__text { min-width: 0; overflow-wrap: anywhere; }
 .page__done-actions { display: flex; flex-direction: column; gap: var(--space-2); margin-top: auto; padding-top: var(--space-4); }
 
 /* Fotografia subministrada per The Silent Fleet. El DESIGN.md la vol a tall viu, sense marc i amb el vel pla `overlay-hero` (sense degradats): dues capes planes del token la fan llegible per a text blanc. */

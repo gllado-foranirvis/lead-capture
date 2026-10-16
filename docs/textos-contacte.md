@@ -117,6 +117,7 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `doneText` | Descárgalo ahora y consúltalo cuando quieras. | Descarrega'l ara i consulta'l quan vulguis. | Descarrega-o agora e consulta-o quando quiseres. | Download it now and read it whenever you like. |
 | `doneTextMail` | Descárgalo ahora; también te lo hemos enviado por correo para que lo consultes cuando quieras. | Descarrega'l ara; també te l'hem enviat per correu perquè el consultis quan vulguis. | Descarrega-o agora; também to enviámos por e-mail para o consultares quando quiseres. | Download it now; we have also emailed it to you to read whenever you like. |
 | `doneDownload` | Descargar el dossier | Descarregar el dossier | Descarregar o dossier | Download the dossier |
+| `doneDownloadAll` | Descargar todos los dossiers | Descarregar tots els dossiers | Descarregar todos os dossiers | Download all dossiers |
 | `doneCardTitle` | Dossier The Silent Fleet | Dossier The Silent Fleet | Dossier The Silent Fleet | Dossier The Silent Fleet |
 | `doneCardGeneral` | Información general | Informació general | Informação geral | General information |
 | `doneHome` | Volver al inicio | Tornar a l'inici | Voltar ao início | Back to start |

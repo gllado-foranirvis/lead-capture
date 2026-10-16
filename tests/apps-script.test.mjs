@@ -51,6 +51,14 @@ test('sanitizeLead accepta un parcial i un final vàlids i normalitza el correu'
   const lead = api.sanitizeLead(complete);
   assert.deepEqual([lead.stage, lead.activity, lead.hasBoat, lead.demo], ['complete', 'vela', 'si', 'Girona']);
 });
+test('product: diversos ids separats per comes es desen; un format invàlid o massa ids deixa el producte buit sense rebutjar el lead', () => {
+  const { api } = load();
+  const product = (value) => api.sanitizeLead({ ...step1, contact: { ...contact, product: value } }).product;
+  assert.equal(product('model-a,model-b'), 'model-a,model-b');
+  assert.equal(product('model-a'), 'model-a');
+  for (const bad of ['model-a,', ',model-a', 'a b', 'Model-A', Array.from({ length: 11 }, (_, i) => `m${i}`).join(',')]) assert.equal(product(bad), '', bad);
+  assert.equal(product(Array.from({ length: 10 }, (_, i) => `m${i}`).join(',')).split(',').length, 10);
+});
 test('les llistes d\'opinió es desen filtrades i en l\'ordre del formulari; el text «other» només si «other» és marcat', () => {
   const { api } = load();
   const lead = api.sanitizeLead(complete);

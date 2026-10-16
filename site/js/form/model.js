@@ -12,8 +12,8 @@ export const DEFAULT_PREFIX = '+34';
 // Array.from evita partir un emoji (parell subrogat) pel mig.
 export const clip = (value, max) => Array.from(String(value ?? '').trim()).slice(0, max).join('');
 
-export const emptyForm = ({ product = '' } = {}) => ({
-  product, email: '', name: '', profile: '', phonePrefix: DEFAULT_PREFIX, phone: '',
+export const emptyForm = ({ products = [] } = {}) => ({
+  products, email: '', name: '', profile: '', phonePrefix: DEFAULT_PREFIX, phone: '',
   activity: '', activityOther: '', hasBoat: '', hasElectric: '', intent: '', demo: '',
   enthusiasm: [], enthusiasmOther: '', concerns: [], concernsOther: '', factors: [], factorsOther: '', comments: '',
   privacy: false, newsletter: false,
@@ -35,6 +35,13 @@ function withDependencies(values) {
   return next;
 }
 
+// Marcar o desmarcar un valor. A la tria de models, «asesoramiento» és excloent: no pot conviure amb cap model.
+function toggled(field, list, value) {
+  if (list.includes(value)) return list.filter((v) => v !== value);
+  if (field !== 'products') return [...list, value];
+  return value === ADVICE ? [ADVICE] : [...list.filter((v) => v !== ADVICE), value];
+}
+
 export function formReducer(state, action) {
   switch (action.type) {
     case 'set':
@@ -42,7 +49,7 @@ export function formReducer(state, action) {
     case 'toggle': {
       const list = state[action.field];
       if (!Array.isArray(list)) return state;
-      const next = list.includes(action.value) ? list.filter((v) => v !== action.value) : [...list, action.value];
+      const next = toggled(action.field, list, action.value);
       return withDependencies({ ...state, [action.field]: next });
     }
     case 'reset':

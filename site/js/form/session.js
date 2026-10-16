@@ -1,4 +1,4 @@
-import { MAX, OPINION_GROUPS, clip, showsActivity } from './model.js';
+import { ADVICE, MAX, OPINION_GROUPS, clip, showsActivity } from './model.js';
 
 // «Profesional» del formulari fa servir el missatge «distribuidor» (decisió oberta amb Bruno).
 const MESSAGE_PROFILE = { profesional: 'distribuidor', particular: 'particular' };
@@ -25,12 +25,19 @@ function opinionLabel(values, group, dict) {
     .join(', ');
 }
 
+// Noms dels models triats (o el de l'assessorament) separats per comes; els ids desconeguts s'ignoren.
+function productLabel(values, { products, dict }) {
+  return (values.products ?? [])
+    .map((id) => (id === ADVICE ? dict.form.productAdvice : products.find((p) => p.id === id)?.name))
+    .filter(Boolean)
+    .join(', ');
+}
+
 // Dades de la sessió en l'idioma actual, preparades per als missatges de WhatsApp i correu.
 export function toSession(values, { products, dict }) {
-  const product = values.product === 'asesoramiento' ? dict.form.productAdvice : products.find((p) => p.id === values.product)?.name;
   return {
     profile: MESSAGE_PROFILE[values.profile] ?? '',
-    product: product ?? '',
+    product: productLabel(values, { products, dict }),
     activity: activityLabel(values, dict),
     hasBoat: answer(values.hasBoat, dict),
     hasElectric: answer(values.hasElectric, dict),

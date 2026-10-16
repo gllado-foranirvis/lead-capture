@@ -4,11 +4,27 @@ import { ACTIVITIES, ADVICE, CONCERNS, ENTHUSIASM, FACTORS, DEFAULT_PREFIX, MAX,
 
 test('formulari buit: contacte, perfilació i consentiments nets', () => {
   assert.deepEqual(emptyForm(), {
-    product: '', email: '', name: '', profile: '', phonePrefix: '+34', phone: '', activity: '', activityOther: '', hasBoat: '', hasElectric: '', intent: '', demo: '', enthusiasm: [], enthusiasmOther: '', concerns: [], concernsOther: '', factors: [], factorsOther: '', comments: '', privacy: false, newsletter: false,
+    products: [], email: '', name: '', profile: '', phonePrefix: '+34', phone: '', activity: '', activityOther: '', hasBoat: '', hasElectric: '', intent: '', demo: '', enthusiasm: [], enthusiasmOther: '', concerns: [], concernsOther: '', factors: [], factorsOther: '', comments: '', privacy: false, newsletter: false,
   });
 });
-test('emptyForm accepta el producte inicial', () => {
-  assert.equal(emptyForm({ product: 'model-a' }).product, 'model-a');
+test('emptyForm accepta els models inicials', () => {
+  assert.deepEqual(emptyForm().products, []);
+  assert.deepEqual(emptyForm({ products: ['model-a'] }).products, ['model-a']);
+});
+test('toggle products: els models se sumen i «asesoramiento» és excloent', () => {
+  const toggle = (s, value) => formReducer(s, { type: 'toggle', field: 'products', value });
+  let s = toggle(emptyForm(), 'model-a');
+  assert.deepEqual(s.products, ['model-a']);
+  s = toggle(s, 'model-b');
+  assert.deepEqual(s.products, ['model-a', 'model-b']);
+  s = toggle(s, 'model-a');
+  assert.deepEqual(s.products, ['model-b']);
+  s = toggle(s, 'asesoramiento');
+  assert.deepEqual(s.products, ['asesoramiento']);
+  s = toggle(s, 'model-a');
+  assert.deepEqual(s.products, ['model-a']);
+  s = toggle(toggle(s, 'asesoramiento'), 'asesoramiento');
+  assert.deepEqual(s.products, []);
 });
 test('constants', () => {
   assert.deepEqual(PROFILES, ['particular', 'profesional']);
@@ -43,9 +59,9 @@ test('canviar l\'activitat a una altra que no és «otra» esborra l\'especifica
   let s = formReducer({ ...emptyForm(), profile: 'profesional', activity: 'otra', activityOther: 'x' }, { type: 'set', field: 'activity', value: 'vela' });
   assert.equal(s.activityOther, '');
 });
-test('reset torna al formulari buit amb el producte inicial', () => {
+test('reset torna al formulari buit amb els models inicials', () => {
   const dirty = { ...emptyForm(), name: 'Ana', privacy: true, profile: 'profesional', activity: 'vela' };
-  assert.deepEqual(formReducer(dirty, { type: 'reset', initial: { product: 'model-a' } }), emptyForm({ product: 'model-a' }));
+  assert.deepEqual(formReducer(dirty, { type: 'reset', initial: { products: ['model-a'] } }), emptyForm({ products: ['model-a'] }));
 });
 test('clip retalla i no trenca un emoji', () => {
   assert.equal(clip('  hola  ', 10), 'hola');

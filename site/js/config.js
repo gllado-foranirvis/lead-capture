@@ -4,7 +4,7 @@
 //   email            (obligatòria) adreça de contacte; es veu a l'entrada i és el destinatari del correu.
 //   siteUrl          (obligatòria) URL pública, https i acabada en «/»; l'usen el QR i els enllaços. Definitiva.
 //   extra1           (obligatòria) true = flux de captació en 2 passos i dossier; false = només l'MVP (WhatsApp i correu).
-//   dossier          (opcional, per defecte true) false = versió de contingència sense PDF: no es pregunta el producte d'interès ni es parla de cap descàrrega. Es veu també amb ?dossier=0.
+//   dossier          (opcional, per defecte true) false = versió de contingència sense PDF: no es pregunta el producte d'interès ni es parla de cap descàrrega. Es veu també amb ?dossier=0; amb false, ?dossier=1 el previsualitza.
 //   dossierUrl       (obligatòria) ruta relativa dins de site/ del PDF general; és l'alternativa de tots els models.
 //   dossierFileName  (obligatòria) nom amb què es desa la descàrrega del dossier general («nom.pdf», sense carpetes).
 //   emailDelivery    (obligatòria) false fins que existeixi l'enviament del correu amb el dossier; només canvia el subtítol de la confirmació.
@@ -23,7 +23,7 @@ export const CONFIG = {
   email: 'info@thesilentfleet.com',
   siteUrl: 'https://gllado-foranirvis.github.io/lead-capture/', // definitiva (decidit)
   extra1: true, // L'Extra 1 és actiu (decidit el 9/10/2026 per a la fira); amb false torna a l'MVP sol i es previsualitza amb ?extra1=1
-  dossier: false, // false = versió de contingència sense PDF (sense pregunta de producte ni descàrrega); amb ?dossier=0 es previsualitza
+  dossier: false, // false = versió de contingència sense PDF (sense pregunta de producte ni descàrrega); amb ?dossier=0 es previsualitza i, amb false, ?dossier=1 previsualitza el dossier
   dossierUrl: 'dossier-prova.pdf', // PROVA: substituir pel document real de Bruno (a site/)
   dossierFileName: 'the-silent-fleet-dossier.pdf', // nom amb què es desa la descàrrega del dossier general (PROVA: el posa Bruno amb el document real)
   emailDelivery: false, // posar-ho a true quan l'enviament del correu amb la ficha existeixi: només canvia el text de la confirmació

@@ -9,7 +9,7 @@ const answered = (value) => clip(value, 1) !== '';
 
 function buildContact(values, { id, lang, origin }) {
   return {
-    id, product: values.product,
+    id, product: (values.products ?? []).join(','),
     name: clip(values.name, MAX.name),
     email: clip(values.email, MAX.email).toLowerCase(),
     phone: fullPhone(values),
