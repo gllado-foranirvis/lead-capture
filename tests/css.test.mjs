@@ -50,9 +50,8 @@ test('page.css: els xips del formulari fan salt de línia perquè cap opció que
   assert.match(page, /\.form \.tsf-chip\s*\{[^}]*flex:\s*1 1 40%/);
 });
 
-test('page.css: separació del CTA de l\'inici i xip llarg a fila pròpia', () => {
+test('page.css: separació del CTA de l\'inici', () => {
   assert.match(page, /\.page__cta\s*\{[^}]*margin-top:\s*var\(--space-2\)/); // 16 de gap + 8 = 24 respecte als contactes
-  assert.match(page, /\.form__chips--wide \.tsf-chip:last-child\s*\{[^}]*flex-basis:\s*100%/);
 });
 
 test('page.css: els enllaços legals compacts fan 44px d\'alt (el sistema compacte els deixa a 40px) i el contingut va dins de <main>', () => {
@@ -76,7 +75,6 @@ test('page.css (mòbil compacte): caselles múltiples en dues columnes i ritme v
   assert.match(page, /\.form__group\s*\{[^}]*gap:\s*var\(--space-3\)/);
   assert.match(page, /\.page__top\s*\{[^}]*min-height:\s*var\(--tap-min-compact\)/);
   assert.match(page, /\.tsf-chips__legend\s*\{[^}]*margin-bottom:\s*var\(--space-1\)/);
-  assert.match(page, /\.form__chips--wide \.tsf-chip\s*\{[^}]*flex-basis:\s*30%/);
 });
 test('page.css: a pantalles amples (≥768px) el ritme torna a ser generós', () => {
   const wide = page.slice(page.indexOf('@media (min-width: 768px)'));

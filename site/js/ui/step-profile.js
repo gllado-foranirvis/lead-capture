@@ -34,7 +34,7 @@ export function createStepProfile({ h, T }) {
           ...opinion('concerns', CONCERNS),
           chips('intent', f.intent, yesNo),
           ...opinion('factors', FACTORS),
-          askProduct ? chips('product', f.productLegend, productOptions, { className: 'form__chips--wide' }) : null,
+          askProduct ? checks('products', f.productLegend, productOptions) : null,
           text('demo', f.demo, { placeholder: f.demoPlaceholder }),
           text('comments', f.comments, { multiline: true, placeholder: f.commentsPlaceholder })),
         h('div', { className: 'form__actions' },

@@ -2,14 +2,15 @@ import { CONFIG } from './config.js';
 import { dictFor, resolveLang } from './i18n.js';
 import { contactLinks } from './messages.js';
 import { icon } from './icons.js';
-import { isDossierEnabled, isExtra1Enabled, legalQuery, resolveOrigin, resolveProduct } from './form/context.js';
+import { isDossierEnabled, isExtra1Enabled, legalQuery, resolveOrigin, resolveProducts } from './form/context.js';
 import { PROFILES, emptyForm, formReducer } from './form/model.js';
 import { clearError } from './form/validate.js';
 import { newLeadId } from './form/lead.js';
 import { advanceStep1, discardSession, handleSubmit, leaveToEntry } from './form/flow.js';
 import { ACTIVITY_EVENTS, IDLE_MS, watchIdle } from './form/idle.js';
 import { toSession } from './form/session.js';
-import { dossierFor, dossierFileFor, dossierMeta } from './form/dossier.js';
+import { dossiersFor } from './form/dossier.js';
+import { downloadAll } from './form/download-all.js';
 import { focusFirstError, focusStepHeading } from './form/focus.js';
 import { advanceOnEnter, applyFieldHints } from './form/hints.js';
 import { connectSender, createSender } from './form/sender.js';
@@ -41,7 +42,7 @@ const emit = (name) => (detail) => window.dispatchEvent(new CustomEvent(name, { 
 function App() {
   const [lang, setLang] = R.useState(() => resolveLang(search, CONFIG));
   const [view, setView] = R.useState('entry'); // entry | step1 | step2 | done
-  const [values, dispatch] = R.useReducer(formReducer, undefined, () => emptyForm({ product: resolveProduct(search, CONFIG.products) }));
+  const [values, dispatch] = R.useReducer(formReducer, undefined, () => emptyForm({ products: resolveProducts(search, CONFIG.products) }));
   const [errors, setErrors] = R.useState({});
   const [attempt, setAttempt] = R.useState(0);
   const [leadId, setLeadId] = R.useState('');
@@ -116,9 +117,10 @@ function App() {
     }),
     done: () => {
       const links = contactLinks(CONFIG, t, receipt ? sessionOf(receipt) : {});
+      const docs = dossier ? dossiersFor(receipt?.products ?? [], CONFIG, t.form.doneCardGeneral) : [];
       return h(DoneScreen, {
         t, emailDelivery: dossier && CONFIG.emailDelivery, onHome: goHome, whatsappHref: links.whatsapp, emailHref: links.email,
-        dossierHref: dossier ? dossierFor(receipt?.product, CONFIG) : '', dossierFile: dossierFileFor(receipt?.product, CONFIG), docMeta: dossierMeta(receipt?.product, CONFIG, t.form.doneCardGeneral),
+        docs, onDownloadAll: () => downloadAll(docs),
       });
     },
   };

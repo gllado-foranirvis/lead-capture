@@ -33,12 +33,12 @@ test('versió sense dossier: cap literal de l\'usuari parla de dossier ni de des
 });
 test('pas 2 sense dossier: no es pregunta el producte', () => {
   const props = { t: DICT.es, products: CONFIG.products, values: emptyForm(), errors: {}, onChange: noop, onToggle: noop, onSubmit: noop, onBack: noop };
-  assert.equal(byName(StepProfile(props), 'product').length, 1);
-  assert.equal(byName(StepProfile({ ...props, askProduct: false }), 'product').length, 0);
+  assert.equal(byName(StepProfile(props), 'products').length, 1);
+  assert.equal(byName(StepProfile({ ...props, askProduct: false }), 'products').length, 0);
 });
 test('confirmació sense dossier: cap targeta ni botó de descàrrega', () => {
   const t = dictFor('es', false);
-  const tree = DoneScreen({ t, emailDelivery: false, dossierHref: '', dossierFile: '', docMeta: '', whatsappHref: 'wa', emailHref: 'mail', onHome: noop });
+  const tree = DoneScreen({ t, emailDelivery: false, docs: [], onDownloadAll: noop, whatsappHref: 'wa', emailHref: 'mail', onHome: noop });
   assert.doesNotMatch(all(tree), DOSSIER_WORD);
   assert.equal(findAll(tree, (n) => n.type === 'a' && n.props.download !== undefined).length, 0);
 });
