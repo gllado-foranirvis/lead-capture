@@ -4,7 +4,7 @@ import { buildLead, buildPartialLead, newLeadId, submitForm } from '../site/js/f
 import { emptyForm } from '../site/js/form/model.js';
 
 const values = {
-  ...emptyForm({ product: 'model-a' }), email: ' Ana@Example.com ', name: '  Ana  ', profile: 'profesional',
+  ...emptyForm({ products: ['model-a'] }), email: ' Ana@Example.com ', name: '  Ana  ', profile: 'profesional',
   phonePrefix: '+34', phone: ' 600 00 00 00 ', activity: 'vela', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: ' Barcelona ', enthusiasm: ['noise', 'other'], enthusiasmOther: ' Silenci ', concerns: ['range'], factors: ['price', 'warranty'], comments: ' Molt bé ', privacy: true, newsletter: true,
 };
 const ctx = { id: 'id-1', lang: 'es', origin: 'mobil' };
@@ -23,6 +23,11 @@ test('lead final: contacte i producte', () => {
     id: 'id-1', product: 'model-a', name: 'Ana', email: 'ana@example.com', phone: '+34 600 00 00 00',
     privacy: true, newsletter: true, lang: 'es', profile: 'profesional', origin: 'mobil',
   });
+});
+test('lead final: diversos models es desen com a ids separats per comes; cap model, text buit', () => {
+  assert.equal(buildLead({ ...values, products: ['model-a', 'model-b'] }, ctx).contact.product, 'model-a,model-b');
+  assert.equal(buildLead({ ...values, products: [] }, ctx).contact.product, '');
+  assert.equal(Object.hasOwn(buildPartialLead({ ...values, products: ['model-a', 'model-b'] }, ctx), 'product'), false);
 });
 test('perfilació completa d\'un Profesional', () => {
   const { profiling, hasProfiling } = buildLead(values, ctx);

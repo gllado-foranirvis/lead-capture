@@ -18,6 +18,7 @@ L'Extra 1 emet dos esdeveniments (`tsf:lead-partial` i `tsf:lead`). Si `CONFIG.l
 ## Com funciona
 - Una fila per `id`: el pas 1 crea la fila (`stage = step1`) i l'enviament final la completa (`stage = complete`). Un reintent no la duplica i un parcial tardà no degrada una fila completa.
 - El servidor no desa mai un lead sense `privacy: true`.
+- La columna `product` porta els ids dels models triats separats per comes (`model-a,model-b`; fins a 10). **Cal actualitzar l'script** (pas 9) perquè els accepti: amb l'script antic la columna queda buida, però el lead es desa igualment.
 - Les columnes tenen format de text pla, perquè un valor que comenci per `=`, `+` o `@` no s'executi com a fórmula.
 - La cua d'enviament del client és només en memòria (cap dada personal al navegador): reintenta amb espera creixent, torna a provar en recuperar la xarxa i fa un darrer intent amb `sendBeacon` en tancar la pàgina.
 - L'enviament no bloqueja el visitant: la pantalla de gràcies amb el dossier surt igualment.
