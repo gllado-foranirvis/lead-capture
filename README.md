@@ -8,7 +8,7 @@ Context i decisions: [PRODUCT.md](PRODUCT.md), [DESIGN.md](DESIGN.md) i [docs/](
 
 ```bash
 npm install        # un cop
-npm run serve      # http://localhost:8080
+npm run serve      # http://localhost:8080 (servidor sense memòria cau; PORT=… per canviar el port)
 npm test           # tots els tests
 npm run sync       # copia el sistema de disseny, React i Montserrat a site/ (després d'actualitzar the-silent-fleet-ds/)
 npm run qr         # genera out/qr.png i out/qr.svg a partir de siteUrl
