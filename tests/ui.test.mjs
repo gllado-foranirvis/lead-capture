@@ -53,10 +53,11 @@ test('entrada: línia explicativa, adreça visible i enllaços legals amb la que
   assert.equal(legal.props.links[0].href, 'privacy.html?lang=es&extra1=1');
 });
 
-test('app.js: recorregut entry → step1 → done, PDF segons l\'idioma, clics notificats i cap resta de la perfilació', async () => {
+test('app.js: recorregut entry → step1 → step2 → done, lead parcial i final, saltar, descàrregues i desat notificats', async () => {
   const { readFileSync } = await import('node:fs');
   const app = readFileSync('site/js/app.js', 'utf8');
-  for (const gone of ['step-profile', 'StepProfile', 'step2', 'PROFILES', 'advanceStep1', 'profileOptions', 'onProfile']) assert.doesNotMatch(app, new RegExp(gone), gone);
+  for (const gone of ['profileOptions', 'onProfile', 'onClearProfile']) assert.doesNotMatch(app, new RegExp(gone), gone);
+  for (const present of ['advanceStep1', 'handleSkip', 'handleSubmit', 'StepProfile', "step2: () =>", "tsf:lead-partial", "tsf:lead'", 'tsf:saved', 'notifySaved', "button: 'download'", 'onlyEnglishPdfs']) assert.match(app, new RegExp(present.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), present);
   assert.match(app, /tsf:contact-click/);
   assert.match(app, /fair: CONFIG\.fair/);
   assert.match(app, /doneView\(/, 'la confirmació es calcula amb la funció pura de views.js');

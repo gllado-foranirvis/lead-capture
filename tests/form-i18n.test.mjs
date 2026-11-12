@@ -79,14 +79,15 @@ test('cada idioma té un exemple per a nom, correu i telèfon; el correu i el te
     assert.ok(form.errors.prefix.length <= 24, `${l}: el missatge del prefix cap en una columna estreta`);
   }
 });
-test('el text de privacitat cita la ciutat, el producte i el recompte anònim de clics, i no la perfilació antiga', () => {
+test('el text de privacitat cita la ciutat, el producte, les respostes opcionals del pas 2 i el registre de clics i descàrregues', () => {
   const parts = {
     es: [/la ciudad/, /el producto que te interesa/, /registro del clic/], ca: [/la ciutat/, /el producte que t'interessa/, /registre del clic/],
     pt: [/a cidade/, /o produto que te interessa/, /registo do clique/], en: [/city/, /the product you are interested in/, /record of the click/],
   };
   for (const l of CONFIG.languages) {
     for (const re of parts[l]) assert.match(DICT[l].form.privacyText, re, `${l} ${re}`);
-    assert.doesNotMatch(DICT[l].form.privacyText, /embarcaci|embarca[cç]|boat|comentari|comments|perfil|profile/i, l);
+    assert.match(DICT[l].form.privacyText, /embarcaci|embarca[cç]|boat/i, `${l} respostes opcionals`);
+    assert.match(DICT[l].form.privacyText, /descarg|descarreg|download/i, `${l} descàrregues`);
   }
 });
 test('el text de cookies enumera tot el que es desa a cada clic i avisa que es pot relacionar amb les dades deixades', () => {
@@ -99,6 +100,7 @@ test('el text de cookies enumera tot el que es desa a cada clic i avisa que es p
   for (const l of CONFIG.languages) {
     const text = DICT[l].cookiesText;
     for (const re of parts[l]) assert.match(text, re, `${l} ${re}`);
+    assert.match(text, /descarga un dossier|descarrega un dossier|descarrega um dossier|dossier is downloaded/, `${l} descàrrega`);
     assert.match(text, /WhatsApp/, l);
     assert.match(text, /cookies/i, l);
     assert.doesNotMatch(text, /anónim|anònim|anonym|herramientas de medici|ferramentas de medi|eines de mesura|measurement tools/i, l);

@@ -61,7 +61,7 @@ export const FORM = {
     doneCardTitle: 'Dossier The Silent Fleet',
     doneCardGeneral: 'Información general',
     doneHome: 'Volver al inicio',
-    privacyText: 'Si usas el formulario, guardamos tu nombre, correo, teléfono, la ciudad, el producto que te interesa, el idioma, el origen (móvil o tableta), si marcas la casilla de novedades y que has aceptado la política de privacidad.\n\nLos usamos para enviarte el dossier y contactarte sobre tu interés; si marcas la casilla de novedades, también para enviarte novedades.\n\nSi pulsas el botón de WhatsApp o el de correo, guardamos un registro del clic (botón, idioma, dispositivo, producto y ciudad indicados y otros datos técnicos, como se explica en la página de cookies), sin tu nombre, correo ni teléfono; si ya nos has dejado tus datos, podría relacionarse con ellos.\n\nResponsable: {responsable}. Los datos se guardan en Google (Hojas de cálculo), que actúa como encargado del tratamiento.\n\nPuedes pedirnos acceso, rectificación o supresión escribiendo a {email}.\n\nSi nos escribes por WhatsApp o por correo, usaremos tus datos solo para responderte.',
+    privacyText: 'Si usas el formulario, guardamos tu nombre, correo o teléfono, la ciudad, el producto que te interesa, el idioma, el origen (móvil o tableta), si marcas la casilla de novedades y que has aceptado la política de privacidad, además de las respuestas opcionales del segundo paso (perfil, actividad, embarcación, intereses y comentarios) si las envías.\n\nLos usamos para enviarte el dossier y contactarte sobre tu interés; si marcas la casilla de novedades, también para enviarte novedades.\n\nSi pulsas el botón de WhatsApp o el de correo, o descargas un dossier, guardamos un registro del clic (botón, idioma, dispositivo, producto y ciudad indicados y otros datos técnicos, como se explica en la página de cookies), sin tu nombre, correo ni teléfono; si ya nos has dejado tus datos, podría relacionarse con ellos.\n\nResponsable: {responsable}. Los datos se guardan en Google (Hojas de cálculo), que actúa como encargado del tratamiento.\n\nPuedes pedirnos acceso, rectificación o supresión escribiendo a {email}.\n\nSi nos escribes por WhatsApp o por correo, usaremos tus datos solo para responderte.',
   },
   ca: {
     entryTitle: 'Descobreix el mar en silenci',
@@ -123,7 +123,7 @@ export const FORM = {
     doneCardTitle: 'Dossier The Silent Fleet',
     doneCardGeneral: 'Informació general',
     doneHome: 'Tornar a l\'inici',
-    privacyText: 'Si fas servir el formulari, desem el teu nom, correu, telèfon, la ciutat, el producte que t\'interessa, l\'idioma, l\'origen (mòbil o tauleta), si marques la casella de novetats i que has acceptat la política de privacitat.\n\nEls fem servir per enviar-te el dossier i contactar-te sobre el teu interès; si marques la casella de novetats, també per enviar-te novetats.\n\nSi prems el botó de WhatsApp o el de correu, desem un registre del clic (botó, idioma, dispositiu, producte i ciutat indicats i altres dades tècniques, com s\'explica a la pàgina de cookies), sense el teu nom, correu ni telèfon; si ja ens has deixat les teves dades, es podria relacionar amb elles.\n\nResponsable: {responsable}. Les dades es desen a Google (Fulls de càlcul), que actua com a encarregat del tractament.\n\nPots demanar-nos accés, rectificació o supressió escrivint a {email}.\n\nSi ens escrius per WhatsApp o per correu, farem servir les teves dades només per respondre\'t.',
+    privacyText: 'Si fas servir el formulari, desem el teu nom, correu o telèfon, la ciutat, el producte que t\'interessa, l\'idioma, l\'origen (mòbil o tauleta), si marques la casella de novetats i que has acceptat la política de privacitat, a més de les respostes opcionals del segon pas (perfil, activitat, embarcació, interessos i comentaris) si les envies.\n\nEls fem servir per enviar-te el dossier i contactar-te sobre el teu interès; si marques la casella de novetats, també per enviar-te novetats.\n\nSi prems el botó de WhatsApp o el de correu, o descarregues un dossier, desem un registre del clic (botó, idioma, dispositiu, producte i ciutat indicats i altres dades tècniques, com s\'explica a la pàgina de cookies), sense el teu nom, correu ni telèfon; si ja ens has deixat les teves dades, es podria relacionar amb elles.\n\nResponsable: {responsable}. Les dades es desen a Google (Fulls de càlcul), que actua com a encarregat del tractament.\n\nPots demanar-nos accés, rectificació o supressió escrivint a {email}.\n\nSi ens escrius per WhatsApp o per correu, farem servir les teves dades només per respondre\'t.',
   },
   pt: {
     entryTitle: 'Descobre o mar em silêncio',
@@ -185,7 +185,7 @@ export const FORM = {
     doneCardTitle: 'Dossier The Silent Fleet',
     doneCardGeneral: 'Informação geral',
     doneHome: 'Voltar ao início',
-    privacyText: 'Se usares o formulário, guardamos o teu nome, e-mail, telefone, a cidade, o produto que te interessa, o idioma, a origem (telemóvel ou tablet), se marcares a caixa de novidades e que aceitaste a política de privacidade.\n\nUsamos estes dados para te enviar o dossier e contactar-te sobre o teu interesse; se marcares a caixa de novidades, também para te enviar novidades.\n\nSe carregares no botão de WhatsApp ou no de e-mail, guardamos um registo do clique (botão, idioma, dispositivo, produto e cidade indicados e outros dados técnicos, como se explica na página de cookies), sem o teu nome, e-mail nem telefone; se já nos deixaste os teus dados, poderá ser relacionado com eles.\n\nResponsável: {responsable}. Os dados ficam guardados na Google (Folhas de cálculo), que atua como subcontratante.\n\nPodes pedir-nos acesso, retificação ou apagamento escrevendo para {email}.\n\nSe nos escreveres por WhatsApp ou por e-mail, usaremos os teus dados apenas para te responder.',
+    privacyText: 'Se usares o formulário, guardamos o teu nome, e-mail ou telefone, a cidade, o produto que te interessa, o idioma, a origem (telemóvel ou tablet), se marcares a caixa de novidades e que aceitaste a política de privacidade, além das respostas opcionais do segundo passo (perfil, atividade, embarcação, interesses e comentários) se as enviares.\n\nUsamos estes dados para te enviar o dossier e contactar-te sobre o teu interesse; se marcares a caixa de novidades, também para te enviar novidades.\n\nSe carregares no botão de WhatsApp ou no de e-mail, ou descarregares um dossier, guardamos um registo do clique (botão, idioma, dispositivo, produto e cidade indicados e outros dados técnicos, como se explica na página de cookies), sem o teu nome, e-mail nem telefone; se já nos deixaste os teus dados, poderá ser relacionado com eles.\n\nResponsável: {responsable}. Os dados ficam guardados na Google (Folhas de cálculo), que atua como subcontratante.\n\nPodes pedir-nos acesso, retificação ou apagamento escrevendo para {email}.\n\nSe nos escreveres por WhatsApp ou por e-mail, usaremos os teus dados apenas para te responder.',
   },
   en: {
     entryTitle: 'Discover the sea in silence',
@@ -247,7 +247,7 @@ export const FORM = {
     doneCardTitle: 'Dossier The Silent Fleet',
     doneCardGeneral: 'General information',
     doneHome: 'Back to start',
-    privacyText: 'If you use the form, we store your name, email, phone, city, the product you are interested in, language, origin (mobile or tablet), whether you tick the updates box and the fact that you accepted the privacy policy.\n\nWe use this to send you the dossier and contact you about your interest; if you tick the updates box, also to send you updates.\n\nIf you press the WhatsApp or the email button, we store a record of the click (button, language, device, product and city entered and other technical data, as explained on the cookies page), without your name, email or phone; if you have already left your details, it could be linked to them.\n\nController: {responsable}. The data is stored with Google (Sheets), which acts as data processor.\n\nYou can ask us for access, correction or deletion by writing to {email}.\n\nIf you write to us by WhatsApp or email, we will use your details only to reply.',
+    privacyText: 'If you use the form, we store your name, email or phone, city, the product you are interested in, language, origin (mobile or tablet), whether you tick the updates box and the fact that you accepted the privacy policy, plus the optional answers from the second step (profile, activity, boat, interests and comments) if you send them.\n\nWe use this to send you the dossier and contact you about your interest; if you tick the updates box, also to send you updates.\n\nIf you press the WhatsApp or the email button, or download a dossier, we store a record of the click (button, language, device, product and city entered and other technical data, as explained on the cookies page), without your name, email or phone; if you have already left your details, it could be linked to them.\n\nController: {responsable}. The data is stored with Google (Sheets), which acts as data processor.\n\nYou can ask us for access, correction or deletion by writing to {email}.\n\nIf you write to us by WhatsApp or email, we will use your details only to reply.',
   },
 };
 
@@ -264,7 +264,7 @@ export const FORM_NO_DOSSIER = {
     submit: 'Enviar',
     doneTitle: 'Gracias, ya tenemos tus datos',
     doneText: 'Nos pondremos en contacto contigo muy pronto. Si lo prefieres, escríbenos ahora mismo.',
-    privacy: [['el producto que te interesa, ', ''], ['para enviarte el dossier y contactarte', 'para contactarte'], ['producto y ciudad', 'ciudad']],
+    privacy: [[', o descargas un dossier', ''], ['el producto que te interesa, ', ''], ['para enviarte el dossier y contactarte', 'para contactarte'], ['producto y ciudad', 'ciudad']],
   },
   ca: {
     entryTitle: 'Parlem de propulsió elèctrica',
@@ -276,7 +276,7 @@ export const FORM_NO_DOSSIER = {
     submit: 'Enviar',
     doneTitle: 'Gràcies, ja tenim les teves dades',
     doneText: 'Ens posarem en contacte amb tu ben aviat. Si ho prefereixes, escriu-nos ara mateix.',
-    privacy: [['el producte que t\'interessa, ', ''], ['per enviar-te el dossier i contactar-te', 'per contactar-te'], ['producte i ciutat', 'ciutat']],
+    privacy: [[', o descarregues un dossier', ''], ['el producte que t\'interessa, ', ''], ['per enviar-te el dossier i contactar-te', 'per contactar-te'], ['producte i ciutat', 'ciutat']],
   },
   pt: {
     entryTitle: 'Falemos de propulsão elétrica',
@@ -288,7 +288,7 @@ export const FORM_NO_DOSSIER = {
     submit: 'Enviar',
     doneTitle: 'Obrigado, já temos os teus dados',
     doneText: 'Entraremos em contacto contigo muito em breve. Se preferires, escreve-nos já.',
-    privacy: [['o produto que te interessa, ', ''], ['para te enviar o dossier e contactar-te', 'para contactar-te'], ['produto e cidade', 'cidade']],
+    privacy: [[', ou descarregares um dossier', ''], ['o produto que te interessa, ', ''], ['para te enviar o dossier e contactar-te', 'para contactar-te'], ['produto e cidade', 'cidade']],
   },
   en: {
     entryTitle: 'Let\'s talk about electric propulsion',
@@ -300,6 +300,6 @@ export const FORM_NO_DOSSIER = {
     submit: 'Send',
     doneTitle: 'Thank you, we have your details',
     doneText: 'We will get in touch with you very soon. If you prefer, write to us right now.',
-    privacy: [['the product you are interested in, ', ''], ['to send you the dossier and contact you', 'to contact you'], ['product and city', 'city']],
+    privacy: [[', or download a dossier', ''], ['the product you are interested in, ', ''], ['to send you the dossier and contact you', 'to contact you'], ['product and city', 'city']],
   },
 };

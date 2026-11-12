@@ -10,13 +10,20 @@ const send = async (label, payload) => {
 };
 
 console.log('GET', (await (await fetch(url)).text()));
-await send('lead    ', { id, stage: 'complete', contact });
-await send('reintent', { id, stage: 'complete', contact });
+// Recorregut real: el lead es desa al pas 1 (només telèfon, sense correu) i es completa al pas 2 (amb perfilació i un text com a fórmula).
+const { email: _email, ...phoneOnly } = contact;
+await send('pas 1   ', { id, stage: 'step1', contact: { ...phoneOnly, email: '' } });
+await send('pas 2   ', { id, stage: 'complete', contact: { ...phoneOnly, email: '' }, profiling: { profile: 'profesional', activity: 'vela', hasBoat: 'si', enthusiasm: ['noise', 'other'], enthusiasmOther: 'silenci', comments: '=1+1' } });
+await send('reintent', { id, stage: 'complete', contact: { ...phoneOnly, email: '' } });
+await send('saltat  ', { id: `${id}-skip`, stage: 'complete', contact });
 await send('invàlid ', { id, stage: 'complete', contact: { ...contact, privacy: false } });
+await send('sense contacte', { id: `${id}-x`, stage: 'complete', contact: { ...contact, email: '', phone: '' } });
 const click = { visit: `visit-${Date.now()}`, button: 'whatsapp', from: 'entry', lang: 'pt', origin: 'mobil', products: 'sifly', city: 'Lisboa', device: 'mobile', os: 'ios', browserLang: 'pt-PT', tz: 'Europe/Lisbon', screen: '360x740', seconds: 12, referrer: 'www.google.com' };
 const clickId = `click-${Date.now()}`;
 await send('clic    ', { id: clickId, stage: 'click', click });
 await send('clic rep', { id: clickId, stage: 'click', click });
 await send('clic dol', { id: clickId, stage: 'click', click: { ...click, button: 'sms' } });
-console.log(`Mira el full: a «Leads» ha d'haver-hi UNA fila amb id ${id} (stage complete) i la ciutat com a text («=1+1»), no com a fórmula.`);
-console.log(`A «Clics» ha d'haver-hi UNA fila amb id ${clickId}, amb dia i hora de la zona del full i les 18 columnes.`);
+const downloadId = `click-dl-${Date.now()}`;
+await send('descàrr.', { id: downloadId, stage: 'click', click: { ...click, button: 'download', from: 'done', products: 'sifly' } });
+console.log(`Mira el full: a «Leads» ha d'haver-hi UNA fila amb id ${id} (stage complete, sense correu, perfil «profesional» i comentaris «=1+1» com a text) i una altra amb id ${id}-skip (perfil buit); cap fila amb ${id}-x.`);
+console.log(`A «Clics» ha d'haver-hi UNA fila amb id ${clickId} (dia i hora de la zona del full i les 18 columnes) i UNA amb ${downloadId} (button download).`);
