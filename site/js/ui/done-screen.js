@@ -11,7 +11,7 @@ export function createDoneScreen({ h, T, icon }) {
         h('span', { className: 'tsf-pdf__text' },
           h('span', { className: 'label tsf-pdf__title' }, f.doneCardTitle),
           h('span', { className: 'body-sm tsf-pdf__meta' }, meta))));
-  return function DoneScreen({ t, emailDelivery, docs, onDownloadAll, whatsappHref, emailHref, onHome }) {
+  return function DoneScreen({ t, emailDelivery, docs, onDownloadAll, onContactClick, whatsappHref, emailHref, onHome }) {
     const f = t.form;
     return h('div', { className: 'page__screen page__screen--done' },
       mark,
@@ -29,8 +29,8 @@ export function createDoneScreen({ h, T, icon }) {
           // Button no reenvia `download`, d'aquí l'<a> amb les classes del sistema.
           : h('a', { className: 'tsf-btn button tsf-btn--solid tsf-btn--full', href: docs[0].href, download: '' }, f.doneDownload)) : null,
       h('div', { className: 'page__done-actions' },
-        h(T.Button, { full: true, variant: 'outline', href: whatsappHref }, icon(h, 'whatsapp'), f.entryWhatsapp),
-        h(T.Button, { full: true, variant: 'outline', href: emailHref }, icon(h, 'mail'), f.entryEmail),
+        h(T.Button, { full: true, variant: 'outline', href: whatsappHref, onClick: () => onContactClick('whatsapp') }, icon(h, 'whatsapp'), f.entryWhatsapp),
+        h(T.Button, { full: true, variant: 'outline', href: emailHref, onClick: () => onContactClick('email') }, icon(h, 'mail'), f.entryEmail),
         h(T.Button, { variant: 'link', onClick: onHome }, f.doneHome)));
   };
 }

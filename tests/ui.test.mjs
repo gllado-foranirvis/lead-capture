@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { h, T, byType, byName, findAll, textOf } from './helpers/fake-react.mjs';
 import { DICT } from '../site/js/i18n.js';
 import { CONFIG } from '../site/js/config.js';
+import { emptyForm } from '../site/js/form/model.js';
 import { icon } from '../site/js/icons.js';
 import { createChrome } from '../site/js/ui/chrome.js';
 import { createEntryScreen } from '../site/js/ui/entry-screen.js';
@@ -12,9 +13,8 @@ const Header = createChrome({ h, T, brand: CONFIG.brand, languages: CONFIG.langu
 const EntryScreen = createEntryScreen({ h, T, icon });
 
 const entry = (extra = {}) => EntryScreen({
-  t: DICT.es, links: { whatsapp: 'wa', email: 'mail' }, email: CONFIG.email, profile: '', profileLegend: DICT.es.profileLegend,
-  profileOptions: [{ value: 'profesional', label: DICT.es.profileDistribuidor }, { value: 'particular', label: DICT.es.profileParticular }],
-  onProfile: noop, onClearProfile: noop, legalQuery: '?lang=es', ...extra,
+  t: DICT.es, fair: CONFIG.fair, links: { whatsapp: 'wa', email: 'mail' }, email: CONFIG.email, products: CONFIG.products, askProduct: true,
+  values: emptyForm(), onChange: noop, onToggle: noop, onContactClick: noop, legalQuery: '?lang=es', ...extra,
 });
 const buttons = (tree) => byType(tree, 'T.Button');
 
@@ -24,7 +24,7 @@ test('capçalera: marca i selector d\'idioma amb codis en majúscules', () => {
   assert.equal(tree.type, 'header', 'la capçalera és un <header> (landmark de banner)');
   const [lang] = byType(tree, 'T.LangSwitch');
   assert.equal(lang.props.value, 'CA');
-  assert.deepEqual(lang.props.languages.map((l) => l.code), ['ES', 'CA', 'PT', 'EN']);
+  assert.deepEqual(lang.props.languages.map((l) => l.code), ['PT', 'EN', 'ES', 'CA']);
 });
 
 test('capçalera: la marca és un enllaç a l\'inici; el clic normal va a l\'inici sense recarregar i el clic amb modificador obre l\'enllaç', () => {
@@ -52,8 +52,3 @@ test('entrada: línia explicativa, adreça visible i enllaços legals amb la que
   const [legal] = byType(tree, 'T.LegalLinks');
   assert.equal(legal.props.links[0].href, 'privacy.html?lang=es&extra1=1');
 });
-test('entrada: el perfil és desmarcable', () => {
-  const wrapper = findAll(entry({ profile: 'particular' }), (n) => n.type === 'div' && typeof n.props.onClick === 'function' && typeof n.props.onKeyDown === 'function');
-  assert.equal(wrapper.length, 1);
-});
-

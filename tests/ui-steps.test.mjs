@@ -3,37 +3,30 @@ import assert from 'node:assert/strict';
 import { h, T, byType, byName, findAll, textOf } from './helpers/fake-react.mjs';
 import { DICT } from '../site/js/i18n.js';
 import { CONFIG } from '../site/js/config.js';
-import { ACTIVITIES, CONCERNS, ENTHUSIASM, FACTORS, PROFILES, emptyForm } from '../site/js/form/model.js';
+import { emptyForm } from '../site/js/form/model.js';
 import { icon } from '../site/js/icons.js';
 import { FIELD_HINTS } from '../site/js/form/hints.js';
 import { createStepIndicator } from '../site/js/ui/step-indicator.js';
 import { createEntryScreen } from '../site/js/ui/entry-screen.js';
 import { createStepContact } from '../site/js/ui/step-contact.js';
-import { createStepProfile } from '../site/js/ui/step-profile.js';
 import { createDoneScreen } from '../site/js/ui/done-screen.js';
 
 const noop = () => {};
 const StepIndicator = createStepIndicator({ h });
 const EntryScreen = createEntryScreen({ h, T, icon });
 const StepContact = createStepContact({ h, T });
-const StepProfile = createStepProfile({ h, T });
 const DoneScreen = createDoneScreen({ h, T, icon });
 const f = DICT.es.form;
 const buttons = (tree) => byType(tree, 'T.Button');
 const bar = (tree) => findAll(tree, (n) => n.props?.role === 'progressbar')[0];
-const alerts = (tree) => findAll(tree, (n) => n.props?.role === 'alert').map(textOf);
-const deselectable = (tree) => findAll(tree, (n) => n.type === 'div' && typeof n.props.onClick === 'function' && typeof n.props.onKeyDown === 'function');
-const profileOptions = PROFILES.map((p) => ({ value: p, label: f.profiles[p] }));
 
 const entry = (extra = {}) => EntryScreen({
-  t: DICT.es, links: { whatsapp: 'wa', email: 'mail' }, email: CONFIG.email, profile: '', profileLegend: f.entryProfileLegend, profileOptions,
-  onProfile: noop, onClearProfile: noop, legalQuery: '?lang=es', ...extra,
+  t: DICT.es, fair: CONFIG.fair, links: { whatsapp: 'wa', email: 'mail' }, email: CONFIG.email, products: CONFIG.products, askProduct: true,
+  values: emptyForm(), onChange: noop, onToggle: noop, onContactClick: noop, legalQuery: '?lang=es', ...extra,
 });
 const contact = (extra = {}) => StepContact({
-  t: DICT.es, values: emptyForm(), errors: {}, onChange: noop, onNext: noop, onBack: noop, privacyHref: 'privacy.html?lang=es#privacy', ...extra,
-});
-const profile = (extra = {}) => StepProfile({
-  t: DICT.es, products: CONFIG.products, values: emptyForm(), errors: {}, onChange: noop, onToggle: noop, onSubmit: noop, onBack: noop, ...extra,
+  t: DICT.es, products: CONFIG.products, askProduct: true, values: emptyForm(), errors: {}, onChange: noop, onToggle: noop, onSubmit: noop, onBack: noop,
+  privacyHref: 'privacy.html?lang=es#privacy', ...extra,
 });
 
 test('indicador: text visible, barra accessible i segments plens segons el pas', () => {
@@ -44,43 +37,56 @@ test('indicador: text visible, barra accessible i segments plens segons el pas',
   assert.deepEqual([on(1), on(2)], [1, 2]);
 });
 
-test('inici amb Extra 1: xip de perfil sempre visible, CTA nou únic principal, cap xip fora de la pregunta de perfil', () => {
+test('inici amb Extra 1: el nom de la fira dins de l\'escena, sense cap pregunta de perfil', () => {
   const tree = entry({ onOpenForm: noop });
-  const [chips] = byType(tree, 'T.ChoiceChips');
-  assert.deepEqual([chips.props.legend, chips.props.name, chips.props.options.map((o) => o.value)], [f.entryProfileLegend, 'perfil', ['particular', 'profesional']]);
-  const [wa, mail, cta] = buttons(tree);
-  assert.deepEqual([textOf(cta), cta.props.variant, cta.props.onClick], [f.entryCta, undefined, noop]);
-  assert.deepEqual([textOf(wa), wa.props.variant, textOf(mail), mail.props.variant], [f.entryWhatsapp, 'outline', f.entryEmail, 'outline']);
+  const [stage] = tree.children;
+  assert.ok(textOf(stage).includes('Enertech 2026'));
+  assert.equal(byType(tree, 'T.ChoiceChips').length, 0);
   assert.equal(textOf(findAll(tree, (n) => n.type === 'h1')[0]), f.entryTitle);
-  assert.equal(deselectable(tree).length, 1, 'el perfil és desmarcable a l\'inici');
 });
-test('inici amb Extra 1: el CTA principal va després dels contactes, la línia «¿No se abre?» després del CTA i els enllaços legals al final', () => {
+test('inici: els productes són caselles de marcatge múltiple (com al pas de dades), marcades segons values.products', () => {
+  const calls = [];
+  const tree = entry({ onOpenForm: noop, values: { ...emptyForm(), products: ['sifly', 'tko'] }, onToggle: (...a) => calls.push(a) });
+  const [group] = byType(tree, 'T.CheckboxGroup');
+  assert.deepEqual([group.props.legend, group.props.name], [f.productLegend, 'products']);
+  assert.deepEqual(group.props.options.map((o) => o.value), [...CONFIG.products.map((p) => p.id), 'asesoramiento']);
+  assert.deepEqual(group.props.values, ['sifly', 'tko']);
+  group.props.onChange({ target: { value: 'boatee' } });
+  assert.deepEqual(calls, [['products', 'boatee']]);
+});
+test('inici: la ciutat és un camp de text (city) que avisa del canvi', () => {
+  const calls = [];
+  const tree = entry({ onOpenForm: noop, onChange: (...a) => calls.push(a) });
+  const [city] = byName(tree, 'city');
+  assert.deepEqual([city.props.label, city.props.placeholder], [f.cityLabel, f.cityPlaceholder]);
+  city.props.onChange({ target: { value: 'Lisboa' } });
+  assert.deepEqual(calls, [['city', 'Lisboa']]);
+});
+test('inici: ordre productes → ciutat → contacte → CTA → línia de recuperació → enllaços legals', () => {
   const body = findAll(entry({ onOpenForm: noop }), (n) => n.props?.className === 'page__body')[0];
-  const kinds = body.children.map((n) => (typeof n === 'object' && n ? n.type : null));
+  const kinds = body.children.map((n) => n?.props?.name ?? n?.props?.className ?? n?.type ?? null);
+  assert.deepEqual(kinds.filter(Boolean), ['form__products', 'city', 'page__group', 'page__cta', 'body-sm page__note', 'T.LegalLinks']);
   const group = body.children.find((n) => n.props?.className === 'page__group');
   assert.deepEqual(group.children.map((n) => n.type ?? null), ['T.SectionLabel', 'div'], 'etiqueta i botons de contacte formen un grup');
-  assert.ok(body.children.indexOf(group) < kinds.indexOf('T.Button'), 'els contactes abans del CTA');
-  assert.deepEqual(kinds.slice(-3), ['T.Button', 'p', 'T.LegalLinks']);
-  assert.equal(textOf(body.children.at(-3)), f.entryCta);
   assert.equal(textOf(body.children.at(-2)), `${DICT.es.contactFallback} ${CONFIG.email}`);
-  const stack = group.children.find((n) => n.props?.className === 'page__stack');
-  assert.equal(textOf(stack).includes(DICT.es.contactFallback), false, 'ja no és dins del bloc dels contactes');
-  assert.ok(textOf(stack).includes(DICT.es.contactHint), 'la línia explicativa es queda amb els botons');
 });
-test('inici amb Extra 1: escena fotogràfica compacta amb el títol (h1) i el subtítol, i el cos del contacte a sota', () => {
-  const tree = entry({ onOpenForm: noop });
-  const [stage, body] = tree.children;
-  assert.deepEqual([stage.type, stage.props.className, body.props.className], ['section', 'stage tsf-on-dark', 'page__body']);
-  const [h1] = findAll(stage, (n) => n.type === 'h1');
-  assert.equal(findAll(stage, (n) => n.type === 'h1').length, 1);
-  assert.match(h1.props.className, /\bh2\b/, 'títol compacte (28px) per no ocupar tota l\'alçada de la pantalla');
-  assert.equal(textOf(stage), `${f.entryTitle}${f.entrySubtitle}`);
-  assert.equal(findAll(tree, (n) => n.props?.['data-step-heading'] !== undefined).length, 1, 'el focus del canvi de pantalla va al títol');
+test('inici: WhatsApp i correu són enllaços i el clic ho notifica sense canviar l\'href', () => {
+  const calls = [];
+  const [wa, mail, cta] = buttons(entry({ onOpenForm: noop, onContactClick: (b) => calls.push(b) }));
+  assert.deepEqual([textOf(wa), wa.props.variant, wa.props.href, textOf(mail), mail.props.variant, mail.props.href], [f.entryWhatsapp, 'outline', 'wa', f.entryEmail, 'outline', 'mail']);
+  assert.deepEqual([textOf(cta), cta.props.variant], [f.entryCta, undefined]);
+  wa.props.onClick(); mail.props.onClick();
+  assert.deepEqual(calls, ['whatsapp', 'email']);
 });
-test('inici sense Extra 1: l\'MVP amb xips de perfil i WhatsApp principal', () => {
-  const t = DICT.es;
-  const tree = entry({ profileLegend: t.profileLegend, profileOptions: [{ value: 'profesional', label: t.profileDistribuidor }, { value: 'particular', label: t.profileParticular }] });
-  assert.equal(byType(tree, 'T.ChoiceChips')[0].props.legend, t.profileLegend);
+test('inici sense dossier: no es pregunta el producte, però sí la ciutat i el nom de la fira', () => {
+  const tree = entry({ onOpenForm: noop, askProduct: false });
+  assert.equal(byName(tree, 'products').length, 0);
+  assert.equal(byName(tree, 'city').length, 1);
+  assert.ok(textOf(tree).includes('Enertech 2026'));
+});
+test('inici sense Extra 1 (MVP): només títol, contacte i WhatsApp principal; cap pregunta', () => {
+  const tree = entry();
+  assert.equal(byName(tree, 'products').length + byName(tree, 'city').length + byType(tree, 'T.ChoiceChips').length, 0);
   assert.equal(buttons(tree).length, 2);
   assert.equal(buttons(tree)[0].props.variant, undefined);
 });
@@ -91,12 +97,25 @@ test('pas 1: indicador 1 de 2, camps de contacte obligatoris amb el teclat adequ
   assert.ok(textOf(tree).includes('Paso 1 de 2') && textOf(tree).includes(f.requiredNote));
   const order = findAll(tree, (n) => ['T.Field', 'T.Checkbox'].includes(n.type)).map((n) => n.props.name);
   assert.deepEqual(order, ['name', 'email', 'phonePrefix', 'phone', 'privacy', 'newsletter']);
+  assert.equal(byName(tree, 'city').length, 0, 'la ciutat ja s\'ha demanat a l\'inici');
   assert.deepEqual([byName(tree, 'email')[0].props.type, byName(tree, 'phone')[0].props.type], ['email', 'tel']);
   for (const n of ['name', 'email', 'phonePrefix', 'phone']) assert.equal(byName(tree, n)[0].props.required, true, n);
   assert.equal(byName(tree, 'phonePrefix')[0].props.value, '+34', 'el prefix surt omplert amb +34');
   assert.equal(byName(tree, 'phonePrefix')[0].props.label, f.phonePrefix);
   assert.equal(byName(tree, 'phonePrefix')[0].props.type, 'tel');
   assert.equal(byType(tree, 'T.ChoiceChips').length, 0);
+});
+test('pas 1: els productes són les mateixes caselles multi-tria, marcades segons values.products, entre el telèfon i el consentiment', () => {
+  const calls = [];
+  const tree = contact({ values: emptyForm({ products: ['tko'] }), onToggle: (...a) => calls.push(a) });
+  const [group] = byName(tree, 'products');
+  assert.deepEqual([group.type, group.props.legend, group.props.values], ['T.CheckboxGroup', f.productLegend, ['tko']]);
+  assert.deepEqual(group.props.options.map((o) => o.label), [...CONFIG.products.map((p) => p.name), f.productAdvice]);
+  group.props.onChange({ target: { value: 'sifly' } });
+  assert.deepEqual(calls, [['products', 'sifly']]);
+  const names = findAll(tree, (n) => ['T.Field', 'T.CheckboxGroup', 'T.Checkbox'].includes(n.type)).map((n) => n.props.name);
+  assert.deepEqual(names, ['name', 'email', 'phonePrefix', 'phone', 'products', 'privacy', 'newsletter']);
+  assert.equal(byName(contact({ askProduct: false }), 'products').length, 0);
 });
 test('pas 1: privacitat sense marcar amb enllaç a pestanya nova, text d\'un sol element; novetats opcional', () => {
   const tree = contact();
@@ -109,11 +128,11 @@ test('pas 1: privacitat sense marcar amb enllaç a pestanya nova, text d\'un sol
   assert.match(f.consentBefore, / $/);
   assert.equal(byName(tree, 'newsletter')[0].props.required, undefined);
 });
-test('pas 1: botó «Conseguir información →» (submit) i «← Volver»; Intro envia el pas; els errors es veuen abans de seguir', () => {
+test('pas 1: botó d\'enviar (submit) i «← Volver»; Intro envia el formulari; els errors es veuen abans de seguir', () => {
   let called = 0;
-  const tree = contact({ onNext: () => called++, onKeyDown: noop, errors: { name: 'required', email: 'email', privacy: 'privacy' } });
+  const tree = contact({ onSubmit: () => called++, onKeyDown: noop, errors: { name: 'required', email: 'email', privacy: 'privacy' } });
   const [next, back] = buttons(tree);
-  assert.deepEqual([next.props.type, next.props.full, textOf(next), back.props.variant, textOf(back)], ['submit', true, 'Conseguir información →', 'link', '← Volver']);
+  assert.deepEqual([next.props.type, next.props.full, textOf(next), back.props.variant, textOf(back)], ['submit', true, f.submit, 'link', '← Volver']);
   const [formEl] = byType(tree, 'form');
   const e = { preventDefault() { this.prevented = true; } };
   formEl.props.onSubmit(e);
@@ -162,65 +181,10 @@ test('pas 1: el marcador del número segueix el prefix i el prefix porta suggeri
   assert.equal(FIELD_HINTS.phonePrefix.list, 'phone-prefixes');
 });
 
-test('pas 2: indicador 2 de 2 i preguntes en l\'ordre del brief; l\'activitat no hi surt per a un Particular', () => {
-  const tree = profile({ values: { ...emptyForm(), profile: 'particular' } });
-  assert.equal(bar(tree).props['aria-valuenow'], 2);
-  const order = findAll(tree, (n) => ['T.ChoiceChips', 'T.Select', 'T.Field', 'T.CheckboxGroup'].includes(n.type)).map((n) => n.props.name);
-  assert.deepEqual(order, ['profile', 'hasBoat', 'hasElectric', 'enthusiasm', 'concerns', 'intent', 'factors', 'products', 'demo', 'comments']);
-});
-test('pas 2: Profesional veu l\'activitat; «otra» mostra el camp d\'especificar', () => {
-  const pro = profile({ values: { ...emptyForm(), profile: 'profesional' } });
-  const order = findAll(pro, (n) => ['T.ChoiceChips', 'T.Select', 'T.Field', 'T.CheckboxGroup'].includes(n.type)).map((n) => n.props.name);
-  assert.deepEqual(order, ['profile', 'activity', 'hasBoat', 'hasElectric', 'enthusiasm', 'concerns', 'intent', 'factors', 'products', 'demo', 'comments']);
-  assert.deepEqual(byName(pro, 'activity')[0].props.options.map((o) => o.value), ['', ...ACTIVITIES]);
-  assert.equal(byName(pro, 'activity')[0].props.options[0].label, f.activityNone, 'es pot tornar a «sense especificar»');
-  assert.equal(byName(pro, 'activityOther').length, 0);
-  const other = profile({ values: { ...emptyForm(), profile: 'profesional', activity: 'otra' } });
-  assert.equal(byName(other, 'activityOther')[0].type, 'T.Field');
-});
-test('pas 2: només el perfil és obligatori i no es pot desmarcar; la resta és opcional i desmarcable', () => {
-  const tree = profile({ values: { ...emptyForm(), profile: 'profesional' } });
-  assert.equal(byName(tree, 'profile')[0].props.legend, `${f.profileLegend} *`);
-  for (const n of ['hasBoat', 'hasElectric', 'intent']) assert.equal(byName(tree, n)[0].props.legend.endsWith('*'), false, n);
-  assert.equal(byName(tree, 'products')[0].props.legend, f.productLegend);
-  assert.equal(deselectable(tree).length, 3, 'embarcació, embarcació elèctrica i intenció (els models són caselles)');
-  const demo = byName(tree, 'demo')[0];
-  assert.deepEqual([demo.props.label, demo.props.placeholder, demo.props.required], [f.demo, f.demoPlaceholder, undefined]);
-});
-test('pas 2: embarcació i intenció són Sí/No; els models són caselles amb l\'assessorament al final', () => {
-  const tree = profile();
-  assert.deepEqual(byName(tree, 'hasBoat')[0].props.options.map((o) => o.label), ['Sí', 'No']);
-  assert.deepEqual(byName(tree, 'intent')[0].props.options.map((o) => o.label), ['Sí', 'No']);
-  assert.deepEqual(byName(tree, 'hasElectric')[0].props.options.map((o) => o.label), ['Sí', 'No']);
-  const [products] = byName(tree, 'products');
-  assert.equal(products.type, 'T.CheckboxGroup');
-  assert.deepEqual(products.props.options.map((o) => o.label), [...CONFIG.products.map((p) => p.name), f.productAdvice]);
-  assert.equal(products.props.options.at(-1).value, 'asesoramiento');
-});
-test('pas 2: els models marcats són els de values.products i marcar-ne un avisa amb onToggle', () => {
-  const calls = [];
-  const tree = profile({ values: { ...emptyForm({ products: ['model-a', 'model-b'] }) }, onToggle: (field, value) => calls.push([field, value]) });
-  const [products] = byName(tree, 'products');
-  assert.deepEqual(products.props.values, ['model-a', 'model-b']);
-  products.props.onChange({ target: { value: 'model-c' } });
-  assert.deepEqual(calls, [['products', 'model-c']]);
-});
-test('pas 2: error del perfil visible, botó final i «← Volver», enviar no recarrega', () => {
-  let sent = 0;
-  const tree = profile({ errors: { profile: 'profileRequired' }, onSubmit: () => sent++ });
-  assert.deepEqual(alerts(tree), ['! Elige una opción']);
-  const [submit, back] = buttons(tree);
-  assert.deepEqual([submit.props.type, textOf(submit), back.props.variant, textOf(back)], ['submit', 'Acceder al dossier', 'link', '← Volver']);
-  const [formEl] = byType(tree, 'form');
-  const e = { preventDefault() { this.prevented = true; } };
-  formEl.props.onSubmit(e);
-  assert.deepEqual([e.prevented, sent], [true, 1]);
-});
-
-const DOC_A = { href: 'dossiers/model-a.pdf', file: 'tsf-model-a.pdf', meta: 'Modelo A' };
-const DOC_B = { href: 'dossiers/model-b.pdf', file: 'tsf-model-b.pdf', meta: 'Modelo B' };
+const DOC_A = { href: 'dossiers/sifly.en.pdf', meta: 'Sifly' };
+const DOC_B = { href: 'dossiers/tko.en.pdf', meta: 'TKO' };
 const done = (extra = {}) => DoneScreen({
-  t: DICT.es, emailDelivery: false, docs: [DOC_A], onDownloadAll: noop,
+  t: DICT.es, emailDelivery: false, docs: [DOC_A], onDownloadAll: noop, onContactClick: noop,
   whatsappHref: 'https://wa.me/1', emailHref: 'mailto:x@y.z', onHome: noop, ...extra,
 });
 const cardOf = (tree) => findAll(tree, (n) => typeof n.props?.className === 'string' && n.props.className.split(' ').includes('tsf-pdf'))[0];
@@ -230,13 +194,12 @@ test('confirmació: marca d\'èxit, títol, targeta del dossier i descàrrega re
   const tree = done();
   assert.equal(byType(tree, 'T.SectionHeading')[0].props.title, f.doneTitle);
   const card = cardOf(tree);
-  assert.deepEqual([textOf(card), card.props.className], [`${f.doneCardTitle}Modelo A`, 'tsf-pdf tsf-pdf--link']);
+  assert.deepEqual([textOf(card), card.props.className], [`${f.doneCardTitle}Sifly`, 'tsf-pdf tsf-pdf--link']);
   assert.ok(findAll(card, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length === 1, 'icona de document decorativa en lloc de la insígnia «PDF»');
   const dl = link(tree, f.doneDownload);
   const cardLink = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc')[0];
-  assert.deepEqual([cardLink.props.href, cardLink.props.download, cardLink.props.tabIndex], ['dossiers/model-a.pdf', 'tsf-model-a.pdf', -1], 'la targeta descarrega el mateix fitxer amb el mateix nom i no és parada de tabulador');
-  assert.deepEqual([dl.props.href, dl.props.download], ['dossiers/model-a.pdf', 'tsf-model-a.pdf']);
-  assert.equal(link(done({ docs: [{ ...DOC_A, file: '' }] }), f.doneDownload).props.download, '', 'sense nom configurat, el navegador tria el nom');
+  assert.deepEqual([cardLink.props.href, cardLink.props.download, cardLink.props.tabIndex], ['dossiers/sifly.en.pdf', '', -1], 'la targeta descarrega el mateix fitxer, amb el nom del fitxer, i no és parada de tabulador');
+  assert.deepEqual([dl.props.href, dl.props.download], ['dossiers/sifly.en.pdf', '']);
   assert.match(dl.props.className, /tsf-btn--solid/);
   assert.ok(findAll(tree, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length >= 1, 'marca d\'èxit decorativa');
 });
@@ -253,6 +216,12 @@ test('confirmació: WhatsApp i correu sota el dossier, i tornada discreta a l\'i
   assert.deepEqual(order, ['card', f.doneDownload, f.entryWhatsapp, f.entryEmail, f.doneHome]);
   assert.equal(textOf(tree).includes('PDF'), false, 'cap text visible diu PDF');
 });
+test('confirmació: WhatsApp i correu notifiquen el clic sense canviar l\'href', () => {
+  const calls = [];
+  const [wa, mail] = buttons(done({ onContactClick: (b) => calls.push(b) }));
+  wa.props.onClick(); mail.props.onClick();
+  assert.deepEqual(calls, ['whatsapp', 'email']);
+});
 test('confirmació: sense dossier configurat no hi ha targeta ni botó de descàrrega', () => {
   const tree = done({ docs: [] });
   assert.equal(cardOf(tree), undefined);
@@ -268,8 +237,8 @@ test('confirmació amb diversos PDF: una targeta per fitxer (parada de tabulador
   let all = 0;
   const tree = done({ docs: [DOC_A, DOC_B], onDownloadAll: () => all++ });
   const cards = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc');
-  assert.deepEqual(cards.map((c) => [c.props.href, c.props.download, c.props.tabIndex]), [[DOC_A.href, DOC_A.file, undefined], [DOC_B.href, DOC_B.file, undefined]]);
-  assert.deepEqual(findAll(tree, (n) => typeof n.props?.className === 'string' && n.props.className.split(' ').includes('tsf-pdf')).map(textOf), [`${f.doneCardTitle}Modelo A`, `${f.doneCardTitle}Modelo B`]);
+  assert.deepEqual(cards.map((c) => [c.props.href, c.props.download, c.props.tabIndex]), [[DOC_A.href, '', undefined], [DOC_B.href, '', undefined]]);
+  assert.deepEqual(findAll(tree, (n) => typeof n.props?.className === 'string' && n.props.className.split(' ').includes('tsf-pdf')).map(textOf), [`${f.doneCardTitle}Sifly`, `${f.doneCardTitle}TKO`]);
   assert.equal(link(tree, f.doneDownload), undefined, 'amb diversos fitxers no hi ha el botó d\'un de sol');
   const [all1] = findAll(tree, (n) => n.type === 'T.Button' && textOf(n) === f.doneDownloadAll);
   assert.ok(all1, 'botó «descargar todos»');
@@ -295,58 +264,7 @@ test('els camps d\'escriptura porten un exemple com a placeholder (no substituei
     assert.equal(field.props.placeholder, f[key], name);
     assert.notEqual(field.props.placeholder, field.props.label, name);
   }
-  const other = profile({ values: { ...emptyForm(), profile: 'profesional', activity: 'otra' } });
-  assert.equal(byName(other, 'activityOther')[0].props.placeholder, f.activityOtherPlaceholder);
 });
 
-const chipsWrapper = (tree, name) => findAll(tree, (n) => n.type === 'div' && typeof n.props.ref === 'function' && findAll(n, (m) => m.props?.name === name).length > 0)[0];
 const fakeGroup = () => { const attrs = {}; return { attrs, el: { querySelector: () => ({ setAttribute: (k, v) => { attrs[k] = v; }, removeAttribute: (k) => { delete attrs[k]; } }) } }; };
 
-test('error dels xips: el «!» és decoratiu (aria-hidden) i l\'error té un id perquè el grup hi apunti', () => {
-  const tree = profile({ errors: { profile: 'profileRequired' } });
-  const [alert] = findAll(tree, (n) => n.props?.role === 'alert');
-  assert.equal(alert.props.id, 'profile-err');
-  assert.equal(textOf(alert), '! Elige una opción');
-  const [bang] = findAll(alert, (n) => n.type === 'span');
-  assert.deepEqual([bang.props['aria-hidden'], textOf(bang)], ['true', '! ']);
-});
-test('error dels xips: el grup (fieldset) queda enllaçat amb aria-describedby i aria-invalid; sense error es desenllaça', () => {
-  const withError = fakeGroup();
-  chipsWrapper(profile({ errors: { profile: 'profileRequired' } }), 'profile').props.ref(withError.el);
-  assert.deepEqual(withError.attrs, { 'aria-describedby': 'profile-err', 'aria-invalid': 'true' });
-  const clean = fakeGroup();
-  clean.attrs['aria-describedby'] = 'x';
-  chipsWrapper(profile(), 'profile').props.ref(clean.el);
-  assert.deepEqual(clean.attrs, {});
-  chipsWrapper(profile(), 'profile').props.ref(null);
-});
-
-test('pas 2: les tres preguntes d\'opinió són llistes de caselles opcionals amb les opcions del formulari original', () => {
-  const tree = profile();
-  for (const [name, expected] of [['enthusiasm', ENTHUSIASM], ['concerns', CONCERNS], ['factors', FACTORS]]) {
-    const group = byName(tree, name)[0];
-    assert.equal(group.type, 'T.CheckboxGroup', name);
-    assert.deepEqual(group.props.options.map((o) => o.value), expected, name);
-    assert.equal(group.props.required, undefined, name);
-    assert.equal(group.props.legend, f[`${name}Legend`], name);
-  }
-});
-test('pas 2: marcar una casella crida onToggle amb el camp i el valor; les marcades surten com a values', () => {
-  const calls = [];
-  const tree = profile({ onToggle: (field, value) => calls.push([field, value]), values: { ...emptyForm(), concerns: ['range'] } });
-  const group = byName(tree, 'concerns')[0];
-  assert.deepEqual(group.props.values, ['range']);
-  group.props.onChange({ target: { value: 'price' } });
-  assert.deepEqual(calls, [['concerns', 'price']]);
-});
-test('pas 2: «Otro» d\'una pregunta d\'opinió mostra el seu camp d\'especificar, i només aquell', () => {
-  const tree = profile({ values: { ...emptyForm(), enthusiasm: ['other'], factors: ['price'] } });
-  assert.equal(byName(tree, 'enthusiasmOther')[0].props.label, f.otherLabel);
-  assert.equal(byName(tree, 'enthusiasmOther')[0].props.placeholder, f.otherPlaceholder);
-  assert.equal(byName(tree, 'concernsOther').length, 0);
-  assert.equal(byName(tree, 'factorsOther').length, 0);
-});
-test('pas 2: els comentaris són un camp de text llarg (multiline) opcional', () => {
-  const comments = byName(profile(), 'comments')[0];
-  assert.deepEqual([comments.props.multiline, comments.props.required, comments.props.label, comments.props.placeholder], [true, undefined, f.comments, f.commentsPlaceholder]);
-});

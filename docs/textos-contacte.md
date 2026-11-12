@@ -6,122 +6,68 @@ Són textos pendents de validar per Bruno; l'Olga revisa les traduccions. «⏎�
 
 ## Textos de la pàgina
 
-| Element | ES | CA | PT | EN |
+| Element | PT | EN | ES | CA |
 |---|---|---|---|---|
-| Titular | Hablemos de propulsión eléctrica | Parlem de propulsió elèctrica | Falemos de propulsão elétrica | Let's talk electric propulsion |
-| Subtítol | Cuéntanos qué buscas y te respondemos | Explica'ns què busques i et responem | Diz-nos o que procuras e respondemos | Tell us what you're looking for and we'll reply |
-| Pregunta del perfil | ¿Quién eres? (opcional) | Qui ets? (opcional) | Quem és? (opcional) | Who are you? (optional) |
-| Xip de perfil 1 | Distribuidor o profesional | Distribuïdor o professional | Distribuidor ou profissional | Distributor or professional |
-| Xip de perfil 2 | Particular | Particular | Particular | Private customer |
-| Etiqueta de contacte | Escríbenos | Escriu-nos | Escreve-nos | Get in touch |
-| Botó de WhatsApp | Escribir por WhatsApp | Escriure per WhatsApp | Escrever por WhatsApp | Message on WhatsApp |
-| Botó de correu | Escribir por correo | Escriure per correu | Escrever por e-mail | Send an email |
-| Línia explicativa | Se abre con un mensaje ya escrito. Puedes cambiarlo antes de enviarlo. | S'obre amb un missatge ja escrit. Pots canviar-lo abans d'enviar-lo. | Abre com uma mensagem já escrita. Podes alterá-la antes de a enviar. | It opens with a message already written. You can edit it before sending. |
-| Línia de recuperació (seguida de l'adreça) | ¿No se abre? Escríbenos a | No s'obre? Escriu-nos a | Não abre? Escreve-nos para | Doesn't open? Write to us at |
-| Enllaç legal 1 | Privacidad | Privacitat | Privacidade | Privacy |
+| Titular | Falemos de propulsão elétrica | Let's talk electric propulsion | Hablemos de propulsión eléctrica | Parlem de propulsió elèctrica |
+| Subtítol | Diz-nos o que procuras e respondemos | Tell us what you're looking for and we'll reply | Cuéntanos qué buscas y te respondemos | Explica'ns què busques i et responem |
+| Pregunta del perfil | Quem és? (opcional) | Who are you? (optional) | ¿Quién eres? (opcional) | Qui ets? (opcional) |
+| Xip de perfil 1 | Distribuidor ou profissional | Distributor or professional | Distribuidor o profesional | Distribuïdor o professional |
+| Xip de perfil 2 | Particular | Private customer | Particular | Particular |
+| Etiqueta de contacte | Escreve-nos | Get in touch | Escríbenos | Escriu-nos |
+| Botó de WhatsApp | Escrever por WhatsApp | Message on WhatsApp | Escribir por WhatsApp | Escriure per WhatsApp |
+| Botó de correu | Escrever por e-mail | Send an email | Escribir por correo | Escriure per correu |
+| Línia explicativa | Abre com uma mensagem já escrita. Podes alterá-la antes de a enviar. | It opens with a message already written. You can edit it before sending. | Se abre con un mensaje ya escrito. Puedes cambiarlo antes de enviarlo. | S'obre amb un missatge ja escrit. Pots canviar-lo abans d'enviar-lo. |
+| Línia de recuperació (seguida de l'adreça) | Não abre? Escreve-nos para | Doesn't open? Write to us at | ¿No se abre? Escríbenos a | No s'obre? Escriu-nos a |
+| Enllaç legal 1 | Privacidade | Privacy | Privacidad | Privacitat |
 | Enllaç legal 2 | Cookies | Cookies | Cookies | Cookies |
-| Pàgina de privacitat | Esta página no guarda datos personales. Si nos escribes por WhatsApp o por correo, usaremos tus datos solo para responderte. | Aquesta pàgina no desa dades personals. Si ens escrius per WhatsApp o per correu, farem servir les teves dades només per respondre't. | Esta página não guarda dados pessoais. Se nos escreveres por WhatsApp ou por e-mail, usaremos os teus dados apenas para te responder. | This page does not store personal data. If you write to us by WhatsApp or email, we will use your details only to reply. |
-| Pàgina de cookies | Esta página no usa cookies ni herramientas de medición. | Aquesta pàgina no fa servir cookies ni eines de mesura. | Esta página não utiliza cookies nem ferramentas de medição. | This page does not use cookies or measurement tools. |
+| Pàgina de privacitat | Esta página não guarda dados pessoais. Se nos escreveres por WhatsApp ou por e-mail, usaremos os teus dados apenas para te responder. | This page does not store personal data. If you write to us by WhatsApp or email, we will use your details only to reply. | Esta página no guarda datos personales. Si nos escribes por WhatsApp o por correo, usaremos tus datos solo para responderte. | Aquesta pàgina no desa dades personals. Si ens escrius per WhatsApp o per correu, farem servir les teves dades només per respondre't. |
+| Pàgina de cookies | Esta página não utiliza cookies nem ferramentas de medição. | This page does not use cookies or measurement tools. | Esta página no usa cookies ni herramientas de medición. | Aquesta pàgina no fa servir cookies ni eines de mesura. |
 
 L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text seleccionable.
 
 ## Formulari de l'Extra 1 (esborrany)
 
-| Clau | ES | CA | PT | EN |
+| Clau | PT | EN | ES | CA |
 |---|---|---|---|---|
-| `entryTitle` | Hablemos de propulsión eléctrica | Parlem de propulsió elèctrica | Falemos de propulsão elétrica | Let's talk about electric propulsion |
-| `entrySubtitle` | Cuéntanos quién eres y te enviamos el dossier de The Silent Fleet. | Explica'ns qui ets i t'enviem el dossier de The Silent Fleet. | Diz-nos quem és e enviamos-te o dossier da The Silent Fleet. | Tell us who you are and we will send you The Silent Fleet dossier. |
-| `entryProfileLegend` | ¿Quién eres? (opcional) | Qui ets? (opcional) | Quem és? (opcional) | Who are you? (optional) |
-| `entryCta` | Quiero saber más de The Silent Fleet | Vull saber més de The Silent Fleet | Quero saber mais sobre a The Silent Fleet | I want to learn more about The Silent Fleet |
-| `entryContactLabel` | O escríbenos directamente | O escriu-nos directament | Ou escreve-nos diretamente | Or write to us directly |
-| `entryWhatsapp` | Escribir por WhatsApp | Escriure per WhatsApp | Escrever por WhatsApp | Message us on WhatsApp |
-| `entryEmail` | Escribir por correo | Escriure per correu | Escrever por e-mail | Email us |
-| `stepOf` | Paso {n} de {total} | Pas {n} de {total} | Passo {n} de {total} | Step {n} of {total} |
-| `requiredNote` | * Campo obligatorio | * Camp obligatori | * Campo obrigatório | * Required field |
-| `step1Title` | Déjanos tus datos | Deixa'ns les teves dades | Deixa-nos os teus dados | Leave us your details |
-| `step1Subtitle` | Así podremos enviarte el dossier y ponernos en contacto contigo. | Així podrem enviar-te el dossier i posar-nos en contacte amb tu. | Assim poderemos enviar-te o dossier e entrar em contacto contigo. | So we can send you the dossier and get in touch. |
-| `next` | Conseguir información | Aconseguir informació | Obter informação | Get information |
-| `name` | Nombre | Nom | Nome | Name |
-| `email` | Correo electrónico | Correu electrònic | E-mail | Email |
-| `phone` | Teléfono | Telèfon | Telefone | Phone |
-| `phonePrefix` | Prefijo | Prefix | Prefixo | Prefix |
-| `namePlaceholder` | Ana García | Anna Garcia | Ana Silva | Jane Smith |
-| `emailPlaceholder` | nombre@empresa.com | nom@empresa.com | nome@empresa.pt | name@company.com |
-| `phonePlaceholder` | 600 00 00 00 | 600 00 00 00 | 912 345 678 | 600 00 00 00 |
-| `consentBefore` | Acepto la  | Accepto la  | Aceito a  | I accept the  |
-| `consentLink` | política de privacidad | política de privacitat | política de privacidade | privacy policy |
-| `newsletter` | Quiero recibir novedades (opcional) | Vull rebre novetats (opcional) | Quero receber novidades (opcional) | I'd like to receive updates (optional) |
-| `step2Title` | Cuéntanos más sobre ti | Explica'ns més sobre tu | Conta-nos mais sobre ti | Tell us more about you |
-| `step2Subtitle` | Así te atenderemos mejor. Solo el perfil es obligatorio. | Així t'atendrem millor. Només el perfil és obligatori. | Assim poderemos atender-te melhor. Só o perfil é obrigatório. | That helps us serve you better. Only the profile is required. |
-| `profileLegend` | ¿Quién eres? | Qui ets? | Quem és? | Who are you? |
-| `profiles.particular` | Particular | Particular | Particular | Private customer |
-| `profiles.profesional` | Profesional | Professional | Profissional | Professional |
-| `activity` | Actividad principal | Activitat principal | Atividade principal | Main activity |
-| `activityPlaceholder` | Elige una actividad | Tria una activitat | Escolhe uma atividade | Choose an activity |
-| `activityNone` | Sin especificar | Sense especificar | Sem especificar | Not specified |
-| `activities.ocio` | Ocio | Oci | Lazer | Leisure |
-| `activities.charter` | Chárter / alquiler | Xàrter / lloguer | Charter / aluguer | Charter / rental |
-| `activities.vela` | Deporte: vela | Esport: vela | Desporto: vela | Sport: sailing |
-| `activities.buceo` | Deporte: buceo | Esport: busseig | Desporto: mergulho | Sport: diving |
-| `activities.skiwake` | Deporte: Ski / Wake | Esport: Ski / Wake | Desporto: Ski / Wake | Sport: Ski / Wake |
-| `activities.seguridad` | Seguridad / salvamento | Seguretat / salvament | Segurança / salvamento | Safety / rescue |
-| `activities.pasajeros` | Transporte de pasajeros | Transport de passatgers | Transporte de passageiros | Passenger transport |
-| `activities.pesca` | Pesca | Pesca | Pesca | Fishing |
-| `activities.marina` | Marina / operador portuario | Marina / operador portuari | Marina / operador portuário | Marina / port operator |
-| `activities.otra` | Otra | Altra | Outra | Other |
-| `activityOther` | Otra actividad (especifica) | Una altra activitat (especifica) | Outra atividade (especifica) | Other activity (please specify) |
-| `activityOtherPlaceholder` | Por ejemplo, remolcadores | Per exemple, remolcadors | Por exemplo, rebocadores | For example, tugboats |
-| `hasBoat` | ¿Tienes embarcación actualmente? | Tens una embarcació actualment? | Tens atualmente uma embarcação? | Do you currently own a boat? |
-| `enthusiasmLegend` | ¿Qué te entusiasma de esta tecnología? | Què t'entusiasma d'aquesta tecnologia? | O que te entusiasma nesta tecnologia? | What excites you about this technology? |
-| `enthusiasmOptions.sustainability` | Sostenibilidad ambiental | Sostenibilitat ambiental | Sustentabilidade ambiental | Environmental sustainability |
-| `enthusiasmOptions.noise` | Reducción de ruido | Reducció de soroll | Redução de ruído | Noise reduction |
-| `enthusiasmOptions.maintenance` | Menos mantenimiento | Menys manteniment | Menos manutenção | Less maintenance |
-| `enthusiasmOptions.costs` | Costes operativos más bajos | Costos operatius més baixos | Custos operacionais mais baixos | Lower operating costs |
-| `enthusiasmOptions.regulation` | Regulaciones futuras | Regulacions futures | Regulamentações futuras | Future regulations |
-| `enthusiasmOptions.other` | Otro | Altre | Outro | Other |
-| `concernsLegend` | ¿Qué te preocupa? | Què et preocupa? | O que te preocupa? | What concerns you? |
-| `concernsOptions.range` | Autonomía limitada | Autonomia limitada | Autonomia limitada | Limited range |
-| `concernsOptions.charging` | Tiempo de carga | Temps de càrrega | Tempo de carregamento | Charging time |
-| `concernsOptions.price` | Coste de adquisición | Cost d'adquisició | Custo de aquisição | Purchase cost |
-| `concernsOptions.infrastructure` | Infraestructura de carga | Infraestructura de càrrega | Infraestrutura de carregamento | Charging infrastructure |
-| `concernsOptions.depreciation` | Depreciación del equipo | Depreciació de l'equip | Desvalorização do equipamento | Equipment depreciation |
-| `concernsOptions.other` | Otro | Altre | Outro | Other |
-| `factorsLegend` | ¿Cuáles serían los factores decisivos? | Quins serien els factors decisius? | Quais seriam os fatores decisivos? | What would be the deciding factors? |
-| `factorsOptions.price` | Precio | Preu | Preço | Price |
-| `factorsOptions.range` | Autonomía | Autonomia | Autonomia | Range |
-| `factorsOptions.maker` | Fabricante | Fabricant | Fabricante | Manufacturer |
-| `factorsOptions.design` | Diseño | Disseny | Design | Design |
-| `factorsOptions.warranty` | Garantía | Garantia | Garantia | Warranty |
-| `factorsOptions.support` | Soporte posventa | Suport postvenda | Suporte pós-venda | After-sales support |
-| `factorsOptions.other` | Otro | Altre | Outro | Other |
-| `otherLabel` | Otro (especifica) | Altre (especifica) | Outro (especifica) | Other (please specify) |
-| `otherPlaceholder` | Describe aquí | Descriu-ho aquí | Descreve aqui | Describe here |
-| `comments` | Comentarios | Comentaris | Comentários | Comments |
-| `commentsPlaceholder` | Otros comentarios | Altres comentaris | Outros comentários | Other comments |
-| `hasElectric` | ¿Ya tienes una embarcación eléctrica? | Ja tens una embarcació elèctrica? | Já tens uma embarcação elétrica? | Do you already own an electric boat? |
-| `demo` | Si te interesa una demostración, ¿en qué localidad? | Si t'interessa una demostració, a quina localitat? | Se tens interesse numa demonstração, em que localidade? | Interested in a demo? Where? |
-| `demoPlaceholder` | Localidad | Localitat | Localidade | Town or city |
-| `intent` | ¿Tienes intención de comprar propulsión eléctrica? | Tens intenció de comprar propulsió elèctrica? | Tens intenção de comprar propulsão elétrica? | Do you intend to buy electric propulsion? |
-| `productLegend` | Modelo o potencia de interés | Model o potència d'interès | Modelo ou potência de interesse | Model or power of interest |
-| `productAdvice` | No lo sé aún / Busco asesoramiento | Encara no ho sé / Busco assessorament | Ainda não sei / Procuro aconselhamento | Not sure yet / I need advice |
-| `yes` | Sí | Sí | Sim | Yes |
-| `no` | No | No | Não | No |
-| `submit` | Acceder al dossier | Accedir al dossier | Aceder ao dossier | Get the dossier |
-| `errors.required` | Completa este campo | Omple aquest camp | Preenche este campo | Fill in this field |
-| `errors.profileRequired` | Elige una opción | Tria una opció | Escolhe uma opção | Choose an option |
-| `errors.email` | Introduce un correo válido | Introdueix un correu vàlid | Introduz um e-mail válido | Enter a valid email |
-| `errors.phone` | Introduce un teléfono válido, por ejemplo 600 00 00 00 | Introdueix un telèfon vàlid, per exemple 600 00 00 00 | Introduz um telefone válido, por exemplo 912 345 678 | Enter a valid phone number, for example 600 00 00 00 |
-| `errors.prefix` | Prefijo no válido | Prefix no vàlid | Prefixo inválido | Invalid prefix |
-| `errors.privacy` | Acepta la política de privacidad para continuar | Accepta la política de privacitat per continuar | Aceita a política de privacidade para continuar | Accept the privacy policy to continue |
-| `doneTitle` | Aquí tienes el dossier de The Silent Fleet | Aquí tens el dossier de The Silent Fleet | Aqui tens o dossier da The Silent Fleet | Here is The Silent Fleet dossier |
-| `doneText` | Descárgalo ahora y consúltalo cuando quieras. | Descarrega'l ara i consulta'l quan vulguis. | Descarrega-o agora e consulta-o quando quiseres. | Download it now and read it whenever you like. |
-| `doneTextMail` | Descárgalo ahora; también te lo hemos enviado por correo para que lo consultes cuando quieras. | Descarrega'l ara; també te l'hem enviat per correu perquè el consultis quan vulguis. | Descarrega-o agora; também to enviámos por e-mail para o consultares quando quiseres. | Download it now; we have also emailed it to you to read whenever you like. |
-| `doneDownload` | Descargar el dossier | Descarregar el dossier | Descarregar o dossier | Download the dossier |
-| `doneDownloadAll` | Descargar todos los dossiers | Descarregar tots els dossiers | Descarregar todos os dossiers | Download all dossiers |
+| `entryTitle` | Falemos de propulsão elétrica | Let's talk about electric propulsion | Hablemos de propulsión eléctrica | Parlem de propulsió elèctrica |
+| `entrySubtitle` | Diz-nos o que te interessa e enviamos-te o dossier. | Tell us what you are interested in and we will send you the dossier. | Cuéntanos qué te interesa y te enviamos el dossier. | Explica'ns què t'interessa i t'enviem el dossier. |
+| `entryCta` | Quero saber mais sobre a The Silent Fleet | I want to learn more about The Silent Fleet | Quiero saber más de The Silent Fleet | Vull saber més de The Silent Fleet |
+| `entryContactLabel` | Ou escreve-nos diretamente | Or write to us directly | O escríbenos directamente | O escriu-nos directament |
+| `entryWhatsapp` | Escrever por WhatsApp | Message us on WhatsApp | Escribir por WhatsApp | Escriure per WhatsApp |
+| `entryEmail` | Escrever por e-mail | Email us | Escribir por correo | Escriure per correu |
+| `stepOf` | Passo {n} de {total} | Step {n} of {total} | Paso {n} de {total} | Pas {n} de {total} |
+| `requiredNote` | * Campo obrigatório | * Required field | * Campo obligatorio | * Camp obligatori |
+| `step1Title` | Deixa-nos os teus dados | Leave us your details | Déjanos tus datos | Deixa'ns les teves dades |
+| `step1Subtitle` | Assim poderemos enviar-te o dossier e entrar em contacto contigo. | So we can send you the dossier and get in touch. | Así podremos enviarte el dossier y ponernos en contacto contigo. | Així podrem enviar-te el dossier i posar-nos en contacte amb tu. |
+| `name` | Nome | Name | Nombre | Nom |
+| `email` | E-mail | Email | Correo electrónico | Correu electrònic |
+| `phone` | Telefone | Phone | Teléfono | Telèfon |
+| `phonePrefix` | Prefixo | Prefix | Prefijo | Prefix |
+| `namePlaceholder` | Ana Silva | Jane Smith | Ana García | Anna Garcia |
+| `emailPlaceholder` | nome@empresa.pt | name@company.com | nombre@empresa.com | nom@empresa.com |
+| `phonePlaceholder` | 912 345 678 | 600 00 00 00 | 600 00 00 00 | 600 00 00 00 |
+| `consentBefore` | Aceito a  | I accept the  | Acepto la  | Accepto la  |
+| `consentLink` | política de privacidade | privacy policy | política de privacidad | política de privacitat |
+| `newsletter` | Quero receber novidades (opcional) | I'd like to receive updates (optional) | Quiero recibir novedades (opcional) | Vull rebre novetats (opcional) |
+| `cityLabel` | De que cidade és? | Which city are you from? | ¿De qué ciudad eres? | De quina ciutat ets? |
+| `cityPlaceholder` | Lisboa | Lisbon | Lisboa | Lisboa |
+| `productLegend` | Que produto te interessa? | Which product are you interested in? | ¿Qué producto te interesa? | Quin producte t'interessa? |
+| `productAdvice` | Ainda não sei / Procuro aconselhamento | Not sure yet / I need advice | No lo sé aún / Busco asesoramiento | Encara no ho sé / Busco assessorament |
+| `submit` | Aceder ao dossier | Get the dossier | Acceder al dossier | Accedir al dossier |
+| `errors.required` | Preenche este campo | Fill in this field | Completa este campo | Omple aquest camp |
+| `errors.email` | Introduz um e-mail válido | Enter a valid email | Introduce un correo válido | Introdueix un correu vàlid |
+| `errors.phone` | Introduz um telefone válido, por exemplo 912 345 678 | Enter a valid phone number, for example 600 00 00 00 | Introduce un teléfono válido, por ejemplo 600 00 00 00 | Introdueix un telèfon vàlid, per exemple 600 00 00 00 |
+| `errors.prefix` | Prefixo inválido | Invalid prefix | Prefijo no válido | Prefix no vàlid |
+| `errors.privacy` | Aceita a política de privacidade para continuar | Accept the privacy policy to continue | Acepta la política de privacidad para continuar | Accepta la política de privacitat per continuar |
+| `doneTitle` | Aqui tens o dossier da The Silent Fleet | Here is The Silent Fleet dossier | Aquí tienes el dossier de The Silent Fleet | Aquí tens el dossier de The Silent Fleet |
+| `doneText` | Descarrega-o agora e consulta-o quando quiseres. | Download it now and read it whenever you like. | Descárgalo ahora y consúltalo cuando quieras. | Descarrega'l ara i consulta'l quan vulguis. |
+| `doneTextMail` | Descarrega-o agora; também to enviámos por e-mail para o consultares quando quiseres. | Download it now; we have also emailed it to you to read whenever you like. | Descárgalo ahora; también te lo hemos enviado por correo para que lo consultes cuando quieras. | Descarrega'l ara; també te l'hem enviat per correu perquè el consultis quan vulguis. |
+| `doneDownload` | Descarregar o dossier | Download the dossier | Descargar el dossier | Descarregar el dossier |
+| `doneDownloadAll` | Descarregar todos os dossiers | Download all dossiers | Descargar todos los dossiers | Descarregar tots els dossiers |
 | `doneCardTitle` | Dossier The Silent Fleet | Dossier The Silent Fleet | Dossier The Silent Fleet | Dossier The Silent Fleet |
-| `doneCardGeneral` | Información general | Informació general | Informação geral | General information |
-| `doneHome` | Volver al inicio | Tornar a l'inici | Voltar ao início | Back to start |
-| `privacyText` | Si usas el formulario, guardamos tu nombre, correo, teléfono, el idioma, el origen (móvil o tableta), si marcas la casilla de novedades, tu perfil si ya lo has indicado y que has aceptado la política de privacidad en cuanto pasas al segundo paso, aunque no llegues a terminarlo. ⏎ Si lo terminas, guardamos también tu perfil (particular o profesional) y, si lo indicas, tu actividad, si tienes embarcación y si es eléctrica, lo que te entusiasma o te preocupa, si piensas comprar propulsión eléctrica, los factores decisivos, el producto que te interesa, la localidad si quieres una demostración y tus comentarios. ⏎ Los usamos para enviarte el dossier y contactarte sobre tu interés; si marcas la casilla de novedades, también para enviarte novedades. ⏎ Responsable: {responsable}. Los datos se guardan en Google (Hojas de cálculo), que actúa como encargado del tratamiento. ⏎ Puedes pedirnos acceso, rectificación o supresión escribiendo a {email}. ⏎ Si nos escribes por WhatsApp o por correo, usaremos tus datos solo para responderte. | Si fas servir el formulari, desem el teu nom, correu, telèfon, l'idioma, l'origen (mòbil o tauleta), si marques la casella de novetats, el teu perfil si ja l'has indicat i que has acceptat la política de privacitat tan bon punt passes al segon pas, encara que no arribis a acabar-lo. ⏎ Si l'acabes, desem també el teu perfil (particular o professional) i, si ho indiques, la teva activitat, si tens embarcació i si és elèctrica, el que t'entusiasma o et preocupa, si penses comprar propulsió elèctrica, els factors decisius, el producte que t'interessa, la localitat si vols una demostració i els teus comentaris. ⏎ Els fem servir per enviar-te el dossier i contactar-te sobre el teu interès; si marques la casella de novetats, també per enviar-te novetats. ⏎ Responsable: {responsable}. Les dades es desen a Google (Fulls de càlcul), que actua com a encarregat del tractament. ⏎ Pots demanar-nos accés, rectificació o supressió escrivint a {email}. ⏎ Si ens escrius per WhatsApp o per correu, farem servir les teves dades només per respondre't. | Se usares o formulário, guardamos o teu nome, e-mail, telefone, o idioma, a origem (telemóvel ou tablet), se marcares a caixa de novidades, o teu perfil se já o indicaste e que aceitaste a política de privacidade assim que passas ao segundo passo, mesmo que não chegues a terminá-lo. ⏎ Se o terminares, guardamos também o teu perfil (particular ou profissional) e, se o indicares, a tua atividade, se tens embarcação e se é elétrica, o que te entusiasma ou preocupa, se pensas comprar propulsão elétrica, os fatores decisivos, o produto que te interessa, a localidade se queres uma demonstração e os teus comentários. ⏎ Usamos estes dados para te enviar o dossier e contactar-te sobre o teu interesse; se marcares a caixa de novidades, também para te enviar novidades. ⏎ Responsável: {responsable}. Os dados ficam guardados na Google (Folhas de cálculo), que atua como subcontratante. ⏎ Podes pedir-nos acesso, retificação ou apagamento escrevendo para {email}. ⏎ Se nos escreveres por WhatsApp ou por e-mail, usaremos os teus dados apenas para te responder. | If you use the form, we store your name, email, phone, language, origin (mobile or tablet), whether you tick the updates box, your profile if you have already told us and the fact that you accepted the privacy policy as soon as you move to the second step, even if you do not finish it. ⏎ If you finish it, we also store your profile (private customer or professional) and, if you tell us, your activity, whether you own a boat and whether it is electric, what excites or concerns you, whether you intend to buy electric propulsion, the deciding factors, the product you are interested in, your town or city if you want a demo and your comments. ⏎ We use this to send you the dossier and contact you about your interest; if you tick the updates box, also to send you updates. ⏎ Controller: {responsable}. The data is stored with Google (Sheets), which acts as data processor. ⏎ You can ask us for access, correction or deletion by writing to {email}. ⏎ If you write to us by WhatsApp or email, we will use your details only to reply. |
+| `doneCardGeneral` | Informação geral | General information | Información general | Informació general |
+| `doneHome` | Voltar ao início | Back to start | Volver al inicio | Tornar a l'inici |
+| `privacyText` | Se usares o formulário, guardamos o teu nome, e-mail, telefone, a cidade, o produto que te interessa, o idioma, a origem (telemóvel ou tablet), se marcares a caixa de novidades e que aceitaste a política de privacidade. ⏎ Usamos estes dados para te enviar o dossier e contactar-te sobre o teu interesse; se marcares a caixa de novidades, também para te enviar novidades. ⏎ Se carregares no botão de WhatsApp ou no de e-mail, contamos o clique de forma anónima (botão, idioma, tipo de dispositivo, produto e cidade indicados), sem guardar o teu nome, e-mail nem telefone. ⏎ Responsável: {responsable}. Os dados ficam guardados na Google (Folhas de cálculo), que atua como subcontratante. ⏎ Podes pedir-nos acesso, retificação ou apagamento escrevendo para {email}. ⏎ Se nos escreveres por WhatsApp ou por e-mail, usaremos os teus dados apenas para te responder. | If you use the form, we store your name, email, phone, city, the product you are interested in, language, origin (mobile or tablet), whether you tick the updates box and the fact that you accepted the privacy policy. ⏎ We use this to send you the dossier and contact you about your interest; if you tick the updates box, also to send you updates. ⏎ If you press the WhatsApp or the email button, we count the click anonymously (button, language, device type, product and city entered), without storing your name, email or phone. ⏎ Controller: {responsable}. The data is stored with Google (Sheets), which acts as data processor. ⏎ You can ask us for access, correction or deletion by writing to {email}. ⏎ If you write to us by WhatsApp or email, we will use your details only to reply. | Si usas el formulario, guardamos tu nombre, correo, teléfono, la ciudad, el producto que te interesa, el idioma, el origen (móvil o tableta), si marcas la casilla de novedades y que has aceptado la política de privacidad. ⏎ Los usamos para enviarte el dossier y contactarte sobre tu interés; si marcas la casilla de novedades, también para enviarte novedades. ⏎ Si pulsas el botón de WhatsApp o el de correo, contamos el clic de forma anónima (botón, idioma, tipo de dispositivo, producto y ciudad indicados), sin guardar tu nombre, correo ni teléfono. ⏎ Responsable: {responsable}. Los datos se guardan en Google (Hojas de cálculo), que actúa como encargado del tratamiento. ⏎ Puedes pedirnos acceso, rectificación o supresión escribiendo a {email}. ⏎ Si nos escribes por WhatsApp o por correo, usaremos tus datos solo para responderte. | Si fas servir el formulari, desem el teu nom, correu, telèfon, la ciutat, el producte que t'interessa, l'idioma, l'origen (mòbil o tauleta), si marques la casella de novetats i que has acceptat la política de privacitat. ⏎ Els fem servir per enviar-te el dossier i contactar-te sobre el teu interès; si marques la casella de novetats, també per enviar-te novetats. ⏎ Si prems el botó de WhatsApp o el de correu, comptem el clic de manera anònima (botó, idioma, tipus de dispositiu, producte i ciutat indicats), sense desar el teu nom, correu ni telèfon. ⏎ Responsable: {responsable}. Les dades es desen a Google (Fulls de càlcul), que actua com a encarregat del tractament. ⏎ Pots demanar-nos accés, rectificació o supressió escrivint a {email}. ⏎ Si ens escrius per WhatsApp o per correu, farem servir les teves dades només per respondre't. |
 
 ## Missatges
 
@@ -129,32 +75,6 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 - **Correu** (cap a `info@thesilentfleet.com`): assumpte del perfil; cos amb salutació, text del perfil i comiat.
 - **Perfil «Cap»:** és el missatge genèric, quan el visitant no ha triat perfil.
 - **Dades de la sessió:** si el visitant ja ha donat el nom, el producte o si té embarcació, es nota en una línia entre el text i el comiat; les que no té no hi surten.
-
-### Castellà (ES)
-
-| Perfil | Via | Assumpte | Missatge |
-|---|---|---|---|
-| Cap | WhatsApp | — | Hola, ⏎ He visto vuestro stand en el Salón Náutico de Barcelona y quiero más información. |
-| Cap | Correu | Información desde el Salón Náutico | Hola, ⏎ He visto vuestro stand en el Salón Náutico de Barcelona y quiero más información. ⏎ Gracias. |
-| Distribuïdor | WhatsApp | — | Hola, ⏎ Soy distribuidor y me interesa trabajar con The Silent Fleet. ¿Podemos hablar de volumen y condiciones? |
-| Distribuïdor | Correu | Distribución · Salón Náutico | Hola, ⏎ Soy distribuidor y me interesa trabajar con The Silent Fleet. ¿Podemos hablar de volumen y condiciones? ⏎ Gracias. |
-| Particular | WhatsApp | — | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? |
-| Particular | Correu | Propulsión eléctrica · Salón Náutico | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? ⏎ Gracias. |
-| Particular amb dades de sessió (exemple) | WhatsApp | — | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? ⏎ Me llamo Ana. / Producto de interés: Modelo A / Tengo embarcación: Sí / Intención de compra: No |
-| Particular amb dades de sessió (exemple) | Correu | Propulsión eléctrica · Salón Náutico | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? ⏎ Me llamo Ana. / Producto de interés: Modelo A / Tengo embarcación: Sí / Intención de compra: No ⏎ Gracias. |
-
-### Català (CA)
-
-| Perfil | Via | Assumpte | Missatge |
-|---|---|---|---|
-| Cap | WhatsApp | — | Hola, ⏎ He vist el vostre estand al Saló Nàutic de Barcelona i vull més informació. |
-| Cap | Correu | Informació des del Saló Nàutic | Hola, ⏎ He vist el vostre estand al Saló Nàutic de Barcelona i vull més informació. ⏎ Gràcies. |
-| Distribuïdor | WhatsApp | — | Hola, ⏎ Sóc distribuïdor i m'interessa treballar amb The Silent Fleet. Podem parlar de volum i condicions? |
-| Distribuïdor | Correu | Distribució · Saló Nàutic | Hola, ⏎ Sóc distribuïdor i m'interessa treballar amb The Silent Fleet. Podem parlar de volum i condicions? ⏎ Gràcies. |
-| Particular | WhatsApp | — | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? |
-| Particular | Correu | Propulsió elèctrica · Saló Nàutic | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? ⏎ Gràcies. |
-| Particular amb dades de sessió (exemple) | WhatsApp | — | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? ⏎ Em dic Ana. / Producte d'interès: Modelo A / Tinc embarcació: Sí / Intenció de compra: No |
-| Particular amb dades de sessió (exemple) | Correu | Propulsió elèctrica · Saló Nàutic | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? ⏎ Em dic Ana. / Producte d'interès: Modelo A / Tinc embarcació: Sí / Intenció de compra: No ⏎ Gràcies. |
 
 ### Portuguès (PT)
 
@@ -166,8 +86,8 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | Distribuïdor | Correu | Distribuição · Salão Náutico | Olá, ⏎ Sou distribuidor e tenho interesse em trabalhar com a The Silent Fleet. Podemos falar de volume e condições? ⏎ Obrigado. |
 | Particular | WhatsApp | — | Olá, ⏎ Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me? |
 | Particular | Correu | Propulsão elétrica · Salão Náutico | Olá, ⏎ Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me? ⏎ Obrigado. |
-| Particular amb dades de sessió (exemple) | WhatsApp | — | Olá, ⏎ Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me? ⏎ Chamo-me Ana. / Produto de interesse: Modelo A / Tenho embarcação: Sim / Intenção de compra: Não |
-| Particular amb dades de sessió (exemple) | Correu | Propulsão elétrica · Salão Náutico | Olá, ⏎ Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me? ⏎ Chamo-me Ana. / Produto de interesse: Modelo A / Tenho embarcação: Sim / Intenção de compra: Não ⏎ Obrigado. |
+| Particular amb dades de sessió (exemple) | WhatsApp | — | Olá, ⏎ Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me? ⏎ Chamo-me Ana. / Produto de interesse: Modelo A |
+| Particular amb dades de sessió (exemple) | Correu | Propulsão elétrica · Salão Náutico | Olá, ⏎ Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me? ⏎ Chamo-me Ana. / Produto de interesse: Modelo A ⏎ Obrigado. |
 
 ### Anglès (EN)
 
@@ -179,8 +99,34 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | Distribuïdor | Correu | Distribution · Boat Show | Hello, ⏎ I am a distributor and I am interested in working with The Silent Fleet. Can we talk about volume and terms? ⏎ Thank you. |
 | Particular | WhatsApp | — | Hello, ⏎ I am an individual interested in electric propulsion for my boat. Could you send me some information? |
 | Particular | Correu | Electric propulsion · Boat Show | Hello, ⏎ I am an individual interested in electric propulsion for my boat. Could you send me some information? ⏎ Thank you. |
-| Particular amb dades de sessió (exemple) | WhatsApp | — | Hello, ⏎ I am an individual interested in electric propulsion for my boat. Could you send me some information? ⏎ My name is Ana. / Product of interest: Modelo A / I own a boat: Yes / Purchase intent: No |
-| Particular amb dades de sessió (exemple) | Correu | Electric propulsion · Boat Show | Hello, ⏎ I am an individual interested in electric propulsion for my boat. Could you send me some information? ⏎ My name is Ana. / Product of interest: Modelo A / I own a boat: Yes / Purchase intent: No ⏎ Thank you. |
+| Particular amb dades de sessió (exemple) | WhatsApp | — | Hello, ⏎ I am an individual interested in electric propulsion for my boat. Could you send me some information? ⏎ My name is Ana. / Product of interest: Modelo A |
+| Particular amb dades de sessió (exemple) | Correu | Electric propulsion · Boat Show | Hello, ⏎ I am an individual interested in electric propulsion for my boat. Could you send me some information? ⏎ My name is Ana. / Product of interest: Modelo A ⏎ Thank you. |
+
+### Castellà (ES)
+
+| Perfil | Via | Assumpte | Missatge |
+|---|---|---|---|
+| Cap | WhatsApp | — | Hola, ⏎ He visto vuestro stand en el Salón Náutico de Barcelona y quiero más información. |
+| Cap | Correu | Información desde el Salón Náutico | Hola, ⏎ He visto vuestro stand en el Salón Náutico de Barcelona y quiero más información. ⏎ Gracias. |
+| Distribuïdor | WhatsApp | — | Hola, ⏎ Soy distribuidor y me interesa trabajar con The Silent Fleet. ¿Podemos hablar de volumen y condiciones? |
+| Distribuïdor | Correu | Distribución · Salón Náutico | Hola, ⏎ Soy distribuidor y me interesa trabajar con The Silent Fleet. ¿Podemos hablar de volumen y condiciones? ⏎ Gracias. |
+| Particular | WhatsApp | — | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? |
+| Particular | Correu | Propulsión eléctrica · Salón Náutico | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? ⏎ Gracias. |
+| Particular amb dades de sessió (exemple) | WhatsApp | — | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? ⏎ Me llamo Ana. / Producto de interés: Modelo A |
+| Particular amb dades de sessió (exemple) | Correu | Propulsión eléctrica · Salón Náutico | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? ⏎ Me llamo Ana. / Producto de interés: Modelo A ⏎ Gracias. |
+
+### Català (CA)
+
+| Perfil | Via | Assumpte | Missatge |
+|---|---|---|---|
+| Cap | WhatsApp | — | Hola, ⏎ He vist el vostre estand al Saló Nàutic de Barcelona i vull més informació. |
+| Cap | Correu | Informació des del Saló Nàutic | Hola, ⏎ He vist el vostre estand al Saló Nàutic de Barcelona i vull més informació. ⏎ Gràcies. |
+| Distribuïdor | WhatsApp | — | Hola, ⏎ Sóc distribuïdor i m'interessa treballar amb The Silent Fleet. Podem parlar de volum i condicions? |
+| Distribuïdor | Correu | Distribució · Saló Nàutic | Hola, ⏎ Sóc distribuïdor i m'interessa treballar amb The Silent Fleet. Podem parlar de volum i condicions? ⏎ Gràcies. |
+| Particular | WhatsApp | — | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? |
+| Particular | Correu | Propulsió elèctrica · Saló Nàutic | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? ⏎ Gràcies. |
+| Particular amb dades de sessió (exemple) | WhatsApp | — | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? ⏎ Em dic Ana. / Producte d'interès: Modelo A |
+| Particular amb dades de sessió (exemple) | Correu | Propulsió elèctrica · Saló Nàutic | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? ⏎ Em dic Ana. / Producte d'interès: Modelo A ⏎ Gràcies. |
 
 ## Per revisar
 

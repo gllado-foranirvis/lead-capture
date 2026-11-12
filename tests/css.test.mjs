@@ -21,11 +21,6 @@ test('page.css: controls natius segons el tema i selecció de text amb la paleta
   assert.match(page, /\[data-theme="dark"\]\s*\{[^}]*color-scheme:\s*dark/);
   assert.match(page, /::selection\s*\{[^}]*background:\s*var\(--/);
 });
-test('page.css: els xips de dues línies tenen aire vertical i tots dos xips fan la mateixa alçada', () => {
-  assert.match(page, /\.tsf-chip__label\s*\{[^}]*padding-block:\s*var\(--space-2\)/);
-  assert.match(page, /\.tsf-chip\s*\{[^}]*display:\s*flex/);
-  assert.match(page, /\.tsf-chip__label\s*\{[^}]*flex:\s*1/);
-});
 test('page.css: mobile first, sense alçades fixes ni nowrap', () => {
   assert.doesNotMatch(page, /@media[^{]*max-width/);
   assert.doesNotMatch(page, /white-space:\s*nowrap/);
@@ -45,11 +40,6 @@ test('page.css: el moviment de l\'indicador i de les pantalles té guarda de red
   assert.match(motion, /animation:\s*screen-in/);
   assert.doesNotMatch(page.replace(/@media \(prefers-reduced-motion: no-preference\) \{[\s\S]*?\n\}/g, ''), /(^|\s)(transition|animation):/);
 });
-test('page.css: els xips del formulari fan salt de línia perquè cap opció quedi tallada', () => {
-  assert.match(page, /\.form \.tsf-chips__row\s*\{[^}]*flex-wrap:\s*wrap/);
-  assert.match(page, /\.form \.tsf-chip\s*\{[^}]*flex:\s*1 1 40%/);
-});
-
 test('page.css: l\'opció d\'assessorament de la tria de models ocupa tota la fila', () => {
   assert.match(page, /\.form__products \.tsf-group__list > :last-child\s*\{[^}]*grid-column:\s*1 \/ -1/);
 });
@@ -78,11 +68,10 @@ test('page.css: les files de les caselles múltiples fan 44px (el sistema compac
 });
 
 test('page.css (mòbil compacte): caselles múltiples en dues columnes i ritme vertical més curt', () => {
-  assert.match(page, /\.form \.tsf-group__list\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(page, /\.form__products \.tsf-group__list\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(page, /\.form\s*\{[^}]*gap:\s*var\(--space-4\)/);
   assert.match(page, /\.form__group\s*\{[^}]*gap:\s*var\(--space-3\)/);
   assert.match(page, /\.page__top\s*\{[^}]*min-height:\s*var\(--tap-min-compact\)/);
-  assert.match(page, /\.tsf-chips__legend\s*\{[^}]*margin-bottom:\s*var\(--space-1\)/);
 });
 test('page.css: a pantalles amples (≥768px) el ritme torna a ser generós', () => {
   const wide = page.slice(page.indexOf('@media (min-width: 768px)'));
@@ -128,4 +117,7 @@ test('page.css (inici): marges proporcionals sobre una base de 8px: 8 dins d\'un
   assert.match(body, /padding:\s*var\(--space-5\) var\(--gutter\)/, 'tot al voltant, 24: també entre l\'escena i el contingut, simètric amb el peu de l\'escena');
   assert.match(rule('.page__group'), /gap:\s*var\(--space-2\)/, 'etiqueta i botons de contacte, 8');
   assert.match(page, /\.page__cta\s*\{[^}]*margin-top:\s*var\(--space-2\)/, 'CTA: 16 + 8 = 24 respecte als contactes');
+});
+test('page.css: el nom de la fira de l\'escena té estil propi', () => {
+  assert.match(page, /\.stage__fair\s*\{/);
 });

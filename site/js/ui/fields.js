@@ -1,19 +1,4 @@
-import { deselectProps } from '../chips.js';
-
-// Camps comuns als dos passos: text amb error i xips amb error accessible.
-// El ChoiceChips del sistema no reenvia aria-* al <fieldset>: l'enllacem amb l'error des de l'envoltori.
-const linkGroup = (message, errorId) => (wrapper) => {
-  const group = wrapper?.querySelector('fieldset');
-  if (!group) return;
-  if (message) {
-    group.setAttribute('aria-describedby', errorId);
-    group.setAttribute('aria-invalid', 'true');
-  } else {
-    group.removeAttribute('aria-describedby');
-    group.removeAttribute('aria-invalid');
-  }
-};
-
+// Camps comuns de l'inici i de la pàgina de dades: text amb error i caselles de marcatge múltiple.
 export function makeFields({ h, T, f, values, errors, onChange, onToggle }) {
   const set = (field) => (e) => onChange(field, e.target.value);
   const error = (field) => (errors[field] ? f.errors[errors[field]] : undefined);
@@ -21,21 +6,9 @@ export function makeFields({ h, T, f, values, errors, onChange, onToggle }) {
   const text = (field, label, extra = {}) =>
     h(T.Field, { label, name: field, id: field, value: values[field], error: error(field), onChange: set(field), ...extra });
 
-  const chips = (field, legend, options, { required = false, className } = {}) => {
-    const group = h(T.ChoiceChips, { legend: required ? `${legend} *` : legend, name: field, value: values[field], options, onChange: set(field) });
-    const message = error(field);
-    const errorId = `${field}-err`;
-    const body = [group, message ? h('p', { id: errorId, className: 'caption form__error', role: 'alert' }, h('span', { 'aria-hidden': 'true' }, '! '), message) : null];
-    const wrapper = required ? {} : deselectProps(values[field], () => onChange(field, ''));
-    return h('div', { ...wrapper, ...(className ? { className } : {}), ref: linkGroup(message, errorId) }, ...body);
-  };
-
-  const select = (field, label, options, extra = {}) =>
-    h(T.Select, { label, name: field, id: field, value: values[field], error: error(field), onChange: set(field), options, ...extra });
-
-  // Preguntes de marcatge múltiple: el component del sistema avisa amb l'esdeveniment del canvi (valor de la casella).
+  // El component del sistema avisa amb l'esdeveniment del canvi (valor de la casella).
   const checks = (field, legend, options) =>
     h(T.CheckboxGroup, { legend, name: field, values: values[field], options, onChange: (e) => onToggle(field, e.target.value) });
 
-  return { text, chips, select, checks };
+  return { text, checks };
 }
