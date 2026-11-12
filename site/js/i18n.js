@@ -14,7 +14,7 @@ const PAGE = {
     privacyTitle: 'Privacidad',
     privacyText: 'Esta página no guarda datos personales. Si nos escribes por WhatsApp o por correo, usaremos tus datos solo para responderte.',
     cookiesTitle: 'Cookies',
-    cookiesText: 'Esta página no usa cookies ni herramientas de medición.',
+    cookiesText: 'Esta página no usa cookies. Solo cuenta, de forma anónima, cada vez que se pulsa el botón de WhatsApp o el de correo (botón, idioma, tipo de dispositivo y los datos de interés indicados), sin guardar nombre, correo ni teléfono.',
   },
   ca: {
     title: 'Parlem de propulsió elèctrica',
@@ -29,7 +29,7 @@ const PAGE = {
     privacyTitle: 'Privacitat',
     privacyText: 'Aquesta pàgina no desa dades personals. Si ens escrius per WhatsApp o per correu, farem servir les teves dades només per respondre\'t.',
     cookiesTitle: 'Cookies',
-    cookiesText: 'Aquesta pàgina no fa servir cookies ni eines de mesura.',
+    cookiesText: 'Aquesta pàgina no fa servir cookies. Només compta, de manera anònima, cada cop que es prem el botó de WhatsApp o el de correu (botó, idioma, tipus de dispositiu i les dades d\'interès indicades), sense desar nom, correu ni telèfon.',
   },
   pt: {
     title: 'Falemos de propulsão elétrica',
@@ -44,7 +44,7 @@ const PAGE = {
     privacyTitle: 'Privacidade',
     privacyText: 'Esta página não guarda dados pessoais. Se nos escreveres por WhatsApp ou por e-mail, usaremos os teus dados apenas para te responder.',
     cookiesTitle: 'Cookies',
-    cookiesText: 'Esta página não utiliza cookies nem ferramentas de medição.',
+    cookiesText: 'Esta página não utiliza cookies. Apenas conta, de forma anónima, cada vez que se carrega no botão de WhatsApp ou no de e-mail (botão, idioma, tipo de dispositivo e os dados de interesse indicados), sem guardar nome, e-mail nem telefone.',
   },
   en: {
     title: "Let's talk electric propulsion",
@@ -59,7 +59,7 @@ const PAGE = {
     privacyTitle: 'Privacy',
     privacyText: 'This page does not store personal data. If you write to us by WhatsApp or email, we will use your details only to reply.',
     cookiesTitle: 'Cookies',
-    cookiesText: 'This page does not use cookies or measurement tools.',
+    cookiesText: 'This page does not use cookies. It only counts, anonymously, each press of the WhatsApp or email button (button, language, device type and the interest details entered), without storing name, email or phone.',
   },
 };
 

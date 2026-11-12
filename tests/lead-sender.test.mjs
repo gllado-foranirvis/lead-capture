@@ -125,6 +125,20 @@ test('connectSender: els esdeveniments del flux s\'envien amb la forma correcta;
     'flush', 'beacon',
   ]);
 });
+test('connectSender: un clic (tsf:contact-click) s\'envia com a càrrega «click» i el mateix id només hi és un cop a la cua', async () => {
+  const listeners = {};
+  const target = { addEventListener: (name, fn) => { listeners[name] = fn; } };
+  const sent = [];
+  connectSender(target, { send: (p) => sent.push(p), flush() {}, beaconAll() {} });
+  const detail = { id: 'click-0001', visit: 'v1', button: 'email', from: 'done', lang: 'pt', origin: 'mobil', products: '', city: '', info: { device: 'mobile' } };
+  listeners['tsf:contact-click']({ detail });
+  assert.deepEqual(sent, [{ id: 'click-0001', stage: 'click', click: { visit: 'v1', button: 'email', from: 'done', lang: 'pt', origin: 'mobil', products: '', city: '', device: 'mobile' } }]);
+  const h = harness([OK, OK]);
+  const sender = make(h);
+  await sender.send(sent[0]);
+  assert.equal(h.calls[0].body.stage, 'click');
+  assert.equal(sender.size(), 0);
+});
 test('cada petició porta un temps límit perquè un fetch penjat no bloquegi la cua', async () => {
   const h = harness([OK]);
   await make(h).send(partial);

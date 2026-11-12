@@ -89,3 +89,13 @@ test('el text de privacitat cita la ciutat, el producte i el recompte anònim de
     assert.doesNotMatch(DICT[l].form.privacyText, /embarcaci|embarca[cç]|boat|comentari|comments|perfil|profile/i, l);
   }
 });
+test('el text de cookies no diu que no hi ha mesura: compta, de forma anònima, els clics a WhatsApp i correu', () => {
+  const anonymous = { es: /anónim/i, ca: /anònim/i, pt: /anónim/i, en: /anonym/i };
+  for (const l of CONFIG.languages) {
+    const text = DICT[l].cookiesText;
+    assert.match(text, /WhatsApp/, l);
+    assert.match(text, anonymous[l], l);
+    assert.match(text, /cookies/i, l);
+    assert.doesNotMatch(text, /herramientas de medici|ferramentas de medi|eines de mesura|measurement tools/i, l);
+  }
+});

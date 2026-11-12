@@ -1,4 +1,4 @@
-import { finalPayload } from './payload.js';
+import { clickPayload, finalPayload } from './payload.js';
 
 // Espera entre reintents (ms); després de l'últim valor es manté.
 export const RETRY_MS = [2000, 5000, 15000, 30000, 60000];
@@ -74,6 +74,7 @@ export function createSender({
 // Connecta el sender amb els esdeveniments públics del flux i amb l'estat de la xarxa i de la pàgina.
 export function connectSender(target, sender, doc) {
   target.addEventListener('tsf:lead', (e) => sender.send(finalPayload(e.detail)));
+  target.addEventListener('tsf:contact-click', (e) => sender.send(clickPayload(e.detail)));
   target.addEventListener('online', () => sender.flush());
   target.addEventListener('pagehide', () => sender.beaconAll());
   // Al mòbil, pagehide sovint no arriba: quan la pestanya passa a segon pla (p. ex. en obrir el dossier) també fem el darrer intent.

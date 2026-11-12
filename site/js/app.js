@@ -3,7 +3,7 @@ import { dictFor, resolveLang } from './i18n.js';
 import { contactLinks } from './messages.js';
 import { icon } from './icons.js';
 import { isDossierEnabled, isDossierPreview, isExtra1Enabled, legalQuery, resolveOrigin, resolveProducts } from './form/context.js';
-import { emptyForm, formReducer } from './form/model.js';
+import { MAX, clip, emptyForm, formReducer } from './form/model.js';
 import { clearError } from './form/validate.js';
 import { newLeadId } from './form/lead.js';
 import { discardSession, handleSubmit, leaveToEntry } from './form/flow.js';
@@ -13,6 +13,7 @@ import { dossiersFor } from './form/dossier.js';
 import { downloadAll } from './form/download-all.js';
 import { focusFirstError, focusStepHeading } from './form/focus.js';
 import { advanceOnEnter, applyFieldHints } from './form/hints.js';
+import { clickInfo } from './form/click-info.js';
 import { connectSender, createSender } from './form/sender.js';
 import { createChrome } from './ui/chrome.js';
 import { createEntryScreen } from './ui/entry-screen.js';
@@ -36,6 +37,7 @@ const DoneScreen = createDoneScreen({ h, T, icon });
 connectSender(window, createSender({ endpoint: CONFIG.leadEndpoint, token: CONFIG.leadToken }), document);
 
 const emit = (name) => (detail) => window.dispatchEvent(new CustomEvent(name, { detail }));
+const startedAt = Date.now();
 
 function App() {
   const [lang, setLang] = R.useState(() => resolveLang(search, CONFIG));
@@ -46,6 +48,8 @@ function App() {
   const [leadId, setLeadId] = R.useState('');
   const [receipt, setReceipt] = R.useState(null);
   const mounted = R.useRef(false);
+  // Identificador aleatori de la visita: només a la memòria (permet comptar visites, no persones); es renova a la tauleta en descartar la sessió.
+  const visit = R.useRef(newLeadId());
   const t = dictFor(lang, dossier);
   const query = legalQuery(lang, extra1, dossier, isDossierPreview(CONFIG, search));
   const sessionOf = (source) => toSession(source, { products: CONFIG.products, dict: t });
@@ -70,7 +74,7 @@ function App() {
     if (resolveOrigin(search) !== 'tauleta') return undefined;
     return watchIdle({
       target: document, events: ACTIVITY_EVENTS, ms: IDLE_MS,
-      onIdle: () => discardSession({ products: CONFIG.products, search, dispatch, setErrors, setLeadId, setReceipt, goTo: setView }),
+      onIdle: () => { visit.current = newLeadId(); discardSession({ products: CONFIG.products, search, dispatch, setErrors, setLeadId, setReceipt, goTo: setView }); },
     });
   }, []);
   R.useEffect(() => {
@@ -93,7 +97,15 @@ function App() {
   };
 
   // Cada clic a WhatsApp o correu es notifica (l'enllaç segueix el seu camí); `from` diu de quina pantalla ve.
-  const contactClick = (from) => (button) => emit('tsf:contact-click')({ button, from });
+  // A la confirmació, el formulari ja s'ha buidat: els productes i la ciutat són els del rebut.
+  const contactClick = (from) => (button) => {
+    const source = from === 'done' && receipt ? receipt : values;
+    emit('tsf:contact-click')({
+      id: newLeadId(), visit: visit.current, button, from, lang, origin: resolveOrigin(search),
+      products: source.products.join(','), city: clip(source.city, MAX.city),
+      info: clickInfo({ nav: navigator, win: window, doc: document, startedAt, now: Date.now() }),
+    });
+  };
 
   const screens = {
     entry: () => h(EntryScreen, {
