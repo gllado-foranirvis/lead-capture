@@ -117,8 +117,16 @@ test('la promesa de descàrrega: l\'inici i la pàgina de dades la diuen, i la l
 });
 test('el pas 2 té els literals de perfilació i els de saltar, sense la localitat de la demostració', () => {
   for (const l of CONFIG.languages) {
-    for (const key of ['step2Title', 'step2Subtitle', 'profileLegend', 'skipLabel', 'moreGroup', 'hasBoat', 'hasElectric', 'intent', 'comments', 'yes', 'no']) assert.ok(String(DICT[l].form[key]).trim(), `${l}.${key}`);
+    for (const key of ['step2Title', 'step2Subtitle', 'profileLegend', 'skipLabel', 'moreGroup', 'hasBoat', 'hasElectric', 'intent', 'comments', 'yes', 'no']) assert.ok(typeof DICT[l].form[key] === 'string' && DICT[l].form[key].trim(), `${l}.${key}`);
     assert.deepEqual(Object.keys(DICT[l].form.profiles), ['particular', 'profesional'], l);
     assert.equal(Object.keys(DICT[l].form.enthusiasmOptions).length, 6, l);
+  }
+});
+test('el pas 1 té ajuda, etiqueta «un dels dos», botó de continuar i 4 noms de pas sense la paraula PDF', () => {
+  for (const l of CONFIG.languages) {
+    const f = DICT[l].form;
+    for (const key of ['step1Hint', 'eitherTag', 'next', 'saved']) assert.ok(typeof f[key] === 'string' && f[key].trim(), `${l}.${key}`);
+    assert.equal(f.stepNames.length, 4, l);
+    assert.doesNotMatch(f.stepNames.join(' '), /PDF/i, l);
   }
 });

@@ -125,3 +125,8 @@ test('page.css: el grup plegable del pas 2 té resum tàctil de 44 px i anell de
   assert.match(page, /\.form__more-summary\s*\{[^}]*min-height:\s*2\.75rem/);
   assert.match(page, /\.form__more-summary:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--focus\)/);
 });
+test('page.css: el prefix del telèfon es col·lapsa fins que el número té el focus, sense treure\'l de la navegació', () => {
+  const rule = page.match(/\.form__phone:not\(:focus-within\)[^{]*\{[^}]*\}/)?.[0] ?? '';
+  assert.ok(rule, 'regla de col·lapse');
+  assert.doesNotMatch(rule, /display:\s*none|visibility:\s*hidden/);
+});

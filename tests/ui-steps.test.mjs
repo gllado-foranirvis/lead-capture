@@ -100,19 +100,45 @@ test('inici sense Extra 1 (MVP): només títol, contacte i WhatsApp principal; c
   assert.equal(buttons(tree)[0].props.variant, undefined);
 });
 
-test('pas 1: indicador 1 de 2, camps de contacte obligatoris amb el teclat adequat, sense xips', () => {
+test('pas 1: tira «Passo 2 de 4» amb el nom del pas, línia d\'ajuda i camps amb el teclat adequat', () => {
   const tree = contact();
-  assert.equal(bar(tree).props['aria-valuenow'], 1);
-  assert.ok(textOf(tree).includes('Paso 1 de 2') && textOf(tree).includes(f.requiredNote));
+  assert.deepEqual([bar(tree).props['aria-valuenow'], bar(tree).props['aria-valuemax']], [2, 4]);
+  assert.equal(bar(tree).props['aria-valuetext'], 'Paso 2 de 4 · Datos');
+  assert.ok(textOf(tree).includes(f.step1Hint) && textOf(tree).includes(f.requiredNote));
   const order = findAll(tree, (n) => ['T.Field', 'T.Checkbox'].includes(n.type)).map((n) => n.props.name);
   assert.deepEqual(order, ['name', 'email', 'phonePrefix', 'phone', 'privacy', 'newsletter']);
   assert.equal(byName(tree, 'city').length, 0, 'la ciutat ja s\'ha demanat a l\'inici');
   assert.deepEqual([byName(tree, 'email')[0].props.type, byName(tree, 'phone')[0].props.type], ['email', 'tel']);
-  for (const n of ['name', 'email', 'phonePrefix', 'phone']) assert.equal(byName(tree, n)[0].props.required, true, n);
-  assert.equal(byName(tree, 'phonePrefix')[0].props.value, '+34', 'el prefix surt omplert amb +34');
-  assert.equal(byName(tree, 'phonePrefix')[0].props.label, f.phonePrefix);
-  assert.equal(byName(tree, 'phonePrefix')[0].props.type, 'tel');
+  assert.equal(byName(tree, 'phonePrefix')[0].props.value, '+34');
   assert.equal(byType(tree, 'T.ChoiceChips').length, 0);
+});
+test('pas 1: només el nom i la privacitat són obligatoris; correu i telèfon diuen «un dels dos»', () => {
+  const tree = contact();
+  assert.equal(byName(tree, 'name')[0].props.required, true);
+  assert.equal(byName(tree, 'privacy')[0].props.required, true);
+  for (const n of ['email', 'phone']) {
+    assert.notEqual(byName(tree, n)[0].props.required, true, n);
+    assert.ok(byName(tree, n)[0].props.label.includes(f.eitherTag), n);
+  }
+});
+test('pas 1: sense cap contacte, un sol error («either») al correu i cap al telèfon', () => {
+  const tree = contact({ errors: { email: 'either' } });
+  assert.equal(byName(tree, 'email')[0].props.error, f.errors.either);
+  assert.equal(byName(tree, 'phone')[0].props.error, undefined);
+});
+test('pas 1: el botó continua cap al pas 2 (no promet encara el dossier) i «dades guardades» només si s\'ha desat', () => {
+  const tree = contact();
+  assert.equal(textOf(buttons(tree)[0]), f.next);
+  assert.equal(findAll(tree, (n) => n.props?.className?.includes('form__saved')).length, 0);
+  assert.equal(findAll(contact({ saved: true }), (n) => n.props?.className?.includes('form__saved')).length, 1);
+});
+test('pas 1: telèfon i prefix van en una fila col·lapsable (el prefix es veu en enfocar)', () => {
+  const row = findAll(contact(), (n) => n.props?.className === 'form__phone')[0];
+  assert.deepEqual(row.children.map((c) => c.props.name ?? c.type), ['phonePrefix', 'datalist', 'phone']);
+});
+test('pas 2: la tira marca el pas 3 de 4', () => {
+  const tree = profileScreen();
+  assert.deepEqual([bar(tree).props['aria-valuenow'], bar(tree).props['aria-valuemax'], bar(tree).props['aria-valuetext']], [3, 4, 'Paso 3 de 4 · Interés']);
 });
 test('pas 1: els productes són les mateixes caselles multi-tria, marcades segons values.products, entre el telèfon i el consentiment', () => {
   const calls = [];
@@ -149,7 +175,7 @@ test('pas 1: botó d\'enviar (submit) i «← Volver»; Intro envia el formulari
   let called = 0;
   const tree = contact({ onSubmit: () => called++, onKeyDown: noop, errors: { name: 'required', email: 'email', privacy: 'privacy' } });
   const [next, back] = buttons(tree);
-  assert.deepEqual([next.props.type, next.props.full, textOf(next), back.props.variant, textOf(back)], ['submit', true, f.submit, 'link', '← Volver']);
+  assert.deepEqual([next.props.type, next.props.full, textOf(next), back.props.variant, textOf(back)], ['submit', true, f.next, 'link', '← Volver']);
   const [formEl] = byType(tree, 'form');
   const e = { preventDefault() { this.prevented = true; } };
   formEl.props.onSubmit(e);

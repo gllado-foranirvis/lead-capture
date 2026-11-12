@@ -61,6 +61,8 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .form__phone { display: flex; gap: var(--space-3); align-items: flex-start; }
 .form__phone > :first-child { flex: 0 0 var(--space-9); min-width: 0; }
 .form__phone > :last-child { flex: 1; min-width: 0; }
+/* El prefix (+351) només es veu quan el número té el focus o ja té contingut: segueix a la navegació amb teclat i als lectors, i no canvia l'alçada. */
+.form__phone:not(:focus-within):has([name="phone"]:placeholder-shown) > :first-child { flex-basis: 0; overflow: hidden; margin-right: calc(var(--space-3) * -1); opacity: 0; }
 
 /* Pas 2: les preguntes opcionals van plegades; el resum és tàctil. */
 .form__more { border-top: 1px solid var(--border-strong); padding-top: var(--space-2); }

@@ -35,7 +35,10 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `stepOf` | Passo {n} de {total} | Step {n} of {total} | Paso {n} de {total} | Pas {n} de {total} |
 | `requiredNote` | * Campo obrigatório | * Required field | * Campo obligatorio | * Camp obligatori |
 | `step1Title` | Deixa-nos os teus dados | Leave us your details | Déjanos tus datos | Deixa'ns les teves dades |
-| `step1Subtitle` | Deixa-nos os teus dados e descarrega logo o dossier de cada produto escolhido. | Leave your details and download the dossier of each product you chose right away. | Déjanos tus datos y descarga al momento el dossier de cada producto elegido. | Deixa'ns les teves dades i descarrega al moment el dossier de cada producte triat. |
+| `step1Subtitle` | Deixa-nos os teus dados e, depois de algumas perguntas opcionais, descarrega o dossier de cada produto escolhido. | Leave your details and, after a few optional questions, download the dossier for each product you chose. | Déjanos tus datos y, tras unas preguntas opcionales, descarga el dossier de cada producto elegido. | Deixa'ns les teves dades i, després d'unes preguntes opcionals, descarrega el dossier de cada producte triat. |
+| `step1Hint` | Basta o e-mail ou o telemóvel. | Either your e-mail or your phone is enough. | Basta con el correo o el teléfono. | N'hi ha prou amb el correu o el telèfon. |
+| `eitherTag` | (um dos dois) | (either one) | (uno de los dos) | (un dels dos) |
+| `next` | Continuar | Continue | Continuar | Continuar |
 | `name` | Nome | Name | Nombre | Nom |
 | `email` | E-mail | Email | Correo electrónico | Correu electrònic |
 | `phone` | Telefone | Phone | Teléfono | Telèfon |
