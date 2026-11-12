@@ -67,16 +67,22 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .form__phone:not(:focus-within):has([name="phone"]:placeholder-shown) > :first-child { flex-basis: 0; overflow: hidden; margin-right: calc(var(--space-3) * -1); opacity: 0; }
 
 /* Plegable: el resum és una fila-control (vora, 44 px, xurma) perquè es vegi que es pot tocar. */
-.fold__summary { display: flex; align-items: center; gap: var(--space-3); min-height: 2.75rem; padding: var(--space-2) var(--space-3); border: 1px solid var(--border-strong); border-radius: var(--radius-md); background: var(--surface-100); color: var(--ink); cursor: pointer; list-style: none; }
+.fold { border: 1px solid var(--border-strong); border-radius: var(--radius-md); background: var(--surface-100); }
+.fold__summary { display: flex; align-items: center; gap: var(--space-3); min-height: 2.75rem; padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); color: var(--ink); cursor: pointer; list-style: none; }
 .fold__summary::-webkit-details-marker { display: none; }
-.fold__summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.fold__summary:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+/* Obert, resum i cos són un sol bloc: una línia els separa i l'acció «Alterar» ja no fa falta. */
+.fold[open] > .fold__summary { border-bottom: 1px solid var(--border); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.fold[open] .fold__action { display: none; }
 .fold__text { display: flex; flex: 1; flex-direction: column; min-width: 0; }
 .fold__title, .fold__hint { overflow-wrap: anywhere; }
 .fold__hint { color: var(--text-muted); }
 .fold__action { color: var(--action); }
 .fold__chevron { flex: none; color: var(--text-muted); }
 .fold[open] > .fold__summary .fold__chevron { transform: rotate(180deg); }
-.fold__body { padding-top: var(--space-3); }
+.fold__body { padding: var(--space-3); }
+/* El resum ja fa de pregunta: la llegenda del grup es manté per als lectors de pantalla però no es repeteix. */
+.fold.form__products .fold__body .tsf-group__legend { position: absolute; inline-size: 1px; block-size: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); }
 .form__saved { margin: 0; color: var(--success); }
 
 /* Pantalla de gràcies: marca d'èxit centrada i CTA al peu (com el wireframe «Gracias + PDF»). */

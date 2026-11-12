@@ -123,7 +123,7 @@ test('page.css: el nom de la fira de l\'escena té estil propi', () => {
 });
 test('page.css: el plegable és una fila-control tàctil (44 px, vora, focus) amb xurma que gira només si es permet el moviment', () => {
   assert.match(page, /\.fold__summary\s*\{[^}]*min-height:\s*2\.75rem/);
-  assert.match(page, /\.fold__summary\s*\{[^}]*border:\s*1px solid var\(--border-strong\)/);
+  assert.match(page, /\.fold\s*\{[^}]*border:\s*1px solid var\(--border-strong\)/);
   assert.match(page, /\.fold__summary\s*\{[^}]*list-style:\s*none/);
   assert.match(page, /\.fold__summary::-webkit-details-marker\s*\{[^}]*display:\s*none/);
   assert.match(page, /\.fold__summary:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--focus\)/);
@@ -136,4 +136,11 @@ test('page.css: el prefix del telèfon es col·lapsa fins que el número té el 
   const rule = page.match(/\.form__phone:not\(:focus-within\)[^{]*\{[^}]*\}/)?.[0] ?? '';
   assert.ok(rule, 'regla de col·lapse');
   assert.doesNotMatch(rule, /display:\s*none|visibility:\s*hidden/);
+});
+test('page.css: obert, el plegable és un sol contenidor (resum + cos), sense repetir la pregunta ni l\'acció', () => {
+  assert.match(page, /\.fold\[open\] > \.fold__summary\s*\{[^}]*border-bottom:\s*1px solid var\(--border\)/);
+  assert.match(page, /\.fold\[open\] \.fold__action\s*\{[^}]*display:\s*none/);
+  const legend = page.match(/\.fold\.form__products \.fold__body \.tsf-group__legend\s*\{[^}]*\}/)?.[0] ?? '';
+  assert.match(legend, /clip:\s*rect\(0 0 0 0\)/, 'la llegenda es manté per als lectors, però no es veu repetida');
+  assert.match(page, /\.fold__summary:focus-visible\s*\{[^}]*outline-offset:\s*-2px/);
 });
