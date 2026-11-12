@@ -36,8 +36,8 @@ test('els botons de contacte són accions amb verb (no només un nom)', () => {
 test('resolveLang', () => {
   assert.equal(resolveLang('?lang=ca', CONFIG), 'ca');
   assert.equal(resolveLang('?lang=PT', CONFIG), 'pt');
-  assert.equal(resolveLang('?lang=xx', CONFIG), 'es');
-  assert.equal(resolveLang('?lang=', CONFIG), 'es');
-  assert.equal(resolveLang('', CONFIG), 'es');
+  assert.equal(resolveLang('?lang=xx', CONFIG), CONFIG.defaultLang);
+  assert.equal(resolveLang('?lang=', CONFIG), CONFIG.defaultLang);
+  assert.equal(resolveLang('', CONFIG), CONFIG.defaultLang);
   assert.equal(resolveLang('?a=1&lang=en', CONFIG), 'en');
 });

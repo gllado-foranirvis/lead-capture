@@ -4,8 +4,8 @@ export function createDoneScreen({ h, T, icon }) {
   const mark = h('svg', { className: 'page__done-mark', viewBox: '0 0 24 24', 'aria-hidden': 'true', focusable: 'false' },
     h('path', { d: 'M7 12.5l3.2 3.2L17 8.8', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round' }));
   // Targeta amb les classes del sistema (tsf-pdf) però amb la icona de document en lloc de la insígnia «PDF» de T.PdfCard.
-  const card = (f, { href, file, meta }, tabbable) =>
-    h('a', { key: href, className: 'page__doc', href, download: file || '', ...(tabbable ? {} : { tabIndex: -1 }) },
+  const card = (f, { href, meta }, tabbable) =>
+    h('a', { key: href, className: 'page__doc', href, download: '', ...(tabbable ? {} : { tabIndex: -1 }) },
       h('div', { className: 'tsf-pdf tsf-pdf--link' },
         h('span', { className: 'page__doc-icon', 'aria-hidden': 'true' }, fileTextIcon(h)),
         h('span', { className: 'tsf-pdf__text' },
@@ -27,7 +27,7 @@ export function createDoneScreen({ h, T, icon }) {
         docs.length > 1
           ? h(T.Button, { full: true, onClick: onDownloadAll }, f.doneDownloadAll)
           // Button no reenvia `download`, d'aquí l'<a> amb les classes del sistema.
-          : h('a', { className: 'tsf-btn button tsf-btn--solid tsf-btn--full', href: docs[0].href, download: docs[0].file || '' }, f.doneDownload)) : null,
+          : h('a', { className: 'tsf-btn button tsf-btn--solid tsf-btn--full', href: docs[0].href, download: '' }, f.doneDownload)) : null,
       h('div', { className: 'page__done-actions' },
         h(T.Button, { full: true, variant: 'outline', href: whatsappHref }, icon(h, 'whatsapp'), f.entryWhatsapp),
         h(T.Button, { full: true, variant: 'outline', href: emailHref }, icon(h, 'mail'), f.entryEmail),
