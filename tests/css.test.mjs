@@ -41,7 +41,7 @@ test('page.css: el moviment de l\'indicador i de les pantalles té guarda de red
   assert.doesNotMatch(page.replace(/@media \(prefers-reduced-motion: no-preference\) \{[\s\S]*?\n\}/g, ''), /(^|\s)(transition|animation):/);
 });
 test('page.css: l\'opció d\'assessorament de la tria de models ocupa tota la fila', () => {
-  assert.match(page, /\.form__products \.tsf-group__list > :last-child\s*\{[^}]*grid-column:\s*1 \/ -1/);
+  assert.match(page, /\.form__products \.tsf-group__list > :last-child\s*\{[^}]*flex-basis:\s*100%/);
 });
 
 test('page.css: el nom d\'un model llarg es parteix a la targeta de descàrrega en lloc de sortir-ne', () => {
@@ -67,8 +67,8 @@ test('page.css: les files de les caselles múltiples fan 44px (el sistema compac
   assert.match(page, /\.tsf-compact\s*\{[^}]*--option-h:\s*var\(--tap-min\)/);
 });
 
-test('page.css (mòbil compacte): caselles múltiples en dues columnes i ritme vertical més curt', () => {
-  assert.match(page, /\.form__products \.tsf-group__list\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
+test('page.css (mòbil compacte): caselles múltiples en línia (flex-wrap) i ritme vertical més curt', () => {
+  assert.match(page, /\.form__products \.tsf-group__list\s*\{[^}]*flex-wrap:\s*wrap/);
   assert.match(page, /\.form\s*\{[^}]*gap:\s*var\(--space-4\)/);
   assert.match(page, /\.form__group\s*\{[^}]*gap:\s*var\(--space-3\)/);
   assert.match(page, /\.page__top\s*\{[^}]*min-height:\s*var\(--tap-min-compact\)/);
@@ -98,9 +98,9 @@ test('page.css: la marca de la capçalera és un enllaç sense subratllat i amb 
   assert.match(page, /\.page__top \.wordmark\s*\{[^}]*min-height:\s*var\(--tap-min-compact\)/);
 });
 
-test('page.css (mòbil): l\'escena de l\'inici deixa a dalt un espai sense text perquè hi llueixi el vaixell', () => {
+test('page.css (mòbil): l\'escena de l\'inici deixa sota la capçalera (3.5rem) l\'espai just per al text, perquè tot el formulari càpiga a la pantalla', () => {
   const mobileStage = page.match(/\n\.stage\s*\{([^}]*)\}/)?.[1] ?? '';
-  assert.match(mobileStage, /padding:\s*5\.75rem var\(--gutter\)/);
+  assert.match(mobileStage, /padding:\s*3\.5rem var\(--gutter\)/);
   assert.match(mobileStage, /hero-m\.webp/);
 });
 
@@ -108,15 +108,15 @@ test('page.css (mòbil): a l\'inici la capçalera és baixa perquè la marca que
   assert.match(page, /\.site--entry \.site__top \.page__top\s*\{[^}]*min-height:\s*3\.5rem/);
 });
 
-test('page.css (inici): marges proporcionals sobre una base de 8px: 8 dins d\'un grup, 16 entre grups, 24 (= el gutter) a les vores i 40 de la marca al títol', () => {
+test('page.css (inici): marges compactes sobre una base de 8px: 8 dins d\'un grup, 12 entre grups i a les vores verticals, 24 (= el gutter) als costats', () => {
   const rule = (sel) => page.match(new RegExp(`\\n${sel.replace(/[.]/g, '\\.')}\\s*\\{([^}]*)\\}`))?.[1] ?? '';
-  assert.match(rule('.stage'), /padding:\s*5\.75rem var\(--gutter\) var\(--space-5\)/, 'sota l\'escena, 24');
+  assert.match(rule('.stage'), /padding:\s*3\.5rem var\(--gutter\) var\(--space-3\)/, 'sota l\'escena, 12');
   assert.match(rule('.stage__sub'), /margin:\s*var\(--space-2\) 0 0/, 'títol → subtítol, 8');
   const body = rule('.page__body');
-  assert.match(body, /gap:\s*var\(--space-4\)/, 'entre grups, 16');
-  assert.match(body, /padding:\s*var\(--space-5\) var\(--gutter\)/, 'tot al voltant, 24: també entre l\'escena i el contingut, simètric amb el peu de l\'escena');
+  assert.match(body, /gap:\s*var\(--space-3\)/, 'entre grups, 12');
+  assert.match(body, /padding:\s*var\(--space-3\) var\(--gutter\)/, 'a dalt i a baix, 12: simètric amb el peu de l\'escena');
   assert.match(rule('.page__group'), /gap:\s*var\(--space-2\)/, 'etiqueta i botons de contacte, 8');
-  assert.match(page, /\.page__cta\s*\{[^}]*margin-top:\s*var\(--space-2\)/, 'CTA: 16 + 8 = 24 respecte als contactes');
+  assert.match(page, /\.page__cta\s*\{[^}]*margin-top:\s*var\(--space-2\)/, 'CTA: 12 + 8 = 20 respecte als contactes');
 });
 test('page.css: el nom de la fira de l\'escena té estil propi', () => {
   assert.match(page, /\.stage__fair\s*\{/);
