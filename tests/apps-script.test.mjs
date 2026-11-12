@@ -59,14 +59,38 @@ const clickBody = { visit: 'visit-0001', button: 'whatsapp', from: 'entry', lang
 const click = { id: 'click-0001', stage: 'click', click: clickBody };
 const post = (api, payload) => JSON.parse(api.doPost({ postData: { contents: typeof payload === 'string' ? payload : JSON.stringify(payload) } }).text);
 
-test('sanitizeLead accepta un lead complet, normalitza el correu i desa producte i ciutat; no porta perfilació', () => {
+test('sanitizeLead accepta un lead complet, normalitza el correu i desa producte i ciutat; sense perfilació, els camps queden buits', () => {
   const { api } = load();
   const lead = api.sanitizeLead(complete);
   assert.deepEqual([lead.stage, lead.email, lead.product, lead.city], ['complete', 'ana@example.com', 'sifly,tko', 'Lisboa']);
-  assert.equal(Object.hasOwn(lead, 'activity'), false);
-  assert.equal(Object.hasOwn(api.sanitizeLead({ ...complete, profiling: { activity: 'vela' }, contact: { ...contact, profile: 'x' } }), 'profile'), false);
+  assert.deepEqual([lead.profile, lead.activity, lead.comments], ['', '', '']);
 });
-test('sanitizeLead no exigeix perfil (ja no existeix) i accepta encara l\'etapa antiga «step1»', () => {
+test('contacte: almenys un de telèfon o correu; el que hi hagi es valida', () => {
+  const { api } = load();
+  const lead = (patch) => api.sanitizeLead({ ...complete, contact: { ...contact, ...patch } });
+  assert.deepEqual([lead({ phone: '' }).phone, lead({ phone: '' }).email], ['', 'ana@example.com']);
+  assert.deepEqual([lead({ email: '' }).email, lead({ email: '' }).phone], ['', '+34 600 00 00 00']);
+  assert.equal(lead({ email: '', phone: '' }), null);
+  assert.equal(lead({ email: 'mal', phone: '' }), null, 'un correu omplert però invàlid es rebutja');
+});
+test('perfilació: només a l\'etapa complete, amb opcions validades i text net', () => {
+  const { api } = load();
+  const profiling = { profile: 'profesional', activity: 'vela', hasBoat: 'si', hasElectric: 'x', intent: 'no', enthusiasm: ['noise', 'other', 'inventada'], enthusiasmOther: 'silenci', concerns: ['range'], concernsOther: 'ignorat', factors: ['price'], comments: '=1+1' };
+  const lead = api.sanitizeLead({ ...complete, profiling });
+  assert.deepEqual([lead.profile, lead.activity, lead.hasBoat, lead.hasElectric, lead.intent], ['profesional', 'vela', 'si', '', 'no']);
+  assert.deepEqual([lead.enthusiasm, lead.enthusiasmOther, lead.concerns, lead.concernsOther], ['noise, other', 'silenci', 'range', '']);
+  assert.equal(api.sanitizeLead({ ...step1, profiling }).profile, '', 'el parcial no porta perfilació');
+  assert.equal(api.sanitizeLead({ ...complete, profiling: { profile: 'x' } }).profile, '');
+});
+test('un lead complet sense perfilació (perfil saltat) és vàlid; el text amb «=» es protegeix a la fila', () => {
+  const { api, sheet } = load();
+  api.ensureHeader(sheet, api.COLUMNS);
+  api.upsertLead(sheet, api.sanitizeLead({ ...complete, profiling: { profile: 'particular', comments: '=1+1' } }), '2026-11-17T10:00:00Z');
+  const col = (name) => sheet.rows[1][api.COLUMNS.indexOf(name)];
+  assert.equal(col('comments'), "'=1+1");
+  assert.equal(col('stage'), 'complete');
+});
+test('sanitizeLead no exigeix perfil i accepta l\'etapa «step1»', () => {
   const { api } = load();
   assert.ok(api.sanitizeLead(complete));
   assert.equal(api.sanitizeLead(step1).stage, 'step1');
@@ -90,7 +114,6 @@ test('es rebutgen les càrregues invàlides: privacitat no acceptada, id, etapa,
   assert.equal(bad({ privacy: 'true' }), null);
   assert.equal(bad({ email: 'no-es-un-correu' }), null);
   assert.equal(bad({ name: '   ' }), null);
-  assert.equal(bad({ phone: '' }), null);
   assert.equal(bad({ lang: 'fr' }), null);
   assert.equal(bad({ origin: 'web' }), null);
   assert.equal(api.sanitizeLead({ ...complete, id: 'curt' }), null);
@@ -267,4 +290,11 @@ test('doPost: un error intern respon «error» (el client reintenta) i allibera 
 test('doGet respon ok (per comprovar que l\'URL està desplegada)', () => {
   const { api } = load();
   assert.deepEqual(JSON.parse(api.doGet().text), { ok: true });
+});
+
+test('un clic de descàrrega de PDF es registra; un botó desconegut es rebutja', () => {
+  const { api } = load();
+  const download = { ...click, click: { ...clickBody, button: 'download', from: 'done', products: 'sifly' } };
+  assert.equal(api.sanitizeClick(download).button, 'download');
+  assert.equal(api.sanitizeClick({ ...click, click: { ...clickBody, button: 'altre' } }), null);
 });

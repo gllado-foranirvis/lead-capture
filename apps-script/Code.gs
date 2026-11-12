@@ -2,8 +2,8 @@
 // Rep un POST JSON { id, stage, contact?, click?, token? }: un lead fa un upsert per id al full «Leads» i un clic (stage «click») s'afegeix a «Clics».
 
 var SHEET_NAME = 'Leads';
-// Les columnes de la perfilació antiga (profile, activity… factorsOther, comments) es conserven perquè les files
-// ja existents no es desplacin; el formulari actual ja no les omple. «city» ocupa el lloc de l'antiga «demo».
+// Les columnes de perfilació (profile, activity… factorsOther, comments) s'omplen al pas 2 del formulari (o queden buides si el visitant el salta).
+// «city» ocupa el lloc de l'antiga «demo» (la ciutat es demana a l'inici).
 var COLUMNS = [
   'id', 'stage', 'createdAt', 'updatedAt', 'name', 'email', 'phone', 'profile', 'lang', 'origin', 'privacy', 'newsletter', 'product',
   'activity', 'activityOther', 'hasBoat', 'hasElectric', 'enthusiasm', 'enthusiasmOther', 'concerns', 'concernsOther',
@@ -12,14 +12,23 @@ var COLUMNS = [
 var STAGES = ['step1', 'complete'];
 var LANGS = ['es', 'ca', 'pt', 'en'];
 var ORIGINS = ['mobil', 'tauleta'];
-var MAX = { name: 100, email: 254, phone: 30, city: 80 };
+var PROFILES = ['particular', 'profesional'];
+var YES_NO = ['si', 'no'];
+// Aquestes llistes han de coincidir amb site/js/form/model.js (un test ho vigila).
+var ACTIVITIES = ['ocio', 'charter', 'vela', 'buceo', 'skiwake', 'seguridad', 'pasajeros', 'pesca', 'marina', 'otra'];
+var OPINION = {
+  enthusiasm: ['sustainability', 'noise', 'maintenance', 'costs', 'regulation', 'other'],
+  concerns: ['range', 'charging', 'price', 'infrastructure', 'depreciation', 'other'],
+  factors: ['price', 'range', 'maker', 'design', 'warranty', 'support', 'other']
+};
+var MAX = { name: 100, email: 254, phone: 30, city: 80, other: 120, comments: 500 };
 // Pestanya dels clics a WhatsApp i correu: tot és anònim (cap nom, correu ni telèfon).
 var CLICK_SHEET = 'Clics';
 var CLICK_COLUMNS = [
   'id', 'day', 'time', 'at', 'button', 'from', 'lang', 'origin', 'visit', 'products', 'city',
   'device', 'os', 'browserLang', 'tz', 'screen', 'seconds', 'referrer'
 ];
-var BUTTONS = ['whatsapp', 'email'];
+var BUTTONS = ['whatsapp', 'email', 'download'];
 var CLICK_FROM = ['entry', 'done'];
 var DEVICES = ['mobile', 'tablet', 'desktop'];
 var SYSTEMS = ['ios', 'android', 'other'];
@@ -50,14 +59,31 @@ function sanitizeLead(payload) {
   var name = clip(c.name, MAX.name);
   var email = clip(c.email, MAX.email).toLowerCase();
   var phone = clip(c.phone, MAX.phone);
-  if (!name || !phone || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return null;
+  // Cal almenys un de telèfon o correu; el que hi sigui, ha de ser vàlid.
+  if (!name || (!phone && !email) || (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email))) return null;
   if (c.privacy !== true) return null;
   if (LANGS.indexOf(c.lang) === -1 || ORIGINS.indexOf(c.origin) === -1) return null;
-  return {
+  var lead = {
     id: id, stage: payload.stage, name: name, email: email, phone: phone,
     privacy: true, newsletter: c.newsletter === true, lang: c.lang, origin: c.origin,
     product: productsOf(c.product), city: clip(c.city, MAX.city)
   };
+  // La perfilació només arriba a l'etapa «complete»; saltar-la deixa aquests camps buits.
+  var p = payload.stage === 'complete' && payload.profiling && typeof payload.profiling === 'object' ? payload.profiling : {};
+  lead.profile = oneOf(PROFILES, p.profile);
+  lead.activity = oneOf(ACTIVITIES, p.activity);
+  lead.activityOther = lead.activity === 'otra' ? clip(p.activityOther, MAX.other) : '';
+  lead.hasBoat = oneOf(YES_NO, p.hasBoat);
+  lead.hasElectric = oneOf(YES_NO, p.hasElectric);
+  lead.intent = oneOf(YES_NO, p.intent);
+  lead.comments = clip(p.comments, MAX.comments);
+  Object.keys(OPINION).forEach(function (group) {
+    var sent = Array.isArray(p[group]) ? p[group] : [];
+    var chosen = OPINION[group].filter(function (option) { return sent.indexOf(option) > -1; });
+    lead[group] = chosen.join(', ');
+    lead[group + 'Other'] = chosen.indexOf('other') > -1 ? clip(p[group + 'Other'], MAX.other) : '';
+  });
+  return lead;
 }
 
 // Valida i normalitza un clic: l'id, el botó, el lloc, l'idioma i l'origen són obligatoris; la resta, opcional (si no encaixa, queda buit).
