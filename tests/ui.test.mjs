@@ -57,17 +57,16 @@ test('app.js: recorregut entry → step1 → done, PDF segons l\'idioma, clics n
   const { readFileSync } = await import('node:fs');
   const app = readFileSync('site/js/app.js', 'utf8');
   for (const gone of ['step-profile', 'StepProfile', 'step2', 'PROFILES', 'advanceStep1', 'profileOptions', 'onProfile']) assert.doesNotMatch(app, new RegExp(gone), gone);
-  assert.match(app, /dossiersFor\(receipt\?\.products \?\? \[\], lang, CONFIG, /);
   assert.match(app, /tsf:contact-click/);
   assert.match(app, /fair: CONFIG\.fair/);
-  assert.match(app, /dictFor\(lang, false\)/, 'sense PDF aplicable la confirmació usa els textos sense dossier');
+  assert.match(app, /doneView\(/, 'la confirmació es calcula amb la funció pura de views.js');
 });
 
 test('app.js: cada clic porta una visita en memòria (renovada en descartar la sessió), els productes i la ciutat, i la informació anònima', async () => {
   const { readFileSync } = await import('node:fs');
   const app = readFileSync('site/js/app.js', 'utf8');
   assert.match(app, /clickInfo\(\{ nav: navigator, win: window, doc: document, startedAt, now: Date\.now\(\) \}\)/);
+  assert.match(app, /clickDetail\(/);
   assert.match(app, /visit\.current = newLeadId\(\)/, 'la visita es renova quan la tauleta descarta la sessió');
-  assert.match(app, /visit: visit\.current/);
   assert.doesNotMatch(app, /localStorage|sessionStorage|document\.cookie/, 'cap emmagatzematge al navegador');
 });

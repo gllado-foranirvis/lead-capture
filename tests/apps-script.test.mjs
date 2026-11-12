@@ -174,6 +174,18 @@ test('un valor que comença per «=» es desa escapat amb apòstrof perquè Shee
   assert.equal(col('email'), 'ana@example.com');
 });
 
+test('escapat de fórmules: també «+», «-», «@», tabulador i retorn, però no al telèfon (comença per «+» per disseny)', () => {
+  const { api, sheet } = load();
+  api.ensureHeader(sheet, api.COLUMNS);
+  const city = (value) => {
+    api.upsertLead(sheet, api.sanitizeLead({ ...complete, id: `id-${Math.random().toString(36).slice(2, 12)}`, contact: { ...contact, city: value } }), 't');
+    return sheet.rows.at(-1)[api.COLUMNS.indexOf('city')];
+  };
+  for (const evil of ['+1+1', '-1+1', '@SUM(1)', '=1+1']) assert.equal(city(evil), `'${evil}`, evil);
+  assert.equal(city('Lisboa'), 'Lisboa');
+  assert.equal(city('Vila +Nova'), 'Vila +Nova');
+  assert.equal(sheet.rows.at(-1)[api.COLUMNS.indexOf('phone')], '+34 600 00 00 00', 'el telèfon no s\'escapa');
+});
 test('sanitizeClick accepta un clic complet i el normalitza', () => {
   const { api } = load();
   const c = api.sanitizeClick(click);

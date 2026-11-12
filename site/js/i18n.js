@@ -14,7 +14,7 @@ const PAGE = {
     privacyTitle: 'Privacidad',
     privacyText: 'Esta página no guarda datos personales. Si nos escribes por WhatsApp o por correo, usaremos tus datos solo para responderte.',
     cookiesTitle: 'Cookies',
-    cookiesText: 'Esta página no usa cookies. Solo cuenta, de forma anónima, cada vez que se pulsa el botón de WhatsApp o el de correo (botón, idioma, tipo de dispositivo y los datos de interés indicados), sin guardar nombre, correo ni teléfono.',
+    cookiesText: 'Esta página no usa cookies. Cada vez que se pulsa el botón de WhatsApp o el de correo, guardamos un registro sin nombre, correo ni teléfono: botón, idioma de la página y del navegador, tipo de dispositivo y sistema, tamaño de pantalla, zona horaria, producto y ciudad indicados, segundos en la página, web de procedencia (solo el dominio) y un identificador de visita aleatorio que no se guarda en tu dispositivo. Si has dejado tus datos, la ciudad y el producto podrían relacionarse con ellos.',
   },
   ca: {
     title: 'Parlem de propulsió elèctrica',
@@ -29,7 +29,7 @@ const PAGE = {
     privacyTitle: 'Privacitat',
     privacyText: 'Aquesta pàgina no desa dades personals. Si ens escrius per WhatsApp o per correu, farem servir les teves dades només per respondre\'t.',
     cookiesTitle: 'Cookies',
-    cookiesText: 'Aquesta pàgina no fa servir cookies. Només compta, de manera anònima, cada cop que es prem el botó de WhatsApp o el de correu (botó, idioma, tipus de dispositiu i les dades d\'interès indicades), sense desar nom, correu ni telèfon.',
+    cookiesText: 'Aquesta pàgina no fa servir cookies. Cada cop que es prem el botó de WhatsApp o el de correu, desem un registre sense nom, correu ni telèfon: botó, idioma de la pàgina i del navegador, tipus de dispositiu i sistema, mida de pantalla, zona horària, producte i ciutat indicats, segons a la pàgina, web de procedència (només el domini) i un identificador de visita aleatori que no es desa al teu dispositiu. Si has deixat les teves dades, la ciutat i el producte es podrien relacionar amb elles.',
   },
   pt: {
     title: 'Falemos de propulsão elétrica',
@@ -44,7 +44,7 @@ const PAGE = {
     privacyTitle: 'Privacidade',
     privacyText: 'Esta página não guarda dados pessoais. Se nos escreveres por WhatsApp ou por e-mail, usaremos os teus dados apenas para te responder.',
     cookiesTitle: 'Cookies',
-    cookiesText: 'Esta página não utiliza cookies. Apenas conta, de forma anónima, cada vez que se carrega no botão de WhatsApp ou no de e-mail (botão, idioma, tipo de dispositivo e os dados de interesse indicados), sem guardar nome, e-mail nem telefone.',
+    cookiesText: 'Esta página não utiliza cookies. Cada vez que se carrega no botão de WhatsApp ou no de e-mail, guardamos um registo sem nome, e-mail nem telefone: botão, idioma da página e do navegador, tipo de dispositivo e sistema, tamanho do ecrã, fuso horário, produto e cidade indicados, segundos na página, site de origem (apenas o domínio) e um identificador de visita aleatório que não fica guardado no teu dispositivo. Se deixaste os teus dados, a cidade e o produto poderão ser relacionados com eles.',
   },
   en: {
     title: "Let's talk electric propulsion",
@@ -59,20 +59,21 @@ const PAGE = {
     privacyTitle: 'Privacy',
     privacyText: 'This page does not store personal data. If you write to us by WhatsApp or email, we will use your details only to reply.',
     cookiesTitle: 'Cookies',
-    cookiesText: 'This page does not use cookies. It only counts, anonymously, each press of the WhatsApp or email button (button, language, device type and the interest details entered), without storing name, email or phone.',
+    cookiesText: 'This page does not use cookies. Each time the WhatsApp or the email button is pressed, we store a record without name, email or phone: button, page and browser language, device type and system, screen size, time zone, product and city entered, seconds on the page, referring site (domain only) and a random visit identifier that is not stored on your device. If you left your details, the city and product could be linked to them.',
   },
 };
 
 export const DICT = Object.fromEntries(Object.entries(PAGE).map(([lang, page]) => [lang, { ...page, form: FORM[lang] }]));
 
 // Versió sense dossier: els mateixos literals amb els canvis de FORM_NO_DOSSIER (i el text de privacitat sense el producte ni el dossier).
+// Sense dossier no hi ha cap correu amb el document: la confirmació «amb correu» diu el mateix que la normal.
 function withoutDossier(lang) {
   const { privacy, ...texts } = FORM_NO_DOSSIER[lang];
   const privacyText = privacy.reduce((text, [from, to]) => {
     if (!text.includes(from)) throw new Error(`i18n-form: «${from}» no és al text de privacitat (${lang})`);
     return text.replace(from, to);
   }, FORM[lang].privacyText);
-  return { ...DICT[lang], form: { ...FORM[lang], ...texts, privacyText } };
+  return { ...DICT[lang], form: { ...FORM[lang], ...texts, doneTextMail: texts.doneText, privacyText } };
 }
 const DICT_NO_DOSSIER = Object.fromEntries(Object.keys(FORM_NO_DOSSIER).map((lang) => [lang, withoutDossier(lang)]));
 

@@ -81,21 +81,26 @@ test('cada idioma té un exemple per a nom, correu i telèfon; el correu i el te
 });
 test('el text de privacitat cita la ciutat, el producte i el recompte anònim de clics, i no la perfilació antiga', () => {
   const parts = {
-    es: [/la ciudad/, /el producto que te interesa/, /anónima/], ca: [/la ciutat/, /el producte que t'interessa/, /anònima/],
-    pt: [/a cidade/, /o produto que te interessa/, /anónima/], en: [/city/, /the product you are interested in/, /anonymously/],
+    es: [/la ciudad/, /el producto que te interesa/, /registro del clic/], ca: [/la ciutat/, /el producte que t'interessa/, /registre del clic/],
+    pt: [/a cidade/, /o produto que te interessa/, /registo do clique/], en: [/city/, /the product you are interested in/, /record of the click/],
   };
   for (const l of CONFIG.languages) {
     for (const re of parts[l]) assert.match(DICT[l].form.privacyText, re, `${l} ${re}`);
     assert.doesNotMatch(DICT[l].form.privacyText, /embarcaci|embarca[cç]|boat|comentari|comments|perfil|profile/i, l);
   }
 });
-test('el text de cookies no diu que no hi ha mesura: compta, de forma anònima, els clics a WhatsApp i correu', () => {
-  const anonymous = { es: /anónim/i, ca: /anònim/i, pt: /anónim/i, en: /anonym/i };
+test('el text de cookies enumera tot el que es desa a cada clic i avisa que es pot relacionar amb les dades deixades', () => {
+  const parts = {
+    es: [/sistema/, /pantalla/, /zona horaria/, /ciudad/, /dominio/, /idioma de la página y del navegador/, /relacionar/],
+    ca: [/sistema/, /pantalla/, /zona horària/, /ciutat/, /domini/, /idioma de la pàgina i del navegador/, /relacionar/],
+    pt: [/sistema/, /ecrã/, /fuso horário/, /cidade/, /domínio/, /idioma da página e do navegador/, /relacionados/],
+    en: [/system/, /screen size/, /time zone/, /city/, /domain/, /page and browser language/, /linked/],
+  };
   for (const l of CONFIG.languages) {
     const text = DICT[l].cookiesText;
+    for (const re of parts[l]) assert.match(text, re, `${l} ${re}`);
     assert.match(text, /WhatsApp/, l);
-    assert.match(text, anonymous[l], l);
     assert.match(text, /cookies/i, l);
-    assert.doesNotMatch(text, /herramientas de medici|ferramentas de medi|eines de mesura|measurement tools/i, l);
+    assert.doesNotMatch(text, /anónim|anònim|anonym|herramientas de medici|ferramentas de medi|eines de mesura|measurement tools/i, l);
   }
 });

@@ -96,10 +96,12 @@ function ensureHeader(sheet, columns) {
   sheet.getRange(1, 1, 1, columns.length).setValues([columns]);
 }
 
-// setValues executa com a fórmula qualsevol text que comenci per «=», encara que la cel·la tingui format de text:
-// l'apòstrof inicial el converteix en text. («+» i «@» ja queden com a text gràcies al format de la columna.)
-function asText(value) {
-  return typeof value === 'string' && value.charAt(0) === '=' ? "'" + value : value;
+// setValues executa com a fórmula qualsevol text que comenci per «=», encara que la cel·la tingui format de text, i en
+// exportar a CSV o Excel el format de text es perd: l'apòstrof inicial ho evita per a «=», «+», «-», «@», tabulador i retorn.
+// El telèfon comença per «+» per disseny (ja el valida el web i l'script) i queda tal qual.
+var FORMULA_START = /^[=+\-@\t\r]/;
+function asText(value, column) {
+  return column !== 'phone' && typeof value === 'string' && FORMULA_START.test(value) ? "'" + value : value;
 }
 
 function rowFor(lead, current, now) {
@@ -107,7 +109,7 @@ function rowFor(lead, current, now) {
     if (column === 'createdAt') return current ? current[i] : now;
     if (column === 'updatedAt') return now;
     if (column === 'privacy' || column === 'newsletter') return lead[column] ? 'si' : 'no';
-    return asText(lead[column] === undefined ? '' : lead[column]);
+    return asText(lead[column] === undefined ? '' : lead[column], column);
   });
 }
 
@@ -153,7 +155,7 @@ function recordClick(book, click, now) {
     if (column === 'day') return Utilities.formatDate(now, zone, 'yyyy-MM-dd');
     if (column === 'time') return Utilities.formatDate(now, zone, 'HH:mm:ss');
     if (column === 'at') return now.toISOString();
-    return asText(click[column] === undefined ? '' : click[column]);
+    return asText(click[column] === undefined ? '' : click[column], column);
   });
   if (last + 1 > sheet.getMaxRows()) sheet.insertRowsAfter(sheet.getMaxRows(), 500);
   writeRow(sheet, last + 1, values);

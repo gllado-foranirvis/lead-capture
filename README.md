@@ -94,7 +94,7 @@ Només s'emeten esdeveniments a `window`; l'enviament al full és opcional (`lea
 ## Abans de publicar
 
 1. `npm test` en verd (252) i `npm run sync` sense canvis a `git status`.
-2. Substituir les dades de la taula anterior que encara siguin de prova i **redesplegar l'script de Google** (nova versió) amb el `Code.gs` d'aquesta branca; passar `node scripts/smoke-sheet.mjs <url> <token>` i comprovar `Leads` i `Clics`.
+2. **ABANS de fusionar** (si no, el web nou publicat deixa de desar contactes i clics: l'script antic exigeix `profile` i respon `invalid`): substituir les dades de la taula anterior que encara siguin de prova i **redesplegar l'script de Google** (nova versió) amb el `Code.gs` d'aquesta branca (és compatible amb el web antic, així que l'ordre és segur); omplir la data a `docs/google-sheet.md`; passar `node scripts/smoke-sheet.mjs <url> <token>` i comprovar `Leads` i `Clics`.
 3. Etiquetar el punt de retorn (`git tag pre-enertech-2026 origin/main && git push origin pre-enertech-2026`) abans de fusionar.
 4. Després de publicar: provar a la URL real a cada idioma, amb un producte, amb diversos i amb «asesoramiento»; que cada targeta descarrega el PDF correcte; que `Leads` i `Clics` reben les files; i el QR amb un mòbil.
 5. **`noindex, nofollow` (decidit):** les dues pàgines porten `<meta name="robots" content="noindex, nofollow">` i s'hi queden. El test `beta: les dues pàgines porten noindex` de `tests/html.test.mjs` ho vigila.

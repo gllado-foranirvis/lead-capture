@@ -3,17 +3,17 @@ import { dictFor, resolveLang } from './i18n.js';
 import { contactLinks } from './messages.js';
 import { icon } from './icons.js';
 import { isDossierEnabled, isDossierPreview, isExtra1Enabled, legalQuery, resolveOrigin, resolveProducts } from './form/context.js';
-import { MAX, clip, emptyForm, formReducer } from './form/model.js';
+import { emptyForm, formReducer } from './form/model.js';
 import { clearError } from './form/validate.js';
 import { newLeadId } from './form/lead.js';
 import { discardSession, handleSubmit, leaveToEntry } from './form/flow.js';
 import { ACTIVITY_EVENTS, IDLE_MS, watchIdle } from './form/idle.js';
 import { toSession } from './form/session.js';
-import { dossiersFor } from './form/dossier.js';
 import { downloadAll } from './form/download-all.js';
 import { focusFirstError, focusStepHeading } from './form/focus.js';
 import { advanceOnEnter, applyFieldHints } from './form/hints.js';
 import { clickInfo } from './form/click-info.js';
+import { clickDetail, doneView } from './form/views.js';
 import { connectSender, createSender } from './form/sender.js';
 import { createChrome } from './ui/chrome.js';
 import { createEntryScreen } from './ui/entry-screen.js';
@@ -97,15 +97,10 @@ function App() {
   };
 
   // Cada clic a WhatsApp o correu es notifica (l'enllaç segueix el seu camí); `from` diu de quina pantalla ve.
-  // A la confirmació, el formulari ja s'ha buidat: els productes i la ciutat són els del rebut.
-  const contactClick = (from) => (button) => {
-    const source = from === 'done' && receipt ? receipt : values;
-    emit('tsf:contact-click')({
-      id: newLeadId(), visit: visit.current, button, from, lang, origin: resolveOrigin(search),
-      products: source.products.join(','), city: clip(source.city, MAX.city),
-      info: clickInfo({ nav: navigator, win: window, doc: document, startedAt, now: Date.now() }),
-    });
-  };
+  const contactClick = (from) => (button) => emit('tsf:contact-click')(clickDetail({
+    from, button, values, receipt, visit: visit.current, lang, origin: resolveOrigin(search), id: newLeadId(),
+    info: clickInfo({ nav: navigator, win: window, doc: document, startedAt, now: Date.now() }),
+  }));
 
   const screens = {
     entry: () => h(EntryScreen, {
@@ -119,11 +114,10 @@ function App() {
     }),
     done: () => {
       const links = contactLinks(CONFIG, t, receipt ? sessionOf(receipt) : {});
-      const docs = dossier ? dossiersFor(receipt?.products ?? [], lang, CONFIG, t.form.doneCardGeneral) : [];
-      // Sense cap PDF aplicable (p. ex. «asesoramiento») la confirmació no parla de cap descàrrega.
+      const view = doneView({ receipt, lang, dossier, config: CONFIG });
       return h(DoneScreen, {
-        t: docs.length ? t : dictFor(lang, false), emailDelivery: dossier && CONFIG.emailDelivery, onHome: goHome,
-        whatsappHref: links.whatsapp, emailHref: links.email, docs, onDownloadAll: () => downloadAll(docs), onContactClick: contactClick('done'),
+        ...view, onHome: goHome, whatsappHref: links.whatsapp, emailHref: links.email,
+        onDownloadAll: () => downloadAll(view.docs), onContactClick: contactClick('done'),
       });
     },
   };
