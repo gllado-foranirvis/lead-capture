@@ -30,9 +30,13 @@ test('el nom llarg es retalla sense trencar un emoji', () => {
 });
 test('submitForm: errors o lead', () => {
   assert.ok(submitForm(emptyForm(), ctx).errors.name);
-  assert.equal(submitForm({ ...values, email: '' }, ctx).errors.email, 'required');
+  assert.equal(submitForm({ ...values, email: '', phone: '' }, ctx).errors.email, 'either');
   assert.equal(submitForm(values, ctx).lead.contact.id, 'id-1');
 });
 test('newLeadId dona identificadors diferents', () => {
   assert.notEqual(newLeadId(), newLeadId());
+});
+test('sense telèfon, phone és buit; sense correu, email és buit', () => {
+  assert.equal(buildLead({ ...values, phone: '' }, ctx).contact.phone, '');
+  assert.equal(buildLead({ ...values, email: '' }, ctx).contact.email, '');
 });

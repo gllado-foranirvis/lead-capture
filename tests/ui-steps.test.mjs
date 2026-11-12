@@ -4,6 +4,9 @@ import { h, T, byType, byName, findAll, textOf } from './helpers/fake-react.mjs'
 import { DICT } from '../site/js/i18n.js';
 import { CONFIG } from '../site/js/config.js';
 import { emptyForm } from '../site/js/form/model.js';
+
+// Els tests de format del telèfon parteixen del prefix espanyol; el prefix per defecte real (+351) es prova a form-model.
+const spanishForm = (extra = {}) => ({ ...emptyForm(), phonePrefix: '+34', ...extra });
 import { icon } from '../site/js/icons.js';
 import { FIELD_HINTS } from '../site/js/form/hints.js';
 import { createStepIndicator } from '../site/js/ui/step-indicator.js';
@@ -22,10 +25,10 @@ const bar = (tree) => findAll(tree, (n) => n.props?.role === 'progressbar')[0];
 
 const entry = (extra = {}) => EntryScreen({
   t: DICT.es, fair: CONFIG.fair, links: { whatsapp: 'wa', email: 'mail' }, email: CONFIG.email, products: CONFIG.products, askProduct: true,
-  values: emptyForm(), onChange: noop, onToggle: noop, onContactClick: noop, legalQuery: '?lang=es', ...extra,
+  values: spanishForm(), onChange: noop, onToggle: noop, onContactClick: noop, legalQuery: '?lang=es', ...extra,
 });
 const contact = (extra = {}) => StepContact({
-  t: DICT.es, products: CONFIG.products, askProduct: true, downloads: [], values: emptyForm(), errors: {}, onChange: noop, onToggle: noop, onSubmit: noop, onBack: noop,
+  t: DICT.es, products: CONFIG.products, askProduct: true, downloads: [], values: spanishForm(), errors: {}, onChange: noop, onToggle: noop, onSubmit: noop, onBack: noop,
   privacyHref: 'privacy.html?lang=es#privacy', ...extra,
 });
 
@@ -46,7 +49,7 @@ test('inici amb Extra 1: el nom de la fira dins de l\'escena, sense cap pregunta
 });
 test('inici: els productes són caselles de marcatge múltiple (com al pas de dades), marcades segons values.products', () => {
   const calls = [];
-  const tree = entry({ onOpenForm: noop, values: { ...emptyForm(), products: ['sifly', 'tko'] }, onToggle: (...a) => calls.push(a) });
+  const tree = entry({ onOpenForm: noop, values: { ...spanishForm(), products: ['sifly', 'tko'] }, onToggle: (...a) => calls.push(a) });
   const [group] = byType(tree, 'T.CheckboxGroup');
   assert.deepEqual([group.props.legend, group.props.name], [f.productLegend, 'products']);
   assert.deepEqual(group.props.options.map((o) => o.value), [...CONFIG.products.map((p) => p.id), 'asesoramiento']);
@@ -162,9 +165,9 @@ test('pas 1: el telèfon s\'agrupa mentre s\'escriu segons el prefix, i en canvi
   const calls = [];
   const onChange = (field, v) => calls.push([field, v]);
   byName(contact({ onChange }), 'phone')[0].props.onChange({ target: { value: '666666666', selectionStart: 9 } });
-  byName(contact({ onChange, values: { ...emptyForm(), phonePrefix: '+351' } }), 'phone')[0].props.onChange({ target: { value: '912345678', selectionStart: 9 } });
-  byName(contact({ onChange, values: { ...emptyForm(), phone: '912 34 56 78' } }), 'phonePrefix')[0].props.onChange({ target: { value: '+351' } });
-  byName(contact({ onChange, values: { ...emptyForm(), phone: '123456789' } }), 'phonePrefix')[0].props.onChange({ target: { value: '+1' } });
+  byName(contact({ onChange, values: { ...spanishForm(), phonePrefix: '+351' } }), 'phone')[0].props.onChange({ target: { value: '912345678', selectionStart: 9 } });
+  byName(contact({ onChange, values: { ...spanishForm(), phone: '912 34 56 78' } }), 'phonePrefix')[0].props.onChange({ target: { value: '+351' } });
+  byName(contact({ onChange, values: { ...spanishForm(), phone: '123456789' } }), 'phonePrefix')[0].props.onChange({ target: { value: '+1' } });
   assert.deepEqual(calls, [['phone', '666 66 66 66'], ['phone', '912 345 678'], ['phonePrefix', '+351'], ['phone', '912 345 678'], ['phonePrefix', '+1']]);
 });
 
@@ -184,7 +187,7 @@ test('pas 1: teclejar de més al telèfon queda tallat a les xifres permeses', (
   assert.deepEqual(calls, [['phone', '111 11 11 111111']]);
 });
 test('pas 1: el marcador del número segueix el prefix i el prefix porta suggeriments', () => {
-  const placeholder = (values, t = DICT.es) => byName(contact({ t, values: { ...emptyForm(), ...values } }), 'phone')[0].props.placeholder;
+  const placeholder = (values, t = DICT.es) => byName(contact({ t, values: { ...spanishForm(), ...values } }), 'phone')[0].props.placeholder;
   assert.equal(placeholder({}), '600 00 00 00');
   assert.equal(placeholder({}, DICT.pt), '600 00 00 00', 'amb +34 el marcador no depèn de l\'idioma');
   assert.equal(placeholder({ phonePrefix: '+351' }, DICT.en), '912 345 678');

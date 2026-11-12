@@ -42,8 +42,8 @@ test('enviament final sense id previ en crea un', () => {
 });
 test('enviament final amb errors: es queda al pas 1 sense emetre cap lead', () => {
   const { calls, deps } = harness();
-  assert.equal(handleSubmit({ ...contact, email: '' }, deps), false);
-  assert.deepEqual(call(calls, 'setErrors')[1], { email: 'required' });
+  assert.equal(handleSubmit({ ...contact, name: '' }, deps), false);
+  assert.deepEqual(call(calls, 'setErrors')[1], { name: 'required' });
   assert.deepEqual(call(calls, 'goTo'), ['goTo', 'step1']);
   assert.deepEqual(names(calls).filter((n) => n === 'emitLead' || n === 'bumpAttempt'), ['bumpAttempt']);
 });

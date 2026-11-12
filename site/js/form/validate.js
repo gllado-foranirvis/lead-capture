@@ -16,17 +16,20 @@ function phoneError(prefix, number) {
   return NUMBER_CHARS.test(number) && n >= PHONE_DIGITS.min && n <= PHONE_DIGITS.max ? undefined : 'phone';
 }
 
-// Contacte i consentiment.
+// Contacte i consentiment: nom obligatori; cal almenys un de correu o telèfon (un sol error «either», al correu).
 export function validateContact(values) {
   const errors = {};
   if (!text(values, 'name')) errors.name = 'required';
   const email = text(values, 'email');
-  if (!email) errors.email = 'required';
-  else if (!EMAIL.test(email)) errors.email = 'email';
-  const prefix = text(values, 'phonePrefix').replace(/\s/g, '');
-  if (!PREFIX.test(prefix)) errors.phonePrefix = 'prefix';
-  const phone = phoneError(prefix, text(values, 'phone'));
-  if (phone) errors.phone = phone;
+  const number = text(values, 'phone');
+  if (!email && !number) errors.email = 'either';
+  else if (email && !EMAIL.test(email)) errors.email = 'email';
+  if (number) {
+    const prefix = text(values, 'phonePrefix').replace(/\s/g, '');
+    if (!PREFIX.test(prefix)) errors.phonePrefix = 'prefix';
+    const phone = phoneError(prefix, number);
+    if (phone) errors.phone = phone;
+  }
   if (values.privacy !== true) errors.privacy = 'privacy';
   return errors;
 }

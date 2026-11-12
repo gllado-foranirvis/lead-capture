@@ -4,7 +4,7 @@ import { ADVICE, DEFAULT_PREFIX, MAX, fullPhone, clip, emptyForm, formReducer } 
 
 test('formulari buit: productes, ciutat, contacte i consentiments nets', () => {
   assert.deepEqual(emptyForm(), {
-    products: [], city: '', name: '', email: '', phonePrefix: '+34', phone: '', privacy: false, newsletter: false,
+    products: [], city: '', name: '', email: '', phonePrefix: '+351', phone: '', privacy: false, newsletter: false,
   });
 });
 test('emptyForm accepta els models inicials', () => {
@@ -50,11 +50,11 @@ test('clip retalla i no trenca un emoji', () => {
   assert.doesNotMatch(cut, /[\ud800-\udbff](?![\udc00-\udfff])/);
 });
 
-test('el prefix per defecte és +34 i es restableix en reiniciar', () => {
-  assert.equal(DEFAULT_PREFIX, '+34');
-  const dirty = formReducer(emptyForm(), { type: 'set', field: 'phonePrefix', value: '+351' });
-  assert.equal(dirty.phonePrefix, '+351');
-  assert.equal(formReducer(dirty, { type: 'reset', initial: {} }).phonePrefix, '+34');
+test('el prefix per defecte és +351 i es restableix en reiniciar', () => {
+  assert.equal(DEFAULT_PREFIX, '+351');
+  const dirty = formReducer(emptyForm(), { type: 'set', field: 'phonePrefix', value: '+34' });
+  assert.equal(dirty.phonePrefix, '+34');
+  assert.equal(formReducer(dirty, { type: 'reset', initial: {} }).phonePrefix, '+351');
 });
 test('fullPhone uneix prefix i número amb «+» i un espai, tant si el prefix porta «+» com si no', () => {
   assert.equal(fullPhone({ phonePrefix: '+34', phone: ' 600 00 00 00 ' }), '+34 600 00 00 00');
@@ -63,3 +63,7 @@ test('fullPhone uneix prefix i número amb «+» i un espai, tant si el prefix p
   assert.ok(Array.from(fullPhone({ phonePrefix: '+34', phone: '6'.repeat(60) })).length <= 30);
 });
 
+
+test('fullPhone és buit si el número és buit', () => {
+  assert.equal(fullPhone({ phonePrefix: '+351', phone: '  ' }), '');
+});

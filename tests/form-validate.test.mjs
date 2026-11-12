@@ -4,9 +4,20 @@ import { FIELD_ORDER, clearError, firstErrorField, validateContact } from '../si
 
 const ok1 = { name: 'Ana', email: 'ana@example.com', phonePrefix: '+34', phone: '600 00 00 00', privacy: true };
 
-test('pas 1: nom, correu, telèfon i privacitat són obligatoris', () => {
-  assert.deepEqual(validateContact({}), { name: 'required', email: 'required', phonePrefix: 'prefix', phone: 'required', privacy: 'privacy' });
+test('nom i privacitat obligatoris; sense correu ni telèfon, un sol error «either» al correu', () => {
+  assert.deepEqual(validateContact({}), { name: 'required', email: 'either', privacy: 'privacy' });
   assert.deepEqual(validateContact(ok1), {});
+});
+test('només telèfon vàlid: sense errors; el prefix invàlid no es valida sense telèfon', () => {
+  const phoneOnly = { ...ok1, email: '', phonePrefix: '+351', phone: '912 345 678' };
+  assert.deepEqual(validateContact(phoneOnly), {});
+  assert.deepEqual(validateContact({ ...ok1, phone: '', phonePrefix: 'abc' }), {});
+});
+test('només correu vàlid: sense errors', () => {
+  assert.deepEqual(validateContact({ ...ok1, phone: '' }), {});
+});
+test('telèfon omplert amb prefix invàlid: error de prefix', () => {
+  assert.equal(validateContact({ ...ok1, phonePrefix: 'abc' }).phonePrefix, 'prefix');
 });
 test('correu: formes vàlides', () => {
   for (const email of ['ana@example.com', 'a@sub.example.co.uk', ' ana@example.com '])
@@ -31,7 +42,7 @@ test('la privacitat només val si és exactament true', () => {
 });
 test('FIELD_ORDER segueix el formulari i validateContact només en dona errors', () => {
   assert.deepEqual(FIELD_ORDER, ['name', 'email', 'phonePrefix', 'phone', 'privacy']);
-  assert.deepEqual(Object.keys(validateContact({})).sort(), [...FIELD_ORDER].sort());
+  assert.deepEqual(Object.keys(validateContact({})).sort(), ['email', 'name', 'privacy']);
   assert.equal(Object.hasOwn(validateContact({}), 'profile'), false);
 });
 test('firstErrorField segueix l\'ordre del flux; clearError treu un sol camp', () => {
