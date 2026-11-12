@@ -17,7 +17,7 @@ El visitant escaneja el QR a l'estand, dempeus, amb una mà i poc temps. Segons 
 4. **Perfilació (step2), tal com era abans.** Es recuperen les preguntes de l'antic pas 2, que vaig treure per error de la versió de la fira: Quem és (particular/profissional, **l'únic obligatori**), embarcació actual, embarcació elèctrica, entusiasme, preocupacions, intenció de compra, factors decisius, comentaris. **La pregunta de localitat per a la demostració surt** (la ciutat ja es demana a l'inici). El codi original és a l'historial de git abans del commit `0debb6a` (`step-profile.js`, `chips.js`, `FIELD_ORDER`, `emptyForm`, `session.js`, `lead.js`, `payload.js`, `flow.js`).
 4b. **Es pot saltar la perfilació (decisió d'Olga).** Un cop deixades les dades de contacte (step1), el pas 2 ofereix «Saltar i descarregar» al costat d'«Enviar». Saltar porta directe a la confirmació amb els PDF. «Quem és» només és obligatori si el visitant envia el formulari de perfilació, no si el salta. *(Decisió del redactor: en saltar es desa `stage: 'complete'` amb el perfil buit, perquè el full distingeixi «va saltar» de «no va arribar»; ho distingeix també la columna de perfil buida.)*
 5. **Lead.** Es **desa en acabar step1** (`stage: 'step1'`, el servidor ja l'accepta) i es **completa en acabar step2** (`stage: 'complete'`, upsert per `id`). Així un abandonament al perfil no perd el contacte.
-6. **Mesura al full, no GA4.** La pestanya `Clics` registra, a més dels clics de WhatsApp/e-mail, dos esdeveniments nous: **lead enviat** (en acabar step1) i **descàrrega del PDF** (clic al botó de la confirmació). Cada fila amb producte, ciutat, dispositiu, `visit`, origen del botó (inici o confirmació), etc., com ara. Cap cookie nova.
+6. **Mesura al full, no GA4 (sense «esdeveniments» de tercers).** La pestanya `Clics` ja registra els clics de WhatsApp/e-mail. S'hi afegeix **només la descàrrega del PDF**: una fila per cada PDF baixat a la confirmació, amb producte, ciutat, dispositiu i `visit`, com la resta. El «lead enviat» **no** es duplica a `Clics`: ja és a la pestanya de leads amb la seva etapa (`step1` / `complete`). Qui deixa dades i qui baixa el PDF es compara creuant les dues pestanyes. Cap cookie nova.
 7. **Ja fet (no es repeteix).** `autocomplete`, `inputmode` i `type` correctes als camps (`site/js/form/hints.js`); la imatge d'inici ja és `.webp` (66 KB mòbil, 149 KB escriptori); els enllaços de WhatsApp i e-mail ja porten producte i ciutat.
 
 ## Millores de la crítica d'Impeccable (22/32; Olga: tot integrat a aquest spec)
@@ -29,7 +29,7 @@ El visitant escaneja el QR a l'estand, dempeus, amb una mà i poc temps. Segons 
 - **Fora d'abast per decisió d'Olga:** cap.
 
 ## Decisions preses pel redactor (Olga les pot revertir)
-- **Esdeveniments a `Clics`.** Es mantenen les columnes existents (les files velles no es mouen). El camp `button` accepta també `lead` i `download`; `from` accepta `step1` per al lead. Un lead és **anònim**: no porta l'`id` del lead. Una descàrrega = **una fila per cada PDF descarregat** (un clic a «descarregar tots» en genera tantes com PDF).
+- **Esdeveniments a `Clics`.** Es mantenen les columnes existents (les files velles no es mouen). El camp `button` accepta també `download` (el lead no s'hi duplica). Una descàrrega = **una fila per cada PDF descarregat** (un clic a «descarregar tots» en genera tantes com PDF).
 - **Només «asesoramiento» o cap producte.** La tira, el títol i el botó es queden igual; la confirmació continua amb el text «gràcies, ja tenim les teves dades» i sense PDF (regla de l'spec de la fira).
 - **Servidor.** `sanitizeLead` passa d'exigir tots dos a exigir **almenys un** de telèfon/e-mail, amb comprovació de format del que hi sigui; el `complete` accepta el mateix. El servidor s'ha de redesplegar **abans** de publicar el frontend.
 
@@ -42,5 +42,5 @@ El visitant escaneja el QR a l'estand, dempeus, amb una mà i poc temps. Segons 
 Textos exactes de la tira de passos, del títol i de la dreçera en 4 idiomes; com es veu la tira a step2 i a la confirmació; si l'èxit del step1 canvia l'indicador; com es documenten els dos esdeveniments nous als textos de privacitat/cookies (només en llistar dades reals ja existents, sense reformulacions legals).
 
 ## Riscos que cal vigilar
-- Retornar el pas 2 amb 9 preguntes baixa la conversió: és una decisió d'Olga, però s'ha de mesurar amb la nova mesura (lead enviat vs lead complet vs descàrrega).
+- Retornar el pas 2 amb 9 preguntes baixa la conversió: és una decisió d'Olga, però s'ha de mesurar creuant leads (`step1` vs `complete`) amb les descàrregues de `Clics`.
 - El comptatge de visites per `visit` en memòria no distingeix persones.
