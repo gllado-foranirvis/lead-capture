@@ -140,3 +140,10 @@ test('inici amb recompensa: títol, botó, nota de l\'idioma i dreçera, sense �
     assert.doesNotMatch(f.entryCta, /Silent Fleet/, l);
   }
 });
+test('els plegables tenen recompte de preguntes ({n}), acció de canviar i resum de producte buit', () => {
+  for (const l of CONFIG.languages) {
+    const f = DICT[l].form;
+    assert.match(f.moreCount, /\{n\}/, l);
+    for (const key of ['change', 'chooseProduct']) assert.ok(typeof f[key] === 'string' && f[key].trim(), `${l}.${key}`);
+  }
+});

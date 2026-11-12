@@ -5,6 +5,8 @@ export const ENTHUSIASM = ['sustainability', 'noise', 'maintenance', 'costs', 'r
 export const CONCERNS = ['range', 'charging', 'price', 'infrastructure', 'depreciation', 'other'];
 export const FACTORS = ['price', 'range', 'maker', 'design', 'warranty', 'support', 'other'];
 export const OPINION_GROUPS = { enthusiasm: ENTHUSIASM, concerns: CONCERNS, factors: FACTORS };
+// Preguntes opcionals del pas 2 (el resum plegable en diu el recompte).
+export const OPTIONAL_QUESTIONS = ['hasBoat', 'hasElectric', 'enthusiasm', 'concerns', 'intent', 'factors', 'comments'];
 export const ADVICE = 'asesoramiento';
 export const MAX = { name: 100, email: 254, phone: 30, city: 80, activityOther: 120, other: 120, comments: 500 };
 export const DEFAULT_PREFIX = '+351';

@@ -57,7 +57,7 @@ test('app.js: recorregut entry → step1 → step2 → done, lead parcial i fina
   const { readFileSync } = await import('node:fs');
   const app = readFileSync('site/js/app.js', 'utf8');
   for (const gone of ['profileOptions', 'onProfile', 'onClearProfile']) assert.doesNotMatch(app, new RegExp(gone), gone);
-  for (const present of ['advanceStep1', 'handleSkip', 'handleSubmit', 'StepProfile', "step2: () =>", "tsf:lead-partial", "tsf:lead'", 'tsf:saved', 'notifySaved', "button: 'download'", 'onlyEnglishPdfs']) assert.match(app, new RegExp(present.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), present);
+  for (const present of ['advanceStep1', 'handleSkip', 'handleSubmit', 'StepProfile', "step2: () =>", "tsf:lead-partial", "tsf:lead'", 'tsf:saved', 'notifySaved', "button: 'download'", 'onlyEnglishPdfs', 'productsOpen']) assert.match(app, new RegExp(present.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), present);
   assert.match(app, /tsf:contact-click/);
   assert.match(app, /fair: CONFIG\.fair/);
   assert.match(app, /doneView\(/, 'la confirmació es calcula amb la funció pura de views.js');

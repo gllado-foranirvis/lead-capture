@@ -50,6 +50,7 @@ function App() {
   const [attempt, setAttempt] = R.useState(0);
   const [leadId, setLeadId] = R.useState('');
   const [receipt, setReceipt] = R.useState(null);
+  const [productsOpen, setProductsOpen] = R.useState(true); // el bloc de producte del pas de dades surt obert només si no s'ha triat res a l'inici
   const [saved, setSaved] = R.useState(false); // el servidor ha confirmat el lead parcial (mostra «dades guardades»)
   const leadIdRef = R.useRef('');
   leadIdRef.current = leadId;
@@ -127,10 +128,10 @@ function App() {
     entry: () => h(EntryScreen, {
       t, fair: CONFIG.fair, links: contactLinks(CONFIG, t, sessionOf(values)), email: CONFIG.email, legalQuery: query,
       products: CONFIG.products, askProduct: dossier, pdfNote: onlyEnglishPdfs(CONFIG, lang), values, onChange: change, onToggle: toggle, onContactClick: contactClick('entry'),
-      onOpenForm: extra1 ? () => setView('step1') : undefined,
+      onOpenForm: extra1 ? () => { setProductsOpen(values.products.length === 0); setView('step1'); } : undefined,
     }),
     step1: () => h(StepContact, {
-      t, lang, products: CONFIG.products, askProduct: dossier, downloads: plannedDocs({ products: values.products, lang, config: CONFIG, full: t }).map((d) => d.meta), saved, values, errors, onChange: change, onToggle: toggle, onSubmit: next,
+      t, lang, products: CONFIG.products, askProduct: dossier, downloads: plannedDocs({ products: values.products, lang, config: CONFIG, full: t }).map((d) => d.meta), saved, productsOpen, values, errors, onChange: change, onToggle: toggle, onSubmit: next,
       onKeyDown: (e) => advanceOnEnter(e, document), onBack: () => leaveToEntry({ ...common, dispatch }), privacyHref: `privacy.html${query}#privacy`,
     }),
     step2: () => h(StepProfile, {

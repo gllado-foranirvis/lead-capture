@@ -346,8 +346,10 @@ test('pas 2: «Quem és» va primer i és l\'únic obligatori; la resta de pregu
   assert.equal(first.props.legend, `${f.profileLegend} *`);
   const more = findAll(tree, (n) => n.type === 'details');
   assert.equal(more.length, 1);
-  assert.equal(more[0].props.open, undefined, 'plegat per defecte');
-  assert.ok(textOf(findAll(more[0], (n) => n.type === 'summary')[0]).includes(f.moreGroup));
+  assert.notEqual(more[0].props.open, true, 'plegat per defecte');
+  const summary = textOf(findAll(more[0], (n) => n.type === 'summary')[0]);
+  assert.ok(summary.includes(f.moreGroup));
+  assert.ok(summary.includes(f.moreCount.replace('{n}', '7')), 'el resum diu quantes preguntes hi ha');
   const inside = findAll(more[0], (n) => n.props?.name).map((n) => n.props.name);
   assert.deepEqual(inside, ['hasBoat', 'hasElectric', 'enthusiasm', 'concerns', 'intent', 'factors', 'comments']);
   assert.equal(byName(tree, 'demo').length + byName(tree, 'products').length, 0, 'ni localitat de demostració ni productes');
@@ -380,4 +382,24 @@ test('pas 2: «dados guardados» només quan el lead ja s\'ha desat', () => {
   const saved = findAll(profileScreen({ saved: true }), (n) => n.props?.className?.includes('form__saved'));
   assert.equal(saved.length, 1);
   assert.equal(saved[0].props['aria-live'], 'polite');
+});
+
+test('pas 1: el producte és un plegable: tancat i amb la tria al resum si ja n\'hi ha, obert si no; la línia de descàrrega queda fora', () => {
+  const closed = contact({ values: emptyForm({ products: ['tko', 'sifly'] }), productsOpen: false });
+  const [fold] = findAll(closed, (n) => n.type === 'details');
+  assert.notEqual(fold.props.open, true);
+  const summary = textOf(findAll(fold, (n) => n.type === 'summary')[0]);
+  assert.ok(summary.includes(f.productLegend) && summary.includes('Sifly, TKO') && summary.includes(f.change), summary);
+  assert.equal(byName(fold, 'products').length, 1, 'les caselles són dins del plegable');
+  const note = findAll(closed, (n) => n.props?.className?.includes('form__download'));
+  assert.equal(note.length, 1);
+  assert.equal(findAll(fold, (n) => n.props?.className?.includes('form__download')).length, 0, 'la promesa sempre visible, fora del plegable');
+  const open = contact({ values: emptyForm({ products: [] }), productsOpen: true });
+  const [openFold] = findAll(open, (n) => n.type === 'details');
+  assert.equal(openFold.props.open, true);
+  assert.ok(textOf(findAll(openFold, (n) => n.type === 'summary')[0]).includes(f.chooseProduct));
+});
+test('pas 1: amb «asesoramiento» el resum diu l\'assessorament', () => {
+  const tree = contact({ values: emptyForm({ products: ['asesoramiento'] }), productsOpen: false });
+  assert.ok(textOf(findAll(tree, (n) => n.type === 'summary')[0]).includes(f.productAdvice));
 });

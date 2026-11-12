@@ -121,10 +121,17 @@ test('page.css (inici): marges compactes sobre una base de 8px: 8 dins d\'un gru
 test('page.css: el nom de la fira de l\'escena té estil propi', () => {
   assert.match(page, /\.stage__fair\s*\{/);
 });
-test('page.css: el grup plegable del pas 2 té resum tàctil de 44 px i anell de focus', () => {
-  assert.match(page, /\.form__more-summary\s*\{[^}]*min-height:\s*2\.75rem/);
-  assert.match(page, /\.form__more-summary:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--focus\)/);
+test('page.css: el plegable és una fila-control tàctil (44 px, vora, focus) amb xurma que gira només si es permet el moviment', () => {
+  assert.match(page, /\.fold__summary\s*\{[^}]*min-height:\s*2\.75rem/);
+  assert.match(page, /\.fold__summary\s*\{[^}]*border:\s*1px solid var\(--border-strong\)/);
+  assert.match(page, /\.fold__summary\s*\{[^}]*list-style:\s*none/);
+  assert.match(page, /\.fold__summary::-webkit-details-marker\s*\{[^}]*display:\s*none/);
+  assert.match(page, /\.fold__summary:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--focus\)/);
+  assert.match(page, /\.fold\[open\] > \.fold__summary \.fold__chevron\s*\{[^}]*rotate\(180deg\)/);
+  const motion = page.match(/@media \(prefers-reduced-motion: no-preference\)\s*\{[\s\S]*?\n\}/)[0];
+  assert.match(motion, /\.fold__chevron\s*\{[^}]*transition:\s*transform 180ms ease-out/);
 });
+
 test('page.css: el prefix del telèfon es col·lapsa fins que el número té el focus, sense treure\'l de la navegació', () => {
   const rule = page.match(/\.form__phone:not\(:focus-within\)[^{]*\{[^}]*\}/)?.[0] ?? '';
   assert.ok(rule, 'regla de col·lapse');

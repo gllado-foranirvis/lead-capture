@@ -1,11 +1,13 @@
 // site/js/ui/step-profile.js — pas 2: perfilació («Quem és» obligatori només si s'envia; es pot saltar)
-import { ACTIVITIES, CONCERNS, ENTHUSIASM, FACTORS, PROFILES, showsActivity, showsActivityOther } from '../form/model.js';
+import { ACTIVITIES, CONCERNS, ENTHUSIASM, FACTORS, OPTIONAL_QUESTIONS, PROFILES, showsActivity, showsActivityOther } from '../form/model.js';
 import { stepText } from '../form/steps.js';
 import { makeFields } from './fields.js';
 import { createStepIndicator } from './step-indicator.js';
+import { createFold } from './fold.js';
 
 export function createStepProfile({ h, T }) {
   const StepIndicator = createStepIndicator({ h });
+  const Fold = createFold({ h });
   return function StepProfile({ t, values, errors, saved = false, onChange, onToggle, onSubmit, onSkip, onBack, onKeyDown }) {
     const f = t.form;
     const { text, chips, select, checks } = makeFields({ h, T, f, values, errors, onChange, onToggle });
@@ -28,16 +30,17 @@ export function createStepProfile({ h, T }) {
           showsActivity(values) ? select('activity', f.activity, [{ value: '', label: f.activityNone }, ...ACTIVITIES.map((a) => ({ value: a, label: f.activities[a] }))], { placeholder: f.activityPlaceholder }) : null,
           showsActivityOther(values) ? text('activityOther', f.activityOther, { placeholder: f.activityOtherPlaceholder }) : null),
         // La resta de preguntes són opcionals: plegades, perquè el visitant vegi el camí curt (enviar o saltar) sense desplaçar-se.
-        h('details', { className: 'form__more' },
-          h('summary', { className: 'form__more-summary' }, f.moreGroup),
-          h('div', { className: 'form__group' },
+        Fold({
+          title: f.moreGroup, hint: f.moreCount.replace('{n}', String(OPTIONAL_QUESTIONS.length)),
+          children: h('div', { className: 'form__group' },
             chips('hasBoat', f.hasBoat, yesNo),
             chips('hasElectric', f.hasElectric, yesNo),
             ...opinion('enthusiasm', ENTHUSIASM),
             ...opinion('concerns', CONCERNS),
             chips('intent', f.intent, yesNo),
             ...opinion('factors', FACTORS),
-            text('comments', f.comments, { multiline: true, placeholder: f.commentsPlaceholder }))),
+            text('comments', f.comments, { multiline: true, placeholder: f.commentsPlaceholder })),
+        }),
         h('div', { className: 'form__actions' },
           h(T.Button, { type: 'submit', full: true }, f.submit),
           h(T.Button, { full: true, variant: 'outline', onClick: onSkip }, f.skipLabel),

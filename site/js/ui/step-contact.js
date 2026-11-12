@@ -4,10 +4,15 @@ import { formatPhone, keepCaret, phoneExample, prefixSuggestions, splitInternati
 import { stepText } from '../form/steps.js';
 import { makeFields } from './fields.js';
 import { createStepIndicator } from './step-indicator.js';
+import { createFold } from './fold.js';
+
+// Noms dels productes triats (o el de l'assessorament) per al resum del plegable.
+const productSummary = (ids, products, f) => [...products.filter((p) => ids.includes(p.id)).map((p) => p.name), ...(ids.includes(ADVICE) ? [f.productAdvice] : [])].join(', ');
 
 export function createStepContact({ h, T }) {
   const StepIndicator = createStepIndicator({ h });
-  return function StepContact({ t, lang = 'es', products, askProduct = true, downloads = [], saved = false, values, errors, onChange, onToggle, onSubmit, onBack, onKeyDown, privacyHref }) {
+  const Fold = createFold({ h });
+  return function StepContact({ t, lang = 'es', products, askProduct = true, downloads = [], productsOpen = true, saved = false, values, errors, onChange, onToggle, onSubmit, onBack, onKeyDown, privacyHref }) {
     const f = t.form;
     const { text, checks } = makeFields({ h, T, f, values, errors, onChange, onToggle });
     const productOptions = [...products.map((p) => ({ value: p.id, label: p.name })), { value: ADVICE, label: f.productAdvice }];
@@ -46,11 +51,16 @@ export function createStepContact({ h, T }) {
             text('phonePrefix', f.phonePrefix, { type: 'tel', onChange: onPrefix }),
             h('datalist', { id: 'phone-prefixes' }, prefixSuggestions(lang).map((o) => h('option', { key: o.value, value: o.value, label: o.label }))),
             text('phone', `${f.phone} ${f.eitherTag}`, { type: 'tel', placeholder: phoneExample(values.phonePrefix, f.phonePlaceholder), onChange: onPhone })),
-          // El producte ja triat a l'inici surt marcat i es pot canviar.
-          askProduct ? h('div', { className: 'form__products' },
-            checks('products', f.productLegend, productOptions),
-            // Què es descarregarà amb la tria actual: la promesa es veu al lloc on es decideix.
-            h('p', { className: 'body-sm page__note form__download', 'aria-live': 'polite' }, downloads.length ? f.downloadList.replace('{list}', downloads.join(', ')) : f.downloadNone)) : null),
+          // El producte ja triat a l'inici surt plegat, amb la tria al resum, i es pot canviar; sense tria, surt obert.
+          askProduct ? [
+            Fold({
+              className: 'form__products', title: f.productLegend, open: productsOpen,
+              hint: productSummary(values.products, products, f) || f.chooseProduct, action: values.products.length ? f.change : undefined,
+              children: checks('products', f.productLegend, productOptions),
+            }),
+            // Què es descarregarà amb la tria actual: la promesa es veu sempre, també amb el bloc plegat.
+            h('p', { className: 'body-sm page__note form__download', 'aria-live': 'polite' }, downloads.length ? f.downloadList.replace('{list}', downloads.join(', ')) : f.downloadNone),
+          ] : null),
         h('div', { className: 'form__group' },
           h(T.Checkbox, { name: 'privacy', id: 'privacy', required: true, checked: values.privacy, error: error('privacy'), onChange: (e) => onChange('privacy', e.target.checked) },
             // Un sol element: l'etiqueta del Checkbox és flex i, amb tres fills, es perdria l'espai abans de l'enllaç.

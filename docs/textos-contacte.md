@@ -108,6 +108,9 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `stepNames.2` | Interesse | Interest | Interés | Interès |
 | `stepNames.3` | Dossier | Dossier | Dossier | Dossier |
 | `saved` | Dados guardados | Details saved | Datos guardados | Dades desades |
+| `moreCount` | {n} perguntas opcionais | {n} optional questions | {n} preguntas opcionales | {n} preguntes opcionals |
+| `change` | Alterar | Change | Cambiar | Canviar |
+| `chooseProduct` | Escolhe um produto | Choose a product | Elige un producto | Tria un producte |
 | `skipLabel` | Saltar e descarregar | Skip and download | Saltar y descargar | Saltar i descarregar |
 | `moreGroup` | Mais perguntas (opcional) | More questions (optional) | Más preguntas (opcional) | Més preguntes (opcional) |
 | `cityLabel` | De que cidade és? | Which city are you from? | ¿De qué ciudad eres? | De quina ciutat ets? |

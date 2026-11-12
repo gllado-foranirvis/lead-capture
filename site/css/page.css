@@ -66,11 +66,17 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 /* El prefix (+351) només es veu quan el número té el focus o ja té contingut: segueix a la navegació amb teclat i als lectors, i no canvia l'alçada. */
 .form__phone:not(:focus-within):has([name="phone"]:placeholder-shown) > :first-child { flex-basis: 0; overflow: hidden; margin-right: calc(var(--space-3) * -1); opacity: 0; }
 
-/* Pas 2: les preguntes opcionals van plegades; el resum és tàctil. */
-.form__more { border-top: 1px solid var(--border-strong); padding-top: var(--space-2); }
-.form__more-summary { display: flex; align-items: center; min-height: 2.75rem; cursor: pointer; color: var(--text-muted); }
-.form__more-summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-.form__more[open] > .form__more-summary { margin-bottom: var(--space-3); }
+/* Plegable: el resum és una fila-control (vora, 44 px, xurma) perquè es vegi que es pot tocar. */
+.fold__summary { display: flex; align-items: center; gap: var(--space-3); min-height: 2.75rem; padding: var(--space-2) var(--space-3); border: 1px solid var(--border-strong); border-radius: var(--radius-md); background: var(--surface-100); color: var(--ink); cursor: pointer; list-style: none; }
+.fold__summary::-webkit-details-marker { display: none; }
+.fold__summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.fold__text { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+.fold__title, .fold__hint { overflow-wrap: anywhere; }
+.fold__hint { color: var(--text-muted); }
+.fold__action { color: var(--action); }
+.fold__chevron { flex: none; color: var(--text-muted); }
+.fold[open] > .fold__summary .fold__chevron { transform: rotate(180deg); }
+.fold__body { padding-top: var(--space-3); }
 .form__saved { margin: 0; color: var(--success); }
 
 /* Pantalla de gràcies: marca d'èxit centrada i CTA al peu (com el wireframe «Gracias + PDF»). */
@@ -124,6 +130,7 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 @keyframes screen-in { from { opacity: 0; transform: translateY(var(--space-2)); } }
 @media (prefers-reduced-motion: no-preference) {
   .steps__seg { transition: background-color 200ms ease-out; }
+  .fold__chevron { transition: transform 180ms ease-out; }
   .page__screen { animation: screen-in 180ms ease-out; }
   /* La fotografia de l'inici no entra des del blanc: carrega ja a lloc. */
   .page__screen--entry { animation: none; }
