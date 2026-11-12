@@ -45,6 +45,11 @@ test('clickDetail: sense rebut a la confirmació cau als valors; la ciutat es re
   assert.equal(Array.from(clickDetail({ ...base, from: 'entry', values: { products: [], city: '😀'.repeat(100) } }).city).length, 80);
 });
 
+test('clickDetail: amb «product» (una descàrrega) els productes són només aquell id', () => {
+  const detail = clickDetail({ ...base, from: 'done', button: 'download', product: 'sifly', values: { products: [], city: '' }, receipt: { products: ['sifly', 'tko'], city: 'Lisboa' } });
+  assert.deepEqual([detail.products, detail.button, detail.city], ['sifly', 'download', 'Lisboa']);
+});
+
 test('plannedDocs: el que es descarregarà amb la tria actual (el mateix que després ofereix la confirmació)', () => {
   const names = (products, lang = 'pt') => plannedDocs({ products, lang, config, full: DICT[lang] }).map((d) => d.meta);
   assert.deepEqual(names(['tko', 'sifly']), ['Sifly', 'TKO']);

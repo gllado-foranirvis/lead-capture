@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { FETCH_TIMEOUT_MS, RETRY_MS, connectSender, createSender } from '../site/js/form/sender.js';
+import { FETCH_TIMEOUT_MS, RETRY_MS, connectSender, createSender, notifySaved } from '../site/js/form/sender.js';
 
 const partial = { id: 'id-0001', stage: 'step1', contact: { name: 'Ana' } };
 const complete = { id: 'id-0001', stage: 'complete', contact: { name: 'Ana' }, profiling: { hasBoat: 'si' } };
@@ -116,12 +116,13 @@ test('connectSender: els esdeveniments del flux s\'envien amb la forma correcta;
   const sent = [];
   const sender = { send: (p) => sent.push(p), flush: () => sent.push('flush'), beaconAll: () => sent.push('beacon') };
   connectSender(target, sender);
-  assert.equal(Object.hasOwn(listeners, 'tsf:lead-partial'), false);
   listeners['tsf:lead']({ detail: { contact: { id: 'id-0001', name: 'Ana' }, profiling: { id: 'id-0001' } } });
+  listeners['tsf:lead-partial']({ detail: { id: 'id-0002', stage: 'step1', name: 'Eva' } });
   listeners.online();
   listeners.pagehide();
   assert.deepEqual(sent, [
     { id: 'id-0001', stage: 'complete', contact: { name: 'Ana' }, profiling: {} },
+    { id: 'id-0002', stage: 'step1', contact: { name: 'Eva' } },
     'flush', 'beacon',
   ]);
 });
@@ -161,4 +162,18 @@ test('connectSender: quan la pestanya passa a segon pla es fa el darrer intent (
   doc.visibilityState = 'hidden';
   listeners.visibilitychange();
   assert.deepEqual(sent, ['beacon']);
+});
+test('onSent: només quan el servidor confirma, amb l\'id i l\'etapa; un fracàs no avisa', async () => {
+  const sentEvents = [];
+  const ok = harness([OK]);
+  await make(ok, { onSent: (e) => sentEvents.push(e) }).send(partial);
+  assert.deepEqual(sentEvents, [{ id: 'id-0001', stage: 'step1' }]);
+  const bad = harness([new TypeError('offline')]);
+  await make(bad, { onSent: (e) => sentEvents.push(e) }).send(complete);
+  assert.equal(sentEvents.length, 1);
+});
+test('notifySaved: converteix el desat confirmat en l\'esdeveniment «tsf:saved» amb l\'id i l\'etapa', () => {
+  const events = [];
+  notifySaved({ dispatchEvent: (e) => events.push([e.type, e.detail]) })({ id: 'id-0001', stage: 'step1' });
+  assert.deepEqual(events, [['tsf:saved', { id: 'id-0001', stage: 'step1' }]]);
 });
