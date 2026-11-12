@@ -30,8 +30,10 @@ test('versió sense dossier: interruptor per config i per ?dossier=0', () => {
 test('versió sense dossier: cap literal de l\'usuari parla de dossier ni de descàrrega, en tots els idiomes', () => {
   for (const l of CONFIG.languages) {
     const f = dictFor(l, false).form;
-    for (const key of ['entryTitle', 'entryCta', 'entrySubtitle', 'step1Subtitle', 'skipLabel', 'submit', 'doneTitle', 'doneText', 'doneTextMail', 'privacyText'])
+    for (const key of ['entryTitle', 'entryCta', 'entrySubtitle', 'step1Subtitle', 'step2Subtitle', 'skipLabel', 'submit', 'doneTitle', 'doneText', 'doneTextMail', 'privacyText'])
       assert.doesNotMatch(f[key], DOSSIER_WORD, `${l}.${key}`);
+    assert.doesNotMatch(f.stepNames.join(' '), DOSSIER_WORD, `${l}.stepNames`);
+    assert.equal(f.stepNames.length, 4, l);
     assert.notEqual(f.privacyText, DICT[l].form.privacyText, l);
     assert.equal(dictFor(l, true), DICT[l], l);
   }

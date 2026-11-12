@@ -32,6 +32,8 @@ var BUTTONS = ['whatsapp', 'email', 'download'];
 var CLICK_FROM = ['entry', 'done'];
 var DEVICES = ['mobile', 'tablet', 'desktop'];
 var SYSTEMS = ['ios', 'android', 'other'];
+// El web envia el telèfon com «+prefix número»; qualsevol altra forma (p. ex. una fórmula) es rebutja.
+var PHONE_FORMAT = /^\+\d{1,3} [\d\s().-]{4,}$/;
 var ID_FORMAT = /^[A-Za-z0-9-]{8,64}$/;
 // Un o diversos ids de producte separats per comes (fins a 10); si el format no és vàlid, queda buit.
 var PRODUCTS_FORMAT = /^[a-z0-9-]{1,40}(,[a-z0-9-]{1,40}){0,9}$/;
@@ -60,7 +62,7 @@ function sanitizeLead(payload) {
   var email = clip(c.email, MAX.email).toLowerCase();
   var phone = clip(c.phone, MAX.phone);
   // Cal almenys un de telèfon o correu; el que hi sigui, ha de ser vàlid.
-  if (!name || (!phone && !email) || (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email))) return null;
+  if (!name || (!phone && !email) || (phone && !PHONE_FORMAT.test(phone)) || (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email))) return null;
   if (c.privacy !== true) return null;
   if (LANGS.indexOf(c.lang) === -1 || ORIGINS.indexOf(c.origin) === -1) return null;
   var lead = {

