@@ -1,26 +1,8 @@
-import { buildPartialLead, submitForm } from './lead.js';
+import { submitForm } from './lead.js';
 import { resolveOrigin, resolveProducts } from './context.js';
-import { STEP_FIELDS, firstErrorField, validateStep1 } from './validate.js';
-
-// Pas 1: els errors es veuen abans de seguir. El contacte (ja amb consentiment) es desa com a lead parcial amb un id que
-// es conserva si el visitant torna enrere i avança de nou.
-export function advanceStep1(values, { search, lang, leadId, newId, setLeadId, setErrors, bumpAttempt, emitPartial, goTo }) {
-  const errors = validateStep1(values);
-  if (Object.keys(errors).length) {
-    setErrors(errors);
-    bumpAttempt();
-    return false;
-  }
-  const id = leadId || newId();
-  setLeadId(id);
-  setErrors({});
-  emitPartial(buildPartialLead(values, { id, lang, origin: resolveOrigin(search) }));
-  goTo('step2');
-  return true;
-}
 
 // Un enviament vàlid deixa el formulari net per al següent visitant de la tauleta; la confirmació conserva
-// només el que necessita (receipt): el WhatsApp, el correu i els dossiers dels models triats.
+// només el que necessita (receipt): el WhatsApp, el correu i els dossiers dels productes triats.
 export function handleSubmit(values, {
   products, search, lang, leadId, newId, dispatch, setErrors, setLeadId, setReceipt, bumpAttempt, emitLead, goTo,
 }) {
@@ -28,16 +10,11 @@ export function handleSubmit(values, {
   if (result.errors) {
     setErrors(result.errors);
     bumpAttempt();
-    goTo(STEP_FIELDS[1].includes(firstErrorField(result.errors)) ? 'step1' : 'step2');
+    goTo('step1');
     return false;
   }
   emitLead(result.lead);
-  setReceipt({
-    products: values.products, profile: values.profile, activity: values.activity, activityOther: values.activityOther,
-    hasBoat: values.hasBoat, hasElectric: values.hasElectric, intent: values.intent, demo: values.demo, name: values.name,
-    enthusiasm: values.enthusiasm, enthusiasmOther: values.enthusiasmOther, concerns: values.concerns, concernsOther: values.concernsOther,
-    factors: values.factors, factorsOther: values.factorsOther, comments: values.comments,
-  });
+  setReceipt({ products: values.products, name: values.name, city: values.city });
   dispatch({ type: 'reset', initial: { products: resolveProducts(search, products) } });
   setErrors({});
   setLeadId('');

@@ -1,4 +1,4 @@
-import { finalPayload, partialPayload } from './payload.js';
+import { finalPayload } from './payload.js';
 
 // Espera entre reintents (ms); després de l'últim valor es manté.
 export const RETRY_MS = [2000, 5000, 15000, 30000, 60000];
@@ -73,7 +73,6 @@ export function createSender({
 
 // Connecta el sender amb els esdeveniments públics del flux i amb l'estat de la xarxa i de la pàgina.
 export function connectSender(target, sender, doc) {
-  target.addEventListener('tsf:lead-partial', (e) => sender.send(partialPayload(e.detail)));
   target.addEventListener('tsf:lead', (e) => sender.send(finalPayload(e.detail)));
   target.addEventListener('online', () => sender.flush());
   target.addEventListener('pagehide', () => sender.beaconAll());

@@ -1,7 +1,5 @@
-import { PROFILES } from './model.js';
-
-export const STEP_FIELDS = { 1: ['name', 'email', 'phonePrefix', 'phone', 'privacy'], 2: ['profile'] };
-export const FIELD_ORDER = [...STEP_FIELDS[1], ...STEP_FIELDS[2]];
+// Camps validats, en l'ordre del formulari.
+export const FIELD_ORDER = ['name', 'email', 'phonePrefix', 'phone', 'privacy'];
 
 const EMAIL = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[^\s@.]{2,}$/;
 const PREFIX = /^\+?\d{1,3}$/;
@@ -18,8 +16,8 @@ function phoneError(prefix, number) {
   return NUMBER_CHARS.test(number) && n >= PHONE_DIGITS.min && n <= PHONE_DIGITS.max ? undefined : 'phone';
 }
 
-// Pas 1: contacte i consentiment.
-export function validateStep1(values) {
+// Contacte i consentiment.
+export function validateContact(values) {
   const errors = {};
   if (!text(values, 'name')) errors.name = 'required';
   const email = text(values, 'email');
@@ -32,13 +30,6 @@ export function validateStep1(values) {
   if (values.privacy !== true) errors.privacy = 'privacy';
   return errors;
 }
-
-// Pas 2: només el perfil és obligatori; la resta de la perfilació és opcional.
-export function validateStep2(values) {
-  return PROFILES.includes(values.profile) ? {} : { profile: 'profileRequired' };
-}
-
-export const validateContact = (values) => ({ ...validateStep1(values), ...validateStep2(values) });
 
 export const firstErrorField = (errors) => FIELD_ORDER.find((field) => errors[field]);
 

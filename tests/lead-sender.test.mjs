@@ -116,13 +116,12 @@ test('connectSender: els esdeveniments del flux s\'envien amb la forma correcta;
   const sent = [];
   const sender = { send: (p) => sent.push(p), flush: () => sent.push('flush'), beaconAll: () => sent.push('beacon') };
   connectSender(target, sender);
-  listeners['tsf:lead-partial']({ detail: { id: 'id-0001', stage: 'step1', name: 'Ana' } });
-  listeners['tsf:lead']({ detail: { contact: { id: 'id-0001', name: 'Ana' }, profiling: { id: 'id-0001', hasBoat: 'si' }, hasProfiling: true } });
+  assert.equal(Object.hasOwn(listeners, 'tsf:lead-partial'), false);
+  listeners['tsf:lead']({ detail: { contact: { id: 'id-0001', name: 'Ana' } } });
   listeners.online();
   listeners.pagehide();
   assert.deepEqual(sent, [
-    { id: 'id-0001', stage: 'step1', contact: { name: 'Ana' } },
-    { id: 'id-0001', stage: 'complete', contact: { name: 'Ana' }, profiling: { hasBoat: 'si' } },
+    { id: 'id-0001', stage: 'complete', contact: { name: 'Ana' } },
     'flush', 'beacon',
   ]);
 });
