@@ -46,7 +46,7 @@ test('el document es diu «dossier»: cap «ficha» ni «PDF» als literals visi
   }
 });
 test('CTA d\'entrada i botó final', () => {
-  const cta = { es: 'Quiero saber más de The Silent Fleet', ca: 'Vull saber més de The Silent Fleet', pt: 'Quero saber mais sobre a The Silent Fleet', en: 'I want to learn more about The Silent Fleet' };
+  const cta = { es: 'Descargar dossier →', ca: 'Descarregar dossier →', pt: 'Descarregar dossier →', en: 'Download dossier →' };
   const submit = { es: 'Acceder al dossier', ca: 'Accedir al dossier', pt: 'Aceder ao dossier', en: 'Get the dossier' };
   for (const l of CONFIG.languages) assert.deepEqual([DICT[l].form.entryCta, DICT[l].form.submit], [cta[l], submit[l]], l);
 });
@@ -128,5 +128,13 @@ test('el pas 1 té ajuda, etiqueta «un dels dos», botó de continuar i 4 noms 
     for (const key of ['step1Hint', 'eitherTag', 'next', 'saved']) assert.ok(typeof f[key] === 'string' && f[key].trim(), `${l}.${key}`);
     assert.equal(f.stepNames.length, 4, l);
     assert.doesNotMatch(f.stepNames.join(' '), /PDF/i, l);
+  }
+});
+test('inici amb recompensa: títol, botó, nota de l\'idioma i dreçera, sense «PDF» ni «barco» als textos', () => {
+  for (const l of CONFIG.languages) {
+    const f = DICT[l].form;
+    for (const key of ['entryTitle', 'entrySubtitle', 'entryCta', 'entryPdfNote', 'entryContactLabel', 'shortWhatsapp', 'shortEmail']) assert.ok(typeof f[key] === 'string' && f[key].trim(), `${l}.${key}`);
+    assert.doesNotMatch(f.entryTitle + f.entrySubtitle + f.entryCta + f.entryPdfNote, /PDF|barco|barc[oa]|boat/i, l);
+    assert.doesNotMatch(f.entryCta, /Silent Fleet/, l);
   }
 });

@@ -2,7 +2,7 @@ import { ADVICE } from '../form/model.js';
 import { makeFields } from './fields.js';
 
 export function createEntryScreen({ h, T, icon }) {
-  return function EntryScreen({ t, fair, links, email, products, askProduct, values, onChange, onToggle, onContactClick, legalQuery, onOpenForm }) {
+  return function EntryScreen({ t, fair, links, email, products, askProduct, pdfNote = false, values, onChange, onToggle, onContactClick, legalQuery, onOpenForm }) {
     const withForm = typeof onOpenForm === 'function';
     const f = t.form;
     const { text, checks } = makeFields({ h, T, f, values, errors: {}, onChange, onToggle });
@@ -18,15 +18,16 @@ export function createEntryScreen({ h, T, icon }) {
         // Els productes i la ciutat només es pregunten amb el flux de captació; viatgen al formulari i als missatges.
         withForm && askProduct ? h('div', { className: 'form__products' }, checks('products', f.productLegend, productOptions)) : null,
         withForm ? text('city', f.cityLabel, { placeholder: f.cityPlaceholder }) : null,
-        // L'etiqueta i els botons de contacte són un sol grup (8px entre ells; 16px entre grups).
+        // El botó principal (descarregar el dossier) va abans de la dreçera de contacte: qui no vol perdre temps la té just a sota.
+        withForm ? h(T.Button, { full: true, className: 'page__cta', onClick: onOpenForm }, f.entryCta) : null,
+        withForm && askProduct && pdfNote ? h('p', { className: 'body-sm page__note page__pdfnote' }, f.entryPdfNote) : null,
+        // L'etiqueta i els botons de contacte són un sol grup (8px entre ells; 16px entre grups). Amb el flux de captació, en una fila de dos.
         h('div', { className: 'page__group' },
           h(T.SectionLabel, null, withForm ? f.entryContactLabel : t.contactLabel),
-          h('div', { className: 'page__stack' },
-            h(T.Button, { full: true, variant: withForm ? 'outline' : undefined, href: links.whatsapp, onClick: () => onContactClick('whatsapp') }, icon(h, 'whatsapp'), withForm ? f.entryWhatsapp : t.whatsapp),
-            h(T.Button, { full: true, variant: 'outline', href: links.email, onClick: () => onContactClick('email') }, icon(h, 'mail'), withForm ? f.entryEmail : t.emailLabel),
-            h('p', { className: 'body-sm page__note' }, t.contactHint))),
-        // El CTA principal va després dels contactes; la línia de recuperació (l'adreça), just darrere, abans dels enllaços legals.
-        withForm ? h(T.Button, { full: true, className: 'page__cta', onClick: onOpenForm }, f.entryCta) : null,
+          h('div', { className: withForm ? 'page__row' : 'page__stack' },
+            h(T.Button, { full: true, variant: withForm ? 'outline' : undefined, href: links.whatsapp, onClick: () => onContactClick('whatsapp') }, icon(h, 'whatsapp'), withForm ? f.shortWhatsapp : t.whatsapp),
+            h(T.Button, { full: true, variant: 'outline', href: links.email, onClick: () => onContactClick('email') }, icon(h, 'mail'), withForm ? f.shortEmail : t.emailLabel)),
+          h('p', { className: 'body-sm page__note' }, t.contactHint)),
         h('p', { className: 'body-sm page__note' }, `${t.contactFallback} `, h('span', { className: 'page__address' }, email)),
         h(T.LegalLinks, {
           label: t.legalNav,

@@ -26,12 +26,15 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 
 | Clau | PT | EN | ES | CA |
 |---|---|---|---|---|
-| `entryTitle` | Falemos de propulsão elétrica | Let's talk about electric propulsion | Hablemos de propulsión eléctrica | Parlem de propulsió elèctrica |
-| `entrySubtitle` | Escolhe os produtos, deixa os dados e descarrega logo o dossier. | Choose products, leave your details and download the dossier right away. | Elige tus productos, deja tus datos y descarga el dossier al instante. | Tria els productes, deixa les dades i descarrega el dossier al moment. |
-| `entryCta` | Quero saber mais sobre a The Silent Fleet | I want to learn more about The Silent Fleet | Quiero saber más de The Silent Fleet | Vull saber més de The Silent Fleet |
-| `entryContactLabel` | Ou escreve-nos diretamente | Or write to us directly | O escríbenos directamente | O escriu-nos directament |
+| `entryTitle` | Descobre o mar em silêncio | Discover the sea in silence | Descubre el mar en silencio | Descobreix el mar en silenci |
+| `entrySubtitle` | Escolhe o teu produto e descarrega já o dossier. | Pick your product and download the dossier right away. | Elige tu producto y descarga el dossier al instante. | Tria el teu producte i descarrega el dossier al moment. |
+| `entryCta` | Descarregar dossier → | Download dossier → | Descargar dossier → | Descarregar dossier → |
+| `entryPdfNote` | Dossier em inglês | Dossier in English | Dossier en inglés | Dossier en anglès |
+| `entryContactLabel` | Prefiro falar já | I would rather talk now | Prefiero hablar ya | Prefereixo parlar ara |
 | `entryWhatsapp` | Escrever por WhatsApp | Message us on WhatsApp | Escribir por WhatsApp | Escriure per WhatsApp |
 | `entryEmail` | Escrever por e-mail | Email us | Escribir por correo | Escriure per correu |
+| `shortWhatsapp` | WhatsApp | WhatsApp | WhatsApp | WhatsApp |
+| `shortEmail` | E-mail | E-mail | Correo | Correu |
 | `stepOf` | Passo {n} de {total} | Step {n} of {total} | Paso {n} de {total} | Pas {n} de {total} |
 | `requiredNote` | * Campo obrigatório | * Required field | * Campo obligatorio | * Camp obligatori |
 | `step1Title` | Deixa-nos os teus dados | Leave us your details | Déjanos tus datos | Deixa'ns les teves dades |
