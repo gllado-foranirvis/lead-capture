@@ -25,7 +25,7 @@ const entry = (extra = {}) => EntryScreen({
   values: emptyForm(), onChange: noop, onToggle: noop, onContactClick: noop, legalQuery: '?lang=es', ...extra,
 });
 const contact = (extra = {}) => StepContact({
-  t: DICT.es, products: CONFIG.products, askProduct: true, values: emptyForm(), errors: {}, onChange: noop, onToggle: noop, onSubmit: noop, onBack: noop,
+  t: DICT.es, products: CONFIG.products, askProduct: true, downloads: [], values: emptyForm(), errors: {}, onChange: noop, onToggle: noop, onSubmit: noop, onBack: noop,
   privacyHref: 'privacy.html?lang=es#privacy', ...extra,
 });
 
@@ -116,6 +116,14 @@ test('pas 1: els productes són les mateixes caselles multi-tria, marcades segon
   const names = findAll(tree, (n) => ['T.Field', 'T.CheckboxGroup', 'T.Checkbox'].includes(n.type)).map((n) => n.props.name);
   assert.deepEqual(names, ['name', 'email', 'phonePrefix', 'phone', 'products', 'privacy', 'newsletter']);
   assert.equal(byName(contact({ askProduct: false }), 'products').length, 0);
+});
+test('pas 1: sota els productes, una línia viva diu què es descarregarà o què cal triar per descarregar', () => {
+  const note = (downloads, extra = {}) => findAll(contact({ downloads, ...extra }), (n) => n.props?.className === 'body-sm page__note form__download')[0];
+  const some = note(['Sifly', 'TKO']);
+  assert.equal(textOf(some), f.downloadList.replace('{list}', 'Sifly, TKO'));
+  assert.equal(some.props['aria-live'], 'polite', 'el canvi s\'anuncia als lectors de pantalla');
+  assert.equal(textOf(note([])), f.downloadNone);
+  assert.equal(note([], { askProduct: false }), undefined, 'sense dossier no es parla de cap descàrrega');
 });
 test('pas 1: privacitat sense marcar amb enllaç a pestanya nova, text d\'un sol element; novetats opcional', () => {
   const tree = contact();

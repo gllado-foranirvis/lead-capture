@@ -104,3 +104,14 @@ test('el text de cookies enumera tot el que es desa a cada clic i avisa que es p
     assert.doesNotMatch(text, /anónim|anònim|anonym|herramientas de medici|ferramentas de medi|eines de mesura|measurement tools/i, l);
   }
 });
+test('la promesa de descàrrega: l\'inici i la pàgina de dades la diuen, i la línia viva té llista i buit', () => {
+  const promise = { es: /descarga/i, ca: /descarrega/i, pt: /descarrega/i, en: /download/i };
+  for (const l of CONFIG.languages) {
+    const f = DICT[l].form;
+    assert.match(f.entrySubtitle, promise[l], `${l}.entrySubtitle`);
+    assert.match(f.step1Subtitle, promise[l], `${l}.step1Subtitle`);
+    assert.match(f.downloadList, /\{list\}/, l);
+    assert.ok(f.downloadNone.trim(), l);
+    assert.doesNotMatch(f.downloadList + f.downloadNone + f.entrySubtitle + f.step1Subtitle, /PDF|\bfich?[ae]\b/i, l);
+  }
+});

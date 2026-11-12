@@ -7,7 +7,7 @@ import { createStepIndicator } from './step-indicator.js';
 
 export function createStepContact({ h, T }) {
   const StepIndicator = createStepIndicator({ h });
-  return function StepContact({ t, lang = 'es', products, askProduct = true, values, errors, onChange, onToggle, onSubmit, onBack, onKeyDown, privacyHref }) {
+  return function StepContact({ t, lang = 'es', products, askProduct = true, downloads = [], values, errors, onChange, onToggle, onSubmit, onBack, onKeyDown, privacyHref }) {
     const f = t.form;
     const { text, checks } = makeFields({ h, T, f, values, errors, onChange, onToggle });
     const productOptions = [...products.map((p) => ({ value: p.id, label: p.name })), { value: ADVICE, label: f.productAdvice }];
@@ -46,7 +46,10 @@ export function createStepContact({ h, T }) {
             h('datalist', { id: 'phone-prefixes' }, prefixSuggestions(lang).map((o) => h('option', { key: o.value, value: o.value, label: o.label }))),
             text('phone', f.phone, { required: true, type: 'tel', placeholder: phoneExample(values.phonePrefix, f.phonePlaceholder), onChange: onPhone })),
           // El producte ja triat a l'inici surt marcat i es pot canviar.
-          askProduct ? h('div', { className: 'form__products' }, checks('products', f.productLegend, productOptions)) : null),
+          askProduct ? h('div', { className: 'form__products' },
+            checks('products', f.productLegend, productOptions),
+            // Què es descarregarà amb la tria actual: la promesa es veu al lloc on es decideix.
+            h('p', { className: 'body-sm page__note form__download', 'aria-live': 'polite' }, downloads.length ? f.downloadList.replace('{list}', downloads.join(', ')) : f.downloadNone)) : null),
         h('div', { className: 'form__group' },
           h(T.Checkbox, { name: 'privacy', id: 'privacy', required: true, checked: values.privacy, error: error('privacy'), onChange: (e) => onChange('privacy', e.target.checked) },
             // Un sol element: l'etiqueta del Checkbox és flex i, amb tres fills, es perdria l'espai abans de l'enllaç.

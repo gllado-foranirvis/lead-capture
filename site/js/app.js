@@ -13,7 +13,7 @@ import { downloadAll } from './form/download-all.js';
 import { focusFirstError, focusStepHeading } from './form/focus.js';
 import { advanceOnEnter, applyFieldHints } from './form/hints.js';
 import { clickInfo } from './form/click-info.js';
-import { clickDetail, doneView } from './form/views.js';
+import { clickDetail, doneView, plannedDocs } from './form/views.js';
 import { connectSender, createSender } from './form/sender.js';
 import { createChrome } from './ui/chrome.js';
 import { createEntryScreen } from './ui/entry-screen.js';
@@ -109,7 +109,7 @@ function App() {
       onOpenForm: extra1 ? () => setView('step1') : undefined,
     }),
     step1: () => h(StepContact, {
-      t, lang, products: CONFIG.products, askProduct: dossier, values, errors, onChange: change, onToggle: toggle, onSubmit: submit,
+      t, lang, products: CONFIG.products, askProduct: dossier, downloads: plannedDocs({ products: values.products, lang, config: CONFIG, full: t }).map((d) => d.meta), values, errors, onChange: change, onToggle: toggle, onSubmit: submit,
       onKeyDown: (e) => advanceOnEnter(e, document), onBack: () => leaveToEntry({ ...common, dispatch }), privacyHref: `privacy.html${query}#privacy`,
     }),
     done: () => {

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { CONFIG } from '../site/js/config.js';
 import { DICT, dictFor } from '../site/js/i18n.js';
-import { clickDetail, doneView } from '../site/js/form/views.js';
+import { clickDetail, doneView, plannedDocs } from '../site/js/form/views.js';
 
 const config = { ...CONFIG, emailDelivery: true };
 const view = (products, extra = {}) => doneView({ receipt: { products }, lang: 'pt', dossier: true, config, ...extra });
@@ -43,4 +43,12 @@ test('clickDetail: a l\'inici usa els valors del formulari; a la confirmació, e
 test('clickDetail: sense rebut a la confirmació cau als valors; la ciutat es retalla a 80', () => {
   assert.equal(clickDetail({ ...base, from: 'done', values: { products: ['tko'], city: '' }, receipt: null }).products, 'tko');
   assert.equal(Array.from(clickDetail({ ...base, from: 'entry', values: { products: [], city: '😀'.repeat(100) } }).city).length, 80);
+});
+
+test('plannedDocs: el que es descarregarà amb la tria actual (el mateix que després ofereix la confirmació)', () => {
+  const names = (products, lang = 'pt') => plannedDocs({ products, lang, config, full: DICT[lang] }).map((d) => d.meta);
+  assert.deepEqual(names(['tko', 'sifly']), ['Sifly', 'TKO']);
+  assert.deepEqual(names(['asesoramiento']), []);
+  assert.deepEqual(names([]), []);
+  assert.deepEqual(plannedDocs({ products: ['sifly'], lang: 'pt', config, full: DICT.pt }), doneView({ receipt: { products: ['sifly'] }, lang: 'pt', dossier: true, config }).docs);
 });

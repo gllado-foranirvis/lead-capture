@@ -27,7 +27,7 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | Clau | PT | EN | ES | CA |
 |---|---|---|---|---|
 | `entryTitle` | Falemos de propulsão elétrica | Let's talk about electric propulsion | Hablemos de propulsión eléctrica | Parlem de propulsió elèctrica |
-| `entrySubtitle` | Diz-nos o que te interessa e enviamos-te o dossier. | Tell us what you are interested in and we will send you the dossier. | Cuéntanos qué te interesa y te enviamos el dossier. | Explica'ns què t'interessa i t'enviem el dossier. |
+| `entrySubtitle` | Escolhe os produtos, deixa os dados e descarrega logo o dossier. | Choose products, leave your details and download the dossier right away. | Elige tus productos, deja tus datos y descarga el dossier al instante. | Tria els productes, deixa les dades i descarrega el dossier al moment. |
 | `entryCta` | Quero saber mais sobre a The Silent Fleet | I want to learn more about The Silent Fleet | Quiero saber más de The Silent Fleet | Vull saber més de The Silent Fleet |
 | `entryContactLabel` | Ou escreve-nos diretamente | Or write to us directly | O escríbenos directamente | O escriu-nos directament |
 | `entryWhatsapp` | Escrever por WhatsApp | Message us on WhatsApp | Escribir por WhatsApp | Escriure per WhatsApp |
@@ -35,7 +35,7 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `stepOf` | Passo {n} de {total} | Step {n} of {total} | Paso {n} de {total} | Pas {n} de {total} |
 | `requiredNote` | * Campo obrigatório | * Required field | * Campo obligatorio | * Camp obligatori |
 | `step1Title` | Deixa-nos os teus dados | Leave us your details | Déjanos tus datos | Deixa'ns les teves dades |
-| `step1Subtitle` | Assim poderemos enviar-te o dossier e entrar em contacto contigo. | So we can send you the dossier and get in touch. | Así podremos enviarte el dossier y ponernos en contacto contigo. | Així podrem enviar-te el dossier i posar-nos en contacte amb tu. |
+| `step1Subtitle` | Deixa-nos os teus dados e descarrega logo o dossier de cada produto escolhido. | Leave your details and download the dossier of each product you chose right away. | Déjanos tus datos y descarga al momento el dossier de cada producto elegido. | Deixa'ns les teves dades i descarrega al moment el dossier de cada producte triat. |
 | `name` | Nome | Name | Nombre | Nom |
 | `email` | E-mail | Email | Correo electrónico | Correu electrònic |
 | `phone` | Telefone | Phone | Teléfono | Telèfon |
@@ -50,6 +50,8 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `cityPlaceholder` | Lisboa | Lisbon | Lisboa | Lisboa |
 | `productLegend` | Que produto te interessa? | Which product are you interested in? | ¿Qué producto te interesa? | Quin producte t'interessa? |
 | `productAdvice` | Ainda não sei / Procuro aconselhamento | Not sure yet / I need advice | No lo sé aún / Busco asesoramiento | Encara no ho sé / Busco assessorament |
+| `downloadList` | Vais descarregar: {list} | You will download: {list} | Se descargará: {list} | Es descarregarà: {list} |
+| `downloadNone` | Escolhe um produto para descarregar o respetivo dossier. | Choose a product to download its dossier. | Elige un producto para descargar el dossier correspondiente. | Tria un producte per descarregar el seu dossier. |
 | `submit` | Aceder ao dossier | Get the dossier | Acceder al dossier | Accedir al dossier |
 | `errors.required` | Preenche este campo | Fill in this field | Completa este campo | Omple aquest camp |
 | `errors.email` | Introduz um e-mail válido | Enter a valid email | Introduce un correo válido | Introdueix un correu vàlid |
