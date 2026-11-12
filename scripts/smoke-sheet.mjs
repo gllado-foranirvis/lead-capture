@@ -3,7 +3,7 @@ const [url, token = ''] = process.argv.slice(2);
 if (!url) { console.error('Ús: node scripts/smoke-sheet.mjs <url /exec> [token]'); process.exit(1); }
 
 const id = `smoke-${Date.now()}`;
-const contact = { name: '=HYPERLINK("http://example.com","prova")', email: 'prova@example.com', phone: '+34 600 00 00 00', privacy: true, newsletter: false, lang: 'es', origin: 'mobil', profile: 'profesional' };
+const contact = { name: '=HYPERLINK("http://example.com","prova")', email: 'prova@example.com', phone: '+34 666 33 66 00', privacy: true, newsletter: false, lang: 'es', origin: 'mobil', profile: 'profesional' };
 const send = async (label, payload) => {
   const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(token ? { ...payload, token } : payload) });
   console.log(label, response.status, await response.text());
