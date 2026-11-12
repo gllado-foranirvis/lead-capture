@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { clickPayload, finalPayload } from '../site/js/form/payload.js';
+import { clickPayload, finalPayload, partialPayload } from '../site/js/form/payload.js';
 
 const final = {
+  profiling: { id: 'id-1', profile: 'particular', comments: 'hola' },
   contact: { id: 'id-1', product: 'sifly,tko', city: 'Lisboa', name: 'Ana', email: 'ana@example.com', phone: '+34 600 00 00 00', privacy: true, newsletter: false, lang: 'pt', origin: 'mobil' },
 };
 
@@ -12,7 +13,7 @@ test('el final: id i etapa a dalt, contacte sense id repetit', () => {
   assert.equal(Object.hasOwn(p.contact, 'id'), false);
   assert.equal(p.contact.product, 'sifly,tko');
   assert.equal(p.contact.city, 'Lisboa');
-  assert.equal(Object.hasOwn(p, 'profiling'), false);
+  assert.deepEqual(p.profiling, { profile: 'particular', comments: 'hola' });
 });
 test('no es modifica l\'objecte original', () => {
   finalPayload(final);
@@ -24,4 +25,10 @@ test('el clic: id i etapa a dalt, la resta (visita, botó, lloc, idioma, origen,
     id: 'c1', stage: 'click',
     click: { visit: 'v1', button: 'whatsapp', from: 'entry', lang: 'pt', origin: 'mobil', products: 'sifly,tko', city: 'Lisboa', device: 'mobile', os: 'ios', seconds: 12 },
   });
+});
+test('el parcial: id i etapa step1 a dalt, contacte sense id ni etapa repetits', () => {
+  const p = partialPayload({ ...final.contact, stage: 'step1' });
+  assert.deepEqual([p.id, p.stage], ['id-1', 'step1']);
+  assert.deepEqual(Object.keys(p.contact).includes('id') || Object.keys(p.contact).includes('stage'), false);
+  assert.equal(p.contact.city, 'Lisboa');
 });

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { FIELD_ORDER, clearError, firstErrorField, validateContact } from '../site/js/form/validate.js';
+import { FIELD_ORDER, clearError, firstErrorField, validateContact, validateProfile } from '../site/js/form/validate.js';
 
 const ok1 = { name: 'Ana', email: 'ana@example.com', phonePrefix: '+34', phone: '600 00 00 00', privacy: true };
 
@@ -41,7 +41,7 @@ test('la privacitat només val si és exactament true', () => {
   assert.equal(validateContact({ ...ok1, privacy: 'true' }).privacy, 'privacy');
 });
 test('FIELD_ORDER segueix el formulari i validateContact només en dona errors', () => {
-  assert.deepEqual(FIELD_ORDER, ['name', 'email', 'phonePrefix', 'phone', 'privacy']);
+  assert.deepEqual(FIELD_ORDER, ['name', 'email', 'phonePrefix', 'phone', 'privacy', 'profile']);
   assert.deepEqual(Object.keys(validateContact({})).sort(), ['email', 'name', 'privacy']);
   assert.equal(Object.hasOwn(validateContact({}), 'profile'), false);
 });
@@ -49,4 +49,10 @@ test('firstErrorField segueix l\'ordre del flux; clearError treu un sol camp', (
   assert.equal(firstErrorField({ phone: 'phone', email: 'email' }), 'email');
   assert.equal(firstErrorField({}), undefined);
   assert.deepEqual(clearError({ email: 'x', name: 'y' }, 'email'), { name: 'y' });
+});
+test('perfilació: només el perfil és obligatori', () => {
+  assert.deepEqual(validateProfile({}), { profile: 'profileRequired' });
+  assert.deepEqual(validateProfile({ profile: 'x' }), { profile: 'profileRequired' });
+  assert.deepEqual(validateProfile({ profile: 'particular' }), {});
+  assert.deepEqual(validateProfile({ profile: 'profesional' }), {});
 });

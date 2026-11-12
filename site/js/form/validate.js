@@ -1,5 +1,7 @@
+import { PROFILES } from './model.js';
+
 // Camps validats, en l'ordre del formulari.
-export const FIELD_ORDER = ['name', 'email', 'phonePrefix', 'phone', 'privacy'];
+export const FIELD_ORDER = ['name', 'email', 'phonePrefix', 'phone', 'privacy', 'profile'];
 
 const EMAIL = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[^\s@.]{2,}$/;
 const PREFIX = /^\+?\d{1,3}$/;
@@ -33,6 +35,9 @@ export function validateContact(values) {
   if (values.privacy !== true) errors.privacy = 'privacy';
   return errors;
 }
+
+// Perfilació: només el perfil és obligatori (i només si el visitant envia el pas 2; saltar-lo no el valida).
+export const validateProfile = (values) => (PROFILES.includes(values.profile) ? {} : { profile: 'profileRequired' });
 
 export const firstErrorField = (errors) => FIELD_ORDER.find((field) => errors[field]);
 
