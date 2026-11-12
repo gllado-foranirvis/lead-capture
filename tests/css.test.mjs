@@ -122,6 +122,6 @@ test('page.css: el nom de la fira de l\'escena té estil propi', () => {
   assert.match(page, /\.stage__fair\s*\{/);
 });
 test('page.css: el grup plegable del pas 2 té resum tàctil de 44 px i anell de focus', () => {
-  assert.match(page, /\.form__more-summary\s*\{[^}]*min-height:\s*var\(--space-9\)/);
+  assert.match(page, /\.form__more-summary\s*\{[^}]*min-height:\s*2\.75rem/);
   assert.match(page, /\.form__more-summary:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--focus\)/);
 });

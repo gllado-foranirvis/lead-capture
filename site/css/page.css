@@ -64,7 +64,7 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
 /* Pas 2: les preguntes opcionals van plegades; el resum és tàctil. */
 .form__more { border-top: 1px solid var(--border-strong); padding-top: var(--space-2); }
-.form__more-summary { display: flex; align-items: center; min-height: var(--space-9); cursor: pointer; color: var(--text-muted); }
+.form__more-summary { display: flex; align-items: center; min-height: 2.75rem; cursor: pointer; color: var(--text-muted); }
 .form__more-summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .form__more[open] > .form__more-summary { margin-bottom: var(--space-3); }
 .form__saved { margin: 0; color: var(--success); }
