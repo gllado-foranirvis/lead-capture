@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { caretFor, formatPhone, phoneExample, prefixSuggestions, splitInternational } from '../site/js/form/phone.js';
+import { MAX_PHONE_DIGITS, PHONE_MAX_LENGTH, PREFIX_MAX_LENGTH, caretFor, formatPhone, phoneExample, prefixSuggestions, splitInternational } from '../site/js/form/phone.js';
 
 test('+34: el número s\'agrupa com el marcador de posició («600 00 00 00»)', () => {
   assert.equal(formatPhone('+34', '666666666'), '666 66 66 66');
@@ -77,4 +77,26 @@ test('suggeriments de prefix: sense repetits, en l\'idioma de la pàgina i amb E
   assert.deepEqual(prefixSuggestions('en').find((o) => o.value === '+49'), { value: '+49', label: 'Germany (+49)' });
   assert.deepEqual(prefixSuggestions('pt').find((o) => o.value === '+351'), { value: '+351', label: 'Portugal (+351)' });
   assert.equal(prefixSuggestions('ca').find((o) => o.value === '+33').label, 'França (+33)');
+});
+
+const digitsOf = (s) => s.replace(/\D/g, '').length;
+test('el número té un màxim de xifres: 15 en total amb el prefix (E.164); de més no es deixen escriure', () => {
+  assert.equal(MAX_PHONE_DIGITS, 15);
+  assert.equal(digitsOf(formatPhone('+34', '1'.repeat(30))), 13);
+  assert.equal(digitsOf(formatPhone('+351', '1'.repeat(30))), 12);
+  assert.equal(digitsOf(formatPhone('+44', '1'.repeat(30))), 13);
+  assert.equal(digitsOf(formatPhone('+1', '1'.repeat(30))), 14);
+  assert.equal(digitsOf(formatPhone('34', '1'.repeat(30))), 13, 'el prefix sense «+» també compta');
+});
+test('el cas de la captura: «111 11 11 1111111111111111» queda tallat a les xifres permeses, sense perdre l\'agrupament', () => {
+  assert.equal(formatPhone('+34', '111 11 11 1111111111111111'), '111 11 11 111111');
+  assert.equal(formatPhone('+44', '1111111 11111111111'), '1111111 111111');
+});
+test('un número dins del límit no canvia, i amb altres caràcters no es toca (la validació avisa)', () => {
+  assert.equal(formatPhone('+34', '666666666'), '666 66 66 66');
+  assert.equal(formatPhone('+44', '7911 123456'), '7911 123456');
+  assert.equal(formatPhone('+34', '600+123456789012345678'), '600+123456789012345678');
+});
+test('els camps tenen una longitud màxima de text perquè un enganxat enorme tampoc hi càpiga', () => {
+  assert.deepEqual([PHONE_MAX_LENGTH, PREFIX_MAX_LENGTH], [20, 4]);
 });

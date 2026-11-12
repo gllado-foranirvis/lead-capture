@@ -1,48 +1,48 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { dossiersFor } from '../site/js/form/dossier.js';
+import { dossiersFor, onlyEnglishPdfs, pdfFor } from '../site/js/form/dossier.js';
 
 const config = {
-  dossierUrl: 'dossier-general.pdf', dossierFileName: 'tsf-dossier.pdf',
+  brandPdf: { en: 'g.en.pdf' },
   products: [
-    { id: 'a', name: 'Model a', dossierUrl: 'dossiers/a.pdf', dossierFileName: 'tsf-a.pdf' },
-    { id: 'b', name: 'Model b' },
-    { id: 'c', name: 'Model c', dossierUrl: '' },
-    { id: 'd', name: 'Model d', dossierUrl: 'dossiers/d.pdf', dossierFileName: 'tsf-d.pdf' },
-    { id: 'e', name: 'Model e', dossierUrl: 'dossiers/e.pdf' },
+    { id: 'a', name: 'A', pdf: { en: 'a.en.pdf', pt: 'a.pt.pdf' } },
+    { id: 'b', name: 'B', pdf: { en: 'b.en.pdf' } },
+    { id: 'c', name: 'C' },
   ],
 };
-const GENERAL = { href: 'dossier-general.pdf', file: 'tsf-dossier.pdf', meta: 'General' };
-const A = { href: 'dossiers/a.pdf', file: 'tsf-a.pdf', meta: 'Model a' };
-const D = { href: 'dossiers/d.pdf', file: 'tsf-d.pdf', meta: 'Model d' };
-const docs = (ids, cfg = config) => dossiersFor(ids, cfg, 'General');
+const docs = (ids, lang, cfg = config) => dossiersFor(ids, lang, cfg, 'G');
+const withoutBrand = { products: config.products };
 
-test('un model amb dossier propi ofereix només el seu', () => {
-  assert.deepEqual(docs(['a']), [A]);
+test('pdfFor: l\'idioma demanat, si no l\'anglès, si no res', () => {
+  assert.equal(pdfFor({ en: 'x.en.pdf', pt: 'x.pt.pdf' }, 'pt'), 'x.pt.pdf');
+  assert.equal(pdfFor({ en: 'x.en.pdf' }, 'pt'), 'x.en.pdf');
+  assert.equal(pdfFor({ pt: 'x.pt.pdf' }, 'es'), undefined);
+  assert.equal(pdfFor(undefined, 'pt'), undefined);
 });
-test('dos models amb dossier propi: un PDF per model, en l\'ordre de la config i no de la tria', () => {
-  assert.deepEqual(docs(['d', 'a']), [A, D]);
+test('un producte ofereix el seu PDF en l\'idioma del formulari', () => {
+  assert.deepEqual(docs(['a'], 'pt'), [{ id: 'a', href: 'a.pt.pdf', meta: 'A' }]);
 });
-test('un model amb dossier propi i un altre sense: el seu i el general', () => {
-  assert.deepEqual(docs(['a', 'b']), [A, GENERAL]);
+test('un idioma sense PDF propi cau a l\'anglès', () => {
+  assert.deepEqual(docs(['b'], 'pt'), [{ id: 'b', href: 'b.en.pdf', meta: 'B' }]);
 });
-test('diversos models sense dossier propi (o amb cadena buida): el general una sola vegada', () => {
-  assert.deepEqual(docs(['b', 'c']), [GENERAL]);
+test('un producte amb PDF i un sense: el seu i el general', () => {
+  assert.deepEqual(docs(['a', 'c'], 'es'), [{ id: 'a', href: 'a.en.pdf', meta: 'A' }, { id: 'brand', href: 'g.en.pdf', meta: 'G' }]);
 });
-test('sense model, amb «asesoramiento» o amb un id desconegut s\'ofereix el general', () => {
-  for (const ids of [[], ['asesoramiento'], ['model-antic']]) assert.deepEqual(docs(ids), [GENERAL], JSON.stringify(ids));
+test('«asesoramiento» o cap producte ofereix el general', () => {
+  assert.deepEqual(docs(['asesoramiento'], 'pt'), [{ id: 'brand', href: 'g.en.pdf', meta: 'G' }]);
+  assert.deepEqual(docs([], 'pt'), [{ id: 'brand', href: 'g.en.pdf', meta: 'G' }]);
 });
-test('un model amb dossier propi més «asesoramiento» o un id desconegut: el seu i el general', () => {
-  assert.deepEqual(docs(['a', 'asesoramiento']), [A, GENERAL]);
-  assert.deepEqual(docs(['a', 'inventat']), [A, GENERAL]);
+test('el general surt una sola vegada i en l\'ordre de la config, no el de la tria', () => {
+  assert.deepEqual(docs(['c', 'asesoramiento'], 'en'), [{ id: 'brand', href: 'g.en.pdf', meta: 'G' }]);
+  assert.deepEqual(docs(['b', 'a'], 'en').map((d) => d.meta), ['A', 'B']);
+  assert.equal(docs(['a', 'a'], 'en').length, 1);
 });
-test('un model amb dossier propi sense nom de fitxer no hereta el nom del general', () => {
-  assert.deepEqual(docs(['e']), [{ href: 'dossiers/e.pdf', file: '', meta: 'Model e' }]);
+test('sense PDF general no s\'ofereix res que no sigui d\'un producte', () => {
+  for (const ids of [['c'], ['asesoramiento'], []]) assert.deepEqual(docs(ids, 'pt', withoutBrand), [], JSON.stringify(ids));
+  assert.deepEqual(docs(['a', 'c'], 'en', withoutBrand), [{ id: 'a', href: 'a.en.pdf', meta: 'A' }]);
 });
-test('el general sense nom configurat es desa amb nom buit', () => {
-  assert.deepEqual(docs(['b'], { ...config, dossierFileName: undefined }), [{ href: 'dossier-general.pdf', file: '', meta: 'General' }]);
-});
-test('sense dossier general configurat, un model sense dossier propi no ofereix res', () => {
-  assert.deepEqual(docs(['b'], { ...config, dossierUrl: '' }), []);
-  assert.deepEqual(docs(['a', 'b'], { ...config, dossierUrl: '' }), [A]);
+test('onlyEnglishPdfs: cert si l\'idioma no és l\'anglès i cap producte té PDF en aquell idioma', () => {
+  assert.equal(onlyEnglishPdfs({ products: [{ id: 'x', pdf: { en: 'x.pdf' } }] }, 'pt'), true);
+  assert.equal(onlyEnglishPdfs({ products: [{ id: 'x', pdf: { en: 'x.pdf' } }] }, 'en'), false);
+  assert.equal(onlyEnglishPdfs({ products: [{ id: 'x', pdf: { en: 'x.pdf', pt: 'x.pt.pdf' } }] }, 'pt'), false);
 });

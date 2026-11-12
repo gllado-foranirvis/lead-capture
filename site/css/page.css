@@ -15,14 +15,9 @@ body { background: var(--surface-100); color: var(--ink); font-family: var(--fon
 .page__stack { display: flex; flex-direction: column; gap: var(--space-2); }
 .page__title { overflow-wrap: anywhere; }
 .tsf-btn svg { flex: none; }
-/* Amb text llarg el xip fa dues línies: el min-height de 44px les deixava enganxades a la vora,
-   i l'altre xip es quedava més baix. L'etiqueta omple l'alçada del xip perquè la fila sigui pareja. */
-.tsf-chip { display: flex; }
-.tsf-chip__label { flex: 1; padding-block: var(--space-2); }
-/* Amb tres o més xips la fila fa salt de línia en lloc de tallar l'últim. */
-.form .tsf-chips__row { flex-wrap: wrap; }
-.form .tsf-chip { flex: 1 1 40%; }
 /* El CTA principal tanca l'inici: separat del bloc de contacte. */
+.page__row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+.page__pdfnote { margin: 0; text-align: center; }
 .page__group { display: flex; flex-direction: column; gap: var(--space-2); }
 .page__cta { margin-top: var(--space-2); }
 .page__note { color: var(--text-muted); overflow-wrap: anywhere; }
@@ -46,12 +41,11 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .page__screen--form { flex: 1; gap: var(--space-2); }
 .form { display: flex; flex: 1; flex-direction: column; gap: var(--space-4); }
 .form__group { display: flex; flex-direction: column; gap: var(--space-3); }
-/* Mòbil compacte: la llegenda dels xips i les caselles de marcatge múltiple (2 columnes) ocupen menys alçada. */
-.tsf-chips__legend { margin-bottom: var(--space-1); }
-.form .tsf-group__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-3); }
+/* Els productes flueixen en línia segons l'amplada del seu nom (sense columnes fixes que tallin «Momentum» en mòbil). */
+.form__products .tsf-group__list { flex-direction: row; flex-wrap: wrap; column-gap: var(--space-4); }
 .form__error { color: var(--error); }
-/* Tria de models: els models van de dos en dos i l'opció llarga d'assessorament (l'última) ocupa tota la fila en lloc de partir-se en dues línies. */
-.form__products .tsf-group__list > :last-child { grid-column: 1 / -1; }
+/* Tria de productes: van de tres en tres i l'opció llarga d'assessorament (l'última) ocupa tota la fila en lloc de partir-se en dues línies. */
+.form__products .tsf-group__list > :last-child { flex-basis: 100%; }
 .form__actions { display: flex; flex-direction: column; gap: var(--space-2); margin-top: auto; padding-top: var(--space-4); }
 @media (min-width: 768px) {
   .page, .page__main, .page__screen { gap: var(--space-5); }
@@ -69,6 +63,27 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .form__phone { display: flex; gap: var(--space-3); align-items: flex-start; }
 .form__phone > :first-child { flex: 0 0 var(--space-9); min-width: 0; }
 .form__phone > :last-child { flex: 1; min-width: 0; }
+/* El prefix (+351) només es veu quan el número té el focus o ja té contingut: segueix a la navegació amb teclat i als lectors, i no canvia l'alçada. */
+.form__phone:not(:focus-within):has([name="phone"]:placeholder-shown) > :first-child { flex-basis: 0; overflow: hidden; margin-right: calc(var(--space-3) * -1); opacity: 0; }
+
+/* Plegable: el resum és una fila-control (vora, 44 px, xurma) perquè es vegi que es pot tocar. */
+.fold { border: 1px solid var(--border-strong); border-radius: var(--radius-md); background: var(--surface-100); }
+.fold__summary { display: flex; align-items: center; gap: var(--space-3); min-height: 2.75rem; padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); color: var(--ink); cursor: pointer; list-style: none; }
+.fold__summary::-webkit-details-marker { display: none; }
+.fold__summary:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+/* Obert, resum i cos són un sol bloc: una línia els separa i l'acció «Alterar» ja no fa falta. */
+.fold[open] > .fold__summary { border-bottom: 1px solid var(--border); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.fold[open] .fold__action { display: none; }
+.fold__text { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+.fold__title, .fold__hint { overflow-wrap: anywhere; }
+.fold__hint { color: var(--text-muted); }
+.fold__action { color: var(--action); }
+.fold__chevron { flex: none; color: var(--text-muted); }
+.fold[open] > .fold__summary .fold__chevron { transform: rotate(180deg); }
+.fold__body { padding: var(--space-3); }
+/* El resum ja fa de pregunta: la llegenda del grup es manté per als lectors de pantalla però no es repeteix. */
+.fold.form__products .fold__body .tsf-group__legend { position: absolute; inline-size: 1px; block-size: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); }
+.form__saved { margin: 0; color: var(--success); }
 
 /* Pantalla de gràcies: marca d'èxit centrada i CTA al peu (com el wireframe «Gracias + PDF»). */
 .page__screen--done { flex: 1; align-items: stretch; }
@@ -97,14 +112,15 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .site--entry .page__main { max-width: none; padding: 0; gap: 0; }
 .page__screen--entry { gap: 0; }
 .stage {
-  display: flex; flex-direction: column; justify-content: flex-end; box-sizing: border-box; padding: 5.75rem var(--gutter) var(--space-5);
+  display: flex; flex-direction: column; justify-content: flex-end; box-sizing: border-box; padding: 3.5rem var(--gutter) var(--space-3);
   background: linear-gradient(var(--overlay-hero), var(--overlay-hero)), linear-gradient(var(--overlay-hero), var(--overlay-hero)), url("../img/hero-m.webp") 50% 35% / cover;
   color: var(--on-navy);
 }
 .stage__copy { width: 100%; max-width: 560px; margin-inline: auto; box-sizing: border-box; }
 .stage__title { margin: 0; text-wrap: balance; overflow-wrap: anywhere; }
+.stage__fair { margin: 0 0 var(--space-1); color: var(--on-navy); text-transform: uppercase; letter-spacing: 0.08em; }
 .stage__sub { margin: var(--space-2) 0 0; color: var(--on-navy); }
-.page__body { display: flex; flex-direction: column; gap: var(--space-4); box-sizing: border-box; width: 100%; max-width: 560px; margin-inline: auto; padding: var(--space-5) var(--gutter); }
+.page__body { display: flex; flex-direction: column; gap: var(--space-3); box-sizing: border-box; width: 100%; max-width: 560px; margin-inline: auto; padding: var(--space-3) var(--gutter); }
 /* Gràcies: la franja és més alta i la marca d'èxit s'hi recolza a la vora. */
 .site--done .site__top { padding-bottom: var(--space-6); }
 .site--done .page__main { padding-top: 0; }
@@ -120,6 +136,7 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 @keyframes screen-in { from { opacity: 0; transform: translateY(var(--space-2)); } }
 @media (prefers-reduced-motion: no-preference) {
   .steps__seg { transition: background-color 200ms ease-out; }
+  .fold__chevron { transition: transform 180ms ease-out; }
   .page__screen { animation: screen-in 180ms ease-out; }
   /* La fotografia de l'inici no entra des del blanc: carrega ja a lloc. */
   .page__screen--entry { animation: none; }

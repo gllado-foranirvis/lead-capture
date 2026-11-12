@@ -4,18 +4,37 @@ const GROUPS = { 34: [3, 2, 2, 2], 351: [3, 3, 3] };
 const JUST_DIGITS_AND_SPACES = /^[\d\s]*$/;
 const countDigits = (s) => s.replace(/\D/g, '').length;
 
+// Màxim de xifres d'un telèfon internacional (E.164), prefix inclòs; i longitud màxima del text dels camps (xifres i separadors).
+export const MAX_PHONE_DIGITS = 15;
+export const PHONE_MAX_LENGTH = 20;
+export const PREFIX_MAX_LENGTH = 4;
+
+// Talla el text quan arriba al màxim de xifres, conservant els espais escrits abans.
+function limitDigits(raw, max) {
+  let seen = 0;
+  let end = 0;
+  for (const char of raw) {
+    if (/\d/.test(char) && ++seen > max) break;
+    end += char.length;
+  }
+  return raw.slice(0, end).trimEnd();
+}
+
 export function formatPhone(prefix, raw) {
-  const groups = GROUPS[String(prefix ?? '').replace(/\D/g, '')];
+  const prefixDigits = String(prefix ?? '').replace(/\D/g, '');
+  const groups = GROUPS[prefixDigits];
   // Amb altres caràcters (lletres, «+», parèntesis…) no es toca res: la validació ha de poder avisar.
-  if (!groups || !JUST_DIGITS_AND_SPACES.test(raw)) return raw;
-  let digits = raw.replace(/\D/g, '');
+  if (!JUST_DIGITS_AND_SPACES.test(raw)) return raw;
+  const limited = limitDigits(raw, Math.max(0, MAX_PHONE_DIGITS - prefixDigits.length));
+  if (!groups) return limited;
+  let digits = limited.replace(/\D/g, '');
   const parts = [];
   for (const size of groups) {
     if (!digits) break;
     parts.push(digits.slice(0, size));
     digits = digits.slice(size);
   }
-  if (digits) parts[parts.length - 1] += digits; // xifres de més: la validació ja les acota
+  if (digits) parts[parts.length - 1] += digits; // xifres de més (fins al màxim): van al darrer grup
   return parts.join(' ');
 }
 

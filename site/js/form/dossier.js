@@ -1,12 +1,21 @@
-// PDF que s'ofereixen al visitant segons els models triats, sense repetits. Cada element: { href, file, meta }.
-//   href  ruta del PDF; file  nom de la descàrrega ('' = el del fitxer); meta  segona línia de la targeta.
-// Primer, en l'ordre de config, el dossier propi de cada model triat; després el general si algun dels triats no en té
-// (cap model, «asesoramiento», un id desconegut o un model sense dossier propi) o si no hi ha cap dossier propi.
-export function dossiersFor(productIds, config, generalMeta) {
-  const chosen = config.products?.filter((p) => productIds.includes(p.id) && p.dossierUrl) ?? [];
-  const docs = chosen.map((p) => ({ href: p.dossierUrl, file: p.dossierFileName || '', meta: p.name }));
-  const hasOwn = (id) => chosen.some((p) => p.id === id);
-  const needsGeneral = !docs.length || productIds.some((id) => !hasOwn(id));
-  if (needsGeneral && config.dossierUrl) docs.push({ href: config.dossierUrl, file: config.dossierFileName || '', meta: generalMeta });
-  return docs.filter((doc, i) => docs.findIndex((other) => other.href === doc.href) === i);
+// PDF d'un producte o de la marca en l'idioma demanat; si no existeix, en anglès (l'únic garantit).
+export const pdfFor = (pdfs, lang) => pdfs?.[lang] ?? pdfs?.en;
+
+// El PDF només existeix en anglès (l'idioma no és l'anglès i cap producte té PDF en aquell idioma): la pàgina ho avisa.
+export const onlyEnglishPdfs = (config, lang) => lang !== 'en' && !(config.products ?? []).some((p) => p.pdf?.[lang]);
+
+// PDF que s'ofereixen al visitant segons els productes triats, sense repetits. Cada element: { id, href, meta }.
+//   id  del producte (o «brand» pel general); href  ruta del PDF en l'idioma del formulari (o anglès); meta  segona línia de la targeta.
+// Primer, en l'ordre de config, el PDF de cada producte triat; després el general de la marca (si n'hi ha) si algun dels
+// triats no en té (cap producte, «asesoramiento», un id desconegut o un producte sense PDF) o si no hi ha cap PDF de producte.
+export function dossiersFor(productIds, lang, config, generalMeta) {
+  const docs = (config.products ?? [])
+    .filter((p) => productIds.includes(p.id))
+    .map((p) => ({ id: p.id, href: pdfFor(p.pdf, lang), meta: p.name }))
+    .filter((doc) => doc.href);
+  const needsGeneral = !docs.length || productIds.some((id) => !docs.some((doc) => doc.id === id));
+  const general = pdfFor(config.brandPdf, lang);
+  const offered = [...docs];
+  if (needsGeneral && general) offered.push({ id: 'brand', href: general, meta: generalMeta });
+  return offered.filter((doc, i) => offered.findIndex((other) => other.href === doc.href) === i);
 }

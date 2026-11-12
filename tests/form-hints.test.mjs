@@ -11,11 +11,10 @@ const enter = (name, extra = {}) => ({ key: 'Enter', target: { name, tagName: 'I
 test('els camps de text porten autocompletat, teclat i tecla d\'Intro adequats', () => {
   assert.deepEqual(FIELD_HINTS.email, { autocomplete: 'email', inputmode: 'email', autocapitalize: 'none', spellcheck: 'false', enterkeyhint: 'next' });
   assert.deepEqual(FIELD_HINTS.name, { autocomplete: 'name', autocapitalize: 'words', enterkeyhint: 'next' });
-  assert.deepEqual(FIELD_HINTS.phone, { autocomplete: 'tel-national', inputmode: 'tel', enterkeyhint: 'next' });
-  assert.deepEqual(FIELD_HINTS.phonePrefix, { autocomplete: 'tel-country-code', inputmode: 'tel', enterkeyhint: 'next', list: 'phone-prefixes' });
-  assert.deepEqual(Object.keys(FIELD_HINTS).sort(), ['activityOther', 'demo', 'email', 'name', 'phone', 'phonePrefix']);
-  assert.equal(FIELD_HINTS.activityOther.enterkeyhint, 'next');
-  assert.deepEqual(FIELD_HINTS.demo, { autocomplete: 'address-level2', enterkeyhint: 'done' });
+  assert.deepEqual(FIELD_HINTS.phone, { autocomplete: 'tel-national', inputmode: 'tel', enterkeyhint: 'next', maxlength: '20' });
+  assert.deepEqual(FIELD_HINTS.phonePrefix, { autocomplete: 'tel-country-code', inputmode: 'tel', enterkeyhint: 'next', list: 'phone-prefixes', maxlength: '4' });
+  assert.deepEqual(Object.keys(FIELD_HINTS).sort(), ['city', 'email', 'name', 'phone', 'phonePrefix']);
+  assert.deepEqual(FIELD_HINTS.city, { autocomplete: 'address-level2', enterkeyhint: 'done' });
 });
 test('applyFieldHints aplica els atributs als camps presents i compta els aplicats', () => {
   const doc = fakeDoc(['email']);
@@ -23,7 +22,7 @@ test('applyFieldHints aplica els atributs als camps presents i compta els aplica
   assert.equal(doc.els.email.attrs.inputmode, 'email');
 });
 test('Intro avança: nom → correu → telèfon → privacitat', () => {
-  assert.deepEqual(NEXT_FIELD, { name: 'email', email: 'phonePrefix', phonePrefix: 'phone', phone: 'privacy', activityOther: 'hasBoat' });
+  assert.deepEqual(NEXT_FIELD, { name: 'email', email: 'phonePrefix', phonePrefix: 'phone', phone: 'privacy' });
   const doc = fakeDoc(['email', 'phonePrefix', 'phone', 'privacy']);
   const a = enter('name');
   assert.equal(advanceOnEnter(a, doc), true);
@@ -41,10 +40,4 @@ test('altres tecles, altres elements o un destí que no existeix no fan res', ()
   assert.equal(advanceOnEnter({ ...enter('name'), target: { name: 'name', tagName: 'SELECT' } }, doc), false);
   assert.equal(advanceOnEnter(enter('phone'), doc), false);
   assert.equal(advanceOnEnter(enter('altre'), doc), false);
-});
-test('Intro a «Otra actividad» passa a la pregunta de l\'embarcació en lloc d\'enviar el pas 2', () => {
-  const doc = fakeDoc(['hasBoat']);
-  const e = enter('activityOther');
-  assert.equal(advanceOnEnter(e, doc), true);
-  assert.deepEqual([e.prevented, doc.els.hasBoat.focused], [true, true]);
 });

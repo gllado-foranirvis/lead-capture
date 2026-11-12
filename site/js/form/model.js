@@ -5,23 +5,20 @@ export const ENTHUSIASM = ['sustainability', 'noise', 'maintenance', 'costs', 'r
 export const CONCERNS = ['range', 'charging', 'price', 'infrastructure', 'depreciation', 'other'];
 export const FACTORS = ['price', 'range', 'maker', 'design', 'warranty', 'support', 'other'];
 export const OPINION_GROUPS = { enthusiasm: ENTHUSIASM, concerns: CONCERNS, factors: FACTORS };
+// Preguntes opcionals del pas 2 (el resum plegable en diu el recompte).
+export const OPTIONAL_QUESTIONS = ['hasBoat', 'hasElectric', 'enthusiasm', 'concerns', 'intent', 'factors', 'comments'];
 export const ADVICE = 'asesoramiento';
-export const MAX = { name: 100, email: 254, phone: 30, activityOther: 120, demo: 80, other: 120, comments: 500 };
-export const DEFAULT_PREFIX = '+34';
+export const MAX = { name: 100, email: 254, phone: 30, city: 80, activityOther: 120, other: 120, comments: 500 };
+export const DEFAULT_PREFIX = '+351';
 
 // Array.from evita partir un emoji (parell subrogat) pel mig.
 export const clip = (value, max) => Array.from(String(value ?? '').trim()).slice(0, max).join('');
 
 export const emptyForm = ({ products = [] } = {}) => ({
-  products, email: '', name: '', profile: '', phonePrefix: DEFAULT_PREFIX, phone: '',
-  activity: '', activityOther: '', hasBoat: '', hasElectric: '', intent: '', demo: '',
+  products, city: '', name: '', email: '', phonePrefix: DEFAULT_PREFIX, phone: '', privacy: false, newsletter: false,
+  profile: '', activity: '', activityOther: '', hasBoat: '', hasElectric: '', intent: '',
   enthusiasm: [], enthusiasmOther: '', concerns: [], concernsOther: '', factors: [], factorsOther: '', comments: '',
-  privacy: false, newsletter: false,
 });
-
-// Telèfon complet per al lead: «+» i les xifres del prefix, un espai i el número.
-export const fullPhone = (values) =>
-  clip(`+${String(values.phonePrefix ?? '').replace(/\D/g, '')} ${clip(values.phone, MAX.phone)}`, MAX.phone);
 
 export const showsActivity = (values) => values.profile === 'profesional';
 export const showsActivityOther = (values) => showsActivity(values) && values.activity === 'otra';
@@ -35,7 +32,13 @@ function withDependencies(values) {
   return next;
 }
 
-// Marcar o desmarcar un valor. A la tria de models, «asesoramiento» és excloent: no pot conviure amb cap model.
+// Telèfon complet per al lead: «+» i les xifres del prefix, un espai i el número.
+export const fullPhone = (values) => {
+  const number = clip(values.phone, MAX.phone);
+  return number ? clip(`+${String(values.phonePrefix ?? '').replace(/\D/g, '')} ${number}`, MAX.phone) : '';
+};
+
+// Marcar o desmarcar un valor. A la tria de productes, «asesoramiento» és excloent: no pot conviure amb cap producte.
 function toggled(field, list, value) {
   if (list.includes(value)) return list.filter((v) => v !== value);
   if (field !== 'products') return [...list, value];
@@ -46,12 +49,8 @@ export function formReducer(state, action) {
   switch (action.type) {
     case 'set':
       return Object.hasOwn(state, action.field) ? withDependencies({ ...state, [action.field]: action.value }) : state;
-    case 'toggle': {
-      const list = state[action.field];
-      if (!Array.isArray(list)) return state;
-      const next = toggled(action.field, list, action.value);
-      return withDependencies({ ...state, [action.field]: next });
-    }
+    case 'toggle':
+      return Array.isArray(state[action.field]) ? withDependencies({ ...state, [action.field]: toggled(action.field, state[action.field], action.value) }) : state;
     case 'reset':
       return emptyForm(action.initial);
     default:

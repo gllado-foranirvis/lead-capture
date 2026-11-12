@@ -10,7 +10,8 @@ const doc = readFileSync('docs/textos-contacte.md', 'utf8');
 test('docs/textos-contacte.md és fresc respecte a i18n.js', () => {
   assert.equal(doc, renderTexts(DICT, CONFIG), 'els textos han canviat: executa node scripts/export-texts.mjs');
 });
-test('el document té una fila per idioma × perfil × via (24)', () => {
-  const rows = doc.split('\n').filter((l) => /^\| (Cap|Distribuïdor|Particular) \| (WhatsApp|Correu) \|/.test(l));
-  assert.equal(rows.length, 24);
+test('el document té una fila per idioma × cas × via (16) i cap resta de Barcelona', () => {
+  const rows = doc.split('\n').filter((l) => /^\| (Sense dades|Amb dades de sessió \(exemple\)) \| (WhatsApp|Correu) \|/.test(l));
+  assert.equal(rows.length, CONFIG.languages.length * 4);
+  assert.doesNotMatch(doc, /Barcelona|Náutico|Nàutic|Boat Show/);
 });

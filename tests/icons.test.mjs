@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { ICONS, icon, fileTextIcon } from '../site/js/icons.js';
+import { ICONS, icon, fileTextIcon, chevronIcon } from '../site/js/icons.js';
 
 // h mínim: retorna l'arbre tal qual, sense React
 const h = (type, props, ...children) => ({ type, props: props ?? {}, children });
@@ -38,5 +38,12 @@ test('icona de document (Lucide file-text): decorativa, hereta el color i amb el
   assert.equal(svg.props.focusable, 'false');
   assert.deepEqual([svg.props.fill, svg.props.stroke, svg.props.strokeWidth, svg.props.width, svg.props.height], ['none', 'currentColor', 1.5, 32, 32]);
   assert.equal(svg.children.length, 5, 'full + plec + tres línies de text');
+  assert.doesNotMatch(JSON.stringify(svg), /#[0-9a-fA-F]{3,8}|rgb\(/, 'cap color fix');
+});
+test('xurma (Lucide chevron-down): decoratiu, hereta el color, traç fi del sistema i una sola línia', () => {
+  const svg = chevronIcon(h);
+  assert.deepEqual([svg.type, svg.props['aria-hidden'], svg.props.focusable], ['svg', 'true', 'false']);
+  assert.deepEqual([svg.props.fill, svg.props.stroke, svg.props.strokeWidth], ['none', 'currentColor', 1.5]);
+  assert.equal(svg.children.length, 1);
   assert.doesNotMatch(JSON.stringify(svg), /#[0-9a-fA-F]{3,8}|rgb\(/, 'cap color fix');
 });

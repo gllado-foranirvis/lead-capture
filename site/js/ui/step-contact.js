@@ -1,14 +1,21 @@
-// site/js/ui/step-contact.js — pas 1: dades de contacte i consentiment
+// site/js/ui/step-contact.js — pàgina 1: dades de contacte, producte i consentiment
+import { ADVICE } from '../form/model.js';
 import { formatPhone, keepCaret, phoneExample, prefixSuggestions, splitInternational } from '../form/phone.js';
-import { stepLabel } from '../form/steps.js';
+import { stepText } from '../form/steps.js';
 import { makeFields } from './fields.js';
 import { createStepIndicator } from './step-indicator.js';
+import { createFold } from './fold.js';
+
+// Noms dels productes triats (o el de l'assessorament) per al resum del plegable.
+const productSummary = (ids, products, f) => [...products.filter((p) => ids.includes(p.id)).map((p) => p.name), ...(ids.includes(ADVICE) ? [f.productAdvice] : [])].join(', ');
 
 export function createStepContact({ h, T }) {
   const StepIndicator = createStepIndicator({ h });
-  return function StepContact({ t, lang = 'es', values, errors, onChange, onNext, onBack, onKeyDown, privacyHref }) {
+  const Fold = createFold({ h });
+  return function StepContact({ t, lang = 'es', products, askProduct = true, downloads = [], productsOpen = true, saved = false, values, errors, onChange, onToggle, onSubmit, onBack, onKeyDown, privacyHref }) {
     const f = t.form;
-    const { text } = makeFields({ h, T, f, values, errors, onChange });
+    const { text, checks } = makeFields({ h, T, f, values, errors, onChange, onToggle });
+    const productOptions = [...products.map((p) => ({ value: p.id, label: p.name })), { value: ADVICE, label: f.productAdvice }];
     const error = (field) => (errors[field] ? f.errors[errors[field]] : undefined);
     // El número es reagrupa mentre s'escriu (segons el prefix) i també quan es canvia de prefix.
     const onPhone = (e) => {
@@ -30,26 +37,37 @@ export function createStepContact({ h, T }) {
     };
 
     return h('div', { className: 'page__screen page__screen--form' },
-      StepIndicator({ step: 1, total: 2, label: stepLabel(f.stepOf, 1, 2) }),
+      StepIndicator({ step: 2, total: f.stepNames.length, label: stepText(f.stepOf, f.stepNames, 2, f.stepNames.length) }),
       h('div', { className: 'page__heading', tabIndex: -1, 'data-step-heading': '' },
         h(T.SectionHeading, { layout: 'mobile', align: 'start', level: 1, title: f.step1Title, subtitle: f.step1Subtitle, className: 'page__title' })),
-      h('p', { className: 'body-sm page__note' }, f.requiredNote),
-      h('form', { className: 'form', noValidate: true, onKeyDown, onSubmit: (e) => { e.preventDefault(); onNext(); } },
+      saved ? h('p', { className: 'body-sm page__note form__saved', 'aria-live': 'polite' }, f.saved) : null,
+      h('p', { className: 'body-sm page__note' }, f.step1Hint, ' ', f.requiredNote),
+      h('form', { className: 'form', noValidate: true, onKeyDown, onSubmit: (e) => { e.preventDefault(); onSubmit(); } },
         h('div', { className: 'form__group' },
           text('name', f.name, { required: true, placeholder: f.namePlaceholder }),
-          text('email', f.email, { required: true, type: 'email', placeholder: f.emailPlaceholder }),
+          text('email', `${f.email} ${f.eitherTag}`, { type: 'email', placeholder: f.emailPlaceholder }),
           // Prefix i número en camps separats: el prefix surt amb +34 i es pot canviar (amb suggeriments).
           h('div', { className: 'form__phone' },
-            text('phonePrefix', f.phonePrefix, { required: true, type: 'tel', onChange: onPrefix }),
+            text('phonePrefix', f.phonePrefix, { type: 'tel', onChange: onPrefix }),
             h('datalist', { id: 'phone-prefixes' }, prefixSuggestions(lang).map((o) => h('option', { key: o.value, value: o.value, label: o.label }))),
-            text('phone', f.phone, { required: true, type: 'tel', placeholder: phoneExample(values.phonePrefix, f.phonePlaceholder), onChange: onPhone }))),
+            text('phone', `${f.phone} ${f.eitherTag}`, { type: 'tel', placeholder: phoneExample(values.phonePrefix, f.phonePlaceholder), onChange: onPhone })),
+          // El producte ja triat a l'inici surt plegat, amb la tria al resum, i es pot canviar; sense tria, surt obert.
+          askProduct ? [
+            Fold({
+              className: 'form__products', title: f.productLegend, open: productsOpen,
+              hint: productSummary(values.products, products, f) || f.chooseProduct, action: values.products.length ? f.change : undefined,
+              children: checks('products', f.productLegend, productOptions),
+            }),
+            // Què es descarregarà amb la tria actual: la promesa es veu sempre, també amb el bloc plegat.
+            h('p', { className: 'body-sm page__note form__download', 'aria-live': 'polite' }, downloads.length ? f.downloadList.replace('{list}', downloads.join(', ')) : f.downloadNone),
+          ] : null),
         h('div', { className: 'form__group' },
           h(T.Checkbox, { name: 'privacy', id: 'privacy', required: true, checked: values.privacy, error: error('privacy'), onChange: (e) => onChange('privacy', e.target.checked) },
             // Un sol element: l'etiqueta del Checkbox és flex i, amb tres fills, es perdria l'espai abans de l'enllaç.
             h('span', null, f.consentBefore, h('a', { href: privacyHref, target: '_blank', rel: 'noopener' }, f.consentLink))),
           h(T.Checkbox, { name: 'newsletter', id: 'newsletter', checked: values.newsletter, onChange: (e) => onChange('newsletter', e.target.checked) }, f.newsletter)),
         h('div', { className: 'form__actions' },
-          h(T.Button, { type: 'submit', full: true }, `${f.next} →`),
+          h(T.Button, { type: 'submit', full: true }, f.next),
           h(T.Button, { variant: 'link', onClick: onBack }, `← ${t.back}`))));
   };
 }

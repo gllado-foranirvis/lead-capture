@@ -23,3 +23,9 @@ export function fileTextIcon(h) {
   return h('svg', { width: 32, height: 32, viewBox: '0 0 24 24', 'aria-hidden': 'true', focusable: 'false', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round' },
     ...FILE_TEXT.map((d) => h('path', { d })));
 }
+
+// Xurma (Lucide chevron-down): indica que una fila es pot desplegar; gira amb CSS quan s'obre.
+export function chevronIcon(h) {
+  return h('svg', { className: 'fold__chevron', width: 20, height: 20, viewBox: '0 0 24 24', 'aria-hidden': 'true', focusable: 'false', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round' },
+    h('path', { d: 'm6 9 6 6 6-6' }));
+}

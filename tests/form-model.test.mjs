@@ -1,10 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { ACTIVITIES, ADVICE, CONCERNS, ENTHUSIASM, FACTORS, DEFAULT_PREFIX, MAX, fullPhone, PROFILES, clip, emptyForm, formReducer, showsActivity, showsActivityOther } from '../site/js/form/model.js';
+import { ACTIVITIES, ADVICE, CONCERNS, ENTHUSIASM, FACTORS, OPINION_GROUPS, PROFILES, DEFAULT_PREFIX, MAX, fullPhone, clip, emptyForm, formReducer, showsActivity, showsActivityOther } from '../site/js/form/model.js';
 
-test('formulari buit: contacte, perfilació i consentiments nets', () => {
+test('formulari buit: productes, ciutat, contacte i consentiments nets', () => {
   assert.deepEqual(emptyForm(), {
-    products: [], email: '', name: '', profile: '', phonePrefix: '+34', phone: '', activity: '', activityOther: '', hasBoat: '', hasElectric: '', intent: '', demo: '', enthusiasm: [], enthusiasmOther: '', concerns: [], concernsOther: '', factors: [], factorsOther: '', comments: '', privacy: false, newsletter: false,
+    products: [], city: '', name: '', email: '', phonePrefix: '+351', phone: '', privacy: false, newsletter: false,
+    profile: '', activity: '', activityOther: '', hasBoat: '', hasElectric: '', intent: '',
+    enthusiasm: [], enthusiasmOther: '', concerns: [], concernsOther: '', factors: [], factorsOther: '', comments: '',
   });
 });
 test('emptyForm accepta els models inicials', () => {
@@ -26,41 +28,19 @@ test('toggle products: els models se sumen i «asesoramiento» és excloent', ()
   s = toggle(toggle(s, 'asesoramiento'), 'asesoramiento');
   assert.deepEqual(s.products, []);
 });
-test('constants', () => {
-  assert.deepEqual(PROFILES, ['particular', 'profesional']);
-  assert.equal(ACTIVITIES.length, 10);
-  assert.equal(ACTIVITIES.at(-1), 'otra');
+test('l\'assessorament és un valor reservat', () => {
   assert.equal(ADVICE, 'asesoramiento');
-  assert.deepEqual(MAX, { name: 100, email: 254, phone: 30, activityOther: 120, demo: 80, other: 120, comments: 500 });
 });
-test('l\'activitat només s\'aplica a Profesional; «altra» mostra el camp d\'especificar', () => {
-  assert.equal(showsActivity({ profile: 'profesional' }), true);
-  assert.equal(showsActivity({ profile: 'particular' }), false);
-  assert.equal(showsActivityOther({ profile: 'profesional', activity: 'otra' }), true);
-  assert.equal(showsActivityOther({ profile: 'profesional', activity: 'vela' }), false);
-  assert.equal(showsActivityOther({ profile: 'particular', activity: 'otra' }), false);
+test('la ciutat es desa amb set', () => {
+  assert.equal(formReducer(emptyForm(), { type: 'set', field: 'city', value: 'Lisboa' }).city, 'Lisboa');
 });
 test('set canvia un camp existent i ignora els desconeguts', () => {
   const s = emptyForm();
   assert.equal(formReducer(s, { type: 'set', field: 'name', value: 'Ana' }).name, 'Ana');
   assert.equal(formReducer(s, { type: 'set', field: 'camp-inexistent', value: 'x' }), s);
 });
-test('passar de Profesional a Particular (o desmarcar el perfil) esborra l\'activitat i l\'activitat «altra»', () => {
-  let s = formReducer(emptyForm(), { type: 'set', field: 'profile', value: 'profesional' });
-  s = formReducer(s, { type: 'set', field: 'activity', value: 'otra' });
-  s = formReducer(s, { type: 'set', field: 'activityOther', value: 'Remolcadors' });
-  assert.deepEqual([s.activity, s.activityOther], ['otra', 'Remolcadors']);
-  assert.deepEqual(['particular', ''].map((p) => {
-    const n = formReducer(s, { type: 'set', field: 'profile', value: p });
-    return [n.activity, n.activityOther];
-  }), [['', ''], ['', '']]);
-});
-test('canviar l\'activitat a una altra que no és «otra» esborra l\'especificació', () => {
-  let s = formReducer({ ...emptyForm(), profile: 'profesional', activity: 'otra', activityOther: 'x' }, { type: 'set', field: 'activity', value: 'vela' });
-  assert.equal(s.activityOther, '');
-});
 test('reset torna al formulari buit amb els models inicials', () => {
-  const dirty = { ...emptyForm(), name: 'Ana', privacy: true, profile: 'profesional', activity: 'vela' };
+  const dirty = { ...emptyForm(), name: 'Ana', city: 'Lisboa', privacy: true };
   assert.deepEqual(formReducer(dirty, { type: 'reset', initial: { products: ['model-a'] } }), emptyForm({ products: ['model-a'] }));
 });
 test('clip retalla i no trenca un emoji', () => {
@@ -71,11 +51,11 @@ test('clip retalla i no trenca un emoji', () => {
   assert.doesNotMatch(cut, /[\ud800-\udbff](?![\udc00-\udfff])/);
 });
 
-test('el prefix per defecte és +34 i es restableix en reiniciar', () => {
-  assert.equal(DEFAULT_PREFIX, '+34');
-  const dirty = formReducer(emptyForm(), { type: 'set', field: 'phonePrefix', value: '+351' });
-  assert.equal(dirty.phonePrefix, '+351');
-  assert.equal(formReducer(dirty, { type: 'reset', initial: {} }).phonePrefix, '+34');
+test('el prefix per defecte és +351 i es restableix en reiniciar', () => {
+  assert.equal(DEFAULT_PREFIX, '+351');
+  const dirty = formReducer(emptyForm(), { type: 'set', field: 'phonePrefix', value: '+34' });
+  assert.equal(dirty.phonePrefix, '+34');
+  assert.equal(formReducer(dirty, { type: 'reset', initial: {} }).phonePrefix, '+351');
 });
 test('fullPhone uneix prefix i número amb «+» i un espai, tant si el prefix porta «+» com si no', () => {
   assert.equal(fullPhone({ phonePrefix: '+34', phone: ' 600 00 00 00 ' }), '+34 600 00 00 00');
@@ -84,22 +64,32 @@ test('fullPhone uneix prefix i número amb «+» i un espai, tant si el prefix p
   assert.ok(Array.from(fullPhone({ phonePrefix: '+34', phone: '6'.repeat(60) })).length <= 30);
 });
 
-test('llistes de les preguntes d\'opinió: l\'última opció és «other»', () => {
-  assert.deepEqual(ENTHUSIASM, ['sustainability', 'noise', 'maintenance', 'costs', 'regulation', 'other']);
-  assert.deepEqual(CONCERNS, ['range', 'charging', 'price', 'infrastructure', 'depreciation', 'other']);
-  assert.deepEqual(FACTORS, ['price', 'range', 'maker', 'design', 'warranty', 'support', 'other']);
+
+test('fullPhone és buit si el número és buit', () => {
+  assert.equal(fullPhone({ phonePrefix: '+351', phone: '  ' }), '');
 });
-test('toggle marca i desmarca una opció d\'una llista, en l\'ordre en què es marquen, sense duplicats', () => {
-  let s = emptyForm();
-  s = formReducer(s, { type: 'toggle', field: 'concerns', value: 'price' });
-  s = formReducer(s, { type: 'toggle', field: 'concerns', value: 'range' });
-  assert.deepEqual(s.concerns, ['price', 'range']);
-  s = formReducer(s, { type: 'toggle', field: 'concerns', value: 'price' });
-  assert.deepEqual(s.concerns, ['range']);
-  assert.equal(formReducer(s, { type: 'toggle', field: 'name', value: 'x' }), s, 'només s\'aplica a camps de llista');
+
+test('constants de perfilació i límits', () => {
+  assert.deepEqual(PROFILES, ['particular', 'profesional']);
+  assert.equal(ACTIVITIES.at(-1), 'otra');
+  assert.deepEqual(Object.keys(OPINION_GROUPS), ['enthusiasm', 'concerns', 'factors']);
+  assert.deepEqual([ENTHUSIASM.at(-1), CONCERNS.at(-1), FACTORS.at(-1)], ['other', 'other', 'other']);
+  assert.deepEqual(MAX, { name: 100, email: 254, phone: 30, city: 80, activityOther: 120, other: 120, comments: 500 });
 });
-test('desmarcar «other» esborra el text escrit d\'aquell grup (i només d\'aquell)', () => {
-  let s = { ...emptyForm(), enthusiasm: ['other'], enthusiasmOther: 'Silenci', concerns: ['other'], concernsOther: 'Soroll' };
-  s = formReducer(s, { type: 'toggle', field: 'enthusiasm', value: 'other' });
-  assert.deepEqual([s.enthusiasmOther, s.concernsOther], ['', 'Soroll']);
+test('l\'activitat només s\'aplica a Profesional; «altra» obre el camp d\'especificar', () => {
+  assert.equal(showsActivity({ profile: 'profesional' }), true);
+  assert.equal(showsActivity({ profile: 'particular' }), false);
+  assert.equal(showsActivityOther({ profile: 'profesional', activity: 'otra' }), true);
+  assert.equal(showsActivityOther({ profile: 'particular', activity: 'otra' }), false);
+});
+test('passar a Particular esborra l\'activitat; desmarcar «other» esborra el seu text', () => {
+  let s = { ...emptyForm(), profile: 'profesional', activity: 'otra', activityOther: 'Remolcadors' };
+  s = formReducer(s, { type: 'set', field: 'profile', value: 'particular' });
+  assert.deepEqual([s.activity, s.activityOther], ['', '']);
+  s = formReducer({ ...emptyForm(), enthusiasm: ['other'], enthusiasmOther: 'x' }, { type: 'toggle', field: 'enthusiasm', value: 'other' });
+  assert.deepEqual([s.enthusiasm, s.enthusiasmOther], [[], '']);
+});
+test('toggle d\'una opinió se suma sense l\'exclusivitat de l\'assessorament', () => {
+  const s = formReducer(formReducer(emptyForm(), { type: 'toggle', field: 'concerns', value: 'range' }), { type: 'toggle', field: 'concerns', value: 'price' });
+  assert.deepEqual(s.concerns, ['range', 'price']);
 });

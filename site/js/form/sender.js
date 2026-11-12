@@ -1,4 +1,4 @@
-import { finalPayload, partialPayload } from './payload.js';
+import { clickPayload, finalPayload, partialPayload } from './payload.js';
 
 // Espera entre reintents (ms); després de l'últim valor es manté.
 export const RETRY_MS = [2000, 5000, 15000, 30000, 60000];
@@ -12,7 +12,7 @@ const defaultTimers = { set: (fn, ms) => setTimeout(fn, ms), clear: (id) => clea
 // l'última càrrega; el servidor fa un upsert per id, així un reintent mai duplica una fila.
 export function createSender({
   endpoint, token = '', fetchFn = (...args) => fetch(...args), timers = defaultTimers,
-  beacon = (url, body) => navigator.sendBeacon(url, body),
+  beacon = (url, body) => navigator.sendBeacon(url, body), onSent = () => {},
 }) {
   const pending = new Map();
   let failures = 0;
@@ -41,7 +41,10 @@ export function createSender({
     for (const [id, entry] of [...pending]) {
       const outcome = await post(entry.payload);
       if (outcome === 'retry') retry = true;
-      else if (pending.get(id) === entry) pending.delete(id);
+      else {
+        if (pending.get(id) === entry) pending.delete(id);
+        if (outcome === 'sent') onSent({ id, stage: entry.payload.stage });
+      }
     }
     flushing = false;
     if (!pending.size) {
@@ -71,10 +74,14 @@ export function createSender({
   return { send, flush, beaconAll, size: () => pending.size };
 }
 
+// Avís perquè la pàgina pugui mostrar «dades guardades»: només es dispara quan el servidor ho ha confirmat.
+export const notifySaved = (target) => (detail) => target.dispatchEvent(new CustomEvent('tsf:saved', { detail }));
+
 // Connecta el sender amb els esdeveniments públics del flux i amb l'estat de la xarxa i de la pàgina.
 export function connectSender(target, sender, doc) {
   target.addEventListener('tsf:lead-partial', (e) => sender.send(partialPayload(e.detail)));
   target.addEventListener('tsf:lead', (e) => sender.send(finalPayload(e.detail)));
+  target.addEventListener('tsf:contact-click', (e) => sender.send(clickPayload(e.detail)));
   target.addEventListener('online', () => sender.flush());
   target.addEventListener('pagehide', () => sender.beaconAll());
   // Al mòbil, pagehide sovint no arriba: quan la pestanya passa a segon pla (p. ex. en obrir el dossier) també fem el darrer intent.

@@ -3,11 +3,9 @@ import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { whatsappText, emailBody } from '../site/js/messages.js';
 
-const PROFILES = [['none', 'Cap'], ['distribuidor', 'Distribuïdor'], ['particular', 'Particular']];
 const LANGS = { es: 'Castellà (ES)', ca: 'Català (CA)', pt: 'Portuguès (PT)', en: 'Anglès (EN)' };
 const UI = [
-  ['Titular', 'title'], ['Subtítol', 'subtitle'], ['Pregunta del perfil', 'profileLegend'],
-  ['Xip de perfil 1', 'profileDistribuidor'], ['Xip de perfil 2', 'profileParticular'],
+  ['Titular', 'title'], ['Subtítol', 'subtitle'],
   ['Etiqueta de contacte', 'contactLabel'], ['Botó de WhatsApp', 'whatsapp'], ['Botó de correu', 'emailLabel'],
   ['Línia explicativa', 'contactHint'], ['Línia de recuperació (seguida de l\'adreça)', 'contactFallback'],
   ['Enllaç legal 1', 'privacy'], ['Enllaç legal 2', 'cookies'],
@@ -41,32 +39,26 @@ export function renderTexts(dict, config) {
     '',
     '## Missatges',
     '',
-    '- **WhatsApp:** salutació, salt de línia en blanc i text del perfil. Sense assumpte ni comiat.',
-    `- **Correu** (cap a \`${config.email}\`): assumpte del perfil; cos amb salutació, text del perfil i comiat.`,
-    '- **Perfil «Cap»:** és el missatge genèric, quan el visitant no ha triat perfil.',
-    '- **Dades de la sessió:** si el visitant ja ha donat el nom, el producte o si té embarcació, es nota en una línia entre el text i el comiat; les que no té no hi surten.',
+    '- **WhatsApp:** salutació, salt de línia en blanc i text del missatge. Sense assumpte ni comiat. `{fair}` es substitueix pel nom de la fira (`config.fair`).',
+    `- **Correu** (cap a \`${config.email}\`): assumpte; cos amb salutació, text del missatge i comiat.`,
+    '- **Dades de la sessió:** si el visitant ja ha donat el nom, el producte o la ciutat, es nota en una línia entre el text i el comiat; les que no té no hi surten.',
     '',
   ];
   for (const lang of config.languages) {
     const d = dict[lang];
-    out.push(`### ${LANGS[lang]}`, '', '| Perfil | Via | Assumpte | Missatge |', '|---|---|---|---|');
-    for (const [key, label] of PROFILES) {
-      out.push(`| ${label} | WhatsApp | — | ${cell(whatsappText(d, { profile: key }))} |`);
-      out.push(`| ${label} | Correu | ${cell(d.messages[key].subject)} | ${cell(emailBody(d, { profile: key }))} |`);
+    out.push(`### ${LANGS[lang]}`, '', '| Cas | Via | Assumpte | Missatge |', '|---|---|---|---|');
+    const example = { name: 'Ana', product: 'Sifly', city: 'Lisboa' };
+    for (const [label, session] of [['Sense dades', {}], ['Amb dades de sessió (exemple)', example]]) {
+      out.push(`| ${label} | WhatsApp | — | ${cell(whatsappText(d, session, config.fair))} |`);
+      out.push(`| ${label} | Correu | ${cell(d.message.subject.replaceAll('{fair}', config.fair))} | ${cell(emailBody(d, session, config.fair))} |`);
     }
-    const example = { profile: 'particular', name: 'Ana', product: 'Modelo A', hasBoat: d.form.yes, intent: d.form.no };
-    out.push(`| Particular amb dades de sessió (exemple) | WhatsApp | — | ${cell(whatsappText(d, example))} |`);
-    out.push(`| Particular amb dades de sessió (exemple) | Correu | ${cell(d.messages.particular.subject)} | ${cell(emailBody(d, example))} |`);
     out.push('');
   }
   out.push(
     '## Per revisar',
     '',
     '- **Tractament:** castellà i català de tu; portuguès de «você» formal («Escreva-nos»). Cal confirmar-ho amb Bruno.',
-    '- **«Distribuïdor o professional»** agrupa dos perfils en un xip. Confirmar que no calen dos xips separats. A més, el xip ho diu així però el missatge només diu «distribuïdor».',
     '- **Portuguès:** revisar-lo amb un parlant natiu de la variant europea (per exemple «e-mail»). El comiat dels correus, «Obrigado», és masculí; «Obrigado(a)» o «Cumprimentos» seria neutre.',
-    '- **Anglès, distribuïdor:** «I am a distributor and I am interested in…» repeteix «I am».',
-    '- **Perfil «Cap»:** «He visto vuestro stand…» suposa que el visitant ha estat a l\'estand; no encaixa si arriba pel QR sense passar-hi.',
     '- **Privacitat:** el text no identifica el responsable del tractament; Bruno l\'ha de validar abans de la fira.',
     '',
   );

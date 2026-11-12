@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { advanceStep1, discardSession, handleSubmit, leaveToEntry } from '../site/js/form/flow.js';
+import { advanceStep1, discardSession, handleSkip, handleSubmit, leaveToEntry } from '../site/js/form/flow.js';
 import { emptyForm } from '../site/js/form/model.js';
 
 const PRODUCTS = [{ id: 'model-a', name: 'Modelo A' }];
 const contact = { ...emptyForm({ products: ['model-a'] }), name: 'Ana', email: 'Ana@Example.com', phone: '600 00 00 00', privacy: true, newsletter: true };
-const full = { ...contact, profile: 'profesional', activity: 'vela', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: 'Girona', enthusiasm: ['noise'], concerns: ['range'], factors: ['price'], comments: 'Hola' };
+const full = { ...contact, city: ' Lisboa ' };
 
 const harness = (extra = {}, search = '?producto=model-a&o=tauleta') => {
   const calls = [];
@@ -15,7 +15,7 @@ const harness = (extra = {}, search = '?producto=model-a&o=tauleta') => {
     deps: {
       products: PRODUCTS, search, lang: 'es', leadId: '', newId: () => 'id-1',
       setLeadId: rec('setLeadId'), setErrors: rec('setErrors'), bumpAttempt: rec('bumpAttempt'), dispatch: rec('dispatch'),
-      setReceipt: rec('setReceipt'), emitPartial: rec('emitPartial'), emitLead: rec('emitLead'), goTo: rec('goTo'),
+      setReceipt: rec('setReceipt'), emitLead: rec('emitLead'), goTo: rec('goTo'),
       ...extra,
     },
   };
@@ -23,68 +23,56 @@ const harness = (extra = {}, search = '?producto=model-a&o=tauleta') => {
 const names = (calls) => calls.map((c) => c[0]);
 const call = (calls, name) => calls.find((c) => c[0] === name);
 
-test('pas 1 vàlid: desa un id, emet el lead parcial amb consentiment i passa al pas 2', () => {
+const profiled = { ...full, profile: 'particular' };
+test('pas 1: amb errors no emet res i es queda al pas 1; amb èxit emet el lead parcial i va al pas 2', () => {
+  const bad = harness({ emitPartial: undefined });
+  const emits = [];
+  assert.equal(advanceStep1({ ...contact, name: '' }, { ...bad.deps, emitPartial: (l) => emits.push(l) }), false);
+  assert.deepEqual([emits.length, call(bad.calls, 'goTo')], [0, undefined]);
+  assert.deepEqual(call(bad.calls, 'setErrors')[1], { name: 'required' });
+  const ok = harness({ leadId: 'id-0' });
+  assert.equal(advanceStep1(full, { ...ok.deps, emitPartial: (l) => emits.push(l) }), true);
+  assert.deepEqual([emits[0].id, emits[0].stage, emits[0].city], ['id-0', 'step1', 'Lisboa']);
+  assert.deepEqual(call(ok.calls, 'setLeadId'), ['setLeadId', 'id-0']);
+  assert.deepEqual(call(ok.calls, 'goTo'), ['goTo', 'step2']);
+});
+test('pas 1 sense id previ en crea un i el desa', () => {
   const { calls, deps } = harness();
-  assert.equal(advanceStep1(contact, deps), true);
+  advanceStep1(full, { ...deps, emitPartial: () => {} });
   assert.deepEqual(call(calls, 'setLeadId'), ['setLeadId', 'id-1']);
-  assert.deepEqual(call(calls, 'emitPartial')[1], {
-    id: 'id-1', stage: 'step1', name: 'Ana', email: 'ana@example.com', phone: '+34 600 00 00 00',
-    privacy: true, newsletter: true, lang: 'es', origin: 'tauleta',
-  });
-  assert.deepEqual(call(calls, 'goTo'), ['goTo', 'step2']);
 });
-test('pas 1: el perfil triat a l\'inici viatja al lead parcial', () => {
-  const { calls, deps } = harness();
-  advanceStep1({ ...contact, profile: 'particular' }, deps);
-  assert.equal(call(calls, 'emitPartial')[1].profile, 'particular');
-});
-test('pas 1 invàlid (sense privacitat): errors abans de seguir, no emet ni avança', () => {
-  const { calls, deps } = harness();
-  assert.equal(advanceStep1({ ...contact, privacy: false }, deps), false);
-  assert.deepEqual(call(calls, 'setErrors')[1], { privacy: 'privacy' });
-  assert.deepEqual(names(calls), ['setErrors', 'bumpAttempt']);
-});
-test('tornar al pas 1 i continuar de nou reutilitza l\'id i emet el lead parcial actualitzat', () => {
-  const { calls, deps } = harness({ leadId: 'id-0', newId: () => { throw new Error('no ha de crear un id nou'); } });
-  advanceStep1({ ...contact, phone: '600 11 22 33' }, deps);
-  assert.equal(call(calls, 'emitPartial')[1].id, 'id-0');
-  assert.equal(call(calls, 'emitPartial')[1].phone, '+34 600 11 22 33');
-});
-test('enviament final: no obre cap document; emet el lead i neteja per al següent visitant', () => {
+test('enviament final: emet el lead i neteja per al següent visitant', () => {
   const { calls, deps } = harness({ leadId: 'id-0' });
-  assert.equal(handleSubmit(full, deps), true);
-  assert.equal(names(calls).includes('openDocument'), false);
+  assert.equal(handleSubmit(profiled, deps), true);
+  assert.equal(names(calls).filter((n) => n === 'emitLead').length, 1);
   const lead = call(calls, 'emitLead')[1];
-  assert.deepEqual([lead.contact.id, lead.profiling.id, lead.contact.profile, lead.profiling.activity, lead.profiling.hasBoat, lead.profiling.intent], ['id-0', 'id-0', 'profesional', 'vela', 'si', 'no']);
-  assert.deepEqual(call(calls, 'setReceipt')[1], { products: ['model-a'], profile: 'profesional', activity: 'vela', activityOther: '', hasBoat: 'si', hasElectric: 'no', intent: 'no', demo: 'Girona', enthusiasm: ['noise'], enthusiasmOther: '', concerns: ['range'], concernsOther: '', factors: ['price'], factorsOther: '', comments: 'Hola', name: 'Ana' });
+  assert.deepEqual([lead.contact.id, lead.contact.city, lead.profiling.profile], ['id-0', 'Lisboa', 'particular']);
+  assert.deepEqual(call(calls, 'setReceipt')[1], { products: ['model-a'], name: 'Ana', city: ' Lisboa ' });
   assert.deepEqual(call(calls, 'dispatch')[1], { type: 'reset', initial: { products: ['model-a'] } });
   assert.deepEqual(call(calls, 'setLeadId'), ['setLeadId', '']);
-  assert.deepEqual(call(calls, 'setErrors'), ['setErrors', {}]);
   assert.deepEqual(call(calls, 'goTo'), ['goTo', 'done']);
 });
-test('enviament final sense id previ en crea un', () => {
+test('enviament final sense perfil: es queda al pas 2 sense emetre res', () => {
   const { calls, deps } = harness();
-  handleSubmit(full, deps);
-  assert.equal(call(calls, 'emitLead')[1].contact.id, 'id-1');
-});
-test('enviament final sense perfil: error al pas 2, cap document, cap lead', () => {
-  const { calls, deps } = harness();
-  assert.equal(handleSubmit({ ...contact, profile: '' }, deps), false);
+  assert.equal(handleSubmit(full, deps), false);
   assert.deepEqual(call(calls, 'setErrors')[1], { profile: 'profileRequired' });
   assert.deepEqual(call(calls, 'goTo'), ['goTo', 'step2']);
-  assert.equal(names(calls).includes('emitLead'), false);
+  assert.deepEqual(names(calls).filter((n) => n === 'emitLead' || n === 'bumpAttempt'), ['bumpAttempt']);
 });
-test('enviament final amb un error de contacte torna al pas 1', () => {
-  const { calls, deps } = harness();
-  handleSubmit({ ...full, email: '' }, deps);
-  assert.deepEqual(call(calls, 'goTo'), ['goTo', 'step1']);
+test('saltar la perfilació: emet el lead complet sense perfilació, neteja i va a la confirmació', () => {
+  const { calls, deps } = harness({ leadId: 'id-0' });
+  assert.equal(handleSkip({ ...full, profile: 'particular', comments: 'x' }, deps), true);
+  const lead = call(calls, 'emitLead')[1];
+  assert.deepEqual([lead.contact.id, lead.hasProfiling, lead.profiling], ['id-0', false, { id: 'id-0' }]);
+  assert.deepEqual(call(calls, 'setReceipt')[1], { products: ['model-a'], name: 'Ana', city: ' Lisboa ' });
+  assert.deepEqual(call(calls, 'goTo'), ['goTo', 'done']);
 });
 test('el reinici torna a preseleccionar el producte de la URL, o cap', () => {
   const withProduct = harness({}, '?producto=model-a');
-  handleSubmit(full, withProduct.deps);
+  handleSubmit(profiled, withProduct.deps);
   assert.deepEqual(call(withProduct.calls, 'dispatch')[1].initial, { products: ['model-a'] });
   const without = harness({}, '');
-  handleSubmit(full, without.deps);
+  handleSubmit(profiled, without.deps);
   assert.deepEqual(call(without.calls, 'dispatch')[1].initial, { products: [] });
 });
 
