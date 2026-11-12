@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { CONFIG } from '../site/js/config.js';
 import { DICT } from '../site/js/i18n.js';
 
-const ERROR_CODES = ['required', 'email', 'phone', 'prefix', 'privacy'];
+const ERROR_CODES = ['required', 'either', 'email', 'phone', 'prefix', 'privacy', 'profileRequired'];
 const leaves = (o) => Object.values(o).flatMap((v) => (typeof v === 'object' ? leaves(v) : [v]));
 
 test('cada idioma té un missatge per a cada codi d\'error', () => {
@@ -113,5 +113,12 @@ test('la promesa de descàrrega: l\'inici i la pàgina de dades la diuen, i la l
     assert.match(f.downloadList, /\{list\}/, l);
     assert.ok(f.downloadNone.trim(), l);
     assert.doesNotMatch(f.downloadList + f.downloadNone + f.entrySubtitle + f.step1Subtitle, /PDF|\bfich?[ae]\b/i, l);
+  }
+});
+test('el pas 2 té els literals de perfilació i els de saltar, sense la localitat de la demostració', () => {
+  for (const l of CONFIG.languages) {
+    for (const key of ['step2Title', 'step2Subtitle', 'profileLegend', 'skipLabel', 'moreGroup', 'hasBoat', 'hasElectric', 'intent', 'comments', 'yes', 'no']) assert.ok(String(DICT[l].form[key]).trim(), `${l}.${key}`);
+    assert.deepEqual(Object.keys(DICT[l].form.profiles), ['particular', 'profesional'], l);
+    assert.equal(Object.keys(DICT[l].form.enthusiasmOptions).length, 6, l);
   }
 });

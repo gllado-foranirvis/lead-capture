@@ -121,3 +121,7 @@ test('page.css (inici): marges compactes sobre una base de 8px: 8 dins d\'un gru
 test('page.css: el nom de la fira de l\'escena té estil propi', () => {
   assert.match(page, /\.stage__fair\s*\{/);
 });
+test('page.css: el grup plegable del pas 2 té resum tàctil de 44 px i anell de focus', () => {
+  assert.match(page, /\.form__more-summary\s*\{[^}]*min-height:\s*var\(--space-9\)/);
+  assert.match(page, /\.form__more-summary:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--focus\)/);
+});

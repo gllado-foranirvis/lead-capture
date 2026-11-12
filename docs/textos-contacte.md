@@ -46,6 +46,64 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `consentBefore` | Aceito a  | I accept the  | Acepto la  | Accepto la  |
 | `consentLink` | política de privacidade | privacy policy | política de privacidad | política de privacitat |
 | `newsletter` | Quero receber novidades (opcional) | I'd like to receive updates (optional) | Quiero recibir novedades (opcional) | Vull rebre novetats (opcional) |
+| `step2Title` | Conta-nos mais sobre ti | Tell us more about you | Cuéntanos más sobre ti | Explica'ns més sobre tu |
+| `step2Subtitle` | Se quiseres, conta-nos mais; se não, salta para o dossier. | Tell us more if you like, or skip straight to the dossier. | Si quieres, cuéntanos más; si no, salta al dossier. | Si vols, explica'ns més; si no, salta al dossier. |
+| `profileLegend` | Quem és? | Who are you? | ¿Quién eres? | Qui ets? |
+| `profiles.particular` | Particular | Private customer | Particular | Particular |
+| `profiles.profesional` | Profissional | Professional | Profesional | Professional |
+| `activity` | Atividade principal | Main activity | Actividad principal | Activitat principal |
+| `activityPlaceholder` | Escolhe uma atividade | Choose an activity | Elige una actividad | Tria una activitat |
+| `activityNone` | Sem especificar | Not specified | Sin especificar | Sense especificar |
+| `activities.ocio` | Lazer | Leisure | Ocio | Oci |
+| `activities.charter` | Charter / aluguer | Charter / rental | Chárter / alquiler | Xàrter / lloguer |
+| `activities.vela` | Desporto: vela | Sport: sailing | Deporte: vela | Esport: vela |
+| `activities.buceo` | Desporto: mergulho | Sport: diving | Deporte: buceo | Esport: busseig |
+| `activities.skiwake` | Desporto: Ski / Wake | Sport: Ski / Wake | Deporte: Ski / Wake | Esport: Ski / Wake |
+| `activities.seguridad` | Segurança / salvamento | Safety / rescue | Seguridad / salvamento | Seguretat / salvament |
+| `activities.pasajeros` | Transporte de passageiros | Passenger transport | Transporte de pasajeros | Transport de passatgers |
+| `activities.pesca` | Pesca | Fishing | Pesca | Pesca |
+| `activities.marina` | Marina / operador portuário | Marina / port operator | Marina / operador portuario | Marina / operador portuari |
+| `activities.otra` | Outra | Other | Otra | Altra |
+| `activityOther` | Outra atividade (especifica) | Other activity (please specify) | Otra actividad (especifica) | Una altra activitat (especifica) |
+| `activityOtherPlaceholder` | Por exemplo, rebocadores | For example, tugboats | Por ejemplo, remolcadores | Per exemple, remolcadors |
+| `hasBoat` | Tens atualmente uma embarcação? | Do you currently own a boat? | ¿Tienes embarcación actualmente? | Tens una embarcació actualment? |
+| `enthusiasmLegend` | O que te entusiasma nesta tecnologia? | What excites you about this technology? | ¿Qué te entusiasma de esta tecnología? | Què t'entusiasma d'aquesta tecnologia? |
+| `enthusiasmOptions.sustainability` | Sustentabilidade ambiental | Environmental sustainability | Sostenibilidad ambiental | Sostenibilitat ambiental |
+| `enthusiasmOptions.noise` | Redução de ruído | Noise reduction | Reducción de ruido | Reducció de soroll |
+| `enthusiasmOptions.maintenance` | Menos manutenção | Less maintenance | Menos mantenimiento | Menys manteniment |
+| `enthusiasmOptions.costs` | Custos operacionais mais baixos | Lower operating costs | Costes operativos más bajos | Costos operatius més baixos |
+| `enthusiasmOptions.regulation` | Regulamentações futuras | Future regulations | Regulaciones futuras | Regulacions futures |
+| `enthusiasmOptions.other` | Outro | Other | Otro | Altre |
+| `concernsLegend` | O que te preocupa? | What concerns you? | ¿Qué te preocupa? | Què et preocupa? |
+| `concernsOptions.range` | Autonomia limitada | Limited range | Autonomía limitada | Autonomia limitada |
+| `concernsOptions.charging` | Tempo de carregamento | Charging time | Tiempo de carga | Temps de càrrega |
+| `concernsOptions.price` | Custo de aquisição | Purchase cost | Coste de adquisición | Cost d'adquisició |
+| `concernsOptions.infrastructure` | Infraestrutura de carregamento | Charging infrastructure | Infraestructura de carga | Infraestructura de càrrega |
+| `concernsOptions.depreciation` | Desvalorização do equipamento | Equipment depreciation | Depreciación del equipo | Depreciació de l'equip |
+| `concernsOptions.other` | Outro | Other | Otro | Altre |
+| `factorsLegend` | Quais seriam os fatores decisivos? | What would be the deciding factors? | ¿Cuáles serían los factores decisivos? | Quins serien els factors decisius? |
+| `factorsOptions.price` | Preço | Price | Precio | Preu |
+| `factorsOptions.range` | Autonomia | Range | Autonomía | Autonomia |
+| `factorsOptions.maker` | Fabricante | Manufacturer | Fabricante | Fabricant |
+| `factorsOptions.design` | Design | Design | Diseño | Disseny |
+| `factorsOptions.warranty` | Garantia | Warranty | Garantía | Garantia |
+| `factorsOptions.support` | Suporte pós-venda | After-sales support | Soporte posventa | Suport postvenda |
+| `factorsOptions.other` | Outro | Other | Otro | Altre |
+| `otherLabel` | Outro (especifica) | Other (please specify) | Otro (especifica) | Altre (especifica) |
+| `otherPlaceholder` | Descreve aqui | Describe here | Describe aquí | Descriu-ho aquí |
+| `comments` | Comentários | Comments | Comentarios | Comentaris |
+| `commentsPlaceholder` | Outros comentários | Other comments | Otros comentarios | Altres comentaris |
+| `hasElectric` | Já tens uma embarcação elétrica? | Do you already own an electric boat? | ¿Ya tienes una embarcación eléctrica? | Ja tens una embarcació elèctrica? |
+| `intent` | Tens intenção de comprar propulsão elétrica? | Do you intend to buy electric propulsion? | ¿Tienes intención de comprar propulsión eléctrica? | Tens intenció de comprar propulsió elèctrica? |
+| `yes` | Sim | Yes | Sí | Sí |
+| `no` | Não | No | No | No |
+| `stepNames.0` | Produto | Product | Producto | Producte |
+| `stepNames.1` | Dados | Details | Datos | Dades |
+| `stepNames.2` | Interesse | Interest | Interés | Interès |
+| `stepNames.3` | Dossier | Dossier | Dossier | Dossier |
+| `saved` | Dados guardados | Details saved | Datos guardados | Dades desades |
+| `skipLabel` | Saltar e descarregar | Skip and download | Saltar y descargar | Saltar i descarregar |
+| `moreGroup` | Mais perguntas (opcional) | More questions (optional) | Más preguntas (opcional) | Més preguntes (opcional) |
 | `cityLabel` | De que cidade és? | Which city are you from? | ¿De qué ciudad eres? | De quina ciutat ets? |
 | `cityPlaceholder` | Lisboa | Lisbon | Lisboa | Lisboa |
 | `productLegend` | Que produto te interessa? | Which product are you interested in? | ¿Qué producto te interesa? | Quin producte t'interessa? |
@@ -54,6 +112,8 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `downloadNone` | Escolhe um produto para descarregar o respetivo dossier. | Choose a product to download its dossier. | Elige un producto para descargar el dossier correspondiente. | Tria un producte per descarregar el seu dossier. |
 | `submit` | Aceder ao dossier | Get the dossier | Acceder al dossier | Accedir al dossier |
 | `errors.required` | Preenche este campo | Fill in this field | Completa este campo | Omple aquest camp |
+| `errors.profileRequired` | Escolhe uma opção | Choose an option | Elige una opción | Tria una opció |
+| `errors.either` | Deixa o e-mail ou o telemóvel | Leave an e-mail or a phone number | Deja el correo o el teléfono | Deixa el correu o el telèfon |
 | `errors.email` | Introduz um e-mail válido | Enter a valid email | Introduce un correo válido | Introdueix un correu vàlid |
 | `errors.phone` | Introduz um telefone válido, por exemplo 912 345 678 | Enter a valid phone number, for example 600 00 00 00 | Introduce un teléfono válido, por ejemplo 600 00 00 00 | Introdueix un telèfon vàlid, per exemple 600 00 00 00 |
 | `errors.prefix` | Prefixo inválido | Invalid prefix | Prefijo no válido | Prefix no vàlid |

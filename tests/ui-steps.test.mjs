@@ -12,12 +12,14 @@ import { FIELD_HINTS } from '../site/js/form/hints.js';
 import { createStepIndicator } from '../site/js/ui/step-indicator.js';
 import { createEntryScreen } from '../site/js/ui/entry-screen.js';
 import { createStepContact } from '../site/js/ui/step-contact.js';
+import { createStepProfile } from '../site/js/ui/step-profile.js';
 import { createDoneScreen } from '../site/js/ui/done-screen.js';
 
 const noop = () => {};
 const StepIndicator = createStepIndicator({ h });
 const EntryScreen = createEntryScreen({ h, T, icon });
 const StepContact = createStepContact({ h, T });
+const StepProfile = createStepProfile({ h, T });
 const DoneScreen = createDoneScreen({ h, T, icon });
 const f = DICT.es.form;
 const buttons = (tree) => byType(tree, 'T.Button');
@@ -30,6 +32,10 @@ const entry = (extra = {}) => EntryScreen({
 const contact = (extra = {}) => StepContact({
   t: DICT.es, products: CONFIG.products, askProduct: true, downloads: [], values: spanishForm(), errors: {}, onChange: noop, onToggle: noop, onSubmit: noop, onBack: noop,
   privacyHref: 'privacy.html?lang=es#privacy', ...extra,
+});
+
+const profileScreen = (extra = {}) => StepProfile({
+  t: DICT.es, values: spanishForm(), errors: {}, saved: false, onChange: noop, onToggle: noop, onSubmit: noop, onSkip: noop, onBack: noop, ...extra,
 });
 
 test('indicador: text visible, barra accessible i segments plens segons el pas', () => {
@@ -285,3 +291,46 @@ test('els camps d\'escriptura porten un exemple com a placeholder (no substituei
 
 const fakeGroup = () => { const attrs = {}; return { attrs, el: { querySelector: () => ({ setAttribute: (k, v) => { attrs[k] = v; }, removeAttribute: (k) => { delete attrs[k]; } }) } }; };
 
+
+test('pas 2: «Quem és» va primer i és l\'únic obligatori; la resta de preguntes són opcionals i plegades en un sol grup', () => {
+  const tree = profileScreen();
+  const [first] = findAll(tree, (n) => ['T.ChoiceChips', 'T.CheckboxGroup', 'T.Field', 'T.Select'].includes(n.type));
+  assert.equal(first.props.name, 'profile');
+  assert.equal(first.props.legend, `${f.profileLegend} *`);
+  const more = findAll(tree, (n) => n.type === 'details');
+  assert.equal(more.length, 1);
+  assert.equal(more[0].props.open, undefined, 'plegat per defecte');
+  assert.ok(textOf(findAll(more[0], (n) => n.type === 'summary')[0]).includes(f.moreGroup));
+  const inside = findAll(more[0], (n) => n.props?.name).map((n) => n.props.name);
+  assert.deepEqual(inside, ['hasBoat', 'hasElectric', 'enthusiasm', 'concerns', 'intent', 'factors', 'comments']);
+  assert.equal(byName(tree, 'demo').length + byName(tree, 'products').length, 0, 'ni localitat de demostració ni productes');
+});
+test('pas 2: l\'activitat només surt per a Profesional, i «altra» obre el seu camp', () => {
+  const names = (values) => findAll(profileScreen({ values }), (n) => n.props?.name).map((n) => n.props.name);
+  assert.equal(names(spanishForm({ profile: 'particular' })).includes('activity'), false);
+  assert.equal(names(spanishForm({ profile: 'profesional' })).includes('activity'), true);
+  assert.equal(names(spanishForm({ profile: 'profesional', activity: 'otra' })).includes('activityOther'), true);
+});
+test('pas 2: dos botons de ample complet (enviar i saltar) i l\'enllaç de tornar; saltar crida onSkip', () => {
+  const calls = [];
+  const tree = profileScreen({ onSkip: () => calls.push('skip'), onBack: () => calls.push('back') });
+  const [send, skip, back] = buttons(tree);
+  assert.deepEqual([send.props.type, send.props.full, textOf(send)], ['submit', true, f.submit]);
+  assert.deepEqual([skip.props.full, textOf(skip)], [true, f.skipLabel]);
+  assert.equal(skip.props.type, undefined, 'saltar no envia el formulari');
+  skip.props.onClick(); back.props.onClick();
+  assert.deepEqual(calls, ['skip', 'back']);
+});
+test('pas 2: l\'error del perfil és visible i enviar crida onSubmit', () => {
+  let sent = 0;
+  const tree = profileScreen({ errors: { profile: 'profileRequired' }, onSubmit: () => sent++ });
+  assert.ok(textOf(tree).includes(f.errors.profileRequired));
+  findAll(tree, (n) => n.type === 'form')[0].props.onSubmit({ preventDefault() {} });
+  assert.equal(sent, 1);
+});
+test('pas 2: «dados guardados» només quan el lead ja s\'ha desat', () => {
+  assert.equal(findAll(profileScreen(), (n) => n.props?.className?.includes('form__saved')).length, 0);
+  const saved = findAll(profileScreen({ saved: true }), (n) => n.props?.className?.includes('form__saved'));
+  assert.equal(saved.length, 1);
+  assert.equal(saved[0].props['aria-live'], 'polite');
+});
