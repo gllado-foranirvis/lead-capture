@@ -169,6 +169,12 @@ test('pas 1: un número internacional escrit al camp del número en separa el pr
   phone('+34');
   assert.deepEqual(calls, [['phonePrefix', '+351'], ['phone', '912 345 678'], ['phonePrefix', '+34'], ['phone', '666 66 66 66'], ['phone', '+34']]);
 });
+test('pas 1: teclejar de més al telèfon queda tallat a les xifres permeses', () => {
+  const calls = [];
+  const tree = contact({ onChange: (field, v) => calls.push([field, v]) });
+  byName(tree, 'phone')[0].props.onChange({ target: { value: '111 11 11 1111111111111111', selectionStart: 26 } });
+  assert.deepEqual(calls, [['phone', '111 11 11 111111']]);
+});
 test('pas 1: el marcador del número segueix el prefix i el prefix porta suggeriments', () => {
   const placeholder = (values, t = DICT.es) => byName(contact({ t, values: { ...emptyForm(), ...values } }), 'phone')[0].props.placeholder;
   assert.equal(placeholder({}), '600 00 00 00');

@@ -11,8 +11,8 @@ const enter = (name, extra = {}) => ({ key: 'Enter', target: { name, tagName: 'I
 test('els camps de text porten autocompletat, teclat i tecla d\'Intro adequats', () => {
   assert.deepEqual(FIELD_HINTS.email, { autocomplete: 'email', inputmode: 'email', autocapitalize: 'none', spellcheck: 'false', enterkeyhint: 'next' });
   assert.deepEqual(FIELD_HINTS.name, { autocomplete: 'name', autocapitalize: 'words', enterkeyhint: 'next' });
-  assert.deepEqual(FIELD_HINTS.phone, { autocomplete: 'tel-national', inputmode: 'tel', enterkeyhint: 'next' });
-  assert.deepEqual(FIELD_HINTS.phonePrefix, { autocomplete: 'tel-country-code', inputmode: 'tel', enterkeyhint: 'next', list: 'phone-prefixes' });
+  assert.deepEqual(FIELD_HINTS.phone, { autocomplete: 'tel-national', inputmode: 'tel', enterkeyhint: 'next', maxlength: '20' });
+  assert.deepEqual(FIELD_HINTS.phonePrefix, { autocomplete: 'tel-country-code', inputmode: 'tel', enterkeyhint: 'next', list: 'phone-prefixes', maxlength: '4' });
   assert.deepEqual(Object.keys(FIELD_HINTS).sort(), ['city', 'email', 'name', 'phone', 'phonePrefix']);
   assert.deepEqual(FIELD_HINTS.city, { autocomplete: 'address-level2', enterkeyhint: 'done' });
 });
