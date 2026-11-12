@@ -19,19 +19,20 @@ test('whatsappUrl i mailtoUrl codifiquen accents, ç, ñ i salts de línia', () 
   assert.equal(mail(m).get('subject'), 'Distribució · Saló');
   assert.equal(mail(m).get('body'), 'Línia 1\n\nLínia 2');
 });
-test('sense dades de sessió: els 12 missatges de sempre (4 idiomes × perfil buit, distribuidor, particular)', () => {
-  for (const lang of CONFIG.languages) for (const profile of ['', 'distribuidor', 'particular']) {
+test('sense dades de sessió: el missatge genèric de cada idioma amb el nom de la fira, sense cap resta de Barcelona', () => {
+  for (const lang of CONFIG.languages) {
     const d = DICT[lang];
-    const m = d.messages[profile || 'none'];
-    const { whatsapp, email } = contactLinks(CONFIG, d, { profile });
-    assert.equal(wa(whatsapp), `${d.greeting}\n\n${m.text}`, `${lang}/${profile}`);
-    assert.equal(mail(email).get('subject'), m.subject);
-    assert.equal(mail(email).get('body'), `${d.greeting}\n\n${m.text}\n\n${d.closing}`);
+    const { whatsapp, email } = contactLinks(CONFIG, d, {});
+    const text = d.message.text.replace('{fair}', 'Enertech 2026');
+    assert.equal(wa(whatsapp), `${d.greeting}\n\n${text}`, lang);
+    assert.equal(mail(email).get('subject'), d.message.subject.replace('{fair}', 'Enertech 2026'), lang);
+    assert.equal(mail(email).get('body'), `${d.greeting}\n\n${text}\n\n${d.closing}`, lang);
+    assert.match(wa(whatsapp) + mail(email).get('subject'), /Enertech 2026/, lang);
+    assert.doesNotMatch(wa(whatsapp) + mail(email).get('subject'), /Barcelona|Náutico|Nàutic|Boat Show|\{fair\}/, lang);
   }
 });
-test('sense cap argument de sessió, o amb perfil desconegut, cau al missatge genèric', () => {
-  assert.equal(whatsappText(DICT.es), `${DICT.es.greeting}\n\n${DICT.es.messages.none.text}`);
-  assert.equal(whatsappText(DICT.es, { profile: 'inventat' }), whatsappText(DICT.es));
+test('sense cap argument de sessió ni de fira, no peta', () => {
+  assert.equal(whatsappText(DICT.es), `${DICT.es.greeting}\n\n${DICT.es.message.text.replace('{fair}', '')}`);
 });
 test('un nom amb símbols arriba intacte als dos canals', () => {
   const name = 'Ana & "Joe" ñ 😀 $& {value}';
@@ -48,11 +49,11 @@ test('amb dades de sessió: les línies van entre el text i el comiat, en ordre'
   const session = { name: 'Ana', product: 'Sifly', city: 'Lisboa' };
   const d = DICT.es;
   const lines = 'Me llamo Ana.\nProducto de interés: Sifly\nCiudad: Lisboa';
-  assert.equal(whatsappText(d, session), `${d.greeting}\n\n${d.messages.none.text}\n\n${lines}`);
-  assert.equal(emailBody(d, session), `${d.greeting}\n\n${d.messages.none.text}\n\n${lines}\n\n${d.closing}`);
+  assert.equal(whatsappText(d, session, 'Enertech 2026'), `${d.greeting}\n\n${d.message.text.replace('{fair}', 'Enertech 2026')}\n\n${lines}`);
+  assert.equal(emailBody(d, session, 'Enertech 2026'), `${d.greeting}\n\n${d.message.text.replace('{fair}', 'Enertech 2026')}\n\n${lines}\n\n${d.closing}`);
 });
 test('les línies que no tenen valor no apareixen', () => {
-  assert.equal(whatsappText(DICT.ca, { city: 'Lisboa' }), `${DICT.ca.greeting}\n\n${DICT.ca.messages.none.text}\n\nCiutat: Lisboa`);
+  assert.equal(whatsappText(DICT.ca, { city: 'Lisboa' }, 'Enertech 2026'), `${DICT.ca.greeting}\n\n${DICT.ca.message.text.replace('{fair}', 'Enertech 2026')}\n\nCiutat: Lisboa`);
 });
 test('cada idioma té les tres línies de dades amb {value}', () => {
   for (const lang of CONFIG.languages) for (const key of ['name', 'product', 'city'])

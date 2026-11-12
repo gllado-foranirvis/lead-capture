@@ -10,9 +10,6 @@ Són textos pendents de validar per Bruno; l'Olga revisa les traduccions. «⏎�
 |---|---|---|---|---|
 | Titular | Falemos de propulsão elétrica | Let's talk electric propulsion | Hablemos de propulsión eléctrica | Parlem de propulsió elèctrica |
 | Subtítol | Diz-nos o que procuras e respondemos | Tell us what you're looking for and we'll reply | Cuéntanos qué buscas y te respondemos | Explica'ns què busques i et responem |
-| Pregunta del perfil | Quem és? (opcional) | Who are you? (optional) | ¿Quién eres? (opcional) | Qui ets? (opcional) |
-| Xip de perfil 1 | Distribuidor ou profissional | Distributor or professional | Distribuidor o profesional | Distribuïdor o professional |
-| Xip de perfil 2 | Particular | Private customer | Particular | Particular |
 | Etiqueta de contacte | Escreve-nos | Get in touch | Escríbenos | Escriu-nos |
 | Botó de WhatsApp | Escrever por WhatsApp | Message on WhatsApp | Escribir por WhatsApp | Escriure per WhatsApp |
 | Botó de correu | Escrever por e-mail | Send an email | Escribir por correo | Escriure per correu |
@@ -71,68 +68,48 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 
 ## Missatges
 
-- **WhatsApp:** salutació, salt de línia en blanc i text del perfil. Sense assumpte ni comiat.
-- **Correu** (cap a `info@thesilentfleet.com`): assumpte del perfil; cos amb salutació, text del perfil i comiat.
-- **Perfil «Cap»:** és el missatge genèric, quan el visitant no ha triat perfil.
-- **Dades de la sessió:** si el visitant ja ha donat el nom, el producte o si té embarcació, es nota en una línia entre el text i el comiat; les que no té no hi surten.
+- **WhatsApp:** salutació, salt de línia en blanc i text del missatge. Sense assumpte ni comiat. `{fair}` es substitueix pel nom de la fira (`config.fair`).
+- **Correu** (cap a `info@thesilentfleet.com`): assumpte; cos amb salutació, text del missatge i comiat.
+- **Dades de la sessió:** si el visitant ja ha donat el nom, el producte o la ciutat, es nota en una línia entre el text i el comiat; les que no té no hi surten.
 
 ### Portuguès (PT)
 
-| Perfil | Via | Assumpte | Missatge |
+| Cas | Via | Assumpte | Missatge |
 |---|---|---|---|
-| Cap | WhatsApp | — | Olá, ⏎ Vi o vosso stand no Salão Náutico de Barcelona e gostaria de mais informação. |
-| Cap | Correu | Informação do Salão Náutico | Olá, ⏎ Vi o vosso stand no Salão Náutico de Barcelona e gostaria de mais informação. ⏎ Obrigado. |
-| Distribuïdor | WhatsApp | — | Olá, ⏎ Sou distribuidor e tenho interesse em trabalhar com a The Silent Fleet. Podemos falar de volume e condições? |
-| Distribuïdor | Correu | Distribuição · Salão Náutico | Olá, ⏎ Sou distribuidor e tenho interesse em trabalhar com a The Silent Fleet. Podemos falar de volume e condições? ⏎ Obrigado. |
-| Particular | WhatsApp | — | Olá, ⏎ Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me? |
-| Particular | Correu | Propulsão elétrica · Salão Náutico | Olá, ⏎ Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me? ⏎ Obrigado. |
-| Particular amb dades de sessió (exemple) | WhatsApp | — | Olá, ⏎ Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me? ⏎ Chamo-me Ana. / Produto de interesse: Modelo A |
-| Particular amb dades de sessió (exemple) | Correu | Propulsão elétrica · Salão Náutico | Olá, ⏎ Sou particular e tenho interesse em propulsão elétrica para a minha embarcação. Podem informar-me? ⏎ Chamo-me Ana. / Produto de interesse: Modelo A ⏎ Obrigado. |
+| Sense dades | WhatsApp | — | Olá, ⏎ Vi o vosso stand na Enertech 2026 e gostaria de mais informação. |
+| Sense dades | Correu | Informação da Enertech 2026 | Olá, ⏎ Vi o vosso stand na Enertech 2026 e gostaria de mais informação. ⏎ Obrigado. |
+| Amb dades de sessió (exemple) | WhatsApp | — | Olá, ⏎ Vi o vosso stand na Enertech 2026 e gostaria de mais informação. ⏎ Chamo-me Ana. / Produto de interesse: Sifly / Cidade: Lisboa |
+| Amb dades de sessió (exemple) | Correu | Informação da Enertech 2026 | Olá, ⏎ Vi o vosso stand na Enertech 2026 e gostaria de mais informação. ⏎ Chamo-me Ana. / Produto de interesse: Sifly / Cidade: Lisboa ⏎ Obrigado. |
 
 ### Anglès (EN)
 
-| Perfil | Via | Assumpte | Missatge |
+| Cas | Via | Assumpte | Missatge |
 |---|---|---|---|
-| Cap | WhatsApp | — | Hello, ⏎ I saw your stand at the Barcelona Boat Show and would like more information. |
-| Cap | Correu | Information from the Boat Show | Hello, ⏎ I saw your stand at the Barcelona Boat Show and would like more information. ⏎ Thank you. |
-| Distribuïdor | WhatsApp | — | Hello, ⏎ I am a distributor and I am interested in working with The Silent Fleet. Can we talk about volume and terms? |
-| Distribuïdor | Correu | Distribution · Boat Show | Hello, ⏎ I am a distributor and I am interested in working with The Silent Fleet. Can we talk about volume and terms? ⏎ Thank you. |
-| Particular | WhatsApp | — | Hello, ⏎ I am an individual interested in electric propulsion for my boat. Could you send me some information? |
-| Particular | Correu | Electric propulsion · Boat Show | Hello, ⏎ I am an individual interested in electric propulsion for my boat. Could you send me some information? ⏎ Thank you. |
-| Particular amb dades de sessió (exemple) | WhatsApp | — | Hello, ⏎ I am an individual interested in electric propulsion for my boat. Could you send me some information? ⏎ My name is Ana. / Product of interest: Modelo A |
-| Particular amb dades de sessió (exemple) | Correu | Electric propulsion · Boat Show | Hello, ⏎ I am an individual interested in electric propulsion for my boat. Could you send me some information? ⏎ My name is Ana. / Product of interest: Modelo A ⏎ Thank you. |
+| Sense dades | WhatsApp | — | Hello, ⏎ I saw your stand at Enertech 2026 and would like more information. |
+| Sense dades | Correu | Information from Enertech 2026 | Hello, ⏎ I saw your stand at Enertech 2026 and would like more information. ⏎ Thank you. |
+| Amb dades de sessió (exemple) | WhatsApp | — | Hello, ⏎ I saw your stand at Enertech 2026 and would like more information. ⏎ My name is Ana. / Product of interest: Sifly / City: Lisboa |
+| Amb dades de sessió (exemple) | Correu | Information from Enertech 2026 | Hello, ⏎ I saw your stand at Enertech 2026 and would like more information. ⏎ My name is Ana. / Product of interest: Sifly / City: Lisboa ⏎ Thank you. |
 
 ### Castellà (ES)
 
-| Perfil | Via | Assumpte | Missatge |
+| Cas | Via | Assumpte | Missatge |
 |---|---|---|---|
-| Cap | WhatsApp | — | Hola, ⏎ He visto vuestro stand en el Salón Náutico de Barcelona y quiero más información. |
-| Cap | Correu | Información desde el Salón Náutico | Hola, ⏎ He visto vuestro stand en el Salón Náutico de Barcelona y quiero más información. ⏎ Gracias. |
-| Distribuïdor | WhatsApp | — | Hola, ⏎ Soy distribuidor y me interesa trabajar con The Silent Fleet. ¿Podemos hablar de volumen y condiciones? |
-| Distribuïdor | Correu | Distribución · Salón Náutico | Hola, ⏎ Soy distribuidor y me interesa trabajar con The Silent Fleet. ¿Podemos hablar de volumen y condiciones? ⏎ Gracias. |
-| Particular | WhatsApp | — | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? |
-| Particular | Correu | Propulsión eléctrica · Salón Náutico | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? ⏎ Gracias. |
-| Particular amb dades de sessió (exemple) | WhatsApp | — | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? ⏎ Me llamo Ana. / Producto de interés: Modelo A |
-| Particular amb dades de sessió (exemple) | Correu | Propulsión eléctrica · Salón Náutico | Hola, ⏎ Soy particular y me interesa la propulsión eléctrica para mi embarcación. ¿Podéis informarme? ⏎ Me llamo Ana. / Producto de interés: Modelo A ⏎ Gracias. |
+| Sense dades | WhatsApp | — | Hola, ⏎ He visto vuestro stand en Enertech 2026 y quiero más información. |
+| Sense dades | Correu | Información desde Enertech 2026 | Hola, ⏎ He visto vuestro stand en Enertech 2026 y quiero más información. ⏎ Gracias. |
+| Amb dades de sessió (exemple) | WhatsApp | — | Hola, ⏎ He visto vuestro stand en Enertech 2026 y quiero más información. ⏎ Me llamo Ana. / Producto de interés: Sifly / Ciudad: Lisboa |
+| Amb dades de sessió (exemple) | Correu | Información desde Enertech 2026 | Hola, ⏎ He visto vuestro stand en Enertech 2026 y quiero más información. ⏎ Me llamo Ana. / Producto de interés: Sifly / Ciudad: Lisboa ⏎ Gracias. |
 
 ### Català (CA)
 
-| Perfil | Via | Assumpte | Missatge |
+| Cas | Via | Assumpte | Missatge |
 |---|---|---|---|
-| Cap | WhatsApp | — | Hola, ⏎ He vist el vostre estand al Saló Nàutic de Barcelona i vull més informació. |
-| Cap | Correu | Informació des del Saló Nàutic | Hola, ⏎ He vist el vostre estand al Saló Nàutic de Barcelona i vull més informació. ⏎ Gràcies. |
-| Distribuïdor | WhatsApp | — | Hola, ⏎ Sóc distribuïdor i m'interessa treballar amb The Silent Fleet. Podem parlar de volum i condicions? |
-| Distribuïdor | Correu | Distribució · Saló Nàutic | Hola, ⏎ Sóc distribuïdor i m'interessa treballar amb The Silent Fleet. Podem parlar de volum i condicions? ⏎ Gràcies. |
-| Particular | WhatsApp | — | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? |
-| Particular | Correu | Propulsió elèctrica · Saló Nàutic | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? ⏎ Gràcies. |
-| Particular amb dades de sessió (exemple) | WhatsApp | — | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? ⏎ Em dic Ana. / Producte d'interès: Modelo A |
-| Particular amb dades de sessió (exemple) | Correu | Propulsió elèctrica · Saló Nàutic | Hola, ⏎ Sóc un particular i m'interessa la propulsió elèctrica per a la meva embarcació. Em podeu informar? ⏎ Em dic Ana. / Producte d'interès: Modelo A ⏎ Gràcies. |
+| Sense dades | WhatsApp | — | Hola, ⏎ He vist el vostre estand a Enertech 2026 i vull més informació. |
+| Sense dades | Correu | Informació des de Enertech 2026 | Hola, ⏎ He vist el vostre estand a Enertech 2026 i vull més informació. ⏎ Gràcies. |
+| Amb dades de sessió (exemple) | WhatsApp | — | Hola, ⏎ He vist el vostre estand a Enertech 2026 i vull més informació. ⏎ Em dic Ana. / Producte d'interès: Sifly / Ciutat: Lisboa |
+| Amb dades de sessió (exemple) | Correu | Informació des de Enertech 2026 | Hola, ⏎ He vist el vostre estand a Enertech 2026 i vull més informació. ⏎ Em dic Ana. / Producte d'interès: Sifly / Ciutat: Lisboa ⏎ Gràcies. |
 
 ## Per revisar
 
 - **Tractament:** castellà i català de tu; portuguès de «você» formal («Escreva-nos»). Cal confirmar-ho amb Bruno.
-- **«Distribuïdor o professional»** agrupa dos perfils en un xip. Confirmar que no calen dos xips separats. A més, el xip ho diu així però el missatge només diu «distribuïdor».
 - **Portuguès:** revisar-lo amb un parlant natiu de la variant europea (per exemple «e-mail»). El comiat dels correus, «Obrigado», és masculí; «Obrigado(a)» o «Cumprimentos» seria neutre.
-- **Anglès, distribuïdor:** «I am a distributor and I am interested in…» repeteix «I am».
-- **Perfil «Cap»:** «He visto vuestro stand…» suposa que el visitant ha estat a l'estand; no encaixa si arriba pel QR sense passar-hi.
 - **Privacitat:** el text no identifica el responsable del tractament; Bruno l'ha de validar abans de la fira.

@@ -3,10 +3,10 @@ import { dictFor, resolveLang } from './i18n.js';
 import { contactLinks } from './messages.js';
 import { icon } from './icons.js';
 import { isDossierEnabled, isDossierPreview, isExtra1Enabled, legalQuery, resolveOrigin, resolveProducts } from './form/context.js';
-import { PROFILES, emptyForm, formReducer } from './form/model.js';
+import { emptyForm, formReducer } from './form/model.js';
 import { clearError } from './form/validate.js';
 import { newLeadId } from './form/lead.js';
-import { advanceStep1, discardSession, handleSubmit, leaveToEntry } from './form/flow.js';
+import { discardSession, handleSubmit, leaveToEntry } from './form/flow.js';
 import { ACTIVITY_EVENTS, IDLE_MS, watchIdle } from './form/idle.js';
 import { toSession } from './form/session.js';
 import { dossiersFor } from './form/dossier.js';
@@ -17,7 +17,6 @@ import { connectSender, createSender } from './form/sender.js';
 import { createChrome } from './ui/chrome.js';
 import { createEntryScreen } from './ui/entry-screen.js';
 import { createStepContact } from './ui/step-contact.js';
-import { createStepProfile } from './ui/step-profile.js';
 import { createDoneScreen } from './ui/done-screen.js';
 
 const R = window.React;
@@ -30,7 +29,6 @@ const dossier = isDossierEnabled(CONFIG, search);
 const Header = createChrome({ h, T, brand: CONFIG.brand, languages: CONFIG.languages });
 const EntryScreen = createEntryScreen({ h, T, icon });
 const StepContact = createStepContact({ h, T });
-const StepProfile = createStepProfile({ h, T });
 const DoneScreen = createDoneScreen({ h, T, icon });
 
 // Els leads s'envien al full de Google si hi ha URL configurada; la cua viu aquí (no a l'estat de React) perquè
@@ -41,7 +39,7 @@ const emit = (name) => (detail) => window.dispatchEvent(new CustomEvent(name, { 
 
 function App() {
   const [lang, setLang] = R.useState(() => resolveLang(search, CONFIG));
-  const [view, setView] = R.useState('entry'); // entry | step1 | step2 | done
+  const [view, setView] = R.useState('entry'); // entry | step1 | done
   const [values, dispatch] = R.useReducer(formReducer, undefined, () => emptyForm({ products: resolveProducts(search, CONFIG.products) }));
   const [errors, setErrors] = R.useState({});
   const [attempt, setAttempt] = R.useState(0);
@@ -65,7 +63,7 @@ function App() {
     } else {
       mounted.current = true;
     }
-    if (view === 'step1' || view === 'step2') applyFieldHints(document);
+    if (view === 'step1') applyFieldHints(document);
   }, [view]);
   // Tauleta de l'estand: si el visitant s'allunya sense tocar res, la sessió es descarta.
   R.useEffect(() => {
@@ -84,7 +82,6 @@ function App() {
     setErrors((current) => clearError(current, field));
   };
   const common = { products: CONFIG.products, search, lang, leadId, newId: newLeadId, setLeadId, setErrors, bumpAttempt, goTo: setView };
-  const next = () => advanceStep1(values, { ...common, emitPartial: emit('tsf:lead-partial') });
   const submit = () => handleSubmit(values, { ...common, dispatch, setReceipt, emitLead: emit('tsf:lead') });
   const toggle = (field, value) => dispatch({ type: 'toggle', field, value });
   const goHome = () => { setReceipt(null); setView('entry'); };
@@ -94,33 +91,27 @@ function App() {
     else if (view !== 'entry') leaveToEntry({ ...common, dispatch });
     window.scrollTo(0, 0);
   };
-  const goBack = (to) => () => { setErrors({}); setView(to); };
 
-  // El mateix xip de perfil a l'inici, al pas 2 i als missatges: una sola dada (values.profile).
-  const profileOptions = extra1
-    ? PROFILES.map((p) => ({ value: p, label: t.form.profiles[p] }))
-    : [{ value: 'profesional', label: t.profileDistribuidor }, { value: 'particular', label: t.profileParticular }];
+  // Cada clic a WhatsApp o correu es notifica (l'enllaç segueix el seu camí); `from` diu de quina pantalla ve.
+  const contactClick = (from) => (button) => emit('tsf:contact-click')({ button, from });
 
   const screens = {
     entry: () => h(EntryScreen, {
-      t, links: contactLinks(CONFIG, t, sessionOf(values)), email: CONFIG.email, legalQuery: query,
-      profile: values.profile, profileLegend: extra1 ? t.form.entryProfileLegend : t.profileLegend, profileOptions,
-      onProfile: (v) => change('profile', v), onClearProfile: () => change('profile', ''),
+      t, fair: CONFIG.fair, links: contactLinks(CONFIG, t, sessionOf(values)), email: CONFIG.email, legalQuery: query,
+      products: CONFIG.products, askProduct: dossier, values, onChange: change, onToggle: toggle, onContactClick: contactClick('entry'),
       onOpenForm: extra1 ? () => setView('step1') : undefined,
     }),
     step1: () => h(StepContact, {
-      t, lang, values, errors, onChange: change, onNext: next, onKeyDown: (e) => advanceOnEnter(e, document),
-      onBack: () => leaveToEntry({ ...common, dispatch }), privacyHref: `privacy.html${query}#privacy`,
-    }),
-    step2: () => h(StepProfile, {
-      t, products: CONFIG.products, askProduct: dossier, values, errors, onChange: change, onToggle: toggle, onSubmit: submit, onKeyDown: (e) => advanceOnEnter(e, document), onBack: goBack('step1'),
+      t, lang, products: CONFIG.products, askProduct: dossier, values, errors, onChange: change, onToggle: toggle, onSubmit: submit,
+      onKeyDown: (e) => advanceOnEnter(e, document), onBack: () => leaveToEntry({ ...common, dispatch }), privacyHref: `privacy.html${query}#privacy`,
     }),
     done: () => {
       const links = contactLinks(CONFIG, t, receipt ? sessionOf(receipt) : {});
-      const docs = dossier ? dossiersFor(receipt?.products ?? [], CONFIG, t.form.doneCardGeneral) : [];
+      const docs = dossier ? dossiersFor(receipt?.products ?? [], lang, CONFIG, t.form.doneCardGeneral) : [];
+      // Sense cap PDF aplicable (p. ex. «asesoramiento») la confirmació no parla de cap descàrrega.
       return h(DoneScreen, {
-        t, emailDelivery: dossier && CONFIG.emailDelivery, onHome: goHome, whatsappHref: links.whatsapp, emailHref: links.email,
-        docs, onDownloadAll: () => downloadAll(docs),
+        t: docs.length ? t : dictFor(lang, false), emailDelivery: dossier && CONFIG.emailDelivery, onHome: goHome,
+        whatsappHref: links.whatsapp, emailHref: links.email, docs, onDownloadAll: () => downloadAll(docs), onContactClick: contactClick('done'),
       });
     },
   };

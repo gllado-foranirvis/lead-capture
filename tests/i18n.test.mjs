@@ -18,12 +18,14 @@ test('cap literal buit ni amb signes d\'exclamació o emojis', () => {
     assert.doesNotMatch(s, /\p{Extended_Pictographic}/u, `${l}: "${s}"`);
   }
 });
-test('cada missatge té només assumpte i text (cap camp a omplir ni altres peces)', () => {
-  for (const l of CONFIG.languages) for (const [k, m] of Object.entries(DICT[l].messages))
-    assert.deepEqual(Object.keys(m).sort(), ['subject', 'text'], `${l}/${k}`);
+test('el missatge té només assumpte i text, amb la marca {fair}', () => {
+  for (const l of CONFIG.languages) {
+    assert.deepEqual(Object.keys(DICT[l].message).sort(), ['subject', 'text'], l);
+    for (const part of Object.values(DICT[l].message)) assert.match(part, /\{fair\}/, l);
+  }
 });
 test('registre consistent a la interfície: ES i CA de tu, sense «usted» ni «vós»', () => {
-  const ui = (d) => leaves((({ messages, ...rest }) => rest)(d)).join(' ');
+  const ui = (d) => leaves((({ message, ...rest }) => rest)(d)).join(' ');
   assert.doesNotMatch(ui(DICT.es), /\b(su|sus|usted|ustedes)\b/i);
   assert.doesNotMatch(ui(DICT.ca), /\b(vostre|vostra|vostres|escriviu|contacteu)\b/i);
 });

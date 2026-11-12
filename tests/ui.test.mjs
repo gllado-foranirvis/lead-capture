@@ -52,3 +52,13 @@ test('entrada: línia explicativa, adreça visible i enllaços legals amb la que
   const [legal] = byType(tree, 'T.LegalLinks');
   assert.equal(legal.props.links[0].href, 'privacy.html?lang=es&extra1=1');
 });
+
+test('app.js: recorregut entry → step1 → done, PDF segons l\'idioma, clics notificats i cap resta de la perfilació', async () => {
+  const { readFileSync } = await import('node:fs');
+  const app = readFileSync('site/js/app.js', 'utf8');
+  for (const gone of ['step-profile', 'StepProfile', 'step2', 'PROFILES', 'advanceStep1', 'profileOptions', 'onProfile']) assert.doesNotMatch(app, new RegExp(gone), gone);
+  assert.match(app, /dossiersFor\(receipt\?\.products \?\? \[\], lang, CONFIG, /);
+  assert.match(app, /tsf:contact-click/);
+  assert.match(app, /fair: CONFIG\.fair/);
+  assert.match(app, /dictFor\(lang, false\)/, 'sense PDF aplicable la confirmació usa els textos sense dossier');
+});
