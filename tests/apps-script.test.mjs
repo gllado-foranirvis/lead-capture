@@ -289,7 +289,7 @@ test('doPost: un error intern respon «error» (el client reintenta) i allibera 
 });
 test('doGet respon ok (per comprovar que l\'URL està desplegada)', () => {
   const { api } = load();
-  assert.deepEqual(JSON.parse(api.doGet().text), { ok: true });
+  assert.deepEqual(JSON.parse(api.doGet().text), { ok: true, version: 'cro-enertech-2026-11-13' });
 });
 
 test('un clic de descàrrega de PDF es registra; un botó desconegut es rebutja', () => {

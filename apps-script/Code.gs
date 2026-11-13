@@ -194,8 +194,11 @@ function reply(object) {
   return ContentService.createTextOutput(JSON.stringify(object)).setMimeType(ContentService.MimeType.JSON);
 }
 
+// La marca de versió permet veure, amb un GET a l'URL /exec, quin codi hi ha realment desplegat.
+var VERSION = 'cro-enertech-2026-11-13';
+
 function doGet() {
-  return reply({ ok: true });
+  return reply({ ok: true, version: VERSION });
 }
 
 function doPost(e) {
