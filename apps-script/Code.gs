@@ -3,11 +3,12 @@
 
 var SHEET_NAME = 'Leads';
 // Les columnes de perfilació (profile, activity… factorsOther, comments) s'omplen al pas 2 del formulari (o queden buides si el visitant el salta).
-// «city» ocupa el lloc de l'antiga «demo» (la ciutat es demana a l'inici).
+// «city» ocupa el lloc de l'antiga «demo» (la ciutat es demana a l'inici). «visit» és l'última (les anteriors no es mouen):
+// és la mateixa visita que porta cada fila de «Clics», i permet saber què ha fet un lead.
 var COLUMNS = [
   'id', 'stage', 'createdAt', 'updatedAt', 'name', 'email', 'phone', 'profile', 'lang', 'origin', 'privacy', 'newsletter', 'product',
   'activity', 'activityOther', 'hasBoat', 'hasElectric', 'enthusiasm', 'enthusiasmOther', 'concerns', 'concernsOther',
-  'intent', 'factors', 'factorsOther', 'city', 'comments'
+  'intent', 'factors', 'factorsOther', 'city', 'comments', 'visit'
 ];
 var STAGES = ['step1', 'complete'];
 var LANGS = ['es', 'ca', 'pt', 'en'];
@@ -68,7 +69,8 @@ function sanitizeLead(payload) {
   var lead = {
     id: id, stage: payload.stage, name: name, email: email, phone: phone,
     privacy: true, newsletter: c.newsletter === true, lang: c.lang, origin: c.origin,
-    product: productsOf(c.product), city: clip(c.city, MAX.city)
+    product: productsOf(c.product), city: clip(c.city, MAX.city),
+    visit: ID_FORMAT.test(String(c.visit || '')) ? String(c.visit) : ''
   };
   // La perfilació només arriba a l'etapa «complete»; saltar-la deixa aquests camps buits.
   var p = payload.stage === 'complete' && payload.profiling && typeof payload.profiling === 'object' ? payload.profiling : {};
@@ -114,6 +116,9 @@ function sanitizeClick(payload) {
 
 // Escriu la capçalera de la pestanya si falta o ha canviat (p. ex. «demo» → «city»); un full nou també es formata com a text pla.
 function ensureHeader(sheet, columns) {
+  // Un full nou només té 26 columnes (A–Z): si en cal més, s'amplia la quadrícula (getRange fora de la quadrícula falla).
+  var maxColumns = sheet.getMaxColumns();
+  if (columns.length > maxColumns) sheet.insertColumnsAfter(maxColumns, columns.length - maxColumns);
   var first = sheet.getRange(1, 1, 1, columns.length).getValues()[0];
   if (first.join('|') === columns.join('|')) return;
   if (String(first[0]) !== columns[0]) {
@@ -195,7 +200,7 @@ function reply(object) {
 }
 
 // La marca de versió permet veure, amb un GET a l'URL /exec, quin codi hi ha realment desplegat.
-var VERSION = 'cro-enertech-2026-11-13';
+var VERSION = 'cro-enertech-2026-11-13-visit';
 
 function doGet() {
   return reply({ ok: true, version: VERSION });

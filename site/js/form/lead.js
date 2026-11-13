@@ -7,7 +7,7 @@ export const newLeadId = () =>
 const YES_NO = ['si', 'no'];
 const answered = (value) => clip(value, 1) !== '';
 
-function buildContact(values, { id, lang, origin }) {
+function buildContact(values, { id, lang, origin, visit = '' }) {
   return {
     id, product: (values.products ?? []).join(','),
     city: clip(values.city, MAX.city),
@@ -16,7 +16,7 @@ function buildContact(values, { id, lang, origin }) {
     phone: fullPhone(values),
     privacy: true,
     newsletter: values.newsletter === true,
-    lang, origin,
+    lang, origin, visit,
   };
 }
 

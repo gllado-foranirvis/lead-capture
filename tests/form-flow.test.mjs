@@ -13,7 +13,7 @@ const harness = (extra = {}, search = '?producto=model-a&o=tauleta') => {
   return {
     calls,
     deps: {
-      products: PRODUCTS, search, lang: 'es', leadId: '', newId: () => 'id-1',
+      products: PRODUCTS, search, lang: 'es', visit: 'visit-1', leadId: '', newId: () => 'id-1',
       setLeadId: rec('setLeadId'), setErrors: rec('setErrors'), bumpAttempt: rec('bumpAttempt'), dispatch: rec('dispatch'),
       setReceipt: rec('setReceipt'), emitLead: rec('emitLead'), goTo: rec('goTo'),
       ...extra,
@@ -100,4 +100,15 @@ test('discardSession (inactivitat a la tauleta): esborra dades, perfil, errors, 
   discardSession({ products: PRODUCTS, search: '?o=tauleta&producto=model-a', dispatch: rec('dispatch'), setErrors: rec('setErrors'), setLeadId: rec('setLeadId'), setReceipt: rec('setReceipt'), goTo: rec('goTo') });
   assert.deepEqual(call(calls, 'dispatch')[1], { type: 'reset', initial: { products: ['model-a'] } });
   assert.deepEqual([call(calls, 'setErrors')[1], call(calls, 'setLeadId')[1], call(calls, 'setReceipt')[1], call(calls, 'goTo')[1]], [{}, '', null, 'entry']);
+});
+test('la visita viatja amb el lead parcial, amb el final i amb el saltat', () => {
+  const emits = [];
+  advanceStep1(full, { ...harness().deps, emitPartial: (l) => emits.push(l) });
+  assert.equal(emits[0].visit, 'visit-1');
+  const sent = harness();
+  handleSubmit(profiled, sent.deps);
+  assert.equal(call(sent.calls, 'emitLead')[1].contact.visit, 'visit-1');
+  const skipped = harness();
+  handleSkip(full, skipped.deps);
+  assert.equal(call(skipped.calls, 'emitLead')[1].contact.visit, 'visit-1');
 });
