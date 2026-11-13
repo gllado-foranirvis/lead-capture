@@ -14,15 +14,17 @@ const formatDate = (date, zone, format) => {
 };
 
 class FakeSheet {
-  constructor() { this.rows = []; this.formats = []; this.formatted = new Set(); this.frozen = 0; this.maxRows = 1000; }
+  constructor() { this.rows = []; this.formats = []; this.formatted = new Set(); this.frozen = 0; this.maxRows = 1000; this.maxCols = 26; }
   getLastRow() { return this.rows.length; }
   getMaxRows() { return this.maxRows; }
   insertRowsAfter(position, howMany) { assert.equal(position, this.maxRows); this.maxRows += howMany; }
+  getMaxColumns() { return this.maxCols; }
+  insertColumnsAfter(position, howMany) { assert.equal(position, this.maxCols); this.maxCols += howMany; }
   setFrozenRows(n) { this.frozen = n; }
   getRange(row, col, nRows = 1, nCols = 1) {
     const sheet = this;
     // Com al full real: fora de la quadrícula, l'accés falla.
-    if (row + nRows - 1 > sheet.maxRows) throw new Error('The coordinates of the range are outside the dimensions of the sheet.');
+    if (row + nRows - 1 > sheet.maxRows || col + nCols - 1 > sheet.maxCols) throw new Error('The coordinates of the range are outside the dimensions of the sheet.');
     return {
       getValues: () => Array.from({ length: nRows }, (_, i) => Array.from({ length: nCols }, (_, j) => (sheet.rows[row - 1 + i] ?? [])[col - 1 + j] ?? '')),
       setValues(values) { values.forEach((v, i) => { sheet.rows[row - 1 + i] = [...(sheet.rows[row - 1 + i] ?? [])]; v.forEach((x, j) => { sheet.rows[row - 1 + i][col - 1 + j] = x; }); }); },
@@ -289,7 +291,7 @@ test('doPost: un error intern respon «error» (el client reintenta) i allibera 
 });
 test('doGet respon ok (per comprovar que l\'URL està desplegada)', () => {
   const { api } = load();
-  assert.deepEqual(JSON.parse(api.doGet().text), { ok: true, version: 'cro-enertech-2026-11-13' });
+  assert.deepEqual(JSON.parse(api.doGet().text), { ok: true, version: 'cro-enertech-2026-11-13-visit' });
 });
 
 test('un clic de descàrrega de PDF es registra; un botó desconegut es rebutja', () => {
@@ -333,4 +335,19 @@ test('upsert desa la visita a la fila i un final posterior la conserva', () => {
   send('step1'); send('complete');
   assert.equal(sheet.rows.length, 2);
   assert.equal(sheet.rows[1][api.COLUMNS.indexOf('visit')], 'visit-0001');
+});
+
+test('un full nou només té 26 columnes (A–Z): l\'script n\'amplia la quadrícula abans d\'escriure la capçalera de 27', () => {
+  const { api, sheet } = load();
+  assert.equal(sheet.getMaxColumns(), 26);
+  api.ensureHeader(sheet, api.COLUMNS);
+  assert.ok(sheet.getMaxColumns() >= api.COLUMNS.length);
+  assert.equal(sheet.rows[0].at(-1), 'visit');
+});
+test('amb un full de 26 columnes, un lead nou s\'escriu sencer (27 columnes) i el POST respon ok', () => {
+  const { sheet, api } = load();
+  const reply = post(api, { ...complete, contact: { ...contact, visit: 'visit-0001' } });
+  assert.deepEqual(reply, { ok: true, result: 'created' });
+  assert.equal(sheet.rows[1].length, api.COLUMNS.length);
+  assert.equal(sheet.rows[1].at(-1), 'visit-0001');
 });

@@ -116,6 +116,9 @@ function sanitizeClick(payload) {
 
 // Escriu la capçalera de la pestanya si falta o ha canviat (p. ex. «demo» → «city»); un full nou també es formata com a text pla.
 function ensureHeader(sheet, columns) {
+  // Un full nou només té 26 columnes (A–Z): si en cal més, s'amplia la quadrícula (getRange fora de la quadrícula falla).
+  var maxColumns = sheet.getMaxColumns();
+  if (columns.length > maxColumns) sheet.insertColumnsAfter(maxColumns, columns.length - maxColumns);
   var first = sheet.getRange(1, 1, 1, columns.length).getValues()[0];
   if (first.join('|') === columns.join('|')) return;
   if (String(first[0]) !== columns[0]) {
@@ -197,7 +200,7 @@ function reply(object) {
 }
 
 // La marca de versió permet veure, amb un GET a l'URL /exec, quin codi hi ha realment desplegat.
-var VERSION = 'cro-enertech-2026-11-13';
+var VERSION = 'cro-enertech-2026-11-13-visit';
 
 function doGet() {
   return reply({ ok: true, version: VERSION });
