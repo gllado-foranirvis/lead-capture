@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CONFIG } from '../site/js/config.js';
+import { CONFIG, ENDPOINTS, leadTarget } from '../site/js/config.js';
 import { normalizeNumber } from '../site/js/messages.js';
 
 test('el número de WhatsApp de config és un número internacional vàlid', () => {
@@ -52,4 +52,15 @@ test('l\'enviament al full: buit (apagat) o una URL /exec de Google; el token é
   assert.match(CONFIG.leadEndpoint, /^(|https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec)$/);
   assert.equal(typeof CONFIG.leadToken, 'string');
   if (CONFIG.leadToken) assert.ok(CONFIG.leadEndpoint, 'un token sense URL no té sentit');
+});
+
+test('en local el web envia al full de test i a qualsevol altre domini, al de producció', () => {
+  for (const host of ['localhost', '127.0.0.1', '[::1]']) assert.equal(leadTarget(host).url, ENDPOINTS.test.url, host);
+  for (const host of ['gllado-foranirvis.github.io', 'localhost.example.com', '', undefined]) assert.equal(leadTarget(host).url, ENDPOINTS.production.url, String(host));
+  assert.notEqual(ENDPOINTS.test.url, ENDPOINTS.production.url);
+});
+
+test('sota Node (sense location) CONFIG apunta a producció', () => {
+  assert.equal(CONFIG.leadEndpoint, ENDPOINTS.production.url);
+  assert.equal(CONFIG.leadToken, ENDPOINTS.production.token);
 });
