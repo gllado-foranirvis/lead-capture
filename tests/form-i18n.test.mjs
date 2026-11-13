@@ -90,10 +90,10 @@ test('el text de privacitat cita la ciutat, el producte, les respostes opcionals
     assert.match(DICT[l].form.privacyText, /descarg|descarreg|download/i, `${l} descàrregues`);
   }
 });
-test('el text de cookies enumera tot el que es desa a cada clic i avisa que es pot relacionar amb les dades deixades', () => {
+test('el text de cookies enumera tot el que es desa a cada clic i diu que es relaciona amb les dades deixades', () => {
   const parts = {
-    es: [/sistema/, /pantalla/, /zona horaria/, /ciudad/, /dominio/, /idioma de la página y del navegador/, /relacionar/],
-    ca: [/sistema/, /pantalla/, /zona horària/, /ciutat/, /domini/, /idioma de la pàgina i del navegador/, /relacionar/],
+    es: [/sistema/, /pantalla/, /zona horaria/, /ciudad/, /dominio/, /idioma de la página y del navegador/, /relacionados/],
+    ca: [/sistema/, /pantalla/, /zona horària/, /ciutat/, /domini/, /idioma de la pàgina i del navegador/, /relacionats/],
     pt: [/sistema/, /ecrã/, /fuso horário/, /cidade/, /domínio/, /idioma da página e do navegador/, /relacionados/],
     en: [/system/, /screen size/, /time zone/, /city/, /domain/, /page and browser language/, /linked/],
   };
@@ -145,5 +145,23 @@ test('els plegables tenen recompte de preguntes ({n}), acció de canviar i resum
     const f = DICT[l].form;
     assert.match(f.moreCount, /\{n\}/, l);
     for (const key of ['change', 'chooseProduct']) assert.ok(typeof f[key] === 'string' && f[key].trim(), `${l}.${key}`);
+  }
+});
+
+test('els clics es relacionen amb el lead a través de la visita: privacitat i cookies ho diuen sense condicionals', () => {
+  const linked = {
+    es: /se relacionan con tu contacto/, ca: /es relacionen amb el teu contacte/,
+    pt: /ficam relacionados com o teu contacto/, en: /are linked to your contact/,
+  };
+  const cookiesLinked = {
+    es: /quedan relacionados con tu contacto/, ca: /queden relacionats amb el teu contacte/,
+    pt: /ficam relacionados com o teu contacto/, en: /are linked to your contact/,
+  };
+  const hedge = /podr[ií]a|podrien|podria|poder[aã]o|poder[aá]|could/i;
+  for (const l of CONFIG.languages) {
+    assert.match(DICT[l].form.privacyText, linked[l], `${l} privacitat`);
+    assert.match(DICT[l].cookiesText, cookiesLinked[l], `${l} cookies`);
+    assert.doesNotMatch(DICT[l].form.privacyText.split('\n\n')[2], hedge, `${l} privacitat sense condicional`);
+    assert.doesNotMatch(DICT[l].cookiesText, hedge, `${l} cookies sense condicional`);
   }
 });

@@ -98,7 +98,7 @@ function App() {
     dispatch({ type: 'set', field, value });
     setErrors((current) => clearError(current, field));
   };
-  const common = { products: CONFIG.products, search, lang, leadId, newId: newLeadId, setLeadId, setErrors, bumpAttempt, goTo: setView };
+  const common = { products: CONFIG.products, search, lang, visit: visit.current, leadId, newId: newLeadId, setLeadId, setErrors, bumpAttempt, goTo: setView };
   const next = () => advanceStep1(values, { ...common, emitPartial: emit('tsf:lead-partial') });
   const finishDeps = { ...common, dispatch, setReceipt, emitLead: emit('tsf:lead') };
   const submit = () => handleSubmit(values, finishDeps);

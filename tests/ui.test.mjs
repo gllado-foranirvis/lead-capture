@@ -69,5 +69,6 @@ test('app.js: cada clic porta una visita en memòria (renovada en descartar la s
   assert.match(app, /clickInfo\(\{ nav: navigator, win: window, doc: document, startedAt, now: Date\.now\(\) \}\)/);
   assert.match(app, /clickDetail\(/);
   assert.match(app, /visit\.current = newLeadId\(\)/, 'la visita es renova quan la tauleta descarta la sessió');
+  assert.match(app, /const common = \{[^}]*visit: visit\.current/, 'el lead porta la visita (pas 1, final i saltat)');
   assert.doesNotMatch(app, /localStorage|sessionStorage|document\.cookie/, 'cap emmagatzematge al navegador');
 });

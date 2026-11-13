@@ -7,11 +7,11 @@ const values = {
   ...emptyForm({ products: ['sifly'] }), email: ' Ana@Example.com ', name: '  Ana  ', city: '  Lisboa  ',
   phonePrefix: '+34', phone: ' 600 00 00 00 ', privacy: true, newsletter: true,
 };
-const ctx = { id: 'id-1', lang: 'pt', origin: 'mobil' };
+const ctx = { id: 'id-1', lang: 'pt', origin: 'mobil', visit: 'visit-1' };
 
 const contactOnly = {
   id: 'id-1', product: 'sifly', city: 'Lisboa', name: 'Ana', email: 'ana@example.com', phone: '+34 600 00 00 00',
-  privacy: true, newsletter: true, lang: 'pt', origin: 'mobil',
+  privacy: true, newsletter: true, lang: 'pt', origin: 'mobil', visit: 'visit-1',
 };
 test('lead complet sense perfilació: contacte normalitzat i perfilació només amb l\'id', () => {
   assert.deepEqual(buildLead(values, ctx), { contact: contactOnly, profiling: { id: 'id-1' }, hasProfiling: false });
@@ -59,4 +59,7 @@ test('newLeadId dona identificadors diferents', () => {
 test('sense telèfon, phone és buit; sense correu, email és buit', () => {
   assert.equal(buildLead({ ...values, phone: '' }, ctx).contact.phone, '');
   assert.equal(buildLead({ ...values, email: '' }, ctx).contact.email, '');
+});
+test('sense visita al context, el lead porta la visita buida (mai undefined)', () => {
+  assert.equal(buildPartialLead(values, { id: 'id-1', lang: 'pt', origin: 'mobil' }).visit, '');
 });
