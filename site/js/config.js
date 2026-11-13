@@ -21,7 +21,7 @@
 // La URL /exec és la de cada desplegament de l'script (docs/google-sheet.md); el token és la propietat TOKEN de cada script (visible al web: talla el correu brossa casual, no és un secret).
 export const ENDPOINTS = {
   production: {
-    url: 'https://script.google.com/macros/s/AKfycby90bv7WWfBgr4AG6ZLmyh5WiIjwolPe4oycfVKc_OfvoRoWxITRVznHFIGp8oFHUoLtw/exec',
+    url: 'https://script.google.com/macros/s/AKfycbxLqnEmncP_j9CYSnG95KztxohujzKiY9HsRF98aXMsv2ms2E9Kic_VD6Cq6oJFuUPl/exec',
     token: '27aa6d8a3f1ef0a01b395c3448cd8338380b40a78b4a1141',
   },
   test: {
