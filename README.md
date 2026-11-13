@@ -58,18 +58,18 @@ A la tauleta (`?o=tauleta`), tornar a l'inici o 90 segons sense tocar res descar
 
 ### Full de Google
 
-`apps-script/Code.gs` desa els leads a `Leads` (una fila per lead, amb `product` i `city`) i els clics a `Clics` (una fila per clic, 18 columnes anònimes: dia i hora de la zona del full, botó, lloc, idioma, origen, visita, productes, ciutat, dispositiu, sistema, idioma del navegador, zona horària, pantalla, segons a la pàgina i domini de procedència). Guia, recomptes i la prova de fum: `docs/google-sheet.md` i `node scripts/smoke-sheet.mjs <url> [token]`. **Cal tornar a desplegar l'script (nova versió) després de cada canvi de `Code.gs`.**
+`apps-script/Code.gs` desa els leads a `Leads` (una fila per lead, amb `product` i `city`) i els clics a `Clics` (una fila per clic, 18 columnes sense nom, correu ni telèfon: dia i hora de la zona del full, botó, lloc, idioma, origen, visita, productes, ciutat, dispositiu, sistema, idioma del navegador, zona horària, pantalla, segons a la pàgina i domini de procedència). `Leads` també desa la visita (`visit`, l'última columna): és la clau per creuar què ha fet cada lead. Guia, recomptes i la prova de fum: `docs/google-sheet.md` i `node scripts/smoke-sheet.mjs <url> [token]`. **Cal tornar a desplegar l'script (nova versió) després de cada canvi de `Code.gs`.**
 
 ### Dades i esdeveniments
 Només s'emeten esdeveniments a `window`; l'enviament al full és opcional (`leadEndpoint`):
-- `tsf:lead` en enviar el formulari: `{ contact: { id, product, city, name, email, phone, privacy: true, newsletter, lang, origin } }`. El telèfon va com `+34 600 00 00 00`; `product` són els ids separats per comes.
-- `tsf:contact-click` a cada clic de WhatsApp o correu: `{ id, visit, button, from, lang, origin, products, city, info }`. `visit` és un identificador aleatori que només viu a la memòria de la pàgina (es renova en descartar la sessió de la tauleta).
+- `tsf:lead` en enviar el formulari: `{ contact: { id, product, city, name, email, phone, privacy: true, newsletter, lang, origin, visit } }`. El telèfon va com `+34 600 00 00 00`; `product` són els ids separats per comes.
+- `tsf:contact-click` a cada clic de WhatsApp o correu: `{ id, visit, button, from, lang, origin, products, city, info }`. `visit` és un identificador aleatori que només viu a la memòria de la pàgina (es renova en descartar la sessió de la tauleta); també viatja amb el lead (`Leads.visit`), i així es poden relacionar els clics amb el lead.
 
 ### Altres peces
 - **`emailDelivery`** (`config.js`) és `false` fins que existeixi l'enviament del correu amb el dossier; només canvia el text de la confirmació.
 - **Fotografia:** `site/img/hero-m.webp` i `hero-d.webp` (foto de The Silent Fleet subministrada per l'Olga).
 - **Literals:** `site/js/i18n.js` (pàgina i missatges, amb `{fair}`) i `site/js/i18n-form.js` (formulari); de tu als 4 idiomes; el document es diu «dossier». Els noms de producte no es tradueixen.
-- **Privacitat i cookies:** textos a `i18n-form.js` i `i18n.js`; el de privacitat diu què es desa de veritat (nom, correu, telèfon, ciutat, producte, idioma, origen, novetats) i el de cookies que només es compten els clics de forma anònima. Són esborranys: han de passar per revisió legal de Bruno.
+- **Privacitat i cookies:** textos a `i18n-form.js` i `i18n.js`; el de privacitat diu què es desa de veritat (nom, correu, telèfon, ciutat, producte, idioma, origen, novetats) i el de cookies que cada clic es desa amb un identificador de visita aleatori que, si el visitant deixa les dades, queda relacionat amb el seu contacte. Són esborranys: han de passar per revisió legal de Bruno.
 - **Accessibilitat:** indicador de pas amb `progressbar`, focus al títol en canviar de pantalla, errors enllaçats amb els camps i capçalera com a `<header>`.
 - `docs-privats/` és local i no és al repositori.
 

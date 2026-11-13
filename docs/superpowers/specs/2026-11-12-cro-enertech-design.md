@@ -44,3 +44,6 @@ Textos exactes de la tira de passos, del títol i de la dreçera en 4 idiomes; c
 ## Riscos que cal vigilar
 - Retornar el pas 2 amb 9 preguntes baixa la conversió: és una decisió d'Olga, però s'ha de mesurar creuant leads (`step1` vs `complete`) amb les descàrregues de `Clics`.
 - El comptatge de visites per `visit` en memòria no distingeix persones.
+
+## Actualització 13/11/2026: la visita també és al lead
+Decidit amb Olga (i autoritzat per Bruno): `Leads` desa el `visit` (columna 27, la darrera) perquè els clics de `Clics` es puguin relacionar amb el lead, també els anteriors al pas 1. Per això `Clics` ja no és «anònima»: no porta nom, correu ni telèfon, però es relaciona amb el lead a través de la visita. Els textos de privacitat i cookies ho diuen sense condicionals. El «ha clicat o no» el calculen fórmules al full (`docs/google-sheet.md`); l'script no escriu comptadors.
