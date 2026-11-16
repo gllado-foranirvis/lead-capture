@@ -153,3 +153,6 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .tsf-btn--solid:active { opacity: .85; }
 .tsf-btn--outline:active { background: var(--ink); color: var(--surface-100); }
 .tsf-pdf--link:active { background: var(--surface-200); }
+
+/* Casella opcional (novetats): menys pes visual que la de privacitat, que és obligatòria. */
+.form__optional { color: var(--text-muted); font-size: 14px; }
