@@ -32,3 +32,17 @@ test('sense fitxers no fa res', () => {
   downloadAll([], opts);
   assert.deepEqual([log, scheduled], [[], []]);
 });
+
+test('onceWithin: un segon toc dins de la finestra no repeteix l\'acció', async () => {
+  const { onceWithin } = await import('../site/js/form/download-all.js');
+  let now = 1000;
+  let calls = 0;
+  const guarded = onceWithin(() => { calls += 1; }, 2000, () => now);
+  guarded();
+  now = 1500;
+  guarded();
+  assert.equal(calls, 1);
+  now = 3500;
+  guarded();
+  assert.equal(calls, 2);
+});

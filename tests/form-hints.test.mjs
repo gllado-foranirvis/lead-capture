@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { FIELD_HINTS, NEXT_FIELD, advanceOnEnter, applyFieldHints } from '../site/js/form/hints.js';
+import { FIELD_HINTS, NEXT_FIELD, advanceOnEnter, applyFieldHints, blockEnterSubmit } from '../site/js/form/hints.js';
 
 const fakeDoc = (names) => {
   const els = Object.fromEntries(names.map((n) => [n, { name: n, attrs: {}, focused: false, setAttribute(k, v) { this.attrs[k] = v; }, focus() { this.focused = true; } }]));
@@ -40,4 +40,16 @@ test('altres tecles, altres elements o un destí que no existeix no fan res', ()
   assert.equal(advanceOnEnter({ ...enter('name'), target: { name: 'name', tagName: 'SELECT' } }, doc), false);
   assert.equal(advanceOnEnter(enter('phone'), doc), false);
   assert.equal(advanceOnEnter(enter('altre'), doc), false);
+});
+
+test('pas 2: Intro en un camp <input> no envia el formulari', () => {
+  const e = enter('activityOther');
+  assert.equal(blockEnterSubmit(e), true);
+  assert.equal(e.prevented, true);
+  const area = { key: 'Enter', target: { tagName: 'TEXTAREA' }, preventDefault() { this.prevented = true; } };
+  assert.equal(blockEnterSubmit(area), false);
+  assert.equal(area.prevented, undefined);
+  const button = { key: 'Enter', target: { tagName: 'BUTTON' }, preventDefault() { this.prevented = true; } };
+  assert.equal(blockEnterSubmit(button), false);
+  assert.equal(blockEnterSubmit(enter('x', { key: 'a' })), false);
 });

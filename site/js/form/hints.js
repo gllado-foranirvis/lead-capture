@@ -34,3 +34,10 @@ export function advanceOnEnter(event, doc) {
   element.focus();
   return true;
 }
+
+// Pas 2 (és llarg i opcional): Intro en un camp de text no l'ha d'enviar per accident; només els botons envien.
+export function blockEnterSubmit(event) {
+  if (event.key !== 'Enter' || event.target.tagName !== 'INPUT') return false;
+  event.preventDefault();
+  return true;
+}
