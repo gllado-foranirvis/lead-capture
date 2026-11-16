@@ -154,3 +154,10 @@ test('page.css: la barra d\'accions és sticky al mòbil (mobile first), torna a
 test('page.css: l\'avís de scroll surt del data-hint de la barra, només si queda contingut (data-more) i sense icona', () => {
   assert.match(page, /html\[data-more="true"\] :is\(\.form__actions, \.page__bar\)\[data-hint\]::before\s*\{[^}]*content:\s*attr\(data-hint\)/);
 });
+
+test('page.css: la píndola de l\'avís de scroll es pot tocar (cursor, àrea tàctil ampliada amb una vora transparent)', () => {
+  const rule = page.match(/\[data-hint\]::before\s*\{[^}]*\}/)?.[0] ?? '';
+  assert.match(rule, /cursor:\s*pointer/);
+  assert.match(rule, /border:\s*5px solid transparent/);
+  assert.doesNotMatch(rule, /pointer-events:\s*none/);
+});

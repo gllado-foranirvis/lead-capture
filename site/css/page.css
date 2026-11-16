@@ -53,7 +53,7 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .form__actions, .page__bar {
   position: sticky; bottom: 0; z-index: 3; box-sizing: border-box;
   margin-inline: calc(var(--gutter) * -1);
-  padding: var(--space-4) var(--gutter) calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+  padding: calc(var(--space-4) + 2px) var(--gutter) calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
   background: var(--surface-100); border-top: 1px solid var(--border);
 }
 .page__bar { display: flex; flex-direction: column; gap: var(--space-2); }
@@ -67,11 +67,11 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .page__main:has(.form__actions) { padding-bottom: 0; }
 .page__body:has(.page__bar) { padding-bottom: 0; }
 .site:has(input:focus, textarea:focus, select:focus) :is(.form__actions, .page__bar) { position: static; }
-/* Avís de scroll: una píndola negra a cavall de la vora de la barra (el text el posa app.js a `data-hint`, sense icona) mentre quedi contingut per sota. */
+/* Avís de scroll: una píndola negra a cavall de la vora de la barra (el text el posa app.js a `data-hint`, sense icona) mentre quedi contingut per sota; tocar-la baixa una pantalla (scroll-hint.js). */
 html[data-more="true"] :is(.form__actions, .page__bar)[data-hint]::before {
   content: attr(data-hint); position: absolute; left: 50%; bottom: 100%; translate: -50% 50%;
-  box-sizing: border-box; width: max-content; max-width: calc(100% - var(--gutter)); padding: 2px var(--space-3);
-  border-radius: var(--radius-pill); background: var(--action); color: var(--on-action); pointer-events: none;
+  box-sizing: border-box; width: max-content; max-width: calc(100% - var(--gutter)); padding: 2px var(--space-3); border: 5px solid transparent; background-clip: padding-box; cursor: pointer;
+  border-radius: var(--radius-pill); background-color: var(--action); color: var(--on-action);
   font-size: 14px; line-height: 20px; font-weight: 500;
 }
 html:has(input:focus, textarea:focus, select:focus) :is(.form__actions, .page__bar)::before { display: none; }
