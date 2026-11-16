@@ -21,8 +21,8 @@ export function makeFields({ h, T, f, values, errors, onChange, onToggle }) {
   const text = (field, label, extra = {}) =>
     h(T.Field, { label, name: field, id: field, value: values[field], error: error(field), onChange: set(field), ...extra });
 
-  const chips = (field, legend, options, { required = false, className } = {}) => {
-    const group = h(T.ChoiceChips, { legend: required ? `${legend} *` : legend, name: field, value: values[field], options, onChange: set(field) });
+  const chips = (field, legend, options, { required = false, mark = required, className } = {}) => {
+    const group = h(T.ChoiceChips, { legend: mark ? `${legend} *` : legend, name: field, value: values[field], options, onChange: set(field) });
     const message = error(field);
     const errorId = `${field}-err`;
     const body = [group, message ? h('p', { id: errorId, className: 'caption form__error', role: 'alert' }, h('span', { 'aria-hidden': 'true' }, '! '), message) : null];

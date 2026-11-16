@@ -63,5 +63,5 @@ export function submitProfile(values, context) {
   return Object.keys(errors).length ? { errors } : { lead: buildLead(values, context) };
 }
 
-// Saltar el pas 2: el lead es completa només amb el contacte, encara que hi hagi respostes a mig fer.
-export const skipProfile = (values, context) => ({ lead: withProfiling(buildContact(values, context), { id: context.id }) });
+// Saltar el pas 2: el lead es completa amb el que el visitant ja hagi respost (sense exigir el perfil); si no ha respost res, només el contacte.
+export const skipProfile = (values, context) => ({ lead: buildLead(values, context) });

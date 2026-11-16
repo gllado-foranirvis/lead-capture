@@ -59,11 +59,11 @@ test('enviament final sense perfil: es queda al pas 2 sense emetre res', () => {
   assert.deepEqual(call(calls, 'goTo'), ['goTo', 'step2']);
   assert.deepEqual(names(calls).filter((n) => n === 'emitLead' || n === 'bumpAttempt'), ['bumpAttempt']);
 });
-test('saltar la perfilació: emet el lead complet sense perfilació, neteja i va a la confirmació', () => {
+test('saltar la perfilació: emet el lead complet amb el que hi hagi (sense exigir el perfil), neteja i va a la confirmació', () => {
   const { calls, deps } = harness({ leadId: 'id-0' });
   assert.equal(handleSkip({ ...full, profile: 'particular', comments: 'x' }, deps), true);
   const lead = call(calls, 'emitLead')[1];
-  assert.deepEqual([lead.contact.id, lead.hasProfiling, lead.profiling], ['id-0', false, { id: 'id-0' }]);
+  assert.deepEqual([lead.contact.id, lead.hasProfiling, lead.profiling], ['id-0', true, { id: 'id-0', profile: 'particular', comments: 'x' }]);
   assert.deepEqual(call(calls, 'setReceipt')[1], { products: ['model-a'], name: 'Ana', city: ' Lisboa ' });
   assert.deepEqual(call(calls, 'goTo'), ['goTo', 'done']);
 });

@@ -16,7 +16,7 @@ body { background: var(--surface-100); color: var(--ink); font-family: var(--fon
 .page__title { overflow-wrap: anywhere; }
 .tsf-btn svg { flex: none; }
 /* El CTA principal tanca l'inici: separat del bloc de contacte. */
-.page__row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+.page__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-2); }
 .page__pdfnote { margin: 0; text-align: center; }
 .page__group { display: flex; flex-direction: column; gap: var(--space-2); }
 .page__cta { margin-top: var(--space-2); }
@@ -24,7 +24,7 @@ body { background: var(--surface-100); color: var(--ink); font-family: var(--fon
 .page__address { color: var(--ink); user-select: all; }
 /* El sistema cobreix a, button, input i textarea; el select (idioma) quedava amb l'anell del navegador */
 select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-/* Cada pantalla és una columna; el formulari ocupa l'alçada i empeny les accions cap avall (sense posició fixa: salta amb el teclat del mòbil) */
+/* Cada pantalla és una columna; el formulari ocupa l'alçada i empeny les accions cap avall; al mòbil, la barra d'accions és «sticky» (vegeu més avall) */
 .privacy section { display: flex; flex-direction: column; gap: var(--space-3); }
 /* Els marges per defecte dels títols i <p> se sumaven al gap i separaven massa els paràgrafs. */
 .privacy h1, .privacy h2, .privacy p { margin: 0; }
@@ -47,6 +47,43 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 /* Tria de productes: van de tres en tres i l'opció llarga d'assessorament (l'última) ocupa tota la fila en lloc de partir-se en dues línies. */
 .form__products .tsf-group__list > :last-child { flex-basis: 100%; }
 .form__actions { display: flex; flex-direction: column; gap: var(--space-2); margin-top: auto; padding-top: var(--space-4); }
+/* Barra d'accions fixa al mòbil: els botons d'acció sempre a l'abast del polze, també amb el formulari llarg.
+   «sticky» (no «fixed»): queda dins de la seva pantalla. Mai s'allibera pel focus: una versió que la feia «static» amb un camp de text enfocat la treia de pantalla (a la pàgina inicial, en tocar la ciutat).
+   Primer el primari, a tota l'amplada; sota, tornar (enllaç) i el botó secundari. Amb només dos botons, tornar a l'esquerra i el primari a la dreta. */
+.form__actions, .page__bar {
+  position: sticky; bottom: 0; z-index: 3; box-sizing: border-box;
+  margin-inline: calc(var(--gutter) * -1);
+  padding: calc(var(--space-4) + 2px) var(--gutter) calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+  background: var(--surface-100); border-top: 1px solid var(--border);
+}
+.page__bar { display: flex; flex-direction: column; gap: var(--space-2); }
+.page__bar .page__cta { margin-top: 0; }
+.form__actions { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-2); align-items: center; }
+.form__actions > :first-child { grid-column: 1 / -1; grid-row: 1; }
+.form__actions > :last-child { grid-column: 1; grid-row: 2; }
+.form__actions > :nth-child(2):not(:last-child) { grid-column: 2; grid-row: 2; }
+.form__actions > :first-child:nth-last-child(2) { grid-column: 2; }
+.form__actions > :first-child:nth-last-child(2) ~ :last-child { grid-row: 1; }
+.page__main:has(.form__actions) { padding-bottom: 0; }
+.page__body:has(.page__bar) { padding-bottom: 0; }
+/* Avís de scroll: una píndola negra a cavall de la vora de la barra (el text el posa app.js a `data-hint`, sense icona) mentre quedi contingut per sota; tocar-la baixa una pantalla (scroll-hint.js). */
+html[data-more="true"] :is(.form__actions, .page__bar)[data-hint]::before {
+  content: attr(data-hint); position: absolute; left: 50%; bottom: 100%; translate: -50% 50%;
+  box-sizing: border-box; width: max-content; max-width: calc(100% - var(--gutter)); padding: 2px var(--space-3); border: 5px solid transparent; background-clip: padding-box; cursor: pointer;
+  border-radius: var(--radius-pill); background-color: var(--action); color: var(--on-action);
+  font-size: 14px; line-height: 20px; font-weight: 500;
+}
+html:has(:is(input:not([type=radio], [type=checkbox], [type=button], [type=submit]), textarea):focus) :is(.form__actions, .page__bar)::before { display: none; }
+/* Sobre pantalles amples la barra és una fila normal del flux, com sempre. */
+@media (min-width: 768px) {
+  .form__actions, .page__bar { position: static; margin-inline: 0; padding-inline: 0; background: none; border-top: 0; }
+  .form__actions { display: flex; flex-direction: column; padding-top: var(--space-4); padding-bottom: 0; }
+  .form__actions > * { grid-area: auto; }
+  .page__bar { padding-block: 0; }
+  .page__main:has(.form__actions) { padding-bottom: var(--space-5); }
+  .page__body:has(.page__bar) { padding-bottom: var(--space-3); }
+  html[data-more="true"] :is(.form__actions, .page__bar)[data-hint]::before { content: none; }
+}
 @media (min-width: 768px) {
   .page, .page__main, .page__screen { gap: var(--space-5); }
   .page { padding-top: var(--space-7); }
@@ -90,7 +127,14 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .page__done-mark { align-self: center; box-sizing: border-box; width: 3.5rem; aspect-ratio: 1; padding: var(--space-3); border-radius: 50%; background: var(--success-bg); color: var(--success); }
 .page__doc-icon { display: flex; flex: none; }
 .page__doc { display: block; color: inherit; text-decoration: none; border-radius: var(--radius-md); }
-.page__doc .tsf-pdf__text { min-width: 0; overflow-wrap: anywhere; }
+.page__doc .tsf-pdf__text { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+/* Crida de cada targeta: una píndola negra «Descarregar» (després, «✓ Descarregat» en contorn). La targeta sencera segueix sent l'enllaç. */
+.page__doc-cta {
+  display: inline-flex; flex: none; align-items: center; justify-content: center; box-sizing: border-box; min-height: 2.25rem;
+  padding: 0 var(--space-3); border: 1px solid var(--action); border-radius: var(--radius-pill);
+  background: var(--action); color: var(--on-action); font-size: 14px; line-height: 20px; font-weight: 600;
+}
+.page__doc-cta--done { background: transparent; color: var(--ink); }
 .page__done-actions { display: flex; flex-direction: column; gap: var(--space-2); margin-top: auto; padding-top: var(--space-4); }
 
 /* Fotografia subministrada per The Silent Fleet. El DESIGN.md la vol a tall viu, sense marc i amb el vel pla `overlay-hero` (sense degradats): dues capes planes del token la fan llegible per a text blanc. */
@@ -156,3 +200,9 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
 /* Casella opcional (novetats): menys pes visual que la de privacitat, que és obligatòria. */
 .form__optional { color: var(--text-muted); font-size: 14px; }
+
+/* Avís de scroll: entra amb un lleuger desplaçament (només si es permet el moviment). */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-more="true"] :is(.form__actions, .page__bar)[data-hint]::before { animation: hint-in 200ms ease-out; }
+}
+@keyframes hint-in { from { opacity: 0; } to { opacity: 1; } }

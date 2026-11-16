@@ -28,10 +28,13 @@ test('perfilació: només opcions vàlides, activitat només per a Profesional i
   });
   assert.equal(buildLead(full, ctx).hasProfiling, true);
 });
-test('skipProfile: contacte complet i cap perfilació, encara que hi hagi respostes a mig fer', () => {
-  const lead = skipProfile({ ...values, profile: 'particular', comments: 'x' }, ctx).lead;
-  assert.deepEqual(lead.profiling, { id: 'id-1' });
-  assert.equal(lead.hasProfiling, false);
+test('skipProfile: desa les respostes a mig fer (sense exigir el perfil) i, sense cap resposta, només el contacte', () => {
+  const partial = skipProfile({ ...values, comments: 'x' }, ctx).lead;
+  assert.deepEqual(partial.profiling, { id: 'id-1', comments: 'x' });
+  assert.equal(partial.hasProfiling, true);
+  const empty = skipProfile({ ...values, profile: '', comments: '' }, ctx).lead;
+  assert.deepEqual(empty.profiling, { id: 'id-1' });
+  assert.equal(empty.hasProfiling, false);
 });
 test('diversos productes es desen com a ids separats per comes; cap producte, text buit', () => {
   assert.equal(buildLead({ ...values, products: ['sifly', 'tko'] }, ctx).contact.product, 'sifly,tko');

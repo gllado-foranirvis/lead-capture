@@ -52,7 +52,7 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `consentLink` | política de privacidade | privacy policy | política de privacidad | política de privacitat |
 | `newsletter` | Quero receber novidades (opcional) | I'd like to receive updates (optional) | Quiero recibir novedades (opcional) | Vull rebre novetats (opcional) |
 | `step2Title` | Conta-nos mais sobre ti | Tell us more about you | Cuéntanos más sobre ti | Explica'ns més sobre tu |
-| `step2Subtitle` | Se quiseres, conta-nos mais; se não, salta para o dossier. | Tell us more if you like, or skip straight to the dossier. | Si quieres, cuéntanos más; si no, salta al dossier. | Si vols, explica'ns més; si no, salta al dossier. |
+| `step2Subtitle` | Assim podemos atender-te melhor. Se preferires, vai direto ao dossier. | So we can help you better. Or go straight to the dossier. | Así podemos atenderte mejor. Si prefieres, ve directo al dossier. | Així et podem atendre millor. Si prefereixes, ves directament al dossier. |
 | `profileLegend` | Quem és? | Who are you? | ¿Quién eres? | Qui ets? |
 | `profiles.particular` | Particular | Private customer | Particular | Particular |
 | `profiles.profesional` | Profissional | Professional | Profesional | Professional |
@@ -107,20 +107,18 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `stepNames.2` | Interesse | Interest | Interés | Interès |
 | `stepNames.3` | Dossier | Dossier | Dossier | Dossier |
 | `saved` | Dados guardados | Details saved | Datos guardados | Dades desades |
-| `moreCount` | {n} perguntas opcionais | {n} optional questions | {n} preguntas opcionales | {n} preguntes opcionals |
 | `change` | Alterar | Change | Cambiar | Canviar |
 | `chooseProduct` | Escolhe um produto | Choose a product | Elige un producto | Tria un producte |
-| `skipLabel` | Saltar e descarregar | Skip and download | Saltar y descargar | Saltar i descarregar |
-| `moreGroup` | Mais perguntas (opcional) | More questions (optional) | Más preguntas (opcional) | Més preguntes (opcional) |
+| `skipLabel` | Agora não, ir para o dossier | Not now, go to the dossier | Ahora no, ir al dossier | Ara no, anar al dossier |
 | `cityLabel` | De que cidade és? | Which city are you from? | ¿De qué ciudad eres? | De quina ciutat ets? |
 | `cityPlaceholder` | Lisboa | Lisbon | Lisboa | Lisboa |
 | `productLegend` | Que produto te interessa? | Which product are you interested in? | ¿Qué producto te interesa? | Quin producte t'interessa? |
 | `productAdvice` | Ainda não sei / Procuro aconselhamento | Not sure yet / I need advice | No lo sé aún / Busco asesoramiento | Encara no ho sé / Busco assessorament |
 | `downloadList` | Vais descarregar: {list} | You will download: {list} | Se descargará: {list} | Es descarregarà: {list} |
 | `downloadNone` | Escolhe um produto para descarregar o respetivo dossier. | Choose a product to download its dossier. | Elige un producto para descargar el dossier correspondiente. | Tria un producte per descarregar el seu dossier. |
-| `submit` | Aceder ao dossier | Get the dossier | Acceder al dossier | Accedir al dossier |
+| `submit` | Enviar e ver o dossier | Send and get the dossier | Enviar y ver el dossier | Enviar i veure el dossier |
 | `errors.required` | Preenche este campo | Fill in this field | Completa este campo | Omple aquest camp |
-| `errors.profileRequired` | Escolhe uma opção | Choose an option | Elige una opción | Tria una opció |
+| `errors.profileRequired` | Escolhe uma opção ou salta este passo | Choose an option or skip this step | Elige una opción o salta este paso | Tria una opció o salta aquest pas |
 | `errors.either` | Deixa o e-mail ou o telemóvel | Leave an e-mail or a phone number | Deja el correo o el teléfono | Deixa el correu o el telèfon |
 | `errors.email` | Introduz um e-mail válido | Enter a valid email | Introduce un correo válido | Introdueix un correu vàlid |
 | `errors.phone` | Introduz um telefone válido, por exemplo 912 345 678 | Enter a valid phone number, for example 600 00 00 00 | Introduce un teléfono válido, por ejemplo 600 00 00 00 | Introdueix un telèfon vàlid, per exemple 600 00 00 00 |
@@ -131,6 +129,11 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `doneTextMail` | Descarrega-o agora; também to enviámos por e-mail para o consultares quando quiseres. | Download it now; we have also emailed it to you to read whenever you like. | Descárgalo ahora; también te lo hemos enviado por correo para que lo consultes cuando quieras. | Descarrega'l ara; també te l'hem enviat per correu perquè el consultis quan vulguis. |
 | `doneDownload` | Descarregar o dossier | Download the dossier | Descargar el dossier | Descarregar el dossier |
 | `doneDownloadAll` | Descarregar todos os dossiers | Download all dossiers | Descargar todos los dossiers | Descarregar tots els dossiers |
+| `doneDownloaded` | Descarregado | Downloaded | Descargado | Descarregat |
+| `doneDownloadShort` | Descarregar | Download | Descargar | Descarregar |
+| `doneDownloadOf` | Descarregar o dossier de {name} | Download the {name} dossier | Descargar el dossier de {name} | Descarregar el dossier de {name} |
+| `scrollHint` | Desliza para ver mais | Scroll for more | Desliza para ver más | Llisca per veure'n més |
+| `doneIosNote` | No iPhone o dossier abre no visualizador: toca em Partilhar para o guardar. | On iPhone the dossier opens in the viewer: tap Share to save it. | En iPhone el dossier se abre en el visor: pulsa Compartir para guardarlo. | A l'iPhone el dossier s'obre al visor: prem Compartir per desar-lo. |
 | `doneCardTitle` | Dossier The Silent Fleet | Dossier The Silent Fleet | Dossier The Silent Fleet | Dossier The Silent Fleet |
 | `doneCardGeneral` | Informação geral | General information | Información general | Informació general |
 | `doneHome` | Voltar ao início | Back to start | Volver al inicio | Tornar a l'inici |

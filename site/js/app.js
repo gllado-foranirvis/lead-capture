@@ -12,7 +12,8 @@ import { toSession } from './form/session.js';
 import { downloadAll, onceWithin } from './form/download-all.js';
 import { focusFirstError, focusStepHeading } from './form/focus.js';
 import { advanceOnEnter, applyFieldHints, blockEnterSubmit } from './form/hints.js';
-import { clickInfo } from './form/click-info.js';
+import { clickInfo, isIos } from './form/click-info.js';
+import { watchScrollHint } from './form/scroll-hint.js';
 import { clickDetail, doneView, plannedDocs } from './form/views.js';
 import { connectSender, createSender, notifySaved } from './form/sender.js';
 import { onlyEnglishPdfs } from './form/dossier.js';
@@ -51,6 +52,7 @@ function App() {
   const [leadId, setLeadId] = R.useState('');
   const [receipt, setReceipt] = R.useState(null);
   const [productsOpen, setProductsOpen] = R.useState(true); // el bloc de producte del pas de dades surt obert només si no s'ha triat res a l'inici
+  const [downloaded, setDownloaded] = R.useState([]); // ids dels PDF ja descarregats en aquesta confirmació
   const [saved, setSaved] = R.useState(false); // el servidor ha confirmat el lead parcial (mostra «dades guardades»)
   const leadIdRef = R.useRef('');
   leadIdRef.current = leadId;
@@ -77,6 +79,7 @@ function App() {
     }
     if (view === 'step1') applyFieldHints(document);
     if (view === 'entry' || view === 'done') setSaved(false);
+    if (view !== 'done') setDownloaded([]);
   }, [view]);
   R.useEffect(() => {
     const onSaved = (e) => { if (e.detail.stage === 'step1' && e.detail.id === leadIdRef.current) setSaved(true); };
@@ -91,6 +94,8 @@ function App() {
       onIdle: () => { visit.current = newLeadId(); discardSession({ products: CONFIG.products, search, dispatch, setErrors, setLeadId, setReceipt, goTo: setView }); },
     });
   }, []);
+  // Barra d'accions fixa (mòbil): l'avís «desplaça» surt mentre hi hagi contingut per sota; es recalcula en canviar de pantalla.
+  R.useEffect(() => watchScrollHint(window, document, { text: t.form.scrollHint }), [view, lang]);
   R.useEffect(() => {
     if (attempt > 0) focusFirstError(errors, document);
   }, [attempt]);
@@ -125,10 +130,13 @@ function App() {
   }));
 
   // Cada PDF descarregat és una fila a «Clics» (producte i ciutat del rebut); mai bloqueja la descàrrega.
-  const onDownload = (doc) => emit('tsf:contact-click')(clickDetail({
-    from: 'done', button: 'download', product: doc.id, values, receipt, visit: visit.current, lang, origin: resolveOrigin(search), id: newLeadId(),
-    info: clickInfo({ nav: navigator, win: window, doc: document, startedAt, now: Date.now() }),
-  }));
+  const onDownload = (doc) => {
+    setDownloaded((list) => (list.includes(doc.id) ? list : [...list, doc.id]));
+    emit('tsf:contact-click')(clickDetail({
+      from: 'done', button: 'download', product: doc.id, values, receipt, visit: visit.current, lang, origin: resolveOrigin(search), id: newLeadId(),
+      info: clickInfo({ nav: navigator, win: window, doc: document, startedAt, now: Date.now() }),
+    }));
+  };
 
   const downloadAllOnce = (docs) => () => guardDownloadAll.current(() => { downloadAll(docs); docs.forEach(onDownload); });
   const screens = {
@@ -149,7 +157,7 @@ function App() {
       const links = contactLinks(CONFIG, t, receipt ? sessionOf(receipt) : {});
       const view = doneView({ receipt, lang, dossier, config: CONFIG });
       return h(DoneScreen, {
-        ...view, onHome: goHome, whatsappHref: links.whatsapp, emailHref: links.email,
+        ...view, pdfNote: onlyEnglishPdfs(CONFIG, lang), downloaded, ios: isIos(navigator), onHome: goHome, whatsappHref: links.whatsapp, emailHref: links.email,
         onDownload,
         onDownloadAll: downloadAllOnce(view.docs), onContactClick: contactClick('done'),
       });

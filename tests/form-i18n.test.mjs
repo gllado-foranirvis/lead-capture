@@ -47,7 +47,7 @@ test('el document es diu «dossier»: cap «ficha» ni «PDF» als literals visi
 });
 test('CTA d\'entrada i botó final', () => {
   const cta = { es: 'Descargar dossier →', ca: 'Descarregar dossier →', pt: 'Descarregar dossier →', en: 'Download dossier →' };
-  const submit = { es: 'Acceder al dossier', ca: 'Accedir al dossier', pt: 'Aceder ao dossier', en: 'Get the dossier' };
+  const submit = { es: 'Enviar y ver el dossier', ca: 'Enviar i veure el dossier', pt: 'Enviar e ver o dossier', en: 'Send and get the dossier' };
   for (const l of CONFIG.languages) assert.deepEqual([DICT[l].form.entryCta, DICT[l].form.submit], [cta[l], submit[l]], l);
 });
 test('la confirmació té una versió amb correu i una sense', () => {
@@ -119,7 +119,7 @@ test('la promesa de descàrrega: l\'inici i la pàgina de dades la diuen, i la l
 });
 test('el pas 2 té els literals de perfilació i els de saltar, sense la localitat de la demostració', () => {
   for (const l of CONFIG.languages) {
-    for (const key of ['step2Title', 'step2Subtitle', 'profileLegend', 'skipLabel', 'moreGroup', 'hasBoat', 'hasElectric', 'intent', 'comments', 'yes', 'no']) assert.ok(typeof DICT[l].form[key] === 'string' && DICT[l].form[key].trim(), `${l}.${key}`);
+    for (const key of ['step2Title', 'step2Subtitle', 'profileLegend', 'skipLabel', 'hasBoat', 'hasElectric', 'intent', 'comments', 'yes', 'no']) assert.ok(typeof DICT[l].form[key] === 'string' && DICT[l].form[key].trim(), `${l}.${key}`);
     assert.deepEqual(Object.keys(DICT[l].form.profiles), ['particular', 'profesional'], l);
     assert.equal(Object.keys(DICT[l].form.enthusiasmOptions).length, 6, l);
   }
@@ -140,10 +140,9 @@ test('inici amb recompensa: títol, botó, nota de l\'idioma i dreçera, sense �
     assert.doesNotMatch(f.entryCta, /Silent Fleet/, l);
   }
 });
-test('els plegables tenen recompte de preguntes ({n}), acció de canviar i resum de producte buit', () => {
+test('el plegable de producte té acció de canviar i resum buit', () => {
   for (const l of CONFIG.languages) {
     const f = DICT[l].form;
-    assert.match(f.moreCount, /\{n\}/, l);
     for (const key of ['change', 'chooseProduct']) assert.ok(typeof f[key] === 'string' && f[key].trim(), `${l}.${key}`);
   }
 });

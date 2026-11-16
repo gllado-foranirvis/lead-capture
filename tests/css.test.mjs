@@ -144,3 +144,26 @@ test('page.css: obert, el plegable és un sol contenidor (resum + cos), sense re
   assert.match(legend, /clip:\s*rect\(0 0 0 0\)/, 'la llegenda es manté per als lectors, però no es veu repetida');
   assert.match(page, /\.fold__summary:focus-visible\s*\{[^}]*outline-offset:\s*-2px/);
 });
+
+test('page.css: la barra d\'accions és sticky al mòbil (mobile first), torna al flux des de 768 px i NO s\'allibera per cap focus', () => {
+  assert.match(page, /\.form__actions, \.page__bar\s*\{[^}]*position:\s*sticky[^}]*bottom:\s*0/);
+  assert.match(page, /env\(safe-area-inset-bottom/);
+  assert.match(page, /@media \(min-width: 768px\)\s*\{\s*\.form__actions, \.page__bar\s*\{[^}]*position:\s*static/);
+  // Regressió: una regla «:has(…:focus) … { position: static }» treia la barra de la pantalla en tocar el camp de la ciutat (y=748 de 740).
+  assert.doesNotMatch(page, /:focus\)[^{]*\{[^}]*position:\s*static/);
+});
+test('page.css: l\'avís de scroll surt del data-hint de la barra, només si queda contingut (data-more) i sense icona', () => {
+  assert.match(page, /html\[data-more="true"\] :is\(\.form__actions, \.page__bar\)\[data-hint\]::before\s*\{[^}]*content:\s*attr\(data-hint\)/);
+});
+
+test('page.css: la píndola de l\'avís de scroll es pot tocar (cursor, àrea tàctil ampliada amb una vora transparent)', () => {
+  const rule = page.match(/\[data-hint\]::before\s*\{[^}]*\}/)?.[0] ?? '';
+  assert.match(rule, /cursor:\s*pointer/);
+  assert.match(rule, /border:\s*5px solid transparent/);
+  assert.doesNotMatch(rule, /pointer-events:\s*none/);
+});
+
+test('page.css: la targeta de descàrrega té una crida visible («Descarregar») que passa a contorn quan ja s\'ha baixat', () => {
+  assert.match(page, /\.page__doc-cta\s*\{[^}]*background:\s*var\(--action\)/);
+  assert.match(page, /\.page__doc-cta--done\s*\{[^}]*background:\s*transparent/);
+});

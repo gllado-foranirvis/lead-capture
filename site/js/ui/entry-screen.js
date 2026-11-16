@@ -18,9 +18,6 @@ export function createEntryScreen({ h, T, icon }) {
         // Els productes i la ciutat només es pregunten amb el flux de captació; viatgen al formulari i als missatges.
         withForm && askProduct ? h('div', { className: 'form__products' }, checks('products', f.productLegend, productOptions)) : null,
         withForm ? text('city', f.cityLabel, { placeholder: f.cityPlaceholder }) : null,
-        // El botó principal (descarregar el dossier) va abans de la dreçera de contacte: qui no vol perdre temps la té just a sota.
-        withForm ? h(T.Button, { full: true, className: 'page__cta', onClick: onOpenForm }, f.entryCta) : null,
-        withForm && askProduct && pdfNote ? h('p', { className: 'body-sm page__note page__pdfnote' }, f.entryPdfNote) : null,
         // L'etiqueta i els botons de contacte són un sol grup (8px entre ells; 16px entre grups). Amb el flux de captació, en una fila de dos.
         h('div', { className: 'page__group' },
           h(T.SectionLabel, null, withForm ? f.entryContactLabel : t.contactLabel),
@@ -32,6 +29,11 @@ export function createEntryScreen({ h, T, icon }) {
         h(T.LegalLinks, {
           label: t.legalNav,
           links: [{ label: t.privacy, href: `privacy.html${legalQuery}` }, { label: t.cookies, href: `privacy.html${legalQuery}#cookies` }],
-        })));
+        }),
+        // El botó principal (descarregar el dossier) és l'últim del cos: així la barra «sticky» queda sempre fixada a la vora de la pantalla
+        // al mòbil (una barra enmig del cos s'hauria perdut en fer scroll). L'avís de l'idioma del PDF hi va a sota, amb el botó.
+        withForm ? h('div', { className: 'page__bar' },
+          h(T.Button, { full: true, className: 'page__cta', onClick: onOpenForm }, f.entryCta),
+          askProduct && pdfNote ? h('p', { className: 'body-sm page__note page__pdfnote' }, f.entryPdfNote) : null) : null));
   };
 }

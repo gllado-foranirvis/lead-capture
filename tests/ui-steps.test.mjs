@@ -71,18 +71,18 @@ test('inici: la ciutat és un camp de text (city) que avisa del canvi', () => {
   city.props.onChange({ target: { value: 'Lisboa' } });
   assert.deepEqual(calls, [['city', 'Lisboa']]);
 });
-test('inici: ordre productes → ciutat → botó principal → dreçera de contacte → línia de recuperació → enllaços legals', () => {
+test('inici: ordre productes → ciutat → dreçera de contacte → línia de recuperació → enllaços legals → botó principal (barra fixa, l\'últim del cos)', () => {
   const body = findAll(entry({ onOpenForm: noop }), (n) => n.props?.className === 'page__body')[0];
   const kinds = body.children.map((n) => n?.props?.name ?? n?.props?.className ?? n?.type ?? null);
-  assert.deepEqual(kinds.filter(Boolean), ['form__products', 'city', 'page__cta', 'page__group', 'body-sm page__note', 'T.LegalLinks']);
+  assert.deepEqual(kinds.filter(Boolean), ['form__products', 'city', 'page__group', 'body-sm page__note', 'T.LegalLinks', 'page__bar']);
   const group = body.children.find((n) => n?.props?.className === 'page__group');
   assert.deepEqual(group.children.map((n) => n.type ?? null), ['T.SectionLabel', 'div', 'p'], 'etiqueta, fila de dos botons i nota');
   assert.equal(textOf(group.children[0]), f.entryContactLabel);
   assert.equal(group.children[1].props.className, 'page__row');
-  assert.equal(textOf(body.children.at(-2)), `${DICT.es.contactFallback} ${CONFIG.email}`);
+  assert.equal(textOf(body.children.at(-3)), `${DICT.es.contactFallback} ${CONFIG.email}`);
 });
 test('inici: el botó principal descarrega el dossier (no parla de The Silent Fleet) i la dreçera té botons curts', () => {
-  const [cta, wa, mail] = buttons(entry({ onOpenForm: noop }));
+  const [wa, mail, cta] = buttons(entry({ onOpenForm: noop }));
   assert.deepEqual([textOf(cta), cta.props.variant], [f.entryCta, undefined]);
   assert.ok(!textOf(cta).includes('Silent Fleet'));
   assert.deepEqual([textOf(wa), textOf(mail)], [f.shortWhatsapp, f.shortEmail]);
@@ -95,7 +95,7 @@ test('inici: la nota «dossier en inglés» només surt amb pdfNote i amb dossie
 });
 test('inici: WhatsApp i correu són enllaços i el clic ho notifica sense canviar l\'href', () => {
   const calls = [];
-  const [cta, wa, mail] = buttons(entry({ onOpenForm: noop, onContactClick: (b) => calls.push(b) }));
+  const [wa, mail, cta] = buttons(entry({ onOpenForm: noop, onContactClick: (b) => calls.push(b) }));
   assert.deepEqual([wa.props.variant, wa.props.href, mail.props.variant, mail.props.href], ['outline', 'wa', 'outline', 'mail']);
   assert.equal(cta.props.href, undefined);
   wa.props.onClick(); mail.props.onClick();
@@ -253,25 +253,35 @@ const done = (extra = {}) => DoneScreen({
 const cardOf = (tree) => findAll(tree, (n) => typeof n.props?.className === 'string' && n.props.className.split(' ').includes('tsf-pdf'))[0];
 const link = (tree, text) => findAll(tree, (n) => n.type === 'a' && textOf(n) === text)[0];
 
-test('confirmació: cada descàrrega (targeta o botó d\'un sol fitxer) notifica el seu document', () => {
+const DL_A = () => f.doneDownloadOf.replace('{name}', DOC_A.meta);
+test('confirmació: cada descàrrega (targeta, o el botó d\'un sol fitxer) notifica el seu document', () => {
   const seen = [];
-  const tree = done({ onDownload: (doc) => seen.push(doc.id) });
-  findAll(tree, (n) => n.type === 'a' && n.props.className?.includes('page__doc'))[0].props.onClick();
-  link(tree, f.doneDownload).props.onClick();
-  assert.deepEqual(seen, [DOC_A.id, DOC_A.id]);
+  link(done({ onDownload: (doc) => seen.push(doc.id) }), DL_A()).props.onClick();
+  findAll(done({ docs: [DOC_A, DOC_B], onDownload: (doc) => seen.push(doc.id) }), (n) => n.type === 'a' && n.props.className === 'page__doc')[1].props.onClick();
+  assert.deepEqual(seen, [DOC_A.id, DOC_B.id]);
 });
-test('confirmació: marca d\'èxit, títol, targeta del dossier i descàrrega real', () => {
+test('confirmació amb un sol PDF: només el botó sòlid amb el nom del producte (sense targeta duplicada) i l\'estat «descarregat»', () => {
   const tree = done();
   assert.equal(byType(tree, 'T.SectionHeading')[0].props.title, f.doneTitle);
-  const card = cardOf(tree);
-  assert.deepEqual([textOf(card), card.props.className], [`${f.doneCardTitle}Sifly`, 'tsf-pdf tsf-pdf--link']);
-  assert.ok(findAll(card, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length === 1, 'icona de document decorativa en lloc de la insígnia «PDF»');
-  const dl = link(tree, f.doneDownload);
-  const cardLink = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc')[0];
-  assert.deepEqual([cardLink.props.href, cardLink.props.download, cardLink.props.tabIndex], ['dossiers/sifly.en.pdf', '', -1], 'la targeta descarrega el mateix fitxer, amb el nom del fitxer, i no és parada de tabulador');
+  assert.equal(cardOf(tree), undefined, 'cap targeta amb un sol fitxer');
+  const dl = link(tree, DL_A());
   assert.deepEqual([dl.props.href, dl.props.download], ['dossiers/sifly.en.pdf', '']);
   assert.match(dl.props.className, /tsf-btn--solid/);
+  assert.equal(dl.props['aria-live'], 'polite');
+  const after = link(done({ downloaded: [DOC_A.id] }), `✓ ${f.doneDownloaded}`);
+  assert.ok(after, 'després de baixar-lo, el botó ho diu');
   assert.ok(findAll(tree, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length >= 1, 'marca d\'èxit decorativa');
+});
+test('confirmació amb diversos PDF: la targeta porta el nom del producte, la icona de document i l\'estat «descarregat»; a iOS surt igualment «descargar todos» i la nota del visor', () => {
+  const tree = done({ docs: [DOC_A, DOC_B], downloaded: [DOC_B.id] });
+  const [a, b] = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc');
+  assert.deepEqual([textOf(a), textOf(b)], [`Sifly${f.doneCardTitle}${f.doneDownloadShort}`, `TKO${f.doneCardTitle}✓ ${f.doneDownloaded}`]);
+  assert.ok(findAll(a, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length === 1, 'icona de document decorativa en lloc de la insígnia «PDF»');
+  assert.ok(findAll(tree, (n) => n.type === 'T.Button' && textOf(n) === f.doneDownloadAll).length === 1);
+  const ios = done({ docs: [DOC_A, DOC_B], ios: true });
+  assert.equal(findAll(ios, (n) => n.type === 'T.Button' && textOf(n) === f.doneDownloadAll).length, 1, 'també a iOS');
+  assert.ok(textOf(ios).includes(f.doneIosNote));
+  assert.equal(textOf(done()).includes(f.doneIosNote), false);
 });
 test('confirmació: WhatsApp i correu sota el dossier, i tornada discreta a l\'inici', () => {
   let home = 0;
@@ -283,7 +293,7 @@ test('confirmació: WhatsApp i correu sota el dossier, i tornada discreta a l\'i
   back.props.onClick();
   assert.equal(home, 1);
   const order = findAll(tree, (n) => (n.type === 'a' && n.props.className !== 'page__doc') || n.type === 'T.Button' || n.props?.className === 'page__doc').map((n) => n.props?.className === 'page__doc' ? 'card' : textOf(n));
-  assert.deepEqual(order, ['card', f.doneDownload, f.entryWhatsapp, f.entryEmail, f.doneHome]);
+  assert.deepEqual(order, [DL_A(), f.entryWhatsapp, f.entryEmail, f.doneHome]);
   assert.equal(textOf(tree).includes('PDF'), false, 'cap text visible diu PDF');
 });
 test('confirmació: WhatsApp i correu notifiquen el clic sense canviar l\'href', () => {
@@ -308,7 +318,7 @@ test('confirmació amb diversos PDF: una targeta per fitxer (parada de tabulador
   const tree = done({ docs: [DOC_A, DOC_B], onDownloadAll: () => all++ });
   const cards = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc');
   assert.deepEqual(cards.map((c) => [c.props.href, c.props.download, c.props.tabIndex]), [[DOC_A.href, '', undefined], [DOC_B.href, '', undefined]]);
-  assert.deepEqual(findAll(tree, (n) => typeof n.props?.className === 'string' && n.props.className.split(' ').includes('tsf-pdf')).map(textOf), [`${f.doneCardTitle}Sifly`, `${f.doneCardTitle}TKO`]);
+  assert.deepEqual(findAll(tree, (n) => typeof n.props?.className === 'string' && n.props.className.split(' ').includes('tsf-pdf')).map(textOf), [`Sifly${f.doneCardTitle}${f.doneDownloadShort}`, `TKO${f.doneCardTitle}${f.doneDownloadShort}`]);
   assert.equal(link(tree, f.doneDownload), undefined, 'amb diversos fitxers no hi ha el botó d\'un de sol');
   const [all1] = findAll(tree, (n) => n.type === 'T.Button' && textOf(n) === f.doneDownloadAll);
   assert.ok(all1, 'botó «descargar todos»');
@@ -323,7 +333,7 @@ test('confirmació: el subtítol parla del correu només si l\'enviament existei
 });
 
 test('inici: el CTA principal té separació pròpia dels contactes (page__cta)', () => {
-  const cta = buttons(entry({ onOpenForm: noop }))[0];
+  const cta = buttons(entry({ onOpenForm: noop })).at(-1);
   assert.equal(textOf(cta), f.entryCta);
   assert.equal(cta.props.className, 'page__cta');
 });
@@ -339,19 +349,14 @@ test('els camps d\'escriptura porten un exemple com a placeholder (no substituei
 const fakeGroup = () => { const attrs = {}; return { attrs, el: { querySelector: () => ({ setAttribute: (k, v) => { attrs[k] = v; }, removeAttribute: (k) => { delete attrs[k]; } }) } }; };
 
 
-test('pas 2: «Quem és» va primer i és l\'únic obligatori; la resta de preguntes són opcionals i plegades en un sol grup', () => {
+test('pas 2: «Quem és» va primer i és l\'únic obligatori; la resta de preguntes són opcionals i es veuen directament (sense plegable)', () => {
   const tree = profileScreen();
   const [first] = findAll(tree, (n) => ['T.ChoiceChips', 'T.CheckboxGroup', 'T.Field', 'T.Select'].includes(n.type));
   assert.equal(first.props.name, 'profile');
-  assert.equal(first.props.legend, `${f.profileLegend} *`);
-  const more = findAll(tree, (n) => n.type === 'details');
-  assert.equal(more.length, 1);
-  assert.notEqual(more[0].props.open, true, 'plegat per defecte');
-  const summary = textOf(findAll(more[0], (n) => n.type === 'summary')[0]);
-  assert.ok(summary.includes(f.moreGroup));
-  assert.ok(summary.includes(f.moreCount.replace('{n}', '7')), 'el resum diu quantes preguntes hi ha');
-  const inside = findAll(more[0], (n) => n.props?.name).map((n) => n.props.name);
-  assert.deepEqual(inside, ['hasBoat', 'hasElectric', 'enthusiasm', 'concerns', 'intent', 'factors', 'comments']);
+  assert.equal(first.props.legend, f.profileLegend);
+  assert.equal(findAll(tree, (n) => n.type === 'details').length, 0, 'cap plegable al pas 2');
+  const names = findAll(tree, (n) => n.props?.name).map((n) => n.props.name);
+  assert.deepEqual(names, ['profile', 'hasBoat', 'hasElectric', 'enthusiasm', 'concerns', 'intent', 'factors', 'comments']);
   assert.equal(byName(tree, 'demo').length + byName(tree, 'products').length, 0, 'ni localitat de demostració ni productes');
 });
 test('pas 2: l\'activitat només surt per a Profesional, i «altra» obre el seu camp', () => {
