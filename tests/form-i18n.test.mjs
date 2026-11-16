@@ -47,7 +47,7 @@ test('el document es diu «dossier»: cap «ficha» ni «PDF» als literals visi
 });
 test('CTA d\'entrada i botó final', () => {
   const cta = { es: 'Descargar dossier →', ca: 'Descarregar dossier →', pt: 'Descarregar dossier →', en: 'Download dossier →' };
-  const submit = { es: 'Acceder al dossier', ca: 'Accedir al dossier', pt: 'Aceder ao dossier', en: 'Get the dossier' };
+  const submit = { es: 'Enviar y ver el dossier', ca: 'Enviar i veure el dossier', pt: 'Enviar e ver o dossier', en: 'Send and get the dossier' };
   for (const l of CONFIG.languages) assert.deepEqual([DICT[l].form.entryCta, DICT[l].form.submit], [cta[l], submit[l]], l);
 });
 test('la confirmació té una versió amb correu i una sense', () => {

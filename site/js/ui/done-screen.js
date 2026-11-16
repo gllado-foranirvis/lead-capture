@@ -9,9 +9,10 @@ export function createDoneScreen({ h, T, icon }) {
       h('div', { className: 'tsf-pdf tsf-pdf--link' },
         h('span', { className: 'page__doc-icon', 'aria-hidden': 'true' }, fileTextIcon(h)),
         h('span', { className: 'tsf-pdf__text' },
-          h('span', { className: 'label tsf-pdf__title' }, f.doneCardTitle),
-          h('span', { className: 'body-sm tsf-pdf__meta' }, doc.meta))));
-  return function DoneScreen({ t, emailDelivery, docs, onDownloadAll, onDownload = () => {}, onContactClick, whatsappHref, emailHref, onHome }) {
+          // El nom del producte és el títol (distingeix les targetes); «Dossier The Silent Fleet» queda com a detall.
+          h('span', { className: 'label tsf-pdf__title' }, doc.meta),
+          h('span', { className: 'body-sm tsf-pdf__meta' }, f.doneCardTitle))));
+  return function DoneScreen({ t, emailDelivery, docs, pdfNote = false, onDownloadAll, onDownload = () => {}, onContactClick, whatsappHref, emailHref, onHome }) {
     const f = t.form;
     return h('div', { className: 'page__screen page__screen--done' },
       mark,
@@ -28,6 +29,8 @@ export function createDoneScreen({ h, T, icon }) {
           ? h(T.Button, { full: true, onClick: onDownloadAll }, f.doneDownloadAll)
           // Button no reenvia `download`, d'aquí l'<a> amb les classes del sistema.
           : h('a', { className: 'tsf-btn button tsf-btn--solid tsf-btn--full', href: docs[0].href, download: '', onClick: () => onDownload(docs[0]) }, f.doneDownload)) : null,
+      // Els PDF són en anglès: l'avís, també aquí, abans de tocar (el de l'entrada s'ha vist feia estona).
+      docs.length && pdfNote ? h('p', { className: 'body-sm page__note page__pdfnote' }, f.entryPdfNote) : null,
       h('div', { className: 'page__done-actions' },
         h(T.Button, { full: true, variant: 'outline', href: whatsappHref, onClick: () => onContactClick('whatsapp') }, icon(h, 'whatsapp'), f.entryWhatsapp),
         h(T.Button, { full: true, variant: 'outline', href: emailHref, onClick: () => onContactClick('email') }, icon(h, 'mail'), f.entryEmail),

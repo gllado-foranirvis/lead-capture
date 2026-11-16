@@ -26,7 +26,7 @@ export function createStepProfile({ h, T }) {
       saved ? h('p', { className: 'body-sm page__note form__saved', 'aria-live': 'polite' }, f.saved) : null,
       h('form', { className: 'form', noValidate: true, onKeyDown, onSubmit: (e) => { e.preventDefault(); onSubmit(); } },
         h('div', { className: 'form__group' },
-          chips('profile', f.profileLegend, PROFILES.map((p) => ({ value: p, label: f.profiles[p] })), { required: true }),
+          chips('profile', f.profileLegend, PROFILES.map((p) => ({ value: p, label: f.profiles[p] })), { required: true, mark: false }),
           showsActivity(values) ? select('activity', f.activity, [{ value: '', label: f.activityNone }, ...ACTIVITIES.map((a) => ({ value: a, label: f.activities[a] }))], { placeholder: f.activityPlaceholder }) : null,
           showsActivityOther(values) ? text('activityOther', f.activityOther, { placeholder: f.activityOtherPlaceholder }) : null),
         // La resta de preguntes són opcionals: plegades, perquè el visitant vegi el camí curt (enviar o saltar) sense desplaçar-se.

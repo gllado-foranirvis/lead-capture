@@ -264,7 +264,7 @@ test('confirmació: marca d\'èxit, títol, targeta del dossier i descàrrega re
   const tree = done();
   assert.equal(byType(tree, 'T.SectionHeading')[0].props.title, f.doneTitle);
   const card = cardOf(tree);
-  assert.deepEqual([textOf(card), card.props.className], [`${f.doneCardTitle}Sifly`, 'tsf-pdf tsf-pdf--link']);
+  assert.deepEqual([textOf(card), card.props.className], [`Sifly${f.doneCardTitle}`, 'tsf-pdf tsf-pdf--link']);
   assert.ok(findAll(card, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length === 1, 'icona de document decorativa en lloc de la insígnia «PDF»');
   const dl = link(tree, f.doneDownload);
   const cardLink = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc')[0];
@@ -308,7 +308,7 @@ test('confirmació amb diversos PDF: una targeta per fitxer (parada de tabulador
   const tree = done({ docs: [DOC_A, DOC_B], onDownloadAll: () => all++ });
   const cards = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc');
   assert.deepEqual(cards.map((c) => [c.props.href, c.props.download, c.props.tabIndex]), [[DOC_A.href, '', undefined], [DOC_B.href, '', undefined]]);
-  assert.deepEqual(findAll(tree, (n) => typeof n.props?.className === 'string' && n.props.className.split(' ').includes('tsf-pdf')).map(textOf), [`${f.doneCardTitle}Sifly`, `${f.doneCardTitle}TKO`]);
+  assert.deepEqual(findAll(tree, (n) => typeof n.props?.className === 'string' && n.props.className.split(' ').includes('tsf-pdf')).map(textOf), [`Sifly${f.doneCardTitle}`, `TKO${f.doneCardTitle}`]);
   assert.equal(link(tree, f.doneDownload), undefined, 'amb diversos fitxers no hi ha el botó d\'un de sol');
   const [all1] = findAll(tree, (n) => n.type === 'T.Button' && textOf(n) === f.doneDownloadAll);
   assert.ok(all1, 'botó «descargar todos»');
@@ -343,7 +343,7 @@ test('pas 2: «Quem és» va primer i és l\'únic obligatori; la resta de pregu
   const tree = profileScreen();
   const [first] = findAll(tree, (n) => ['T.ChoiceChips', 'T.CheckboxGroup', 'T.Field', 'T.Select'].includes(n.type));
   assert.equal(first.props.name, 'profile');
-  assert.equal(first.props.legend, `${f.profileLegend} *`);
+  assert.equal(first.props.legend, f.profileLegend);
   const more = findAll(tree, (n) => n.type === 'details');
   assert.equal(more.length, 1);
   assert.notEqual(more[0].props.open, true, 'plegat per defecte');

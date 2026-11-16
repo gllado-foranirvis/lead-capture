@@ -149,7 +149,7 @@ function App() {
       const links = contactLinks(CONFIG, t, receipt ? sessionOf(receipt) : {});
       const view = doneView({ receipt, lang, dossier, config: CONFIG });
       return h(DoneScreen, {
-        ...view, onHome: goHome, whatsappHref: links.whatsapp, emailHref: links.email,
+        ...view, pdfNote: onlyEnglishPdfs(CONFIG, lang), onHome: goHome, whatsappHref: links.whatsapp, emailHref: links.email,
         onDownload,
         onDownloadAll: downloadAllOnce(view.docs), onContactClick: contactClick('done'),
       });

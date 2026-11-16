@@ -110,7 +110,7 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `moreCount` | {n} perguntas opcionais | {n} optional questions | {n} preguntas opcionales | {n} preguntes opcionals |
 | `change` | Alterar | Change | Cambiar | Canviar |
 | `chooseProduct` | Escolhe um produto | Choose a product | Elige un producto | Tria un producte |
-| `skipLabel` | Saltar e descarregar | Skip and download | Saltar y descargar | Saltar i descarregar |
+| `skipLabel` | Agora não, ir para o dossier | Not now, go to the dossier | Ahora no, ir al dossier | Ara no, anar al dossier |
 | `moreGroup` | Mais perguntas (opcional) | More questions (optional) | Más preguntas (opcional) | Més preguntes (opcional) |
 | `cityLabel` | De que cidade és? | Which city are you from? | ¿De qué ciudad eres? | De quina ciutat ets? |
 | `cityPlaceholder` | Lisboa | Lisbon | Lisboa | Lisboa |
@@ -118,9 +118,9 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `productAdvice` | Ainda não sei / Procuro aconselhamento | Not sure yet / I need advice | No lo sé aún / Busco asesoramiento | Encara no ho sé / Busco assessorament |
 | `downloadList` | Vais descarregar: {list} | You will download: {list} | Se descargará: {list} | Es descarregarà: {list} |
 | `downloadNone` | Escolhe um produto para descarregar o respetivo dossier. | Choose a product to download its dossier. | Elige un producto para descargar el dossier correspondiente. | Tria un producte per descarregar el seu dossier. |
-| `submit` | Aceder ao dossier | Get the dossier | Acceder al dossier | Accedir al dossier |
+| `submit` | Enviar e ver o dossier | Send and get the dossier | Enviar y ver el dossier | Enviar i veure el dossier |
 | `errors.required` | Preenche este campo | Fill in this field | Completa este campo | Omple aquest camp |
-| `errors.profileRequired` | Escolhe uma opção | Choose an option | Elige una opción | Tria una opció |
+| `errors.profileRequired` | Escolhe uma opção ou salta este passo | Choose an option or skip this step | Elige una opción o salta este paso | Tria una opció o salta aquest pas |
 | `errors.either` | Deixa o e-mail ou o telemóvel | Leave an e-mail or a phone number | Deja el correo o el teléfono | Deixa el correu o el telèfon |
 | `errors.email` | Introduz um e-mail válido | Enter a valid email | Introduce un correo válido | Introdueix un correu vàlid |
 | `errors.phone` | Introduz um telefone válido, por exemplo 912 345 678 | Enter a valid phone number, for example 600 00 00 00 | Introduce un teléfono válido, por ejemplo 600 00 00 00 | Introdueix un telèfon vàlid, per exemple 600 00 00 00 |
