@@ -71,18 +71,18 @@ test('inici: la ciutat és un camp de text (city) que avisa del canvi', () => {
   city.props.onChange({ target: { value: 'Lisboa' } });
   assert.deepEqual(calls, [['city', 'Lisboa']]);
 });
-test('inici: ordre productes → ciutat → botó principal → dreçera de contacte → línia de recuperació → enllaços legals', () => {
+test('inici: ordre productes → ciutat → dreçera de contacte → línia de recuperació → enllaços legals → botó principal (barra fixa, l\'últim del cos)', () => {
   const body = findAll(entry({ onOpenForm: noop }), (n) => n.props?.className === 'page__body')[0];
   const kinds = body.children.map((n) => n?.props?.name ?? n?.props?.className ?? n?.type ?? null);
-  assert.deepEqual(kinds.filter(Boolean), ['form__products', 'city', 'page__bar', 'page__group', 'body-sm page__note', 'T.LegalLinks']);
+  assert.deepEqual(kinds.filter(Boolean), ['form__products', 'city', 'page__group', 'body-sm page__note', 'T.LegalLinks', 'page__bar']);
   const group = body.children.find((n) => n?.props?.className === 'page__group');
   assert.deepEqual(group.children.map((n) => n.type ?? null), ['T.SectionLabel', 'div', 'p'], 'etiqueta, fila de dos botons i nota');
   assert.equal(textOf(group.children[0]), f.entryContactLabel);
   assert.equal(group.children[1].props.className, 'page__row');
-  assert.equal(textOf(body.children.at(-2)), `${DICT.es.contactFallback} ${CONFIG.email}`);
+  assert.equal(textOf(body.children.at(-3)), `${DICT.es.contactFallback} ${CONFIG.email}`);
 });
 test('inici: el botó principal descarrega el dossier (no parla de The Silent Fleet) i la dreçera té botons curts', () => {
-  const [cta, wa, mail] = buttons(entry({ onOpenForm: noop }));
+  const [wa, mail, cta] = buttons(entry({ onOpenForm: noop }));
   assert.deepEqual([textOf(cta), cta.props.variant], [f.entryCta, undefined]);
   assert.ok(!textOf(cta).includes('Silent Fleet'));
   assert.deepEqual([textOf(wa), textOf(mail)], [f.shortWhatsapp, f.shortEmail]);
@@ -95,7 +95,7 @@ test('inici: la nota «dossier en inglés» només surt amb pdfNote i amb dossie
 });
 test('inici: WhatsApp i correu són enllaços i el clic ho notifica sense canviar l\'href', () => {
   const calls = [];
-  const [cta, wa, mail] = buttons(entry({ onOpenForm: noop, onContactClick: (b) => calls.push(b) }));
+  const [wa, mail, cta] = buttons(entry({ onOpenForm: noop, onContactClick: (b) => calls.push(b) }));
   assert.deepEqual([wa.props.variant, wa.props.href, mail.props.variant, mail.props.href], ['outline', 'wa', 'outline', 'mail']);
   assert.equal(cta.props.href, undefined);
   wa.props.onClick(); mail.props.onClick();
@@ -333,7 +333,7 @@ test('confirmació: el subtítol parla del correu només si l\'enviament existei
 });
 
 test('inici: el CTA principal té separació pròpia dels contactes (page__cta)', () => {
-  const cta = buttons(entry({ onOpenForm: noop }))[0];
+  const cta = buttons(entry({ onOpenForm: noop })).at(-1);
   assert.equal(textOf(cta), f.entryCta);
   assert.equal(cta.props.className, 'page__cta');
 });
