@@ -148,7 +148,9 @@ test('page.css: obert, el plegable és un sol contenidor (resum + cos), sense re
 test('page.css: la barra d\'accions és sticky al mòbil (mobile first), torna al flux des de 768 px i amb el teclat obert', () => {
   assert.match(page, /\.form__actions, \.page__bar\s*\{[^}]*position:\s*sticky[^}]*bottom:\s*0/);
   assert.match(page, /env\(safe-area-inset-bottom/);
-  assert.match(page, /input:focus, textarea:focus, select:focus\) :is\(\.form__actions, \.page__bar\)\s*\{[^}]*position:\s*static/);
+  assert.match(page, /textarea\):focus\) :is\(\.form__actions, \.page__bar\)\s*\{[^}]*position:\s*static/);
+  assert.match(page, /input:not\(\[type=radio\], \[type=checkbox\]/, 'els xips (radio) i les caselles no compten com a teclat obert');
+  assert.doesNotMatch(page, /select:focus[,)]/, 'el selector (idioma) tampoc obre teclat');
   assert.match(page, /@media \(min-width: 768px\)\s*\{\s*\.form__actions, \.page__bar\s*\{[^}]*position:\s*static/);
 });
 test('page.css: l\'avís de scroll surt del data-hint de la barra, només si queda contingut (data-more) i sense icona', () => {
