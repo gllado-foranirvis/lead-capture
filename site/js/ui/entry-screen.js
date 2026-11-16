@@ -19,7 +19,7 @@ export function createEntryScreen({ h, T, icon }) {
         withForm && askProduct ? h('div', { className: 'form__products' }, checks('products', f.productLegend, productOptions)) : null,
         withForm ? text('city', f.cityLabel, { placeholder: f.cityPlaceholder }) : null,
         // El botó principal (descarregar el dossier) va abans de la dreçera de contacte: qui no vol perdre temps la té just a sota.
-        withForm ? h(T.Button, { full: true, className: 'page__cta', onClick: onOpenForm }, f.entryCta) : null,
+        withForm ? h('div', { className: 'page__bar' }, h(T.Button, { full: true, className: 'page__cta', onClick: onOpenForm }, f.entryCta)) : null,
         withForm && askProduct && pdfNote ? h('p', { className: 'body-sm page__note page__pdfnote' }, f.entryPdfNote) : null,
         // L'etiqueta i els botons de contacte són un sol grup (8px entre ells; 16px entre grups). Amb el flux de captació, en una fila de dos.
         h('div', { className: 'page__group' },

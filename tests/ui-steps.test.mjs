@@ -74,7 +74,7 @@ test('inici: la ciutat és un camp de text (city) que avisa del canvi', () => {
 test('inici: ordre productes → ciutat → botó principal → dreçera de contacte → línia de recuperació → enllaços legals', () => {
   const body = findAll(entry({ onOpenForm: noop }), (n) => n.props?.className === 'page__body')[0];
   const kinds = body.children.map((n) => n?.props?.name ?? n?.props?.className ?? n?.type ?? null);
-  assert.deepEqual(kinds.filter(Boolean), ['form__products', 'city', 'page__cta', 'page__group', 'body-sm page__note', 'T.LegalLinks']);
+  assert.deepEqual(kinds.filter(Boolean), ['form__products', 'city', 'page__bar', 'page__group', 'body-sm page__note', 'T.LegalLinks']);
   const group = body.children.find((n) => n?.props?.className === 'page__group');
   assert.deepEqual(group.children.map((n) => n.type ?? null), ['T.SectionLabel', 'div', 'p'], 'etiqueta, fila de dos botons i nota');
   assert.equal(textOf(group.children[0]), f.entryContactLabel);
@@ -253,25 +253,35 @@ const done = (extra = {}) => DoneScreen({
 const cardOf = (tree) => findAll(tree, (n) => typeof n.props?.className === 'string' && n.props.className.split(' ').includes('tsf-pdf'))[0];
 const link = (tree, text) => findAll(tree, (n) => n.type === 'a' && textOf(n) === text)[0];
 
-test('confirmació: cada descàrrega (targeta o botó d\'un sol fitxer) notifica el seu document', () => {
+const DL_A = () => f.doneDownloadOf.replace('{name}', DOC_A.meta);
+test('confirmació: cada descàrrega (targeta, o el botó d\'un sol fitxer) notifica el seu document', () => {
   const seen = [];
-  const tree = done({ onDownload: (doc) => seen.push(doc.id) });
-  findAll(tree, (n) => n.type === 'a' && n.props.className?.includes('page__doc'))[0].props.onClick();
-  link(tree, f.doneDownload).props.onClick();
-  assert.deepEqual(seen, [DOC_A.id, DOC_A.id]);
+  link(done({ onDownload: (doc) => seen.push(doc.id) }), DL_A()).props.onClick();
+  findAll(done({ docs: [DOC_A, DOC_B], onDownload: (doc) => seen.push(doc.id) }), (n) => n.type === 'a' && n.props.className === 'page__doc')[1].props.onClick();
+  assert.deepEqual(seen, [DOC_A.id, DOC_B.id]);
 });
-test('confirmació: marca d\'èxit, títol, targeta del dossier i descàrrega real', () => {
+test('confirmació amb un sol PDF: només el botó sòlid amb el nom del producte (sense targeta duplicada) i l\'estat «descarregat»', () => {
   const tree = done();
   assert.equal(byType(tree, 'T.SectionHeading')[0].props.title, f.doneTitle);
-  const card = cardOf(tree);
-  assert.deepEqual([textOf(card), card.props.className], [`Sifly${f.doneCardTitle}`, 'tsf-pdf tsf-pdf--link']);
-  assert.ok(findAll(card, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length === 1, 'icona de document decorativa en lloc de la insígnia «PDF»');
-  const dl = link(tree, f.doneDownload);
-  const cardLink = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc')[0];
-  assert.deepEqual([cardLink.props.href, cardLink.props.download, cardLink.props.tabIndex], ['dossiers/sifly.en.pdf', '', -1], 'la targeta descarrega el mateix fitxer, amb el nom del fitxer, i no és parada de tabulador');
+  assert.equal(cardOf(tree), undefined, 'cap targeta amb un sol fitxer');
+  const dl = link(tree, DL_A());
   assert.deepEqual([dl.props.href, dl.props.download], ['dossiers/sifly.en.pdf', '']);
   assert.match(dl.props.className, /tsf-btn--solid/);
+  assert.equal(dl.props['aria-live'], 'polite');
+  const after = link(done({ downloaded: [DOC_A.id] }), `✓ ${f.doneDownloaded}`);
+  assert.ok(after, 'després de baixar-lo, el botó ho diu');
   assert.ok(findAll(tree, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length >= 1, 'marca d\'èxit decorativa');
+});
+test('confirmació amb diversos PDF: la targeta porta el nom del producte, la icona de document i l\'estat «descarregat»; a iOS no hi ha «descargar todos»', () => {
+  const tree = done({ docs: [DOC_A, DOC_B], downloaded: [DOC_B.id] });
+  const [a, b] = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc');
+  assert.deepEqual([textOf(a), textOf(b)], [`Sifly${f.doneCardTitle}`, `TKO✓ ${f.doneDownloaded}`]);
+  assert.ok(findAll(a, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length === 1, 'icona de document decorativa en lloc de la insígnia «PDF»');
+  assert.ok(findAll(tree, (n) => n.type === 'T.Button' && textOf(n) === f.doneDownloadAll).length === 1);
+  const ios = done({ docs: [DOC_A, DOC_B], ios: true });
+  assert.equal(findAll(ios, (n) => n.type === 'T.Button' && textOf(n) === f.doneDownloadAll).length, 0);
+  assert.ok(textOf(ios).includes(f.doneIosNote));
+  assert.equal(textOf(done()).includes(f.doneIosNote), false);
 });
 test('confirmació: WhatsApp i correu sota el dossier, i tornada discreta a l\'inici', () => {
   let home = 0;
@@ -283,7 +293,7 @@ test('confirmació: WhatsApp i correu sota el dossier, i tornada discreta a l\'i
   back.props.onClick();
   assert.equal(home, 1);
   const order = findAll(tree, (n) => (n.type === 'a' && n.props.className !== 'page__doc') || n.type === 'T.Button' || n.props?.className === 'page__doc').map((n) => n.props?.className === 'page__doc' ? 'card' : textOf(n));
-  assert.deepEqual(order, ['card', f.doneDownload, f.entryWhatsapp, f.entryEmail, f.doneHome]);
+  assert.deepEqual(order, [DL_A(), f.entryWhatsapp, f.entryEmail, f.doneHome]);
   assert.equal(textOf(tree).includes('PDF'), false, 'cap text visible diu PDF');
 });
 test('confirmació: WhatsApp i correu notifiquen el clic sense canviar l\'href', () => {

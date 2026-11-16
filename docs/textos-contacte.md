@@ -132,6 +132,8 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `doneDownload` | Descarregar o dossier | Download the dossier | Descargar el dossier | Descarregar el dossier |
 | `doneDownloadAll` | Descarregar todos os dossiers | Download all dossiers | Descargar todos los dossiers | Descarregar tots els dossiers |
 | `doneDownloaded` | Descarregado | Downloaded | Descargado | Descarregat |
+| `doneDownloadOf` | Descarregar o dossier de {name} | Download the {name} dossier | Descargar el dossier de {name} | Descarregar el dossier de {name} |
+| `scrollHint` | Desliza para ver mais | Scroll for more | Desliza para ver más | Llisca per veure'n més |
 | `doneIosNote` | No iPhone o dossier abre no visualizador: toca em Partilhar para o guardar. | On iPhone the dossier opens in the viewer: tap Share to save it. | En iPhone el dossier se abre en el visor: pulsa Compartir para guardarlo. | A l'iPhone el dossier s'obre al visor: prem Compartir per desar-lo. |
 | `doneCardTitle` | Dossier The Silent Fleet | Dossier The Silent Fleet | Dossier The Silent Fleet | Dossier The Silent Fleet |
 | `doneCardGeneral` | Informação geral | General information | Información general | Informació general |

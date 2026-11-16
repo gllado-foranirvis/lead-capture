@@ -13,6 +13,7 @@ import { downloadAll, onceWithin } from './form/download-all.js';
 import { focusFirstError, focusStepHeading } from './form/focus.js';
 import { advanceOnEnter, applyFieldHints, blockEnterSubmit } from './form/hints.js';
 import { clickInfo, isIos } from './form/click-info.js';
+import { watchScrollHint } from './form/scroll-hint.js';
 import { clickDetail, doneView, plannedDocs } from './form/views.js';
 import { connectSender, createSender, notifySaved } from './form/sender.js';
 import { onlyEnglishPdfs } from './form/dossier.js';
@@ -93,6 +94,8 @@ function App() {
       onIdle: () => { visit.current = newLeadId(); discardSession({ products: CONFIG.products, search, dispatch, setErrors, setLeadId, setReceipt, goTo: setView }); },
     });
   }, []);
+  // Barra d'accions fixa (mòbil): l'avís «desplaça» surt mentre hi hagi contingut per sota; es recalcula en canviar de pantalla.
+  R.useEffect(() => watchScrollHint(window, document, { text: t.form.scrollHint }), [view, lang]);
   R.useEffect(() => {
     if (attempt > 0) focusFirstError(errors, document);
   }, [attempt]);

@@ -23,15 +23,14 @@ export function createDoneScreen({ h, T, icon }) {
           subtitle: emailDelivery ? f.doneTextMail : f.doneText, className: 'page__title',
         })),
       docs.length ? h('div', { className: 'page__stack' },
-        // Una targeta clicable per PDF (decidit al brief): mateix fitxer i nom que el botó. `T.PdfCard` amb href no deixa posar el nom de descàrrega, d'aquí l'<a> que l'embolcalla.
-        // Amb un sol PDF el botó ja és la parada de tabulador i la targeta no ho és; amb diversos, cada targeta és l'única via al seu fitxer.
-        ...docs.map((doc) => card(f, doc, docs.length > 1, onDownload, downloaded.includes(doc.id))),
-        // A iOS no hi ha «descarregar tots»: només el primer fitxer s'ha de baixar sota el gest; cada targeta és un toc seu.
-        docs.length > 1 && ios ? null : docs.length > 1
-          ? h(T.Button, { full: true, onClick: onDownloadAll }, f.doneDownloadAll)
+        // Un sol PDF: només el botó sòlid, amb el nom del producte dins (la targeta i el botó eren el mateix fitxer dues vegades).
+        // Diversos: una targeta per fitxer (cada una és l'única via al seu PDF) i, sota, «descarregar tots» (no a iOS, que bloqueja les descàrregues encadenades sense gest).
+        ...(docs.length > 1 ? docs.map((doc) => card(f, doc, true, onDownload, downloaded.includes(doc.id))) : []),
+        docs.length > 1
+          ? (ios ? null : h(T.Button, { full: true, onClick: onDownloadAll }, f.doneDownloadAll))
           // Button no reenvia `download`, d'aquí l'<a> amb les classes del sistema.
-          : h('a', { className: 'tsf-btn button tsf-btn--solid tsf-btn--full', href: docs[0].href, download: '', onClick: () => onDownload(docs[0]) }, f.doneDownload)) : null,
-      // Els PDF són en anglès: l'avís, també aquí, abans de tocar (el de l'entrada s'ha vist feia estona).
+          : h('a', { className: 'tsf-btn button tsf-btn--solid tsf-btn--full', href: docs[0].href, download: '', 'aria-live': 'polite', onClick: () => onDownload(docs[0]) },
+            downloaded.includes(docs[0].id) ? `✓ ${f.doneDownloaded}` : docs[0].id === 'brand' ? f.doneDownload : f.doneDownloadOf.replace('{name}', docs[0].meta))) : null,
       docs.length && ios ? h('p', { className: 'body-sm page__note' }, f.doneIosNote) : null,
       docs.length && pdfNote ? h('p', { className: 'body-sm page__note page__pdfnote' }, f.entryPdfNote) : null,
       h('div', { className: 'page__done-actions' },

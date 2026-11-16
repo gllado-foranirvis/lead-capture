@@ -144,3 +144,13 @@ test('page.css: obert, el plegable és un sol contenidor (resum + cos), sense re
   assert.match(legend, /clip:\s*rect\(0 0 0 0\)/, 'la llegenda es manté per als lectors, però no es veu repetida');
   assert.match(page, /\.fold__summary:focus-visible\s*\{[^}]*outline-offset:\s*-2px/);
 });
+
+test('page.css: la barra d\'accions és sticky al mòbil (mobile first), torna al flux des de 768 px i amb el teclat obert', () => {
+  assert.match(page, /\.form__actions, \.page__bar\s*\{[^}]*position:\s*sticky[^}]*bottom:\s*0/);
+  assert.match(page, /env\(safe-area-inset-bottom/);
+  assert.match(page, /input:focus, textarea:focus, select:focus\) :is\(\.form__actions, \.page__bar\)\s*\{[^}]*position:\s*static/);
+  assert.match(page, /@media \(min-width: 768px\)\s*\{\s*\.form__actions, \.page__bar\s*\{[^}]*position:\s*static/);
+});
+test('page.css: l\'avís de scroll surt del data-hint de la barra, només si queda contingut (data-more) i sense icona', () => {
+  assert.match(page, /html\[data-more="true"\] :is\(\.form__actions, \.page__bar\)\[data-hint\]::before\s*\{[^}]*content:\s*attr\(data-hint\)/);
+});
