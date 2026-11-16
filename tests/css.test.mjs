@@ -161,3 +161,8 @@ test('page.css: la píndola de l\'avís de scroll es pot tocar (cursor, àrea t�
   assert.match(rule, /border:\s*5px solid transparent/);
   assert.doesNotMatch(rule, /pointer-events:\s*none/);
 });
+
+test('page.css: la targeta de descàrrega té una crida visible («Descarregar») que passa a contorn quan ja s\'ha baixat', () => {
+  assert.match(page, /\.page__doc-cta\s*\{[^}]*background:\s*var\(--action\)/);
+  assert.match(page, /\.page__doc-cta--done\s*\{[^}]*background:\s*transparent/);
+});

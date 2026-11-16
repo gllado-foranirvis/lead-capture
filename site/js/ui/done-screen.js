@@ -11,8 +11,9 @@ export function createDoneScreen({ h, T, icon }) {
         h('span', { className: 'tsf-pdf__text' },
           // El nom del producte és el títol (distingeix les targetes); «Dossier The Silent Fleet» queda com a detall.
           h('span', { className: 'label tsf-pdf__title' }, doc.meta),
-          // Estat de la descàrrega: es veu i s'anuncia (el toc a una targeta no mostrava cap resposta).
-          h('span', { className: 'body-sm tsf-pdf__meta', 'aria-live': 'polite' }, downloaded ? `✓ ${f.doneDownloaded}` : f.doneCardTitle))));
+          h('span', { className: 'body-sm tsf-pdf__meta' }, f.doneCardTitle)),
+        // Crida a l'acció visible a cada targeta (sense ella no es veia que la targeta és un enllaç); després del toc, l'estat «descarregat» (s'anuncia).
+        h('span', { className: downloaded ? 'page__doc-cta page__doc-cta--done' : 'page__doc-cta', 'aria-live': 'polite' }, downloaded ? `✓ ${f.doneDownloaded}` : f.doneDownloadShort)));
   return function DoneScreen({ t, emailDelivery, docs, pdfNote = false, downloaded = [], ios = false, onDownloadAll, onDownload = () => {}, onContactClick, whatsappHref, emailHref, onHome }) {
     const f = t.form;
     return h('div', { className: 'page__screen page__screen--done' },

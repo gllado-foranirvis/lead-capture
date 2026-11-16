@@ -275,7 +275,7 @@ test('confirmació amb un sol PDF: només el botó sòlid amb el nom del product
 test('confirmació amb diversos PDF: la targeta porta el nom del producte, la icona de document i l\'estat «descarregat»; a iOS no hi ha «descargar todos»', () => {
   const tree = done({ docs: [DOC_A, DOC_B], downloaded: [DOC_B.id] });
   const [a, b] = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc');
-  assert.deepEqual([textOf(a), textOf(b)], [`Sifly${f.doneCardTitle}`, `TKO✓ ${f.doneDownloaded}`]);
+  assert.deepEqual([textOf(a), textOf(b)], [`Sifly${f.doneCardTitle}${f.doneDownloadShort}`, `TKO${f.doneCardTitle}✓ ${f.doneDownloaded}`]);
   assert.ok(findAll(a, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length === 1, 'icona de document decorativa en lloc de la insígnia «PDF»');
   assert.ok(findAll(tree, (n) => n.type === 'T.Button' && textOf(n) === f.doneDownloadAll).length === 1);
   const ios = done({ docs: [DOC_A, DOC_B], ios: true });
@@ -318,7 +318,7 @@ test('confirmació amb diversos PDF: una targeta per fitxer (parada de tabulador
   const tree = done({ docs: [DOC_A, DOC_B], onDownloadAll: () => all++ });
   const cards = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc');
   assert.deepEqual(cards.map((c) => [c.props.href, c.props.download, c.props.tabIndex]), [[DOC_A.href, '', undefined], [DOC_B.href, '', undefined]]);
-  assert.deepEqual(findAll(tree, (n) => typeof n.props?.className === 'string' && n.props.className.split(' ').includes('tsf-pdf')).map(textOf), [`Sifly${f.doneCardTitle}`, `TKO${f.doneCardTitle}`]);
+  assert.deepEqual(findAll(tree, (n) => typeof n.props?.className === 'string' && n.props.className.split(' ').includes('tsf-pdf')).map(textOf), [`Sifly${f.doneCardTitle}${f.doneDownloadShort}`, `TKO${f.doneCardTitle}${f.doneDownloadShort}`]);
   assert.equal(link(tree, f.doneDownload), undefined, 'amb diversos fitxers no hi ha el botó d\'un de sol');
   const [all1] = findAll(tree, (n) => n.type === 'T.Button' && textOf(n) === f.doneDownloadAll);
   assert.ok(all1, 'botó «descargar todos»');
