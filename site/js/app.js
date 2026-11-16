@@ -97,7 +97,12 @@ function App() {
 
   const change = (field, value) => {
     dispatch({ type: 'set', field, value });
-    setErrors((current) => clearError(current, field));
+    // «Un dels dos»: en omplir el correu o el telèfon, l'error del seu company també desapareix.
+    setErrors((current) => {
+      const cleared = clearError(current, field);
+      const partner = field === 'email' ? 'phone' : field === 'phone' ? 'email' : null;
+      return partner && cleared[partner] === 'either' ? clearError(cleared, partner) : cleared;
+    });
   };
   const common = { products: CONFIG.products, search, lang, visit: visit.current, leadId, newId: newLeadId, setLeadId, setErrors, bumpAttempt, goTo: setView };
   const next = () => advanceStep1(values, { ...common, emitPartial: emit('tsf:lead-partial') });
@@ -130,7 +135,7 @@ function App() {
     entry: () => h(EntryScreen, {
       t, fair: CONFIG.fair, links: contactLinks(CONFIG, t, sessionOf(values)), email: CONFIG.email, legalQuery: query,
       products: CONFIG.products, askProduct: dossier, pdfNote: onlyEnglishPdfs(CONFIG, lang), values, onChange: change, onToggle: toggle, onContactClick: contactClick('entry'),
-      onOpenForm: extra1 ? () => { setProductsOpen(values.products.length === 0); setView('step1'); } : undefined,
+      onOpenForm: extra1 ? () => { setProductsOpen(false); setView('step1'); } : undefined,
     }),
     step1: () => h(StepContact, {
       t, lang, products: CONFIG.products, askProduct: dossier, downloads: plannedDocs({ products: values.products, lang, config: CONFIG, full: t }).map((d) => d.meta), saved, productsOpen, values, errors, onChange: change, onToggle: toggle, onSubmit: next,

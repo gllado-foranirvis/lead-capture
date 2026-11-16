@@ -18,13 +18,13 @@ function phoneError(prefix, number) {
   return NUMBER_CHARS.test(number) && n >= PHONE_DIGITS.min && n <= PHONE_DIGITS.max ? undefined : 'phone';
 }
 
-// Contacte i consentiment: nom obligatori; cal almenys un de correu o telèfon (un sol error «either», al correu).
+// Contacte i consentiment: nom obligatori; cal almenys un de correu o telèfon (l'error «either» als dos camps).
 export function validateContact(values) {
   const errors = {};
   if (!text(values, 'name')) errors.name = 'required';
   const email = text(values, 'email');
   const number = text(values, 'phone');
-  if (!email && !number) errors.email = 'either';
+  if (!email && !number) { errors.email = 'either'; errors.phone = 'either'; }
   else if (email && !EMAIL.test(email)) errors.email = 'email';
   if (number) {
     const prefix = text(values, 'phonePrefix').replace(/\s/g, '');

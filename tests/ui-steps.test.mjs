@@ -135,10 +135,10 @@ test('pas 1: només el nom i la privacitat són obligatoris; correu i telèfon d
     assert.ok(byName(tree, n)[0].props.label.includes(f.eitherTag), n);
   }
 });
-test('pas 1: sense cap contacte, un sol error («either») al correu i cap al telèfon', () => {
-  const tree = contact({ errors: { email: 'either' } });
+test('pas 1: sense cap contacte, l\'error («either») surt al correu i al telèfon', () => {
+  const tree = contact({ errors: { email: 'either', phone: 'either' } });
   assert.equal(byName(tree, 'email')[0].props.error, f.errors.either);
-  assert.equal(byName(tree, 'phone')[0].props.error, undefined);
+  assert.equal(byName(tree, 'phone')[0].props.error, f.errors.either);
 });
 test('pas 1: el botó continua cap al pas 2 (no promet encara el dossier) i «dades guardades» només si s\'ha desat', () => {
   const tree = contact();

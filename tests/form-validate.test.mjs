@@ -4,8 +4,8 @@ import { FIELD_ORDER, clearError, firstErrorField, validateContact, validateProf
 
 const ok1 = { name: 'Ana', email: 'ana@example.com', phonePrefix: '+34', phone: '600 00 00 00', privacy: true };
 
-test('nom i privacitat obligatoris; sense correu ni telèfon, un sol error «either» al correu', () => {
-  assert.deepEqual(validateContact({}), { name: 'required', email: 'either', privacy: 'privacy' });
+test('nom i privacitat obligatoris; sense correu ni telèfon, l\'error «either» als dos camps', () => {
+  assert.deepEqual(validateContact({}), { name: 'required', email: 'either', phone: 'either', privacy: 'privacy' });
   assert.deepEqual(validateContact(ok1), {});
 });
 test('només telèfon vàlid: sense errors; el prefix invàlid no es valida sense telèfon', () => {
@@ -42,7 +42,7 @@ test('la privacitat només val si és exactament true', () => {
 });
 test('FIELD_ORDER segueix el formulari i validateContact només en dona errors', () => {
   assert.deepEqual(FIELD_ORDER, ['name', 'email', 'phonePrefix', 'phone', 'privacy', 'profile']);
-  assert.deepEqual(Object.keys(validateContact({})).sort(), ['email', 'name', 'privacy']);
+  assert.deepEqual(Object.keys(validateContact({})).sort(), ['email', 'name', 'phone', 'privacy']);
   assert.equal(Object.hasOwn(validateContact({}), 'profile'), false);
 });
 test('firstErrorField segueix l\'ordre del flux; clearError treu un sol camp', () => {

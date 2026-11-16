@@ -111,10 +111,10 @@ test('la promesa de descàrrega: l\'inici i la pàgina de dades la diuen, i la l
   for (const l of CONFIG.languages) {
     const f = DICT[l].form;
     assert.match(f.entrySubtitle, promise[l], `${l}.entrySubtitle`);
-    assert.match(f.step1Subtitle, promise[l], `${l}.step1Subtitle`);
+    assert.match(f.step1Title, promise[l], `${l}.step1Title`);
     assert.match(f.downloadList, /\{list\}/, l);
     assert.ok(f.downloadNone.trim(), l);
-    assert.doesNotMatch(f.downloadList + f.downloadNone + f.entrySubtitle + f.step1Subtitle, /PDF|\bfich?[ae]\b/i, l);
+    assert.doesNotMatch(f.downloadList + f.downloadNone + f.entrySubtitle + f.step1Title, /PDF|\bfich?[ae]\b/i, l);
   }
 });
 test('el pas 2 té els literals de perfilació i els de saltar, sense la localitat de la demostració', () => {

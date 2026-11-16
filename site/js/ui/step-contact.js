@@ -39,7 +39,7 @@ export function createStepContact({ h, T }) {
     return h('div', { className: 'page__screen page__screen--form' },
       StepIndicator({ step: 2, total: f.stepNames.length, label: stepText(f.stepOf, f.stepNames, 2, f.stepNames.length) }),
       h('div', { className: 'page__heading', tabIndex: -1, 'data-step-heading': '' },
-        h(T.SectionHeading, { layout: 'mobile', align: 'start', level: 1, title: f.step1Title, subtitle: f.step1Subtitle, className: 'page__title' })),
+        h(T.SectionHeading, { layout: 'mobile', align: 'start', level: 1, title: f.step1Title, className: 'page__title' })),
       saved ? h('p', { className: 'body-sm page__note form__saved', 'aria-live': 'polite' }, f.saved) : null,
       h('p', { className: 'body-sm page__note' }, f.step1Hint, ' ', f.requiredNote),
       h('form', { className: 'form', noValidate: true, onKeyDown, onSubmit: (e) => { e.preventDefault(); onSubmit(); } },
@@ -65,7 +65,7 @@ export function createStepContact({ h, T }) {
           h(T.Checkbox, { name: 'privacy', id: 'privacy', required: true, checked: values.privacy, error: error('privacy'), onChange: (e) => onChange('privacy', e.target.checked) },
             // Un sol element: l'etiqueta del Checkbox és flex i, amb tres fills, es perdria l'espai abans de l'enllaç.
             h('span', null, f.consentBefore, h('a', { href: privacyHref, target: '_blank', rel: 'noopener' }, f.consentLink))),
-          h(T.Checkbox, { name: 'newsletter', id: 'newsletter', checked: values.newsletter, onChange: (e) => onChange('newsletter', e.target.checked) }, f.newsletter)),
+          h('div', { className: 'form__optional' }, h(T.Checkbox, { name: 'newsletter', id: 'newsletter', checked: values.newsletter, onChange: (e) => onChange('newsletter', e.target.checked) }, f.newsletter))),
         h('div', { className: 'form__actions' },
           h(T.Button, { type: 'submit', full: true }, f.next),
           h(T.Button, { variant: 'link', onClick: onBack }, `← ${t.back}`))));
