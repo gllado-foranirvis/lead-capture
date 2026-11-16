@@ -153,10 +153,21 @@ function writeRow(sheet, rowNumber, values) {
   range.setValues([values]);
 }
 
+// Última fila amb un id a la columna A. getLastRow() no serveix: una fórmula a la dreta de les dades (p. ex. un
+// ARRAYFORMULA de «Què ha clicat cada lead») omple el full de cadenes buides fins a la fila 1000 i les files noves
+// quedarien sota la 1000. Retorna també els ids (de la fila 2 a l'última) per buscar-hi un id repetit.
+function idsOf(sheet) {
+  var column = sheet.getLastRow() > 1 ? sheet.getRange(1, 1, sheet.getLastRow(), 1).getValues() : [];
+  var last = column.length;
+  while (last > 1 && String(column[last - 1][0]) === '') last--;
+  return { last: Math.max(last, 1), ids: column.slice(1, last) };
+}
+
 // Una fila per lead: el final completa el parcial; un parcial tardà no degrada una fila completa.
 function upsertLead(sheet, lead, now) {
-  var last = sheet.getLastRow();
-  var ids = last > 1 ? sheet.getRange(2, 1, last - 1, 1).getValues() : [];
+  var found = idsOf(sheet);
+  var last = found.last;
+  var ids = found.ids;
   var index = -1;
   for (var i = 0; i < ids.length; i++) {
     if (String(ids[i][0]) === lead.id) { index = i; break; }
@@ -178,8 +189,9 @@ function upsertLead(sheet, lead, now) {
 function recordClick(book, click, now) {
   var sheet = book.getSheetByName(CLICK_SHEET) || book.insertSheet(CLICK_SHEET);
   ensureHeader(sheet, CLICK_COLUMNS);
-  var last = sheet.getLastRow();
-  var ids = last > 1 ? sheet.getRange(2, 1, last - 1, 1).getValues() : [];
+  var found = idsOf(sheet);
+  var last = found.last;
+  var ids = found.ids;
   for (var i = 0; i < ids.length; i++) {
     if (String(ids[i][0]) === click.id) return 'ignored';
   }
@@ -200,7 +212,7 @@ function reply(object) {
 }
 
 // La marca de versió permet veure, amb un GET a l'URL /exec, quin codi hi ha realment desplegat.
-var VERSION = 'cro-enertech-2026-11-13-visit';
+var VERSION = 'cro-enertech-2026-11-16-ultima-fila';
 
 function doGet() {
   return reply({ ok: true, version: VERSION });

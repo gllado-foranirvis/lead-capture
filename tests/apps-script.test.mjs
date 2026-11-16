@@ -14,8 +14,9 @@ const formatDate = (date, zone, format) => {
 };
 
 class FakeSheet {
-  constructor() { this.rows = []; this.formats = []; this.formatted = new Set(); this.frozen = 0; this.maxRows = 1000; this.maxCols = 26; }
-  getLastRow() { return this.rows.length; }
+  constructor() { this.rows = []; this.formats = []; this.formatted = new Set(); this.frozen = 0; this.maxRows = 1000; this.maxCols = 26; this.formulaRows = 0; }
+  // Una fórmula a la dreta (ARRAYFORMULA) que arriba a la fila N compta com a contingut: getLastRow() no baixa de N.
+  getLastRow() { return Math.max(this.rows.length, this.formulaRows); }
   getMaxRows() { return this.maxRows; }
   insertRowsAfter(position, howMany) { assert.equal(position, this.maxRows); this.maxRows += howMany; }
   getMaxColumns() { return this.maxCols; }
@@ -291,7 +292,7 @@ test('doPost: un error intern respon «error» (el client reintenta) i allibera 
 });
 test('doGet respon ok (per comprovar que l\'URL està desplegada)', () => {
   const { api } = load();
-  assert.deepEqual(JSON.parse(api.doGet().text), { ok: true, version: 'cro-enertech-2026-11-13-visit' });
+  assert.deepEqual(JSON.parse(api.doGet().text), { ok: true, version: 'cro-enertech-2026-11-16-ultima-fila' });
 });
 
 test('un clic de descàrrega de PDF es registra; un botó desconegut es rebutja', () => {
@@ -350,4 +351,33 @@ test('amb un full de 26 columnes, un lead nou s\'escriu sencer (27 columnes) i e
   assert.deepEqual(reply, { ok: true, result: 'created' });
   assert.equal(sheet.rows[1].length, api.COLUMNS.length);
   assert.equal(sheet.rows[1].at(-1), 'visit-0001');
+});
+
+test('amb fórmules que omplen el full fins a la fila 1000 a la dreta de les dades, un lead nou es desa just sota l\'últim lead (no sota la fila 1000)', () => {
+  const { sheet, api } = load();
+  api.ensureHeader(sheet, api.COLUMNS);
+  sheet.formulaRows = 1000;
+  assert.equal(post(api, { ...complete, id: 'lead-0001' }).result, 'created');
+  assert.equal(post(api, { ...complete, id: 'lead-0002' }).result, 'created');
+  assert.deepEqual([sheet.rows[1][0], sheet.rows[2][0]], ['lead-0001', 'lead-0002']);
+  assert.equal(sheet.rows.length, 3);
+  assert.equal(sheet.maxRows, 1000, 'no cal ampliar la quadrícula');
+});
+test('amb fórmules fins a la fila 1000, el final d\'un lead segueix actualitzant la seva fila i no en crea una de nova', () => {
+  const { sheet, api } = load();
+  api.ensureHeader(sheet, api.COLUMNS);
+  sheet.formulaRows = 1000;
+  post(api, { ...step1, id: 'lead-0001' });
+  assert.equal(post(api, { ...complete, id: 'lead-0001' }).result, 'updated');
+  assert.equal(sheet.rows.length, 2);
+});
+test('amb fórmules fins a la fila 1000, un clic nou es desa just sota l\'últim clic', () => {
+  const { sheet, api, book } = load();
+  assert.equal(post(api, { ...click, id: 'click-0001' }).result, 'created');
+  const clicks = book.sheets.Clics;
+  clicks.formulaRows = 1000;
+  assert.equal(post(api, { ...click, id: 'click-0002' }).result, 'created');
+  assert.equal(post(api, { ...click, id: 'click-0002' }).result, 'ignored');
+  assert.deepEqual([clicks.rows[1][0], clicks.rows[2][0]], ['click-0001', 'click-0002']);
+  assert.equal(clicks.rows.length, 3);
 });
