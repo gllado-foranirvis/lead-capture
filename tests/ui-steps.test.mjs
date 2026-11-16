@@ -349,19 +349,14 @@ test('els camps d\'escriptura porten un exemple com a placeholder (no substituei
 const fakeGroup = () => { const attrs = {}; return { attrs, el: { querySelector: () => ({ setAttribute: (k, v) => { attrs[k] = v; }, removeAttribute: (k) => { delete attrs[k]; } }) } }; };
 
 
-test('pas 2: «Quem és» va primer i és l\'únic obligatori; la resta de preguntes són opcionals i plegades en un sol grup', () => {
+test('pas 2: «Quem és» va primer i és l\'únic obligatori; la resta de preguntes són opcionals i es veuen directament (sense plegable)', () => {
   const tree = profileScreen();
   const [first] = findAll(tree, (n) => ['T.ChoiceChips', 'T.CheckboxGroup', 'T.Field', 'T.Select'].includes(n.type));
   assert.equal(first.props.name, 'profile');
   assert.equal(first.props.legend, f.profileLegend);
-  const more = findAll(tree, (n) => n.type === 'details');
-  assert.equal(more.length, 1);
-  assert.notEqual(more[0].props.open, true, 'plegat per defecte');
-  const summary = textOf(findAll(more[0], (n) => n.type === 'summary')[0]);
-  assert.ok(summary.includes(f.moreGroup));
-  assert.ok(summary.includes(f.moreCount.replace('{n}', '7')), 'el resum diu quantes preguntes hi ha');
-  const inside = findAll(more[0], (n) => n.props?.name).map((n) => n.props.name);
-  assert.deepEqual(inside, ['hasBoat', 'hasElectric', 'enthusiasm', 'concerns', 'intent', 'factors', 'comments']);
+  assert.equal(findAll(tree, (n) => n.type === 'details').length, 0, 'cap plegable al pas 2');
+  const names = findAll(tree, (n) => n.props?.name).map((n) => n.props.name);
+  assert.deepEqual(names, ['profile', 'hasBoat', 'hasElectric', 'enthusiasm', 'concerns', 'intent', 'factors', 'comments']);
   assert.equal(byName(tree, 'demo').length + byName(tree, 'products').length, 0, 'ni localitat de demostració ni productes');
 });
 test('pas 2: l\'activitat només surt per a Profesional, i «altra» obre el seu camp', () => {

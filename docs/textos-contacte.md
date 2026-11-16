@@ -107,11 +107,9 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `stepNames.2` | Interesse | Interest | Interés | Interès |
 | `stepNames.3` | Dossier | Dossier | Dossier | Dossier |
 | `saved` | Dados guardados | Details saved | Datos guardados | Dades desades |
-| `moreCount` | {n} perguntas opcionais | {n} optional questions | {n} preguntas opcionales | {n} preguntes opcionals |
 | `change` | Alterar | Change | Cambiar | Canviar |
 | `chooseProduct` | Escolhe um produto | Choose a product | Elige un producto | Tria un producte |
 | `skipLabel` | Agora não, ir para o dossier | Not now, go to the dossier | Ahora no, ir al dossier | Ara no, anar al dossier |
-| `moreGroup` | Mais perguntas (opcional) | More questions (optional) | Más preguntas (opcional) | Més preguntes (opcional) |
 | `cityLabel` | De que cidade és? | Which city are you from? | ¿De qué ciudad eres? | De quina ciutat ets? |
 | `cityPlaceholder` | Lisboa | Lisbon | Lisboa | Lisboa |
 | `productLegend` | Que produto te interessa? | Which product are you interested in? | ¿Qué producto te interesa? | Quin producte t'interessa? |
