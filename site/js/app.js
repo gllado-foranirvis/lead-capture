@@ -9,9 +9,9 @@ import { newLeadId } from './form/lead.js';
 import { advanceStep1, discardSession, handleSkip, handleSubmit, leaveToEntry } from './form/flow.js';
 import { ACTIVITY_EVENTS, IDLE_MS, watchIdle } from './form/idle.js';
 import { toSession } from './form/session.js';
-import { downloadAll } from './form/download-all.js';
+import { downloadAll, onceWithin } from './form/download-all.js';
 import { focusFirstError, focusStepHeading } from './form/focus.js';
-import { advanceOnEnter, applyFieldHints } from './form/hints.js';
+import { advanceOnEnter, applyFieldHints, blockEnterSubmit } from './form/hints.js';
 import { clickInfo } from './form/click-info.js';
 import { clickDetail, doneView, plannedDocs } from './form/views.js';
 import { connectSender, createSender, notifySaved } from './form/sender.js';
@@ -57,6 +57,7 @@ function App() {
   const mounted = R.useRef(false);
   // Identificador aleatori de la visita: només a la memòria (permet comptar visites, no persones); es renova a la tauleta en descartar la sessió.
   const visit = R.useRef(newLeadId());
+  const guardDownloadAll = R.useRef(onceWithin((run) => run(), 2000));
   const t = dictFor(lang, dossier);
   const query = legalQuery(lang, extra1, dossier, isDossierPreview(CONFIG, search));
   const sessionOf = (source) => toSession(source, { products: CONFIG.products, dict: t });
@@ -124,6 +125,7 @@ function App() {
     info: clickInfo({ nav: navigator, win: window, doc: document, startedAt, now: Date.now() }),
   }));
 
+  const downloadAllOnce = (docs) => () => guardDownloadAll.current(() => { downloadAll(docs); docs.forEach(onDownload); });
   const screens = {
     entry: () => h(EntryScreen, {
       t, fair: CONFIG.fair, links: contactLinks(CONFIG, t, sessionOf(values)), email: CONFIG.email, legalQuery: query,
@@ -136,7 +138,7 @@ function App() {
     }),
     step2: () => h(StepProfile, {
       t, saved, values, errors, onChange: change, onToggle: toggle, onSubmit: submit, onSkip: skip,
-      onKeyDown: (e) => advanceOnEnter(e, document), onBack: () => { setErrors({}); setView('step1'); },
+      onKeyDown: blockEnterSubmit, onBack: () => { setErrors({}); setView('step1'); },
     }),
     done: () => {
       const links = contactLinks(CONFIG, t, receipt ? sessionOf(receipt) : {});
@@ -144,7 +146,7 @@ function App() {
       return h(DoneScreen, {
         ...view, onHome: goHome, whatsappHref: links.whatsapp, emailHref: links.email,
         onDownload,
-        onDownloadAll: () => { downloadAll(view.docs); view.docs.forEach(onDownload); }, onContactClick: contactClick('done'),
+        onDownloadAll: downloadAllOnce(view.docs), onContactClick: contactClick('done'),
       });
     },
   };
