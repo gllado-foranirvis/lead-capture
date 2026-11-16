@@ -35,3 +35,12 @@ test('un navegador sense res (sense Intl, sense idioma, sense document) no peta 
   assert.deepEqual(info, { browserLang: '', device: 'desktop', os: 'other', tz: '', screen: '', seconds: 5, referrer: '' });
   assert.doesNotThrow(() => clickInfo({}));
 });
+
+test('isIos: iPhone, iPad i iPadOS (Mac amb pantalla tàctil) sí; Android i Mac normal no', async () => {
+  const { isIos } = await import('../site/js/form/click-info.js');
+  assert.equal(isIos({ userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0)' }), true);
+  assert.equal(isIos({ userAgent: 'Mozilla/5.0 (Macintosh)', platform: 'MacIntel', maxTouchPoints: 5 }), true);
+  assert.equal(isIos({ userAgent: 'Mozilla/5.0 (Macintosh)', platform: 'MacIntel', maxTouchPoints: 0 }), false);
+  assert.equal(isIos({ userAgent: 'Mozilla/5.0 (Linux; Android 14)' }), false);
+  assert.equal(isIos(), false);
+});

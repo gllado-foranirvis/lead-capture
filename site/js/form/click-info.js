@@ -39,3 +39,6 @@ export function clickInfo({ nav = {}, win = {}, doc = {}, startedAt = 0, now = 0
     referrer: hostOf(doc?.referrer),
   };
 }
+
+// iOS (també iPadOS, que s'identifica com a Mac amb pantalla tàctil): aquí les descàrregues encadenades sense gest es bloquegen i el PDF s'obre al visor.
+export const isIos = (nav = {}) => /iPhone|iPad|iPod/i.test(String(nav.userAgent ?? '')) || (nav.platform === 'MacIntel' && nav.maxTouchPoints > 1);

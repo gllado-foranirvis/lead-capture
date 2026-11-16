@@ -52,7 +52,7 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `consentLink` | política de privacidade | privacy policy | política de privacidad | política de privacitat |
 | `newsletter` | Quero receber novidades (opcional) | I'd like to receive updates (optional) | Quiero recibir novedades (opcional) | Vull rebre novetats (opcional) |
 | `step2Title` | Conta-nos mais sobre ti | Tell us more about you | Cuéntanos más sobre ti | Explica'ns més sobre tu |
-| `step2Subtitle` | Se quiseres, conta-nos mais; se não, salta para o dossier. | Tell us more if you like, or skip straight to the dossier. | Si quieres, cuéntanos más; si no, salta al dossier. | Si vols, explica'ns més; si no, salta al dossier. |
+| `step2Subtitle` | Assim podemos atender-te melhor. Se preferires, vai direto ao dossier. | So we can help you better. Or go straight to the dossier. | Así podemos atenderte mejor. Si prefieres, ve directo al dossier. | Així et podem atendre millor. Si prefereixes, ves directament al dossier. |
 | `profileLegend` | Quem és? | Who are you? | ¿Quién eres? | Qui ets? |
 | `profiles.particular` | Particular | Private customer | Particular | Particular |
 | `profiles.profesional` | Profissional | Professional | Profesional | Professional |
@@ -131,6 +131,8 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `doneTextMail` | Descarrega-o agora; também to enviámos por e-mail para o consultares quando quiseres. | Download it now; we have also emailed it to you to read whenever you like. | Descárgalo ahora; también te lo hemos enviado por correo para que lo consultes cuando quieras. | Descarrega'l ara; també te l'hem enviat per correu perquè el consultis quan vulguis. |
 | `doneDownload` | Descarregar o dossier | Download the dossier | Descargar el dossier | Descarregar el dossier |
 | `doneDownloadAll` | Descarregar todos os dossiers | Download all dossiers | Descargar todos los dossiers | Descarregar tots els dossiers |
+| `doneDownloaded` | Descarregado | Downloaded | Descargado | Descarregat |
+| `doneIosNote` | No iPhone o dossier abre no visualizador: toca em Partilhar para o guardar. | On iPhone the dossier opens in the viewer: tap Share to save it. | En iPhone el dossier se abre en el visor: pulsa Compartir para guardarlo. | A l'iPhone el dossier s'obre al visor: prem Compartir per desar-lo. |
 | `doneCardTitle` | Dossier The Silent Fleet | Dossier The Silent Fleet | Dossier The Silent Fleet | Dossier The Silent Fleet |
 | `doneCardGeneral` | Informação geral | General information | Información general | Informació general |
 | `doneHome` | Voltar ao início | Back to start | Volver al inicio | Tornar a l'inici |
