@@ -25,10 +25,10 @@ export function createDoneScreen({ h, T, icon }) {
         })),
       docs.length ? h('div', { className: 'page__stack' },
         // Un sol PDF: només el botó sòlid, amb el nom del producte dins (la targeta i el botó eren el mateix fitxer dues vegades).
-        // Diversos: una targeta per fitxer (cada una és l'única via al seu PDF) i, sota, «descarregar tots» (no a iOS, que bloqueja les descàrregues encadenades sense gest).
+        // Diversos: una targeta per fitxer (cada una és l'única via al seu PDF) i, sota, «descarregar tots» (també a iOS, on pot baixar només el primer: les targetes sempre ho permeten).
         ...(docs.length > 1 ? docs.map((doc) => card(f, doc, true, onDownload, downloaded.includes(doc.id))) : []),
         docs.length > 1
-          ? (ios ? null : h(T.Button, { full: true, onClick: onDownloadAll }, f.doneDownloadAll))
+          ? h(T.Button, { full: true, onClick: onDownloadAll }, f.doneDownloadAll)
           // Button no reenvia `download`, d'aquí l'<a> amb les classes del sistema.
           : h('a', { className: 'tsf-btn button tsf-btn--solid tsf-btn--full', href: docs[0].href, download: '', 'aria-live': 'polite', onClick: () => onDownload(docs[0]) },
             downloaded.includes(docs[0].id) ? `✓ ${f.doneDownloaded}` : docs[0].id === 'brand' ? f.doneDownload : f.doneDownloadOf.replace('{name}', docs[0].meta))) : null,

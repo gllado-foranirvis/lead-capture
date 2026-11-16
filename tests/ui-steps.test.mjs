@@ -272,14 +272,14 @@ test('confirmació amb un sol PDF: només el botó sòlid amb el nom del product
   assert.ok(after, 'després de baixar-lo, el botó ho diu');
   assert.ok(findAll(tree, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length >= 1, 'marca d\'èxit decorativa');
 });
-test('confirmació amb diversos PDF: la targeta porta el nom del producte, la icona de document i l\'estat «descarregat»; a iOS no hi ha «descargar todos»', () => {
+test('confirmació amb diversos PDF: la targeta porta el nom del producte, la icona de document i l\'estat «descarregat»; a iOS surt igualment «descargar todos» i la nota del visor', () => {
   const tree = done({ docs: [DOC_A, DOC_B], downloaded: [DOC_B.id] });
   const [a, b] = findAll(tree, (n) => n.type === 'a' && n.props.className === 'page__doc');
   assert.deepEqual([textOf(a), textOf(b)], [`Sifly${f.doneCardTitle}${f.doneDownloadShort}`, `TKO${f.doneCardTitle}✓ ${f.doneDownloaded}`]);
   assert.ok(findAll(a, (n) => n.type === 'svg' && n.props['aria-hidden'] === 'true').length === 1, 'icona de document decorativa en lloc de la insígnia «PDF»');
   assert.ok(findAll(tree, (n) => n.type === 'T.Button' && textOf(n) === f.doneDownloadAll).length === 1);
   const ios = done({ docs: [DOC_A, DOC_B], ios: true });
-  assert.equal(findAll(ios, (n) => n.type === 'T.Button' && textOf(n) === f.doneDownloadAll).length, 0);
+  assert.equal(findAll(ios, (n) => n.type === 'T.Button' && textOf(n) === f.doneDownloadAll).length, 1, 'també a iOS');
   assert.ok(textOf(ios).includes(f.doneIosNote));
   assert.equal(textOf(done()).includes(f.doneIosNote), false);
 });
