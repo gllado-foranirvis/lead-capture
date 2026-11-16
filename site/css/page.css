@@ -48,7 +48,7 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .form__products .tsf-group__list > :last-child { flex-basis: 100%; }
 .form__actions { display: flex; flex-direction: column; gap: var(--space-2); margin-top: auto; padding-top: var(--space-4); }
 /* Barra d'accions fixa al mòbil: els botons d'acció sempre a l'abast del polze, també amb el formulari llarg.
-   «sticky» (no «fixed»): queda dins de la seva pantalla i salta menys amb el teclat; amb un camp de text enfocat (teclat obert) torna al flux; les caselles i els xips no obren teclat i no la toquen.
+   «sticky» (no «fixed»): queda dins de la seva pantalla. Mai s'allibera pel focus: una versió que la feia «static» amb un camp de text enfocat la treia de pantalla (a la pàgina inicial, en tocar la ciutat).
    Primer el primari, a tota l'amplada; sota, tornar (enllaç) i el botó secundari. Amb només dos botons, tornar a l'esquerra i el primari a la dreta. */
 .form__actions, .page__bar {
   position: sticky; bottom: 0; z-index: 3; box-sizing: border-box;
@@ -66,7 +66,6 @@ select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .form__actions > :first-child:nth-last-child(2) ~ :last-child { grid-row: 1; }
 .page__main:has(.form__actions) { padding-bottom: 0; }
 .page__body:has(.page__bar) { padding-bottom: 0; }
-.site:has(:is(input:not([type=radio], [type=checkbox], [type=button], [type=submit]), textarea):focus) :is(.form__actions, .page__bar) { position: static; }
 /* Avís de scroll: una píndola negra a cavall de la vora de la barra (el text el posa app.js a `data-hint`, sense icona) mentre quedi contingut per sota; tocar-la baixa una pantalla (scroll-hint.js). */
 html[data-more="true"] :is(.form__actions, .page__bar)[data-hint]::before {
   content: attr(data-hint); position: absolute; left: 50%; bottom: 100%; translate: -50% 50%;
