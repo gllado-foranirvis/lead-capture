@@ -4,7 +4,7 @@
 var SHEET_NAME = 'Leads';
 // Les columnes de perfilació (profile, activity… factorsOther, comments) s'omplen al pas 2 del formulari (o queden buides si el visitant el salta).
 // «city» ocupa el lloc de l'antiga «demo» (la ciutat es demana a l'inici). «visit» és l'última (les anteriors no es mouen):
-// és la mateixa visita que porta cada fila de «Clics», i permet saber què ha fet un lead. «adviceNote» (text lliure de «Busco asesoramiento») és l'última:
+// és la mateixa visita que porta cada fila de «Clics», i permet saber què ha fet un lead. «adviceNote» (text lliure de «Busco asesoramiento») va després:
 // les anteriors no es mouen i la capçalera s'amplia sola.
 var COLUMNS = [
   'id', 'stage', 'createdAt', 'updatedAt', 'name', 'email', 'phone', 'profile', 'lang', 'origin', 'privacy', 'newsletter', 'product',
