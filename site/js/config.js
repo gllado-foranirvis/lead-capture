@@ -37,7 +37,7 @@ const target = leadTarget(globalThis.location?.hostname);
 export const CONFIG = {
   brand: 'The Silent Fleet',
   fair: 'Enertech 2026',
-  whatsappNumber: '+34 682 375 728',
+  whatsappNumber: '+351 934 065 356',
   email: 'info@thesilentfleet.com',
   siteUrl: 'https://gllado-foranirvis.github.io/lead-capture/', // definitiva (decidit)
   extra1: true, // L'Extra 1 és actiu (decidit el 9/10/2026 per a la fira); amb false torna a l'MVP sol i es previsualitza amb ?extra1=1
