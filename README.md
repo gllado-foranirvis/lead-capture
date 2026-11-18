@@ -2,7 +2,7 @@
 
 Pàgina única i estàtica, en portuguès, anglès, castellà i català (en aquest ordre al selector; per defecte, portuguès), perquè els visitants d'**Enertech 2026** (Portugal) triïn el producte que els interessa, deixin el contacte i es descarreguin el seu PDF, o escriguin per WhatsApp o correu amb un missatge ja escrit. Cada clic a WhatsApp o correu es compta de forma anònima al full de Google. Hi ha una versió de contingència sense PDF (`dossier: false`) i l'MVP original (`extra1: false`, només WhatsApp i correu).
 
-Context i decisions: [PRODUCT.md](PRODUCT.md), [DESIGN.md](DESIGN.md) i [docs/](docs/).
+Context i decisions: [PRODUCT.md](PRODUCT.md), [DESIGN.md](DESIGN.md) i docs/.
 
 ## Comandes
 
@@ -22,16 +22,16 @@ npm run texts      # regenera docs/textos-contacte.md (textos per validar) a par
 - `apps-script/Code.gs`: l'script de Google que rep els leads i els desa al full (es copia a l'editor d'Apps Script; guia a `docs/google-sheet.md`).
 - `scripts/`: `smoke-sheet` (prova de fum de l'script desplegat), `sync-assets` (sistema de disseny, React i Montserrat), `make-qr`, `export-texts` (textos per validar), `rem-migration` (migració de tipografia preparada).
 - `tests/`: tests (`node:test`, 252) de la lògica, de les pantalles amb un renderitzador fals (`tests/helpers/fake-react.mjs`), dels textos, del CSS i del HTML.
-- `docs/`: `textos-contacte.md` (generat), `google-sheet.md`, `typeset-rem/` i `superpowers/` (especificacions, briefs, auditories i plans de cada fase; l'índex amb l'estat de cada document és a [docs/superpowers/README.md](docs/superpowers/README.md)).
+- `docs/`: `textos-contacte.md` (generat), `google-sheet.md`, `typeset-rem/` i `superpowers/` (especificacions, briefs, auditories i plans de cada fase; l'índex amb l'estat de cada document és a docs/superpowers/README.md).
 - `.github/workflows/`: `ci.yml` (a cada pull request cap a `main`: `npm test`, `npm run sync` i comprovació que no deixa canvis) i `pages.yml` (desplegament a GitHub Pages en cada push a `main`, després d'`npm test`).
 
 ## Flux de treball (git)
 
-- **`main` publica sol:** cada push a `main` desplega la beta pública a GitHub Pages (`pages.yml`, després d'`npm test`). Per això res no entra a `main` sense pull request, CI en verd i el vistiplau d'Olga.
+- `main` **publica sol:** cada push a `main` desplega la beta pública a GitHub Pages (`pages.yml`, després d'`npm test`). Per això res no entra a `main` sense pull request, CI en verd i el vistiplau d'Olga.
 - **Branques:** una per canvi, des de l'`origin/main` actual (no des d'un `main` local desactualitzat), amb nom `feat/…`, `fix/…` o `docs/…`. Un PR apilat sobre un altre ha de retargetar-se a `main` **abans** de fusionar-lo (el PR #2 es va fusionar a la branca del #1 i el rediseny no va arribar a `main` fins al #4).
-- **Commits:** petits, en català i amb prefix (`feat:`, `fix:`, `docs:`, `chore:`), **sense cap línia `Co-Authored-By`** (regla d'Olga, també als PR). Abans de cada commit: `npm test` en verd i `npm run sync` sense canvis.
+- **Commits:** petits, en català i amb prefix (`feat:`, `fix:`, `docs:`, `chore:`), **sense cap línia** `Co-Authored-By` (regla d'Olga, també als PR). Abans de cada commit: `npm test` en verd i `npm run sync` sense canvis.
 - **Punt de retorn:** l'etiqueta `pre-gracies-pdf` (`a84e24d`) és la beta anterior a la pantalla de descàrrega, el telèfon i el rediseny fotogràfic. Per tornar-hi: redesplegar aquesta etiqueta.
-- **Després de fusionar:** esperar els ~30 s de Pages, recarregar amb la memòria cau neta (Cmd+Shift+R) i provar a la URL real un enviament amb dades inventades (el full de Google és de prova). Netejar les branques fusionades, locals i remotes.
+- **Després de fusionar:** esperar els \~30 s de Pages, recarregar amb la memòria cau neta (Cmd+Shift+R) i provar a la URL real un enviament amb dades inventades (el full de Google és de prova). Netejar les branques fusionades, locals i remotes.
 - **Historial recent:** #1 pantalla de gràcies amb descàrrega i estats tàctils · #2 i #4 rediseny fotogràfic · #3 format i prefix del telèfon · #5 ajustos de l'inici (ordre, escena compacta, marca enllaç, vaixell, marges).
 
 ## Icones i llicències
@@ -58,15 +58,18 @@ A la tauleta (`?o=tauleta`), tornar a l'inici o 90 segons sense tocar res descar
 
 ### Full de Google
 
-`apps-script/Code.gs` desa els leads a `Leads` (una fila per lead, amb `product` i `city`) i els clics a `Clics` (una fila per clic, 18 columnes sense nom, correu ni telèfon: dia i hora de la zona del full, botó, lloc, idioma, origen, visita, productes, ciutat, dispositiu, sistema, idioma del navegador, zona horària, pantalla, segons a la pàgina i domini de procedència). `Leads` també desa la visita (`visit`, l'última columna): és la clau per creuar què ha fet cada lead. Guia, recomptes i la prova de fum: `docs/google-sheet.md` i `node scripts/smoke-sheet.mjs <url> [token]`. **Cal tornar a desplegar l'script (nova versió) després de cada canvi de `Code.gs`.**
+`apps-script/Code.gs` desa els leads a `Leads` (una fila per lead, amb `product` i `city`) i els clics a `Clics` (una fila per clic, 18 columnes sense nom, correu ni telèfon: dia i hora de la zona del full, botó, lloc, idioma, origen, visita, productes, ciutat, dispositiu, sistema, idioma del navegador, zona horària, pantalla, segons a la pàgina i domini de procedència). `Leads` també desa la visita (`visit`, l'última columna): és la clau per creuar què ha fet cada lead. Guia, recomptes i la prova de fum: `docs/google-sheet.md` i `node scripts/smoke-sheet.mjs <url> [token]`. **Cal tornar a desplegar l'script (nova versió) després de cada canvi de** `Code.gs`**.**
 
 ### Dades i esdeveniments
+
 Només s'emeten esdeveniments a `window`; l'enviament al full és opcional (`leadEndpoint`):
+
 - `tsf:lead` en enviar el formulari: `{ contact: { id, product, city, name, email, phone, privacy: true, newsletter, lang, origin, visit } }`. El telèfon va com `+34 600 00 00 00`; `product` són els ids separats per comes.
 - `tsf:contact-click` a cada clic de WhatsApp o correu: `{ id, visit, button, from, lang, origin, products, city, info }`. `visit` és un identificador aleatori que només viu a la memòria de la pàgina (es renova en descartar la sessió de la tauleta); també viatja amb el lead (`Leads.visit`), i així es poden relacionar els clics amb el lead.
 
 ### Altres peces
-- **`emailDelivery`** (`config.js`) és `false` fins que existeixi l'enviament del correu amb el dossier; només canvia el text de la confirmació.
+
+- `emailDelivery` (`config.js`) és `false` fins que existeixi l'enviament del correu amb el dossier; només canvia el text de la confirmació.
 - **Fotografia:** `site/img/hero-m.webp` i `hero-d.webp` (foto de The Silent Fleet subministrada per l'Olga).
 - **Literals:** `site/js/i18n.js` (pàgina i missatges, amb `{fair}`) i `site/js/i18n-form.js` (formulari); de tu als 4 idiomes; el document es diu «dossier». Els noms de producte no es tradueixen.
 - **Privacitat i cookies:** textos a `i18n-form.js` i `i18n.js`; el de privacitat diu què es desa de veritat (nom, correu, telèfon, ciutat, producte, idioma, origen, novetats) i el de cookies que cada clic es desa amb un identificador de visita aleatori que, si el visitant deixa les dades, queda relacionat amb el seu contacte. Són esborranys: han de passar per revisió legal de Bruno.
@@ -76,8 +79,8 @@ Només s'emeten esdeveniments a `window`; l'enviament al full és opcional (`lea
 ### Dades de prova a substituir abans de la fira
 
 | On | Valor actual | Qui el dona |
-|---|---|---|
-| `whatsappNumber` (`config.js`) i el fallback de `site/index.html` | `+34 682 375 728` | Bruno (WhatsApp Business); `npm test` falla si no coincideixen |
+| --- | --- | --- |
+| `whatsappNumber` (`config.js`) i el fallback de `site/index.html` | `+351 934 065 356` | Bruno (WhatsApp Business); `npm test` falla si no coincideixen |
 | Text de privacitat i de cookies (`i18n-form.js`, `i18n.js`) | Esborranys | Bruno (revisió legal) |
 | `brandPdf` (`config.js`) | No n'hi ha | Bruno, si hi ha un PDF general de la marca |
 | PDF en altres idiomes | Només en anglès | Bruno, si en tenen |
@@ -86,11 +89,12 @@ Només s'emeten esdeveniments a `window`; l'enviament al full és opcional (`lea
 | `leadEndpoint` / `leadToken`, `legalName`, `siteUrl` | Definitius (decidit) | — |
 
 ### Pendent
+
 - **Pàgina de dades a 360×740:** té scroll (uns 1000 px): 3 camps, 8 productes i 2 consentiments no hi caben. Opcions si es vol evitar: treure el subtítol o la casella de novetats, o reduir els productes a un desplegable.
 - Prova en un mòbil real: descàrrega del PDF (iOS Safari l'obre en visor), teclats, tecla «Next», autocompletat del telèfon i l'enviament del clic en obrir WhatsApp (el clic surt amb `sendBeacon` en passar la pàgina a segon pla).
 - Enviament del correu amb el dossier (pla posterior).
 - `site/index.html` (el fallback sense JavaScript) és en castellà i no porta la fotografia; el tema fosc existeix als tokens però no s'activa mai.
-- Canvi de tipografia a `rem`, preparat però no aplicat: [docs/typeset-rem/](docs/typeset-rem/README.md).
+- Canvi de tipografia a `rem`, preparat però no aplicat: docs/typeset-rem/.
 
 ## Abans de publicar
 
@@ -98,5 +102,5 @@ Només s'emeten esdeveniments a `window`; l'enviament al full és opcional (`lea
 2. **ABANS de fusionar** (si no, el web nou publicat deixa de desar contactes i clics: l'script antic exigeix `profile` i respon `invalid`): substituir les dades de la taula anterior que encara siguin de prova i **redesplegar l'script de Google** (nova versió) amb el `Code.gs` d'aquesta branca (és compatible amb el web antic, així que l'ordre és segur); omplir la data a `docs/google-sheet.md`; passar `node scripts/smoke-sheet.mjs <url> <token>` i comprovar `Leads` i `Clics`.
 3. Etiquetar el punt de retorn (`git tag pre-enertech-2026 origin/main && git push origin pre-enertech-2026`) abans de fusionar.
 4. Després de publicar: provar a la URL real a cada idioma, amb un producte, amb diversos i amb «asesoramiento»; que cada targeta descarrega el PDF correcte; que `Leads` i `Clics` reben les files; i el QR amb un mòbil.
-5. **`noindex, nofollow` (decidit):** les dues pàgines porten `<meta name="robots" content="noindex, nofollow">` i s'hi queden. El test `beta: les dues pàgines porten noindex` de `tests/html.test.mjs` ho vigila.
+5. `noindex, nofollow` **(decidit):** les dues pàgines porten `<meta name="robots" content="noindex, nofollow">` i s'hi queden. El test `beta: les dues pàgines porten noindex` de `tests/html.test.mjs` ho vigila.
 6. Comprovar que `…/img/hero-m.webp` i `hero-d.webp` responen 200 a la URL publicada i que el CI del PR ha passat.
