@@ -114,6 +114,8 @@ test('la promesa de descàrrega: l\'inici i la pàgina de dades la diuen, i la l
     assert.match(f.step1Title, promise[l], `${l}.step1Title`);
     assert.match(f.downloadList, /\{list\}/, l);
     assert.ok(f.downloadNone.trim(), l);
+    assert.ok(f.downloadNoDoc?.trim(), l);
+    assert.doesNotMatch(f.downloadNoDoc, /PDF|\bfich?[ae]\b/i, l);
     assert.doesNotMatch(f.downloadList + f.downloadNone + f.entrySubtitle + f.step1Title, /PDF|\bfich?[ae]\b/i, l);
   }
 });

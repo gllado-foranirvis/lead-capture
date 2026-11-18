@@ -59,7 +59,7 @@ export function createStepContact({ h, T }) {
               children: checks('products', f.productLegend, productOptions),
             }),
             // Què es descarregarà amb la tria actual: la promesa es veu sempre, també amb el bloc plegat.
-            h('p', { className: 'body-sm page__note form__download', 'aria-live': 'polite' }, downloads.length ? f.downloadList.replace('{list}', downloads.join(', ')) : f.downloadNone),
+            h('p', { className: 'body-sm page__note form__download', 'aria-live': 'polite' }, downloads.length ? f.downloadList.replace('{list}', downloads.join(', ')) : values.products.length ? f.downloadNoDoc : f.downloadNone),
           ] : null),
         h('div', { className: 'form__group' },
           h(T.Checkbox, { name: 'privacy', id: 'privacy', required: true, checked: values.privacy, error: error('privacy'), onChange: (e) => onChange('privacy', e.target.checked) },

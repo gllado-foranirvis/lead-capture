@@ -54,7 +54,7 @@ A la tauleta (`?o=tauleta`), tornar a l'inici o 90 segons sense tocar res descar
 
 ### Productes i PDF (`config.js`)
 
-`products[]`: `{ id, name, pdf: { en: 'dossiers/<id>.en.pdf' } }`. Els 7 PDF són a `site/dossiers/`: Boatee, EZ Raft, Jetwave, Momentum, SeaNXT, Sifly i TKO (només en anglès). **Per afegir un idioma** a un producte, copia el PDF a `site/dossiers/<id>.<idioma>.pdf` i afegeix la clau al mapa (`pdf: { en: '…', pt: 'dossiers/<id>.pt.pdf' }`); `npm test` comprova que el fitxer existeix i és un PDF. **Per afegir el PDF general de la marca**, posa `brandPdf: { en: 'dossiers/<nom>.en.pdf' }`: s'ofereix quan un producte triat no té PDF propi (o no se'n tria cap). Els PDF més grans fan fins a 17 MB (SeaNXT): pesen en dades mòbils.
+`products[]`: `{ id, name, pdf: { en: 'dossiers/<id>.en.pdf' } }`. Els 7 PDF són a `site/dossiers/`: Boatee, EZ Raft, Jetwave, Momentum, SeaNXT, Sifly, TKO i Electrificação (només en anglès). **Per afegir un idioma** a un producte, copia el PDF a `site/dossiers/<id>.<idioma>.pdf` i afegeix la clau al mapa (`pdf: { en: '…', pt: 'dossiers/<id>.pt.pdf' }`); `npm test` comprova que el fitxer existeix i és un PDF. **Per afegir el PDF general de la marca**, posa `brandPdf: { en: 'dossiers/<nom>.en.pdf' }`: s'ofereix quan un producte triat no té PDF propi (o no se'n tria cap). Els PDF més grans fan fins a 17 MB (SeaNXT): pesen en dades mòbils.
 
 ### Full de Google
 

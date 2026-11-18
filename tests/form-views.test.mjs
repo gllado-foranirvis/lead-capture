@@ -57,3 +57,10 @@ test('plannedDocs: el que es descarregarà amb la tria actual (el mateix que des
   assert.deepEqual(names([]), []);
   assert.deepEqual(plannedDocs({ products: ['sifly'], lang: 'pt', config, full: DICT.pt }), doneView({ receipt: { products: ['sifly'] }, lang: 'pt', dossier: true, config }).docs);
 });
+test('doneView: Electrificação (sense PDF) sola → textos sense dossier; amb Sifly, només el PDF de Sifly', () => {
+  const only = view(['electric']);
+  assert.deepEqual(only.docs, []);
+  assert.equal(only.t, dictFor('pt', false));
+  assert.equal(only.emailDelivery, false);
+  assert.deepEqual(view(['electric', 'sifly']).docs.map((d) => d.id), ['sifly']);
+});

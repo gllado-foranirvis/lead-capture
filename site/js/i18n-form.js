@@ -47,6 +47,7 @@ export const FORM = {
     cityLabel: '¿De qué ciudad eres?', cityPlaceholder: 'Lisboa',
     productLegend: '¿Qué producto te interesa?', productAdvice: 'No lo sé aún / Busco asesoramiento',
     downloadList: 'Se descargará: {list}', downloadNone: 'Elige un producto para descargar el dossier correspondiente.',
+    downloadNoDoc: 'Este producto no tiene dossier; te contactaremos con la información.',
     submit: 'Enviar y ver el dossier',
     errors: {
       required: 'Completa este campo', profileRequired: 'Elige una opción o salta este paso', either: 'Deja el correo o el teléfono',
@@ -113,6 +114,7 @@ export const FORM = {
     cityLabel: 'De quina ciutat ets?', cityPlaceholder: 'Lisboa',
     productLegend: 'Quin producte t\'interessa?', productAdvice: 'Encara no ho sé / Busco assessorament',
     downloadList: 'Es descarregarà: {list}', downloadNone: 'Tria un producte per descarregar el seu dossier.',
+    downloadNoDoc: 'Aquest producte no té dossier; et contactarem amb la informació.',
     submit: 'Enviar i veure el dossier',
     errors: {
       required: 'Omple aquest camp', profileRequired: 'Tria una opció o salta aquest pas', either: 'Deixa el correu o el telèfon',
@@ -179,6 +181,7 @@ export const FORM = {
     cityLabel: 'De que cidade és?', cityPlaceholder: 'Lisboa',
     productLegend: 'Que produto te interessa?', productAdvice: 'Ainda não sei / Procuro aconselhamento',
     downloadList: 'Vais descarregar: {list}', downloadNone: 'Escolhe um produto para descarregar o respetivo dossier.',
+    downloadNoDoc: 'Este produto não tem dossier; vamos contactar-te com a informação.',
     submit: 'Enviar e ver o dossier',
     errors: {
       required: 'Preenche este campo', profileRequired: 'Escolhe uma opção ou salta este passo', either: 'Deixa o e-mail ou o telemóvel',
@@ -245,6 +248,7 @@ export const FORM = {
     cityLabel: 'Which city are you from?', cityPlaceholder: 'Lisbon',
     productLegend: 'Which product are you interested in?', productAdvice: 'Not sure yet / I need advice',
     downloadList: 'You will download: {list}', downloadNone: 'Choose a product to download its dossier.',
+    downloadNoDoc: 'This product has no dossier; we will contact you with the information.',
     submit: 'Send and get the dossier',
     errors: {
       required: 'Fill in this field', profileRequired: 'Choose an option or skip this step', either: 'Leave an e-mail or a phone number',

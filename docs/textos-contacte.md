@@ -116,6 +116,7 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `productAdvice` | Ainda não sei / Procuro aconselhamento | Not sure yet / I need advice | No lo sé aún / Busco asesoramiento | Encara no ho sé / Busco assessorament |
 | `downloadList` | Vais descarregar: {list} | You will download: {list} | Se descargará: {list} | Es descarregarà: {list} |
 | `downloadNone` | Escolhe um produto para descarregar o respetivo dossier. | Choose a product to download its dossier. | Elige un producto para descargar el dossier correspondiente. | Tria un producte per descarregar el seu dossier. |
+| `downloadNoDoc` | Este produto não tem dossier; vamos contactar-te com a informação. | This product has no dossier; we will contact you with the information. | Este producto no tiene dossier; te contactaremos con la información. | Aquest producte no té dossier; et contactarem amb la informació. |
 | `submit` | Enviar e ver o dossier | Send and get the dossier | Enviar y ver el dossier | Enviar i veure el dossier |
 | `errors.required` | Preenche este campo | Fill in this field | Completa este campo | Omple aquest camp |
 | `errors.profileRequired` | Escolhe uma opção ou salta este passo | Choose an option or skip this step | Elige una opción o salta este paso | Tria una opció o salta aquest pas |

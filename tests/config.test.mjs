@@ -15,15 +15,15 @@ test('siteUrl és https i acaba en barra', () => {
 test('idioma per defecte és un dels idiomes disponibles', () => {
   assert.ok(CONFIG.languages.includes(CONFIG.defaultLang));
 });
-test('productes de config: els 7 de la fira, amb ids únics i nom', () => {
-  assert.deepEqual(CONFIG.products.map((p) => p.id), ['boatee', 'ez-raft', 'jetwave', 'momentum', 'seanxt', 'sifly', 'tko']);
-  assert.deepEqual(CONFIG.products.map((p) => p.name), ['Boatee', 'EZ Raft', 'Jetwave', 'Momentum', 'SeaNXT', 'Sifly', 'TKO']);
+test('productes de config: els 8 de la fira, amb ids únics i nom', () => {
+  assert.deepEqual(CONFIG.products.map((p) => p.id), ['boatee', 'ez-raft', 'jetwave', 'momentum', 'seanxt', 'sifly', 'tko', 'electric']);
+  assert.deepEqual(CONFIG.products.map((p) => p.name), ['Boatee', 'EZ Raft', 'Jetwave', 'Momentum', 'SeaNXT', 'Sifly', 'TKO', 'Electrificação']);
 });
 test('legalName és present (de prova fins que Bruno el doni)', () => {
   assert.ok(CONFIG.legalName.trim().length > 0);
 });
 
-const pdfMaps = () => [...(CONFIG.brandPdf ? [['brandPdf', CONFIG.brandPdf]] : []), ...CONFIG.products.map((p) => [p.id, p.pdf])];
+const pdfMaps = () => [...(CONFIG.brandPdf ? [['brandPdf', CONFIG.brandPdf]] : []), ...CONFIG.products.filter((p) => p.pdf).map((p) => [p.id, p.pdf])];
 test('cada PDF configurat és una ruta relativa a un PDF que existeix a site/, i cada mapa té l\'anglès', async () => {
   const { existsSync, readFileSync } = await import('node:fs');
   assert.equal(CONFIG.emailDelivery, false);
@@ -63,4 +63,14 @@ test('en local el web envia al full de test i a qualsevol altre domini, al de pr
 test('sota Node (sense location) CONFIG apunta a producció', () => {
   assert.equal(CONFIG.leadEndpoint, ENDPOINTS.production.url);
   assert.equal(CONFIG.leadToken, ENDPOINTS.production.token);
+});
+test('Electrificação no té dossier: cap PDF configurat ni fitxer a site/dossiers', async () => {
+  const { existsSync } = await import('node:fs');
+  assert.equal(CONFIG.products.find((p) => p.id === 'electric').pdf, undefined);
+  assert.equal(existsSync('site/dossiers/electric.en.pdf'), false);
+});
+test('cap PDF orfe: els fitxers de site/dossiers són exactament els de la config', async () => {
+  const { readdirSync } = await import('node:fs');
+  const used = pdfMaps().flatMap(([, map]) => Object.values(map).map((url) => url.replace(/^dossiers\//, '')));
+  assert.deepEqual(readdirSync('site/dossiers').sort(), used.sort());
 });
