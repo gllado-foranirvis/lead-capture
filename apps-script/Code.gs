@@ -215,7 +215,7 @@ function reply(object) {
 }
 
 // La marca de versió permet veure, amb un GET a l'URL /exec, quin codi hi ha realment desplegat.
-var VERSION = 'cro-enertech-2026-11-16-ultima-fila';
+var VERSION = 'cro-enertech-2026-11-18-advice-adviceNote';
 
 function doGet() {
   return reply({ ok: true, version: VERSION });
