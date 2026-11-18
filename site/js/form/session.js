@@ -14,5 +14,6 @@ export function toSession(values, { products, dict }) {
     product: productLabel(values, { products, dict }),
     city: clip(values.city, MAX.city),
     name: clip(values.name, MAX.name),
+    adviceNote: (values.products ?? []).includes(ADVICE) ? clip(values.adviceNote, MAX.adviceNote) : '',
   };
 }

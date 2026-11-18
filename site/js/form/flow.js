@@ -22,7 +22,7 @@ export function advanceStep1(values, { search, lang, visit, leadId, newId, setLe
 // només el que necessita (receipt): el WhatsApp, el correu i els dossiers dels productes triats.
 function finish(result, values, { products, search, dispatch, setErrors, setLeadId, setReceipt, emitLead, goTo }) {
   emitLead(result.lead);
-  setReceipt({ products: values.products, name: values.name, city: values.city });
+  setReceipt({ products: values.products, name: values.name, city: values.city, adviceNote: values.adviceNote ?? '' });
   dispatch({ type: 'reset', initial: { products: resolveProducts(search, products) } });
   setErrors({});
   setLeadId('');
