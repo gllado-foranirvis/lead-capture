@@ -115,6 +115,7 @@ test('la promesa de descàrrega: l\'inici i la pàgina de dades la diuen, i la l
     assert.match(f.downloadList, /\{list\}/, l);
     assert.ok(f.downloadNone.trim(), l);
     assert.ok(f.downloadNoDoc?.trim(), l);
+    for (const key of ['adviceNoteLabel', 'adviceNotePlaceholder']) assert.ok(f[key]?.trim(), `${l}.${key}`);
     assert.doesNotMatch(f.downloadNoDoc, /PDF|\bfich?[ae]\b/i, l);
     assert.doesNotMatch(f.downloadList + f.downloadNone + f.entrySubtitle + f.step1Title, /PDF|\bfich?[ae]\b/i, l);
   }

@@ -114,6 +114,8 @@ L'adreça de la línia de recuperació és `info@thesilentfleet.com`, en text se
 | `cityPlaceholder` | Lisboa | Lisbon | Lisboa | Lisboa |
 | `productLegend` | Que produto te interessa? | Which product are you interested in? | ¿Qué producto te interesa? | Quin producte t'interessa? |
 | `productAdvice` | Ainda não sei / Procuro aconselhamento | Not sure yet / I need advice | No lo sé aún / Busco asesoramiento | Encara no ho sé / Busco assessorament |
+| `adviceNoteLabel` | De que precisas? (opcional) | What do you need? (optional) | ¿Qué necesitas? (opcional) | Què necessites? (opcional) |
+| `adviceNotePlaceholder` | Conta-nos o que procuras ou que dúvidas tens | Tell us what you are looking for or what questions you have | Cuéntanos qué buscas o qué dudas tienes | Explica'ns què busques o quins dubtes tens |
 | `downloadList` | Vais descarregar: {list} | You will download: {list} | Se descargará: {list} | Es descarregarà: {list} |
 | `downloadNone` | Escolhe um produto para descarregar o respetivo dossier. | Choose a product to download its dossier. | Elige un producto para descargar el dossier correspondiente. | Tria un producte per descarregar el seu dossier. |
 | `downloadNoDoc` | Este produto não tem dossier; vamos contactar-te com a informação. | This product has no dossier; we will contact you with the information. | Este producto no tiene dossier; te contactaremos con la información. | Aquest producte no té dossier; et contactarem amb la informació. |

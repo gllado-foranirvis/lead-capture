@@ -58,6 +58,8 @@ export function createStepContact({ h, T }) {
               hint: productSummary(values.products, products, f) || f.chooseProduct, action: values.products.length ? f.change : undefined,
               children: checks('products', f.productLegend, productOptions),
             }),
+            // El text lliure de l'assessorament va fora del plegable: es veu també amb el bloc plegat (producte preseleccionat).
+            values.products.includes(ADVICE) ? text('adviceNote', f.adviceNoteLabel, { multiline: true, placeholder: f.adviceNotePlaceholder }) : null,
             // Què es descarregarà amb la tria actual: la promesa es veu sempre, també amb el bloc plegat.
             h('p', { className: 'body-sm page__note form__download', 'aria-live': 'polite' }, downloads.length ? f.downloadList.replace('{list}', downloads.join(', ')) : values.products.length ? f.downloadNoDoc : f.downloadNone),
           ] : null),
