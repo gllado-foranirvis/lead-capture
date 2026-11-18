@@ -47,7 +47,7 @@ test('enviament final: emet el lead i neteja per al següent visitant', () => {
   assert.equal(names(calls).filter((n) => n === 'emitLead').length, 1);
   const lead = call(calls, 'emitLead')[1];
   assert.deepEqual([lead.contact.id, lead.contact.city, lead.profiling.profile], ['id-0', 'Lisboa', 'particular']);
-  assert.deepEqual(call(calls, 'setReceipt')[1], { products: ['model-a'], name: 'Ana', city: ' Lisboa ' });
+  assert.deepEqual(call(calls, 'setReceipt')[1], { products: ['model-a'], name: 'Ana', city: ' Lisboa ', adviceNote: '' });
   assert.deepEqual(call(calls, 'dispatch')[1], { type: 'reset', initial: { products: ['model-a'] } });
   assert.deepEqual(call(calls, 'setLeadId'), ['setLeadId', '']);
   assert.deepEqual(call(calls, 'goTo'), ['goTo', 'done']);
@@ -64,7 +64,7 @@ test('saltar la perfilació: emet el lead complet amb el que hi hagi (sense exig
   assert.equal(handleSkip({ ...full, profile: 'particular', comments: 'x' }, deps), true);
   const lead = call(calls, 'emitLead')[1];
   assert.deepEqual([lead.contact.id, lead.hasProfiling, lead.profiling], ['id-0', true, { id: 'id-0', profile: 'particular', comments: 'x' }]);
-  assert.deepEqual(call(calls, 'setReceipt')[1], { products: ['model-a'], name: 'Ana', city: ' Lisboa ' });
+  assert.deepEqual(call(calls, 'setReceipt')[1], { products: ['model-a'], name: 'Ana', city: ' Lisboa ', adviceNote: '' });
   assert.deepEqual(call(calls, 'goTo'), ['goTo', 'done']);
 });
 test('el reinici torna a preseleccionar el producte de la URL, o cap', () => {
@@ -111,4 +111,9 @@ test('la visita viatja amb el lead parcial, amb el final i amb el saltat', () =>
   const skipped = harness();
   handleSkip(full, skipped.deps);
   assert.equal(call(skipped.calls, 'emitLead')[1].contact.visit, 'visit-1');
+});
+test('el rebut de la confirmació porta el text d\'assessorament', () => {
+  const { calls, deps } = harness({ leadId: 'id-0' });
+  handleSubmit({ ...profiled, products: ['asesoramiento'], adviceNote: 'Vull una barca silenciosa' }, deps);
+  assert.equal(call(calls, 'setReceipt')[1].adviceNote, 'Vull una barca silenciosa');
 });

@@ -1,4 +1,4 @@
-import { ACTIVITIES, MAX, OPINION_GROUPS, PROFILES, clip, fullPhone, showsActivity } from './model.js';
+import { ACTIVITIES, ADVICE, MAX, OPINION_GROUPS, PROFILES, clip, fullPhone, showsActivity } from './model.js';
 import { validateContact, validateProfile } from './validate.js';
 
 export const newLeadId = () =>
@@ -8,6 +8,8 @@ const YES_NO = ['si', 'no'];
 const answered = (value) => clip(value, 1) !== '';
 
 function buildContact(values, { id, lang, origin, visit = '' }) {
+  // El text lliure només existeix si el visitant ha triat «asesoramiento»; sense text, la clau no hi és.
+  const adviceNote = (values.products ?? []).includes(ADVICE) ? clip(values.adviceNote, MAX.adviceNote) : '';
   return {
     id, product: (values.products ?? []).join(','),
     city: clip(values.city, MAX.city),
@@ -17,6 +19,7 @@ function buildContact(values, { id, lang, origin, visit = '' }) {
     privacy: true,
     newsletter: values.newsletter === true,
     lang, origin, visit,
+    ...(adviceNote ? { adviceNote } : {}),
   };
 }
 

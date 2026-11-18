@@ -53,6 +53,7 @@ export const CONFIG = {
     { id: 'seanxt', name: 'SeaNXT', pdf: { en: 'dossiers/seanxt.en.pdf' } },
     { id: 'sifly', name: 'Sifly', pdf: { en: 'dossiers/sifly.en.pdf' } },
     { id: 'tko', name: 'TKO', pdf: { en: 'dossiers/tko.en.pdf' } },
+    { id: 'electric', name: 'Electrificação' }, // sense dossier: el PDF és opcional
   ],
   legalName: 'The Silent Fleet', // nom legal definitiu (decidit); es veu al text de privacitat
   defaultLang: 'pt',

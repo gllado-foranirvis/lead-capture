@@ -14,9 +14,9 @@ const fill = (template, value) => template.replace('{value}', () => value);
 const withFair = (template, fair) => template.replaceAll('{fair}', () => fair);
 
 // Línies amb el que el visitant ja ha donat a la sessió; les buides no hi surten.
-function contextLines(dict, { name, product, city } = {}) {
+function contextLines(dict, { name, product, city, adviceNote } = {}) {
   const c = dict.messageContext;
-  return [name && fill(c.name, name), product && fill(c.product, product), city && fill(c.city, city)].filter(Boolean);
+  return [name && fill(c.name, name), product && fill(c.product, product), city && fill(c.city, city), adviceNote && fill(c.advice, adviceNote)].filter(Boolean);
 }
 
 const block = (lines) => (lines.length ? [lines.join('\n')] : []);

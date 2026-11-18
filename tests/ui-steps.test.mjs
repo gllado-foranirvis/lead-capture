@@ -172,6 +172,8 @@ test('pas 1: sota els productes, una línia viva diu què es descarregarà o qu�
   assert.equal(textOf(some), f.downloadList.replace('{list}', 'Sifly, TKO'));
   assert.equal(some.props['aria-live'], 'polite', 'el canvi s\'anuncia als lectors de pantalla');
   assert.equal(textOf(note([])), f.downloadNone);
+  assert.equal(textOf(note([], { values: emptyForm({ products: ['electric'] }) })), f.downloadNoDoc, 'un producte triat sense dossier no demana triar-ne un');
+  assert.equal(textOf(note([], { values: emptyForm({ products: ['asesoramiento'] }) })), f.downloadNone, 'només «asesoramiento»: no és un producte sense dossier');
   assert.equal(note([], { askProduct: false }), undefined, 'sense dossier no es parla de cap descàrrega');
 });
 test('pas 1: privacitat sense marcar amb enllaç a pestanya nova, text d\'un sol element; novetats opcional', () => {
@@ -407,4 +409,24 @@ test('pas 1: el producte és un plegable: tancat i amb la tria al resum si ja n\
 test('pas 1: amb «asesoramiento» el resum diu l\'assessorament', () => {
   const tree = contact({ values: emptyForm({ products: ['asesoramiento'] }), productsOpen: false });
   assert.ok(textOf(findAll(tree, (n) => n.type === 'summary')[0]).includes(f.productAdvice));
+});
+
+const adviceField = (tree) => byName(tree, 'adviceNote')[0];
+test('inici: amb «asesoramiento» surt el camp de text lliure, després de les caselles, i avisa del canvi; sense «asesoramiento» no hi és', () => {
+  const calls = [];
+  const tree = entry({ onOpenForm: noop, values: spanishForm({ products: ['asesoramiento'] }), onChange: (...a) => calls.push(a) });
+  const field = adviceField(tree);
+  assert.deepEqual([field.type, field.props.label, field.props.multiline, field.props.placeholder], ['T.Field', f.adviceNoteLabel, true, f.adviceNotePlaceholder]);
+  field.props.onChange({ target: { value: 'hola' } });
+  assert.deepEqual(calls, [['adviceNote', 'hola']]);
+  const names = findAll(tree, (n) => ['T.Field', 'T.CheckboxGroup'].includes(n.type)).map((n) => n.props.name);
+  assert.deepEqual(names, ['products', 'adviceNote', 'city']);
+  for (const products of [['sifly'], []]) assert.equal(adviceField(entry({ onOpenForm: noop, values: spanishForm({ products }) })), undefined);
+});
+test('pas 1: amb «asesoramiento» el camp de text lliure surt fora del plegable (també amb el bloc plegat); sense «asesoramiento» no hi és', () => {
+  const tree = contact({ values: emptyForm({ products: ['asesoramiento'] }), productsOpen: false });
+  const [fold] = findAll(tree, (n) => n.type === 'details');
+  assert.equal(adviceField(tree).props.label, f.adviceNoteLabel);
+  assert.equal(findAll(fold, (n) => n.props?.name === 'adviceNote').length, 0);
+  assert.equal(adviceField(contact({ values: emptyForm({ products: ['tko'] }) })), undefined);
 });

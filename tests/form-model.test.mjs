@@ -6,7 +6,7 @@ test('formulari buit: productes, ciutat, contacte i consentiments nets', () => {
   assert.deepEqual(emptyForm(), {
     products: [], city: '', name: '', email: '', phonePrefix: '+351', phone: '', privacy: false, newsletter: false,
     profile: '', activity: '', activityOther: '', hasBoat: '', hasElectric: '', intent: '',
-    enthusiasm: [], enthusiasmOther: '', concerns: [], concernsOther: '', factors: [], factorsOther: '', comments: '',
+    enthusiasm: [], enthusiasmOther: '', concerns: [], concernsOther: '', factors: [], factorsOther: '', comments: '', adviceNote: '',
   });
 });
 test('emptyForm accepta els models inicials', () => {
@@ -74,7 +74,7 @@ test('constants de perfilació i límits', () => {
   assert.equal(ACTIVITIES.at(-1), 'otra');
   assert.deepEqual(Object.keys(OPINION_GROUPS), ['enthusiasm', 'concerns', 'factors']);
   assert.deepEqual([ENTHUSIASM.at(-1), CONCERNS.at(-1), FACTORS.at(-1)], ['other', 'other', 'other']);
-  assert.deepEqual(MAX, { name: 100, email: 254, phone: 30, city: 80, activityOther: 120, other: 120, comments: 500 });
+  assert.deepEqual(MAX, { name: 100, email: 254, phone: 30, city: 80, activityOther: 120, other: 120, comments: 500, adviceNote: 500 });
 });
 test('l\'activitat només s\'aplica a Profesional; «altra» obre el camp d\'especificar', () => {
   assert.equal(showsActivity({ profile: 'profesional' }), true);
@@ -92,4 +92,12 @@ test('passar a Particular esborra l\'activitat; desmarcar «other» esborra el s
 test('toggle d\'una opinió se suma sense l\'exclusivitat de l\'assessorament', () => {
   const s = formReducer(formReducer(emptyForm(), { type: 'toggle', field: 'concerns', value: 'range' }), { type: 'toggle', field: 'concerns', value: 'price' });
   assert.deepEqual(s.concerns, ['range', 'price']);
+});
+test('adviceNote s\'esborra en desmarcar l\'assessorament o en triar un model, i es conserva amb l\'assessorament marcat', () => {
+  const toggle = (s, value) => formReducer(s, { type: 'toggle', field: 'products', value });
+  const noted = formReducer(toggle(emptyForm(), 'asesoramiento'), { type: 'set', field: 'adviceNote', value: 'hola' });
+  assert.equal(noted.adviceNote, 'hola');
+  assert.equal(toggle(noted, 'asesoramiento').adviceNote, '');
+  const model = toggle(noted, 'sifly');
+  assert.deepEqual([model.adviceNote, model.products], ['', ['sifly']]);
 });

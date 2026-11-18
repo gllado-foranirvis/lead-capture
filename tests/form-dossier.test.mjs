@@ -46,3 +46,8 @@ test('onlyEnglishPdfs: cert si l\'idioma no és l\'anglès i cap producte té PD
   assert.equal(onlyEnglishPdfs({ products: [{ id: 'x', pdf: { en: 'x.pdf' } }] }, 'en'), false);
   assert.equal(onlyEnglishPdfs({ products: [{ id: 'x', pdf: { en: 'x.pdf', pt: 'x.pt.pdf' } }] }, 'pt'), false);
 });
+test('un producte sense PDF no ofereix res propi ni trenca la nota de l\'idioma', () => {
+  assert.deepEqual(docs(['c'], 'en', withoutBrand), []);
+  assert.deepEqual(docs(['c', 'b'], 'en', withoutBrand), [{ id: 'b', href: 'b.en.pdf', meta: 'B' }]);
+  assert.equal(onlyEnglishPdfs({ products: [{ id: 'c', name: 'C' }] }, 'pt'), true);
+});

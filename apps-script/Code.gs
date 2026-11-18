@@ -4,11 +4,12 @@
 var SHEET_NAME = 'Leads';
 // Les columnes de perfilació (profile, activity… factorsOther, comments) s'omplen al pas 2 del formulari (o queden buides si el visitant el salta).
 // «city» ocupa el lloc de l'antiga «demo» (la ciutat es demana a l'inici). «visit» és l'última (les anteriors no es mouen):
-// és la mateixa visita que porta cada fila de «Clics», i permet saber què ha fet un lead.
+// és la mateixa visita que porta cada fila de «Clics», i permet saber què ha fet un lead. «adviceNote» (text lliure de «Busco asesoramiento») va després:
+// les anteriors no es mouen i la capçalera s'amplia sola.
 var COLUMNS = [
   'id', 'stage', 'createdAt', 'updatedAt', 'name', 'email', 'phone', 'profile', 'lang', 'origin', 'privacy', 'newsletter', 'product',
   'activity', 'activityOther', 'hasBoat', 'hasElectric', 'enthusiasm', 'enthusiasmOther', 'concerns', 'concernsOther',
-  'intent', 'factors', 'factorsOther', 'city', 'comments', 'visit'
+  'intent', 'factors', 'factorsOther', 'city', 'comments', 'visit', 'adviceNote'
 ];
 var STAGES = ['step1', 'complete'];
 var LANGS = ['es', 'ca', 'pt', 'en'];
@@ -22,7 +23,7 @@ var OPINION = {
   concerns: ['range', 'charging', 'price', 'infrastructure', 'depreciation', 'other'],
   factors: ['price', 'range', 'maker', 'design', 'warranty', 'support', 'other']
 };
-var MAX = { name: 100, email: 254, phone: 30, city: 80, other: 120, comments: 500 };
+var MAX = { name: 100, email: 254, phone: 30, city: 80, other: 120, comments: 500, adviceNote: 500 };
 // Pestanya dels clics a WhatsApp i correu: tot és anònim (cap nom, correu ni telèfon).
 var CLICK_SHEET = 'Clics';
 var CLICK_COLUMNS = [
@@ -72,6 +73,8 @@ function sanitizeLead(payload) {
     product: productsOf(c.product), city: clip(c.city, MAX.city),
     visit: ID_FORMAT.test(String(c.visit || '')) ? String(c.visit) : ''
   };
+  // El text lliure de l'assessorament només té sentit si el producte triat és «asesoramiento».
+  lead.adviceNote = lead.product.split(',').indexOf('asesoramiento') > -1 && typeof c.adviceNote === 'string' ? clip(c.adviceNote, MAX.adviceNote) : '';
   // La perfilació només arriba a l'etapa «complete»; saltar-la deixa aquests camps buits.
   var p = payload.stage === 'complete' && payload.profiling && typeof payload.profiling === 'object' ? payload.profiling : {};
   lead.profile = oneOf(PROFILES, p.profile);
@@ -212,7 +215,7 @@ function reply(object) {
 }
 
 // La marca de versió permet veure, amb un GET a l'URL /exec, quin codi hi ha realment desplegat.
-var VERSION = 'cro-enertech-2026-11-16-ultima-fila';
+var VERSION = 'cro-enertech-2026-11-18-advice-adviceNote';
 
 function doGet() {
   return reply({ ok: true, version: VERSION });

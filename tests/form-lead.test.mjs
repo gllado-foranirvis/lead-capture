@@ -66,3 +66,15 @@ test('sense telèfon, phone és buit; sense correu, email és buit', () => {
 test('sense visita al context, el lead porta la visita buida (mai undefined)', () => {
   assert.equal(buildPartialLead(values, { id: 'id-1', lang: 'pt', origin: 'mobil' }).visit, '');
 });
+
+const advice = (extra) => ({ ...values, products: ['asesoramiento'], ...extra });
+test('adviceNote: retallat i al contacte, i al lead parcial', () => {
+  assert.equal(buildLead(advice({ adviceNote: '  Vull una barca per a 6 persones  ' }), ctx).contact.adviceNote, 'Vull una barca per a 6 persones');
+  assert.equal(buildPartialLead(advice({ adviceNote: ' hola ' }), ctx).adviceNote, 'hola');
+  assert.equal(Array.from(buildLead(advice({ adviceNote: '😀'.repeat(600) }), ctx).contact.adviceNote).length, 500);
+});
+test('adviceNote: sense text o sense «asesoramiento» no hi ha la clau', () => {
+  assert.equal(Object.hasOwn(buildLead(advice({ adviceNote: '   ' }), ctx).contact, 'adviceNote'), false);
+  assert.equal(Object.hasOwn(buildLead({ ...values, adviceNote: 'x' }, ctx).contact, 'adviceNote'), false);
+  assert.equal(Object.hasOwn(buildPartialLead({ ...values, adviceNote: 'x' }, ctx), 'adviceNote'), false);
+});

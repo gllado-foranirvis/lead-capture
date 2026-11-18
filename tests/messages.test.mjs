@@ -59,3 +59,15 @@ test('cada idioma té les tres línies de dades amb {value}', () => {
   for (const lang of CONFIG.languages) for (const key of ['name', 'product', 'city'])
     assert.match(DICT[lang].messageContext[key], /\{value\}/, `${lang}.${key}`);
 });
+test('la consulta d\'assessorament és l\'última línia de dades, abans del comiat, als dos canals', () => {
+  const adviceNote = 'Quiero algo silencioso & "rápido" 😀\npara 6 personas';
+  const session = { name: 'Ana', product: 'No lo sé aún', city: 'Lisboa', adviceNote };
+  const { whatsapp, email } = contactLinks(CONFIG, DICT.es, session);
+  const lines = `Me llamo Ana.\nProducto de interés: No lo sé aún\nCiudad: Lisboa\nConsulta: ${adviceNote}`;
+  assert.ok(wa(whatsapp).endsWith(lines));
+  assert.ok(mail(email).get('body').endsWith(`${lines}\n\n${DICT.es.closing}`));
+});
+test('sense consulta no hi ha la línia; cada idioma té la línia amb {value}', () => {
+  assert.doesNotMatch(wa(contactLinks(CONFIG, DICT.es, { name: 'Ana' }).whatsapp), /Consulta/);
+  for (const lang of CONFIG.languages) assert.match(DICT[lang].messageContext.advice, /\{value\}/, lang);
+});

@@ -1,3 +1,4 @@
+import { MAX } from './model.js';
 import { PHONE_MAX_LENGTH, PREFIX_MAX_LENGTH } from './phone.js';
 
 // Ajustos de teclat i autocompletat dels <input> del formulari. Tokens d'autocomplete de l'estàndard HTML.
@@ -8,6 +9,7 @@ export const FIELD_HINTS = {
   phonePrefix: { autocomplete: 'tel-country-code', inputmode: 'tel', enterkeyhint: 'next', list: 'phone-prefixes', maxlength: String(PREFIX_MAX_LENGTH) },
   phone: { autocomplete: 'tel-national', inputmode: 'tel', enterkeyhint: 'next', maxlength: String(PHONE_MAX_LENGTH) },
   city: { autocomplete: 'address-level2', enterkeyhint: 'done' },
+  adviceNote: { maxlength: String(MAX.adviceNote) },
 };
 
 export function applyFieldHints(doc, hints = FIELD_HINTS) {

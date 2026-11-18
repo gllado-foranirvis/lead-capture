@@ -114,6 +114,9 @@ test('la promesa de descàrrega: l\'inici i la pàgina de dades la diuen, i la l
     assert.match(f.step1Title, promise[l], `${l}.step1Title`);
     assert.match(f.downloadList, /\{list\}/, l);
     assert.ok(f.downloadNone.trim(), l);
+    assert.ok(f.downloadNoDoc?.trim(), l);
+    for (const key of ['adviceNoteLabel', 'adviceNotePlaceholder']) assert.ok(f[key]?.trim(), `${l}.${key}`);
+    assert.doesNotMatch(f.downloadNoDoc, /PDF|\bfich?[ae]\b/i, l);
     assert.doesNotMatch(f.downloadList + f.downloadNone + f.entrySubtitle + f.step1Title, /PDF|\bfich?[ae]\b/i, l);
   }
 });
@@ -162,5 +165,13 @@ test('els clics es relacionen amb el lead a través de la visita: privacitat i c
     assert.match(DICT[l].cookiesText, cookiesLinked[l], `${l} cookies`);
     assert.doesNotMatch(DICT[l].form.privacyText.split('\n\n')[2], hedge, `${l} privacitat sense condicional`);
     assert.doesNotMatch(DICT[l].cookiesText, hedge, `${l} cookies sense condicional`);
+  }
+});
+test('el text de privacitat explica el text lliure de l\'assessorament i demana no posar-hi dades sensibles ni de tercers', () => {
+  const advice = { es: /Busco asesoramiento/, ca: /Busco assessorament/, pt: /Procuro aconselhamento/, en: /I need advice/ };
+  const sensitive = { es: /sensibles ni de terceros/, ca: /sensibles ni de tercers/, pt: /sensíveis nem de terceiros/, en: /sensitive or third-party/ };
+  for (const l of CONFIG.languages) {
+    assert.match(DICT[l].form.privacyText, advice[l], l);
+    assert.match(DICT[l].form.privacyText, sensitive[l], l);
   }
 });
