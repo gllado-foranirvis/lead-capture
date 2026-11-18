@@ -44,3 +44,6 @@ test('confirmació sense dossier: cap targeta ni botó de descàrrega', () => {
   assert.doesNotMatch(all(tree), DOSSIER_WORD);
   assert.equal(findAll(tree, (n) => n.type === 'a' && n.props.download !== undefined).length, 0);
 });
+test('versió sense dossier: el text de privacitat no parla de l\'assessorament (no hi ha camp)', () => {
+  for (const l of CONFIG.languages) assert.doesNotMatch(dictFor(l, false).form.privacyText, /asesoramiento|assessorament|aconselhamento|advice|sensib|sensitive|sensíve/i, l);
+});

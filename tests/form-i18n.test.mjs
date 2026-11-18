@@ -167,3 +167,11 @@ test('els clics es relacionen amb el lead a través de la visita: privacitat i c
     assert.doesNotMatch(DICT[l].cookiesText, hedge, `${l} cookies sense condicional`);
   }
 });
+test('el text de privacitat explica el text lliure de l\'assessorament i demana no posar-hi dades sensibles ni de tercers', () => {
+  const advice = { es: /Busco asesoramiento/, ca: /Busco assessorament/, pt: /Procuro aconselhamento/, en: /I need advice/ };
+  const sensitive = { es: /sensibles ni de terceros/, ca: /sensibles ni de tercers/, pt: /sensíveis nem de terceiros/, en: /sensitive or third-party/ };
+  for (const l of CONFIG.languages) {
+    assert.match(DICT[l].form.privacyText, advice[l], l);
+    assert.match(DICT[l].form.privacyText, sensitive[l], l);
+  }
+});
