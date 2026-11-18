@@ -173,6 +173,7 @@ test('pas 1: sota els productes, una línia viva diu què es descarregarà o qu�
   assert.equal(some.props['aria-live'], 'polite', 'el canvi s\'anuncia als lectors de pantalla');
   assert.equal(textOf(note([])), f.downloadNone);
   assert.equal(textOf(note([], { values: emptyForm({ products: ['electric'] }) })), f.downloadNoDoc, 'un producte triat sense dossier no demana triar-ne un');
+  assert.equal(textOf(note([], { values: emptyForm({ products: ['asesoramiento'] }) })), f.downloadNone, 'només «asesoramiento»: no és un producte sense dossier');
   assert.equal(note([], { askProduct: false }), undefined, 'sense dossier no es parla de cap descàrrega');
 });
 test('pas 1: privacitat sense marcar amb enllaç a pestanya nova, text d\'un sol element; novetats opcional', () => {
