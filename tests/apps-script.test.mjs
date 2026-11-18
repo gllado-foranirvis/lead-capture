@@ -396,3 +396,10 @@ test('amb fórmules fins a la fila 1000, un clic nou es desa just sota l\'últim
   assert.deepEqual([clicks.rows[1][0], clicks.rows[2][0]], ['click-0001', 'click-0002']);
   assert.equal(clicks.rows.length, 3);
 });
+test('les fórmules de «Què ha clicat cada lead» comencen just després de l\'última columna de l\'script (AB = 28): la documentació les posa a AC–AE', () => {
+  const { api } = load();
+  assert.equal(api.COLUMNS.length, 28, 'AB (28) és l\'última columna de l\'script; si COLUMNS creix, cal moure les fórmules i la documentació');
+  const doc = readFileSync('docs/google-sheet.md', 'utf8');
+  for (const cell of ['AC2', 'AD2', 'AE2']) assert.ok(doc.includes(`\`${cell}\`: \`=ARRAYFORMULA`), cell);
+  assert.equal(doc.includes('`AB2`: `=ARRAYFORMULA'), false, 'AB és adviceNote');
+});
