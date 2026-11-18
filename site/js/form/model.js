@@ -7,7 +7,7 @@ export const FACTORS = ['price', 'range', 'maker', 'design', 'warranty', 'suppor
 export const OPINION_GROUPS = { enthusiasm: ENTHUSIASM, concerns: CONCERNS, factors: FACTORS };
 // Preguntes opcionals del pas 2 (el resum plegable en diu el recompte).
 export const ADVICE = 'asesoramiento';
-export const MAX = { name: 100, email: 254, phone: 30, city: 80, activityOther: 120, other: 120, comments: 500 };
+export const MAX = { name: 100, email: 254, phone: 30, city: 80, activityOther: 120, other: 120, comments: 500, adviceNote: 500 };
 export const DEFAULT_PREFIX = '+351';
 
 // Array.from evita partir un emoji (parell subrogat) pel mig.
@@ -16,7 +16,7 @@ export const clip = (value, max) => Array.from(String(value ?? '').trim()).slice
 export const emptyForm = ({ products = [] } = {}) => ({
   products, city: '', name: '', email: '', phonePrefix: DEFAULT_PREFIX, phone: '', privacy: false, newsletter: false,
   profile: '', activity: '', activityOther: '', hasBoat: '', hasElectric: '', intent: '',
-  enthusiasm: [], enthusiasmOther: '', concerns: [], concernsOther: '', factors: [], factorsOther: '', comments: '',
+  enthusiasm: [], enthusiasmOther: '', concerns: [], concernsOther: '', factors: [], factorsOther: '', comments: '', adviceNote: '',
 });
 
 export const showsActivity = (values) => values.profile === 'profesional';
@@ -27,6 +27,7 @@ function withDependencies(values) {
   const next = { ...values };
   if (!showsActivity(next)) next.activity = '';
   if (next.activity !== 'otra') next.activityOther = '';
+  if (!next.products.includes(ADVICE)) next.adviceNote = '';
   for (const group of Object.keys(OPINION_GROUPS)) if (!next[group].includes('other')) next[`${group}Other`] = '';
   return next;
 }
